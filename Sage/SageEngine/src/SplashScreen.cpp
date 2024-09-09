@@ -21,7 +21,7 @@ namespace Splash_Screen {
 
 	void Load()
 	{
-		//Assets::Textures::Load("DIGIPEN_SPLASH_SCREEN");
+		Assets::Textures::Load("DIGIPEN_SPLASH_SCREEN");
 		//Textures::Load(TEXTURE_DIGIPEN_SPLASH_SCREEN);
 		//Audio::Load_SFX(SFX_BUTTON_CLICK);
 	}

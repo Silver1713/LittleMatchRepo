@@ -19,7 +19,6 @@ namespace Assets
 		void Init()
 		{
 			source = Parse_CSV("../SageEngine/data/assets/textures.csv");
-			std::cout << source.num_rows << " " << source.num_cols << std::endl;
 			for (int i{1}; i < source.num_rows; i++)
 			{
 				Texture t;
@@ -55,7 +54,7 @@ namespace Assets
 					SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT
 				);
 				textures[ID].is_loaded = true;
-				std::cout << loaded_textures[ID] << std::endl;
+				//std::cout << loaded_textures[ID] << std::endl;
 
 				if (textures[ID].sprites_num > 1)
 				{
