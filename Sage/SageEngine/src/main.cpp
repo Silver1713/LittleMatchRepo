@@ -64,11 +64,13 @@ void init()
     if (status)
     {
         std::cerr << "Sage failed to create OpenGL context.";
+
         std::exit(EXIT_FAILURE);
     }
 
     //SageMain::init();
-    SM::Load();
+    
+	SM::Load();
     SM::Init();
 
 }
