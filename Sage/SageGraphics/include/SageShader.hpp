@@ -1,5 +1,6 @@
 #ifndef SAGE_SHADER_HPP
 #define SAGE_SHADER_HPP
+#include <memory>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
@@ -7,25 +8,40 @@
 // A library for loading and compiling shaders
 class SageShader
 {
-private:
+
+	class SageShaderInternalImpl;
+	std::unique_ptr<SageShaderInternalImpl> sage_impl;
+
 	unsigned int pgm_handle;
 	bool is_linked;
 	std::string log_string;
 
 public:
-	enum class SHADER_TYPE
+	enum class SAGE_SHADER_TYPE
 	{
-		VERTEX_SHADER,
-		FRAGMENT_SHADER,
-		GEOMETRY_SHADER,
-		TESS_CONTROL_SHADER,
-		TESS_EVALUATION_SHADER,
-		COMPUTE_SHADER,
-		count // number of shader types
+		SAGE_VERTEX_SHADER,
+		SAGE_FRAGMENT_SHADER,
+		SAGE_GEOMETRY_SHADER,
+		SAGE_TESS_CONTROL_SHADER,
+		SAGE_TESS_EVALUATION_SHADER,
+		SAGE_COMPUTE_SHADER,
+		SAGE_SHADER_count // number of shader types
 	};
+	
 	SageShader();
-	GLboolean CompileFromString(SHADER_TYPE shader_type, std::string const& source, std::string const& path="");
-	GLboolean CompileFromFile(SHADER_TYPE shader_type, std::string const& file_name);
+	~SageShader();
+	//Delete copy constructor
+	SageShader(const SageShader&) = delete;
+	//Delete assignment operator
+	SageShader& operator=(const SageShader&) = delete;
+
+	//Move constructor
+	SageShader(SageShader&& other) noexcept;
+	//Move assignment operator
+	SageShader& operator=(SageShader&& other) noexcept;
+
+	GLboolean CompileFromString(SAGE_SHADER_TYPE shader_type, std::string const& source, std::string const& path="");
+	GLboolean CompileFromFile(SAGE_SHADER_TYPE shader_type, std::string const& file_name);
 	
 	
 
@@ -40,13 +56,13 @@ public:
 	GLboolean Validate();
 
 	//Compile Link and Validate
-	GLboolean CompileLinkValidate(SHADER_TYPE shader_type, std::string const& source);
+	GLboolean CompileLinkValidate(SAGE_SHADER_TYPE shader_type, std::string const& source);
 
 	// Program Info  - Getters
 
 	// Get the program handle
 	
-	GLuint GetProgramHandle() const;
+	GLuint GetProgramHandle() ;
 	GLboolean IsLinked() const;
 
 	std::string GetLog() const;

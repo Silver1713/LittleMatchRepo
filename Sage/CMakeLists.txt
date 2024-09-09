@@ -31,7 +31,15 @@ foreach(dir ${PROJECT_DIRECTORIES})
     
 
     if(IS_DIRECTORY ${dir} AND NOT DIR_NAME STREQUAL "SageEngine" AND NOT DIR_NAME STREQUAL "Sage" AND NOT DIR_NAME STREQUAL "SageInputUnit")
+        SET(SAGE_SHADER_FILES)
+        if (${DIR_NAME} STREQUAL "SageGraphics")
 
+        file(GLOB_RECURSE SAGE_SHADER_FILES
+            ${dir}/shaders/*.glsl
+        )
+
+        source_group("Shaders File" FILES ${SAGE_SHADER_FILES})
+        endif()
         file(GLOB_RECURSE SAGE_SOURCE_FILE
             ${dir}/src/*.[ch]pp
             ${dir}/include/*.[h]pp
@@ -124,9 +132,9 @@ include(UnitTest)
 
 # Gather source files for the single executable
 file(GLOB_RECURSE SageLite_source_files
-    ${CMAKE_SOURCE_DIR}/SageLite/src/*.[c]pp
-    ${CMAKE_SOURCE_DIR}/SageLite/include/*.h
-    ${CMAKE_SOURCE_DIR}/SageLite/include/*.hpp
+    ${CMAKE_SOURCE_DIR}/SageGraphics/src/*.[c]pp
+    ${CMAKE_SOURCE_DIR}/SageGraphics/include/*.h
+    ${CMAKE_SOURCE_DIR}/SageGraphics/include/*.hpp
 )
 
 file(GLOB_RECURSE SageInput_source_files
@@ -135,8 +143,8 @@ file(GLOB_RECURSE SageInput_source_files
     ${CMAKE_SOURCE_DIR}/SageInput/include/*.[h]pp
 )
 file(GLOB_RECURSE INternal_SAGELITE_H_FILES
-    ${CMAKE_SOURCE_DIR}/SageLite/include/internal/*.h
-    ${CMAKE_SOURCE_DIR}/SageLite/include/internal/*.hpp
+    ${CMAKE_SOURCE_DIR}/SageGraphics/include/internal/*.h
+    ${CMAKE_SOURCE_DIR}/SageGraphics/include/internal/*.hpp
 )
 
 file(GLOB_RECURSE INternal_SAGEINPUT_H_FILES
