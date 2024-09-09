@@ -12,6 +12,7 @@
 /* End Header **************************************************************************/
 #include "SplashScreen.hpp"
 #include "SceneManager.hpp"
+
 //#include "LevelSelect.hpp"
 
 static bool scene_has_loaded{ false };
