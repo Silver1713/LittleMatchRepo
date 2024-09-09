@@ -9,10 +9,11 @@ include(ImportDependencies)
 
 importDependencies()
 
-# All libraries - GLFW, glew
+# All libraries - GLFW, glew , include libraries here for ALL
 set(ALL_LIBS
     PRIVATE glfw
     PRIVATE libglew_static
+    PRIVATE soil
 )
 
 option(GENERATE_ENGINE_CORE "Generate Engine Core" ON)
