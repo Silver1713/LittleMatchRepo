@@ -1,21 +1,19 @@
 /* Start Header ************************************************************************/
 /*!
-\file		Scene_Manager.cpp
+\file		SceneManager.cpp
 \title		Battle Knights
 \author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
 \par		b.muhammadhafiz@digipen.edu
-\date		09 January 2024
+\date		08 September 2024
 \brief		Contains the definitions of functions relating to scene management
 
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
-#include "AEEngine.h"
-#include "Core.h"
-#include "Game.h"
-#include "Splash_Screen.h"
-#include "Scene_Manager.h"
-#include "Level_Select.h"
+//#include "Game.h"
+#include "SplashScreen.h"
+#include "SceneManager.h"
+//#include "Level_Select.h"
 
 static bool scene_has_loaded{ false };
 static bool scene_has_initialized{ false };
@@ -60,16 +58,16 @@ namespace SM {
 
 	void Init_Core_Systems()
 	{
-		Textures::Init();
-		Renderer::Init();
-		Fonts::Init();
-		Input::Init();
-		Audio::Init();
+		//Textures::Init();
+		//Renderer::Init();
+		//Fonts::Init();
+		//Input::Init();
+		//Audio::Init();
 
-		if (Textures::Get(TEXTURE_PRIMITIVE_SQUARE) == nullptr)
+/*		if (Textures::Get(TEXTURE_PRIMITIVE_SQUARE) == nullptr)
 		{
 			Textures::Load(TEXTURE_PRIMITIVE_SQUARE);
-		}				
+		}	*/
 	}
 
 	void Load()
@@ -95,12 +93,12 @@ namespace SM {
 	{
 		if (scene_faded_out && scene_has_initialized)
 		{
-			Input::Update();
+			//Input::Update();
 			SM::fp_input();
 		}
 		else if (ignore_safety_bools && scene_has_initialized)
 		{
-			Input::Update();
+			//Input::Update();
 			SM::fp_input();
 		}
 	}
@@ -124,10 +122,10 @@ namespace SM {
 	void Unload()
 	{
 		SM::fp_unload();
-		Renderer::Exit();
-		Textures::Exit();
-		Fonts::Exit();
-		Audio::Exit();
+		//Renderer::Exit();
+		//Textures::Exit();
+		//Fonts::Exit();
+		//Audio::Exit();
 	}
 
 	void Set_Next_Scene(void(*_load)(), void(*_init)(), void (*_input)(), void(*_update)(), void (*_draw)(), void (*_free)(), void (*_unload)())
@@ -143,7 +141,7 @@ namespace SM {
 
 	void Go_To_Next_Scene()
 	{
-		AESysFrameEnd();
+		//AESysFrameEnd();
 		SM::Free();
 		SM::Unload();
 		SM::fp_load = fp_load_tmp;
@@ -155,74 +153,74 @@ namespace SM {
 		SM::fp_unload = fp_unload_tmp;
 		scene_has_initialized = false;
 		scene_has_loaded = false;
-		AESysReset();
+		//AESysReset();
 	}
 
 	void Restart_Scene()
 	{
-		AESysFrameEnd();
+		//AESysFrameEnd();
 		SM::fp_free();
 		scene_has_initialized = false;
-		AESysReset();
+		//AESysReset();
 	}
 
-	void Fade_In(f32 transition_period)
+	void Fade_In(float transition_period)
 	{
 		if (scene_faded_in) { return; }
 
 		if (transition_period <= 0.0f) { return; }
 
-		static f32 alpha = 255.0f;
-		f32 dt = (f32)AEFrameRateControllerGetFrameTime();
+		static float alpha = 255.0f;
+		float dt = 0.0f; //(float)AEFrameRateControllerGetFrameTime();
 
 		if (alpha > 0.0f)
 		{
 			alpha -= dt * (255.0f / transition_period);
-			Renderer::Set_Modes(AE_GFX_RM_TEXTURE, AE_GFX_BM_BLEND, AE_GFX_TM_PRECISE, RENDER_CONFIG_CUSTOM);
-			AEGfxSetColorToAdd(-1.f, -1.f, -1.f, 0.0f);
-			Renderer::Draw_Sprite(TEXTURE_PRIMITIVE_SQUARE, 0.0f, 0.0f, (f32)*Settings::Get_Screen_Width(), (f32)*Settings::Get_Screen_Height(), 0.0f, alpha);
-			AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.0f);
+			//Renderer::Set_Modes(AE_GFX_RM_TEXTURE, AE_GFX_BM_BLEND, AE_GFX_TM_PRECISE, RENDER_CONFIG_CUSTOM);
+			//AEGfxSetColorToAdd(-1.f, -1.f, -1.f, 0.0f);
+			//Renderer::Draw_Sprite(TEXTURE_PRIMITIVE_SQUARE, 0.0f, 0.0f, (float)*Settings::Get_Screen_Width(), (float)*Settings::Get_Screen_Height(), 0.0f, alpha);
+			//AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.0f);
 			return;
 		}
 		else
 		{
 			alpha = 0.0f;
-			Renderer::Set_Modes(AE_GFX_RM_TEXTURE, AE_GFX_BM_BLEND, AE_GFX_TM_PRECISE, RENDER_CONFIG_CUSTOM);
-			AEGfxSetColorToAdd(-1.f, -1.f, -1.f, 0.0f);
-			Renderer::Draw_Sprite(TEXTURE_PRIMITIVE_SQUARE, 0.0f, 0.0f, (f32)*Settings::Get_Screen_Width(), (f32)*Settings::Get_Screen_Height(), 0.0f, alpha);
-			AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.0f);
+			//Renderer::Set_Modes(AE_GFX_RM_TEXTURE, AE_GFX_BM_BLEND, AE_GFX_TM_PRECISE, RENDER_CONFIG_CUSTOM);
+			//AEGfxSetColorToAdd(-1.f, -1.f, -1.f, 0.0f);
+			//Renderer::Draw_Sprite(TEXTURE_PRIMITIVE_SQUARE, 0.0f, 0.0f, (float)*Settings::Get_Screen_Width(), (float)*Settings::Get_Screen_Height(), 0.0f, alpha);
+			//AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.0f);
 			scene_faded_in = true;
 			alpha = 255.0f;
 			return;
 		}
 	}
 
-	void Fade_Out(f32 transition_period)
+	void Fade_Out(float transition_period)
 	{
 		if (scene_faded_out) { return; }
 
 		if (transition_period <= 0.0f) { return; }
 
-		static f32 alpha = 0.0f;
-		f32 dt = (f32)AEFrameRateControllerGetFrameTime();
+		static float alpha = 0.0f;
+		float dt = 0.0f; //(float)AEFrameRateControllerGetFrameTime();
 
 		if (alpha < 255.0f)
 		{
 			alpha += dt * (255.0f / transition_period);
-			Renderer::Set_Modes(AE_GFX_RM_TEXTURE, AE_GFX_BM_BLEND, AE_GFX_TM_PRECISE, RENDER_CONFIG_CUSTOM);
-			AEGfxSetColorToAdd(-1.f, -1.f, -1.f, 0.0f);
-			Renderer::Draw_Sprite(TEXTURE_PRIMITIVE_SQUARE, 0.0f, 0.0f, (f32)*Settings::Get_Screen_Width(), (f32)*Settings::Get_Screen_Width(), 0.0f, alpha);
-			AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.0f);
+			//Renderer::Set_Modes(AE_GFX_RM_TEXTURE, AE_GFX_BM_BLEND, AE_GFX_TM_PRECISE, RENDER_CONFIG_CUSTOM);
+			//AEGfxSetColorToAdd(-1.f, -1.f, -1.f, 0.0f);
+			//Renderer::Draw_Sprite(TEXTURE_PRIMITIVE_SQUARE, 0.0f, 0.0f, (float)*Settings::Get_Screen_Width(), (float)*Settings::Get_Screen_Width(), 0.0f, alpha);
+			//AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.0f);
 			return;
 		}
 		else
 		{
-			AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+			//AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 			alpha = 255.0f;
-			Renderer::Set_Modes(AE_GFX_RM_TEXTURE, AE_GFX_BM_BLEND, AE_GFX_TM_PRECISE, RENDER_CONFIG_CUSTOM);
-			AEGfxSetColorToAdd(-1.f, -1.f, -1.f, 0.0f);
-			Renderer::Draw_Sprite(TEXTURE_PRIMITIVE_SQUARE, 0.0f, 0.0f, (f32)*Settings::Get_Screen_Width(), (f32)*Settings::Get_Screen_Width(), 0.0f, alpha);
-			AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.0f);
+			//Renderer::Set_Modes(AE_GFX_RM_TEXTURE, AE_GFX_BM_BLEND, AE_GFX_TM_PRECISE, RENDER_CONFIG_CUSTOM);
+			//AEGfxSetColorToAdd(-1.f, -1.f, -1.f, 0.0f);
+			//Renderer::Draw_Sprite(TEXTURE_PRIMITIVE_SQUARE, 0.0f, 0.0f, (float)*Settings::Get_Screen_Width(), (float)*Settings::Get_Screen_Width(), 0.0f, alpha);
+			//AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.0f);
 			scene_faded_out = true;
 			alpha = 0.0f;
 			SM::Go_To_Next_Scene();
