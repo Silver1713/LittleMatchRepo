@@ -1,8 +1,12 @@
+
+# Ignore generated executables and libraries
+# Ignore generated object files
+*.o
+*.obj
 *.ipch
 *.suo
 *.db
 *.pdb
-*.exe
 *.ilk
 .vs
 .tmp
@@ -13,6 +17,37 @@
 *.exp
 *.iobj
 *.ipdb
+*.o
+*.exe
+*.out
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
 bin
 Debug
 Release
+
+
+
+# Ignore build directories
+Sage/bin/
+Sage/CMakeFiles/
+Sage/CMakeCache.txt
+Sage/cmake_install.cmake
+Sage/Makefile
+Sage/build
+Sage/mark-for-delete
+
+
+
+# Ignore logs, temporary files, and other system files
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.DS_Store
+.vs
+.idea/
