@@ -1,3 +1,15 @@
+/*
+ * This is the main entry point for the engine,
+ *	It include libraries and manages life cycle of the engine.
+ *
+ *	@note: You may test your components here. This is where
+ *	all the libs is being compiled and run.
+ *
+ *	Just include your header file for the stuff you want to test.
+ *
+ *	Private (internal) headers cannot be included.
+ *
+ */
 
 #include <iostream>
 #include <numeric>
@@ -6,11 +18,16 @@
 #include "SageMain.hpp"
 #include "SageHelper.hpp"
 
+#include "AssetLoader.hpp"
+#include "SceneManager.hpp"
+
 // Forward declaration
 void init();
 void update();
 void draw();
 void exit();
+int loop = 60;
+int window = 3;
 #define ENABLE_NVIDIA_OPTIMUS 1
 
 #if ENABLE_NVIDIA_OPTIMUS == 1
@@ -22,6 +39,7 @@ extern "C"
 
 int main()
 {
+    Assets::Textures::Init();
 	init();
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
@@ -41,41 +59,43 @@ int main()
 
 void init()
 {
-	int status = SageHelper::init(1920, 1080, "Hello World");
+    int status = SageHelper::init(1920, 1080, "Hello World");
 
-	if (status)
-	{
-		std::cerr << "Sage failed to create OpenGL context.";
-		std::exit(EXIT_FAILURE);
-	}
+    if (status)
+    {
+        std::cerr << "Sage failed to create OpenGL context.";
 
-	SageMain::init();
+        std::exit(EXIT_FAILURE);
+    }
 
-
-
+    //SageMain::init();
+    
+	SM::Load();
+    SM::Init();
 
 }
 
 
 void update()
 {
-	SageHelper::update();
-	SageMain::update();
+    SageHelper::update();
+    //SageMain::update();
+    SM::Update();
 }
 
 void draw()
 {
-	SageHelper::draw();
-	SageMain::draw();
+    SageHelper::draw();
+    //SageMain::draw();
+    SM::Draw();
 }
 
 
 void exit()
 {
-	SageHelper::exit();
-	SageMain::exit();
+    SM::Free();
+    SM::Unload();
+    SageHelper::exit();
+    //SageMain::exit();
 
 }
-
-
-
