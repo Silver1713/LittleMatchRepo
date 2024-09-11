@@ -33,6 +33,7 @@ public:
 	{
 		return internal_impl->Validate();
 	}
+	
 
 	void Use()
 	{
@@ -107,12 +108,12 @@ SageShader& SageShader::operator=(SageShader&& other) noexcept
 
 
 
-GLboolean SageShader::CompileFromString(SAGE_SHADER_TYPE shader_type, std::string const& source, std::string const& path)
+bool SageShader::CompileFromString(SAGE_SHADER_TYPE shader_type, std::string const& source, std::string const& path)
 {
 	return sage_impl->Compile_Raw_String(source, shader_type, path);
 }
 
-GLboolean SageShader::CompileFromFile(SAGE_SHADER_TYPE shader_type, std::string const& file_name)
+bool SageShader::CompileFromFile(SAGE_SHADER_TYPE shader_type, std::string const& file_name)
 {
 	return sage_impl->Compile(file_name, shader_type);
 }
@@ -120,7 +121,7 @@ GLboolean SageShader::CompileFromFile(SAGE_SHADER_TYPE shader_type, std::string 
 
 // Helper function to link the shader program
 
-GLboolean SageShader::Link()
+bool SageShader::Link()
 {
 
 	is_linked = sage_impl->Link();
@@ -128,7 +129,7 @@ GLboolean SageShader::Link()
 }
 
 
-GLboolean SageShader::Validate()
+bool SageShader::Validate()
 {
 	return sage_impl->Validate();
 }
@@ -149,7 +150,7 @@ void SageShader::Deactivate()
 
 
 
-GLuint SageShader::GetProgramHandle()
+unsigned int SageShader::GetProgramHandle()
 {
 	pgm_handle = sage_impl->GetProgramID();
 	return sage_impl->GetProgramID();
@@ -160,23 +161,23 @@ std::string SageShader::GetLog() const
 	return sage_impl->GetLog();
 }
 
-GLboolean SageShader::IsLinked() const
+bool SageShader::IsLinked() const
 {
 	return is_linked;
 }
 
-void SageShader::BindVertexAttribLocation(GLuint index, const char* name)
+void SageShader::BindVertexAttribLocation(int index, const char* name)
 {
 	glBindAttribLocation(pgm_handle, index, name);
 }
 
-void SageShader::BindFragAttribLocation(GLuint index, const char* name)
+void SageShader::BindFragAttribLocation(int index, const char* name)
 {
 	glBindFragDataLocation(pgm_handle, index, name);
 
 }
 
-GLint SageShader::GetUniformLocation(const char* name, bool exit_on_error)
+int SageShader::GetUniformLocation(const char* name, bool exit_on_error)
 {
 #if _DEBUG
 	std::cout << "Getting uniform location for: " << name << '\n';
@@ -197,52 +198,45 @@ GLint SageShader::GetUniformLocation(const char* name, bool exit_on_error)
 
 // Uniform setter - Numerical
 
-void SageShader::SetUniform(const char* name, GLint val)
+void SageShader::SetUniform(const char* name, int val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform1i(loc, val);
 }
 
 
-void SageShader::SetUniform(const char* name, GLfloat val)
+void SageShader::SetUniform(const char* name, float val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform1f(loc, val);
 }
 
-void SageShader::SetUniform(const char* name, GLdouble val)
+void SageShader::SetUniform(const char* name, double val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform1d(loc, val);
 }
 
-void SageShader::SetUniform(const char* name, GLboolean val)
+void SageShader::SetUniform(const char* name, bool val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform1i(loc, val);
 }
-
-void SageShader::SetUniform(const char* name, bool val)
-{
-	GLint loc = GetUniformLocation(name);
-	glUniform1i(loc, val ? GL_TRUE : GL_FALSE);
-}
-
 // Uniform setter - Vector - Singular
 
-void SageShader::SetUniform(const char* name, GLfloat x, GLfloat y)
+void SageShader::SetUniform(const char* name, float x, float y)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform2f(loc, x, y);
 }
-void SageShader::SetUniform(const char* name, GLfloat x, GLfloat y, GLfloat z)
+void SageShader::SetUniform(const char* name, float x, float y, float z)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform3f(loc, x, y, z);
 
 }
 
-void SageShader::SetUniform(const char* name, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
+void SageShader::SetUniform(const char* name, float x, float y, float z, float w)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform4f(loc, x, y, z, w);
