@@ -99,6 +99,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
     if(IS_DIRECTORY ${dir} AND NOT DIR_NAME STREQUAL "SageEngine" AND NOT DIR_NAME STREQUAL "Sage" AND NOT DIR_NAME STREQUAL "SageInputUnit")
         file(GLOB_RECURSE SAGE_SOURCE_FILE
             ${dir}/src/*.[ch]pp
+            ${dir}/src/*/*.[ch]pp
             ${dir}/include/*.[h]pp
             ${dir}/include/*.h
         )
@@ -134,11 +135,33 @@ foreach(dir ${PROJECT_DIRECTORIES})
             target_compile_options(${DIR_NAME}_lib PRIVATE /W3 /WX-)
         endif()
 
+        file(GLOB PROJECT_LIB_SUBDIRECTORIES_HEADER ${dir}/include/*/)
+
+        FOREACH (SUB_DIR_LIB ${PROJECT_LIB_SUBDIRECTORIES_HEADER})
+            set(SUB_NAME_LIB)
+            get_filename_component(SUB_NAME_LIB ${SUB_DIR_LIB} NAME)
+            IF(IS_DIRECTORY ${SUB_DIR_LIB} AND NOT SUB_NAME_LIB STREQUAL "internal")
+                FILE(GLOB_RECURSE DIR_H_FILE_LIB
+                    ${SUB_DIR_LIB}/*.h
+                    ${SUB_DIR_LIB}/*.hpp
+                )
+                source_group("Header Files/${SUB_NAME_LIB}" FILES ${DIR_H_FILE_LIB})
+                message(Status "Header Files/${SUB_NAME_LIB}" FILES ${DIR_H_FILE_LIB})
+                target_include_directories(${DIR_NAME}_lib PUBLIC
+                    ${SUB_DIR_LIB}
+                )
+            ENDIF()
+        ENDFOREACH()
+
         target_include_directories(${DIR_NAME}_lib PUBLIC
             ${dir}/include
+
         )
-        target_include_directories(${DIR_NAME}_lib PRIVATE
-            ${dir}/include/internal)
+        target_include_directories(${DIR_NAME}_lib 
+        PRIVATE ${dir}/include/internal
+
+        
+        )
         list(APPEND LIB_LIST "${DIR_NAME}_lib")
         list(APPEND OBJECT_LIST "$<TARGET_OBJECTS:${DIR_NAME}_lib>")
     endif()
