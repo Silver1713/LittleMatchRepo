@@ -57,7 +57,7 @@ public:
 
 	}
 
-	
+
 
 	void PrintActiveAttribs()
 	{
@@ -78,7 +78,7 @@ public:
 };
 
 
-SageShader::SageShader() : sage_impl{std::make_unique<SageShaderInternalImpl>()}, pgm_handle(0), is_linked(false)
+SageShader::SageShader() : sage_impl{ std::make_unique<SageShaderInternalImpl>() }, pgm_handle(0), is_linked(false)
 {
 
 };
@@ -123,7 +123,7 @@ GLboolean SageShader::CompileFromFile(SAGE_SHADER_TYPE shader_type, std::string 
 GLboolean SageShader::Link()
 {
 
-	is_linked =  sage_impl->Link();
+	is_linked = sage_impl->Link();
 	return is_linked;
 }
 
@@ -149,7 +149,7 @@ void SageShader::Deactivate()
 
 
 
-GLuint SageShader::GetProgramHandle() 
+GLuint SageShader::GetProgramHandle()
 {
 	pgm_handle = sage_impl->GetProgramID();
 	return sage_impl->GetProgramID();

@@ -1,32 +1,47 @@
-#ifndef SAGE_SHADER_INTERNAL_HPP
-#define SAGE_SHADER_INTERNAL_HPP
+#ifndef SAGE_SHADER_HPP
+#define SAGE_SHADER_HPP
+#include <memory>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
 
-
 // A library for loading and compiling shaders
-class SageShaderInternal
+class SageShader
 {
-private:
+
+	class SageShaderInternalImpl;
+	std::unique_ptr<SageShaderInternalImpl> sage_impl;
+
 	unsigned int pgm_handle;
 	bool is_linked;
 	std::string log_string;
 
 public:
-	enum class SAGE_INTERNAL_SHADER_TYPE
+	enum class SAGE_SHADER_TYPE
 	{
-		S_INTERNAL_VERTEX_SHADER,
-		S_INTERNAL_FRAGMENT_SHADER,
-		S_INTERNAL_GEOMETRY_SHADER,
-		S_INTERNAL_TESS_CONTROL_SHADER,
-		S_INTERNAL_TESS_EVALUATION_SHADER,
-		S_INTERNAL_COMPUTE_SHADER,
-		S_INTERNAL_count // number of shader types
+		SAGE_VERTEX_SHADER,
+		SAGE_FRAGMENT_SHADER,
+		SAGE_GEOMETRY_SHADER,
+		SAGE_TESS_CONTROL_SHADER,
+		SAGE_TESS_EVALUATION_SHADER,
+		SAGE_COMPUTE_SHADER,
+		SAGE_SHADER_count // number of shader types
 	};
-	SageShaderInternal();
-	GLboolean CompileFromString(SAGE_INTERNAL_SHADER_TYPE shader_type, std::string const& source, std::string const& path = "");
-	GLboolean CompileFromFile(SAGE_INTERNAL_SHADER_TYPE shader_type, std::string const& file_name);
+
+	SageShader();
+	~SageShader();
+	//Delete copy constructor
+	SageShader(const SageShader&) = delete;
+	//Delete assignment operator
+	SageShader& operator=(const SageShader&) = delete;
+
+	//Move constructor
+	SageShader(SageShader&& other) noexcept;
+	//Move assignment operator
+	SageShader& operator=(SageShader&& other) noexcept;
+
+	GLboolean CompileFromString(SAGE_SHADER_TYPE shader_type, std::string const& source, std::string const& path = "");
+	GLboolean CompileFromFile(SAGE_SHADER_TYPE shader_type, std::string const& file_name);
 
 
 
@@ -41,13 +56,13 @@ public:
 	GLboolean Validate();
 
 	//Compile Link and Validate
-	GLboolean CompileLinkValidate(SAGE_INTERNAL_SHADER_TYPE shader_type, std::string const& source);
+	GLboolean CompileLinkValidate(SAGE_SHADER_TYPE shader_type, std::string const& source);
 
 	// Program Info  - Getters
 
 	// Get the program handle
 
-	GLuint GetProgramHandle() const;
+	GLuint GetProgramHandle();
 	GLboolean IsLinked() const;
 
 	std::string GetLog() const;
