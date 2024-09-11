@@ -56,6 +56,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
                 )
 
                 source_group("Source Files/${SUB_NAMESRC}" FILES ${DIR_SRC_FILE})
+                message(STATUS "Sourced Source Files/${SUB_NAME_LIB}")
             endif()
         endforeach()
 
@@ -70,7 +71,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
                     ${subdirh}/*.hpp
                 )
                 source_group("Header Files/${SUB_NAME}" FILES ${DIR_H_FILE})
-                message("Header Files/${SUB_NAME}" FILES ${DIR_H_FILE})
+                message(STATUS"Header Files/${SUB_NAME}")
                 list(APPEND ADDITION_INCLUDE ${subdirh})
             endif()
         endforeach()
@@ -146,7 +147,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
                     ${SUB_DIR_LIB}/*.hpp
                 )
                 source_group("Header Files/${SUB_NAME_LIB}" FILES ${DIR_H_FILE_LIB})
-                message(Status "Header Files/${SUB_NAME_LIB}" FILES ${DIR_H_FILE_LIB})
+                message(STATUS "Sourced Header Files/${SUB_NAME_LIB}")
                 target_include_directories(${DIR_NAME}_lib PUBLIC
                     ${SUB_DIR_LIB}
                 )
@@ -176,81 +177,27 @@ ENDIF()
 
 include(UnitTest)
 
-# Gather source files for the single executable
-file(GLOB_RECURSE SageLite_source_files
-    ${CMAKE_SOURCE_DIR}/SageLite/src/*.[c]pp
-    ${CMAKE_SOURCE_DIR}/SageLite/include/*.h
-    ${CMAKE_SOURCE_DIR}/SageLite/include/*.hpp
-)
-
-file(GLOB_RECURSE SageInput_source_files
-    ${CMAKE_SOURCE_DIR}/SageInput/src/*.[ch]pp
-    ${CMAKE_SOURCE_DIR}/SageInput/include/*.[h]
-    ${CMAKE_SOURCE_DIR}/SageInput/include/*.[h]pp
-)
-file(GLOB_RECURSE INternal_SAGELITE_H_FILES
-    ${CMAKE_SOURCE_DIR}/SageLite/include/internal/*.h
-    ${CMAKE_SOURCE_DIR}/SageLite/include/internal/*.hpp
-)
-
-file(GLOB_RECURSE INternal_SAGEINPUT_H_FILES
-    ${CMAKE_SOURCE_DIR}/SageInput/include/internal/*.h
-    ${CMAKE_SOURCE_DIR}/SageInput/include/internal/*.hpp
-)
-
-# # Gather shader files
-# file(GLOB_RECURSE SageLite_shaders_files
-# ${CMAKE_SOURCE_DIR}/SageLite/shaders/*.glsl
+# # Gather source files for the single executable
+# file(GLOB_RECURSE SageLite_source_files
+#     ${CMAKE_SOURCE_DIR}/SageLite/src/*.[c]pp
+#     ${CMAKE_SOURCE_DIR}/SageLite/include/*.h
+#     ${CMAKE_SOURCE_DIR}/SageLite/include/*.hpp
 # )
 
-# source_group("Shaders File" FILES ${SageLite_shaders_files})
-# source_group("Internal Header Files" FILES ${INternal_SAGELITE_H_FILES})
-
-# source_group("Internal Header Files" FILES ${INternal_SAGEINPUT_H_FILES})
-
-# # Create the executable
-# add_executable(SageGraphicFramework
-# ${SageLite_source_files}
-# ${SageLite_shaders_files}
-# ${INternal_SAGELITE_H_FILES}
+# file(GLOB_RECURSE SageInput_source_files
+#     ${CMAKE_SOURCE_DIR}/SageInput/src/*.[ch]pp
+#     ${CMAKE_SOURCE_DIR}/SageInput/include/*.[h]
+#     ${CMAKE_SOURCE_DIR}/SageInput/include/*.[h]pp
+# )
+# file(GLOB_RECURSE INternal_SAGELITE_H_FILES
+#     ${CMAKE_SOURCE_DIR}/SageLite/include/internal/*.h
+#     ${CMAKE_SOURCE_DIR}/SageLite/include/internal/*.hpp
 # )
 
-# add_executable(SageInput
-# ${SageInput_source_files}
-# ${INternal_SAGEINPUT_H_FILES}
+# file(GLOB_RECURSE INternal_SAGEINPUT_H_FILES
+#     ${CMAKE_SOURCE_DIR}/SageInput/include/internal/*.h
+#     ${CMAKE_SOURCE_DIR}/SageInput/include/internal/*.hpp
 # )
-
-# # Link the executable with the necessary libraries
-# target_link_libraries(SageGraphicFramework
-# ${ALL_LIBS}
-# )
-
-# # same lib for input
-# target_link_libraries(SageInput
-# ${ALL_LIBS}
-# )
-
-# # Set the C++ standard
-# set_property(TARGET SageGraphicFramework PROPERTY CXX_STANDARD 20)
-# set_property(TARGET SageInput PROPERTY CXX_STANDARD 20)
-
-# # Add compiler options based on the compiler
-# IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-# target_compile_options(SageGraphicFramework PRIVATE -Wall ${DisableWarnings})
-# target_compile_options(SageInput PRIVATE -Wall ${DisableWarnings})
-# elseif(MSVC)
-# target_compile_options(SageGraphicFramework PRIVATE /W3 /WX-)
-# target_compile_options(SageInput PRIVATE /W3 /WX-)
-# endif()
-
-# # Include directories for the executable
-# target_include_directories(SageGraphicFramework PRIVATE
-# ${CMAKE_CURRENT_LIST_DIR}/SageLite/include
-# ${CMAKE_CURRENT_LIST_DIR}/SageLite/include/internal)
-
-# target_include_directories(SageInput PRIVATE
-# ${CMAKE_CURRENT_LIST_DIR}/SageInput/include
-# ${CMAKE_CURRENT_LIST_DIR}/SageInput/include/internal)
 if(${IS_UNIT_TEST_ENABLED})
     enable_testing()
 endif()
