@@ -25,15 +25,15 @@ set(INCLUDES_LIST)
 set(OBJECT_LIST)
 
 foreach(dir ${PROJECT_DIRECTORIES})
+    set(ADDITION_INCLUDE)
     string(REGEX REPLACE "/$" "" dir ${dir})
     get_filename_component(DIR_NAME ${dir} NAME)
-   
+    set(INERNAL_H_FILE_NAME "Internal Header Files")
     
-
     if(IS_DIRECTORY ${dir} AND NOT DIR_NAME STREQUAL "SageEngine" AND NOT DIR_NAME STREQUAL "Sage" AND NOT DIR_NAME STREQUAL "SageInputUnit")
-
         file(GLOB_RECURSE SAGE_SOURCE_FILE
             ${dir}/src/*.[ch]pp
+            ${dir}/src/*/*.[ch]pp
             ${dir}/include/*.[h]pp
             ${dir}/include/*.h
         )
@@ -43,6 +43,38 @@ foreach(dir ${PROJECT_DIRECTORIES})
         )
 
         source_group("Internal Header Files" FILES ${SAGE_INTERNALS_H_FILES})
+        file(GLOB PROJECT_SUBDIRECTORIES_SRC ${dir}/src/*/)
+
+        foreach(subdirsrc ${PROJECT_SUBDIRECTORIES_SRC})
+            set(SUB_NAMESRC)
+            if(IS_DIRECTORY ${subdirsrc})
+                get_filename_component(SUB_NAMESRC ${subdirsrc} NAME)
+                FILE(GLOB_RECURSE DIR_SRC_FILE
+                    ${subdirsrc}/*.[ch]pp
+                    ${subdirsrc}/*.h
+                    ${subdirsrc}/*.hpp
+                )
+
+                source_group("Source Files/${SUB_NAMESRC}" FILES ${DIR_SRC_FILE})
+            endif()
+        endforeach()
+
+        file(GLOB PROJECT_SUBDIRECTORIES_HEADER ${dir}/include/*/)
+
+        foreach(subdirh ${PROJECT_SUBDIRECTORIES_HEADER})
+            set(SUB_NAME)
+            get_filename_component(SUB_NAME ${subdirh} NAME)
+            if(IS_DIRECTORY ${subdirh} AND NOT SUB_NAME STREQUAL "internal")
+                FILE(GLOB_RECURSE DIR_H_FILE
+                    ${subdirh}/*.h
+                    ${subdirh}/*.hpp
+                )
+                source_group("Header Files/${SUB_NAME}" FILES ${DIR_H_FILE})
+                message("Header Files/${SUB_NAME}" FILES ${DIR_H_FILE})
+                list(APPEND ADDITION_INCLUDE ${subdirh})
+            endif()
+        endforeach()
+
         add_executable(
             ${DIR_NAME}
             ${SAGE_SOURCE_FILE}
@@ -59,12 +91,12 @@ foreach(dir ${PROJECT_DIRECTORIES})
 
         target_include_directories(${DIR_NAME} PRIVATE
             ${dir}/include
-            ${dir}/include/internal)
-        list(APPEND INCLUDES_LIST ${dir}/include)
+            ${dir}/include/internal
+            ${ADDITION_INCLUDE})
+        list(APPEND INCLUDES_LIST ${dir}/include ${ADDITION_INCLUDE})
     endif()
 
     if(IS_DIRECTORY ${dir} AND NOT DIR_NAME STREQUAL "SageEngine" AND NOT DIR_NAME STREQUAL "Sage" AND NOT DIR_NAME STREQUAL "SageInputUnit")
-        
         file(GLOB_RECURSE SAGE_SOURCE_FILE
             ${dir}/src/*.[ch]pp
             ${dir}/include/*.[h]pp
@@ -86,7 +118,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
             )
         ELSE()
             message(STATUS "Adding Library : ${DIR_NAME}_lib")
-            add_library(${DIR_NAME}_lib 
+            add_library(${DIR_NAME}_lib
                 STATIC
                 ${SAGE_SOURCE_FILE}
                 ${SAGE_INTERNALS_H_FILES}
@@ -101,7 +133,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
         elseif(MSVC)
             target_compile_options(${DIR_NAME}_lib PRIVATE /W3 /WX-)
         endif()
-        
+
         target_include_directories(${DIR_NAME}_lib PUBLIC
             ${dir}/include
         )
@@ -110,11 +142,10 @@ foreach(dir ${PROJECT_DIRECTORIES})
         list(APPEND LIB_LIST "${DIR_NAME}_lib")
         list(APPEND OBJECT_LIST "$<TARGET_OBJECTS:${DIR_NAME}_lib>")
     endif()
-
-    
 endforeach()
 
 message("List of Libraries: ${LIB_LIST}")
+
 # Generate Core Libraries and Engine
 IF(GENERATE_ENGINE_CORE)
     include(GenerateCore)
