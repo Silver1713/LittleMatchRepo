@@ -1,7 +1,6 @@
 #ifndef SAGE_SHADER_HPP
 #define SAGE_SHADER_HPP
 #include <memory>
-#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
 
@@ -27,7 +26,6 @@ public:
 		SAGE_COMPUTE_SHADER,
 		SAGE_SHADER_count // number of shader types
 	};
-	
 	SageShader();
 	~SageShader();
 	//Delete copy constructor
@@ -40,56 +38,55 @@ public:
 	//Move assignment operator
 	SageShader& operator=(SageShader&& other) noexcept;
 
-	GLboolean CompileFromString(SAGE_SHADER_TYPE shader_type, std::string const& source, std::string const& path="");
-	GLboolean CompileFromFile(SAGE_SHADER_TYPE shader_type, std::string const& file_name);
-	
-	
+	bool CompileFromString(SAGE_SHADER_TYPE shader_type, std::string const& source, std::string const& path = "");
+	bool CompileFromFile(SAGE_SHADER_TYPE shader_type, std::string const& file_name);
 
 
-	GLboolean Link();
+
+
+	bool Link();
 
 	//Program Activation
 	void Activate();
 	void Deactivate();
 
 	//Program Validation
-	GLboolean Validate();
+	bool Validate();
 
 	//Compile Link and Validate
-	GLboolean CompileLinkValidate(SAGE_SHADER_TYPE shader_type, std::string const& source);
+	bool CompileLinkValidate(SAGE_SHADER_TYPE shader_type, std::string const& source);
 
 	// Program Info  - Getters
 
 	// Get the program handle
-	
-	GLuint GetProgramHandle() ;
-	GLboolean IsLinked() const;
+
+	unsigned int GetProgramHandle();
+	bool IsLinked() const;
 
 	std::string GetLog() const;
 
 
 
 	// Vertex and Fragment bindings
-	void BindVertexAttribLocation(GLuint index, const char* name);
-	void BindFragAttribLocation(GLuint index, const char* name);
+	void BindVertexAttribLocation(int index, const char* name);
+	void BindFragAttribLocation(int index, const char* name);
 
 	// Shaders Uniforms
 
 	// Get the location of a uniform variable
-	GLint GetUniformLocation(const char* name, bool exit_on_error = false);
+	int GetUniformLocation(const char* name, bool exit_on_error = false);
 
 	// Setters for uniform variables
 	// Numericals
-	void SetUniform(const char* name, GLint val);
-	void SetUniform(const char* name, GLfloat val);
-	void SetUniform(const char* name, GLdouble val);
-	void SetUniform(const char* name, GLboolean val);
+	void SetUniform(const char* name, int val);
+	void SetUniform(const char* name, float val);
+	void SetUniform(const char* name, double val);
 	void SetUniform(const char* name, bool val);
 
 	//Vectors - Singular
-	void SetUniform(const char* name, GLfloat x, GLfloat y);
-	void SetUniform(const char* name, GLfloat x, GLfloat y, GLfloat z);
-	void SetUniform(const char* name, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
+	void SetUniform(const char* name, float x, float y);
+	void SetUniform(const char* name, float x, float y, float z);
+	void SetUniform(const char* name, float x, float y, float z, float w);
 
 	//Vector - glm
 	void SetUniform(const char* name, const glm::vec2& val);
