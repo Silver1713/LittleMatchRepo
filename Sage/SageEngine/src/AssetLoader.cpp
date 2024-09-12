@@ -54,7 +54,6 @@ namespace Assets
 					SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT
 				);
 				textures[ID].is_loaded = true;
-				//std::cout << loaded_textures[ID] << std::endl;
 
 				if (textures[ID].sprites_num > 1)
 				{
