@@ -96,6 +96,18 @@ macro(import_soil)
     endif()
 endmacro()
 
+macro(import_stb)
+    if (NOT TARGET stb)
+        FetchContent_Declare(
+            stb
+            GIT_REPOSITORY https://github.com/gracicot/stb-cmake
+            GIT_TAG master
+            SOURCE_DIR ${DEP_DIR}/stb
+        )
+        FetchContent_MakeAvailable(stb)
+        include_directories(${stb_SOURCE_DIR}/stb)
+    endif()
+endmacro()
  
 # Macro to import all dependencies
 macro(importDependencies)
@@ -104,5 +116,6 @@ macro(importDependencies)
     import_glfw()
     import_glm()
     import_lodepng()
-    import_soil()    
+    import_soil()
+    import_stb()   
 endmacro()

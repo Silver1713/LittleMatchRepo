@@ -20,6 +20,8 @@ int main(){
 	// It cannot find variables or functions in the 3rd layer
 
 #endif
+	
+
 	std::cout << SAGE_Input_Handler::Get_Key_Pressed(0);
 	return 0;
 }
