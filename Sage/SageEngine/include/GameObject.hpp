@@ -15,8 +15,9 @@ public:
 	virtual void Update();
 	virtual void Exit();
 
-	void Add_Component(component_type _component);
-	void Get_Component(component_type _component);
+	void Add_Component(ComponentType _component);
+	void Add_Component(Component const& _component, ComponentType _componentType);
+	Component& Get_Component(ComponentType _component);
 };
 
 class Knight1 : public GameObject

@@ -14,12 +14,21 @@
 typedef enum {
 	TRANSFORM,
 	SPRITE2D,
+	COLLISION2D,
 	AUDIO,
 	NUM_OF_TYPES_OF_COMPONENTS
-} component_type;
+} ComponentType;
+
+namespace Components
+{
+	void Init();
+}
 
 class Component
 {
+protected:
+	
+
 public:
 	virtual void Init();
 	virtual void Update();
@@ -34,6 +43,20 @@ class Transform : public Component
 };
 
 class Sprite2D : public Component
+{
+	void Init() override;
+	void Update() override;
+	void Exit() override;
+};
+
+class Collision2D : public Component
+{
+	void Init() override;
+	void Update() override;
+	void Exit() override;
+};
+
+class Audio : public Component
 {
 	void Init() override;
 	void Update() override;
