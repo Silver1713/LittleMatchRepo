@@ -11,7 +11,10 @@
 */
 /* End Header **************************************************************************/
 #pragma once
+#include <string>
+
 typedef enum {
+	COMPONENT,
 	TRANSFORM,
 	SPRITE2D,
 	COLLISION2D,
@@ -19,34 +22,46 @@ typedef enum {
 	NUM_OF_TYPES_OF_COMPONENTS
 } ComponentType;
 
-namespace Components
-{
-	void Init();
-}
-
 class Component
 {
-protected:
-	
-
 public:
 	virtual void Init();
 	virtual void Update();
 	virtual void Exit();
+	virtual ComponentType Get_Component_Type();
 };
 
 class Transform : public Component
 {
+private:
+	float positions[3]{};
+	float rotations[3]{};
+
+public:
+	Transform();
+	Transform(float const _new_pos[3], float const _new_rot[3]);
+
 	void Init() override;
 	void Update() override;
 	void Exit() override;
+	ComponentType Get_Component_Type() override;
+
+	void Set_Positions(float const _new_pos[3]);
+	float const* Get_Positions();
+	void Set_Rotations(float const _new_rot[3]);
+	float const* Get_Rotations();
 };
 
 class Sprite2D : public Component
 {
+private:
+	std::string sprite_texture_ID{};
+
+public:
 	void Init() override;
 	void Update() override;
 	void Exit() override;
+	ComponentType Get_Component_Type() override;
 };
 
 class Collision2D : public Component
@@ -54,6 +69,7 @@ class Collision2D : public Component
 	void Init() override;
 	void Update() override;
 	void Exit() override;
+	ComponentType Get_Component_Type() override;
 };
 
 class Audio : public Component
@@ -61,5 +77,6 @@ class Audio : public Component
 	void Init() override;
 	void Update() override;
 	void Exit() override;
+	ComponentType Get_Component_Type() override;
 };
 

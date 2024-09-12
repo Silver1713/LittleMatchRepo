@@ -40,6 +40,7 @@ extern "C"
 int main()
 {
     Assets::Textures::Init();
+    Assets::Prefabs::Init();
 	init();
 
 	while (!SageHelper::sage_ptr_window->should_window_close())

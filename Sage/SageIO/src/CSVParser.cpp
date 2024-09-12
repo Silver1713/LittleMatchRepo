@@ -63,13 +63,13 @@ Parsed_CSV Parse_CSV(std::string const& path)
 			
 			p.num_rows++;
 		}
+		ifs.close();
 	}
 	else 
 	{
 		std::cerr << "CSV File in " << path << " cannot be opened." << std::endl;
 		return p;
 	}
-
-	ifs.close();
+	
 	return p;
 }

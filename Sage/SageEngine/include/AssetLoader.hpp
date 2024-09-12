@@ -27,9 +27,38 @@ namespace Assets
 		} Data_Type;
 
 		void Init();
-		void Load(std::string const& ID);
-		//AEGfxTexture* Get_AEGfxTexture(std::string const& ID);
-		//Texture* Get_Texture(std::string const& ID);
+		void Load(std::string const& _ID);
 		void Unload();
+	}
+
+	namespace Prefabs
+	{
+		struct Prefab
+		{
+			std::string prefab_ID{};
+			float positions[3] = {};
+			float rotations[3] = {};
+			std::string sprite_texture_ID{};
+			std::string collision_data{};
+			std::string audio_data{};
+		};
+
+		typedef enum
+		{
+			PREFAB_ID,
+			POS_X,
+			POS_Y,
+			POS_Z,
+			ROT_X,
+			ROT_Y,
+			ROT_Z,
+			SPRITE_TEXTURE_ID,
+			COL_D,
+			AUDIO_D,
+			NUM_DATA_TYPES
+		} Data_Type;
+
+		void Init();
+		std::unordered_map<std::string, Prefab>const& Get_Prefabs();
 	}
 }

@@ -11,7 +11,7 @@
 */
 /* End Header **************************************************************************/
 #include "AssetLoader.hpp"
-#include "GameObject.hpp"
+#include "Prefabs.hpp"
 
 #define FADE_TIME 0.75f
 #define WAIT_TIME 1.5f
@@ -22,12 +22,13 @@ namespace Splash_Screen {
 
 	void Load()
 	{
-		Assets::Textures::Load("DIGIPEN_SPLASH_SCREEN");
+		Assets::Textures::Load("DIGIPEN_SPLASH_SCREEN");		
 	}
 
 	void Init()
 	{
-		
+		Test_GO test_game_object;
+		test_game_object.Init();
 	}
 
 	void Input()
