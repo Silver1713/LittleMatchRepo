@@ -80,6 +80,11 @@ void Sprite2D::Exit()
 
 }
 ComponentType Sprite2D::Get_Component_Type() { return SPRITE2D; }
+
+void Sprite2D::Set_Texture_ID(std::string _ID)
+{
+	sprite_texture_ID = _ID;
+}
 #pragma endregion
 
 #pragma region Collision2D
@@ -89,7 +94,6 @@ void Collision2D::Init()
 }
 void Collision2D::Update()
 {
-
 }
 void Collision2D::Exit()
 {

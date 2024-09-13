@@ -13,6 +13,8 @@
 #include "AssetLoader.hpp"
 #include "Prefabs.hpp"
 
+#include <string>
+
 #define FADE_TIME 0.75f
 #define WAIT_TIME 1.5f
 
@@ -28,11 +30,20 @@ namespace Splash_Screen {
 	void Init()
 	{
 		Test_GO test;
+		Test_GO_2 test_go_2;
+		Test_GO test2;
 
-		//how to access the member component? help
-		//Transform* t = dynamic_cast<Transform*>(test.Get_Component(TRANSFORM));
+		Transform* t = dynamic_cast<Transform*>(test.Get_Component(TRANSFORM).get());
+		Sprite2D* s = dynamic_cast<Sprite2D*>(test.Get_Component(SPRITE2D).get());
+		Collision2D* c = dynamic_cast<Collision2D*>(test.Get_Component(COLLISION2D).get());
 
-		Test_GO_2 test_2;
+		Game_Objects::Init();
+
+		float a[3]{ 9.0f,9.0f,9.0f };
+		t->Set_Positions(a);
+
+		std::string str{ "s" };
+		s->Set_Texture_ID(str);
 
 		Game_Objects::Init();
 	}
@@ -43,9 +54,7 @@ namespace Splash_Screen {
 	}
 
 	void Update()
-	{						
-		float dt = 0.0f; //(float)AEFrameRateControllerGetFrameTime();
-		time_elapsed += dt;		
+	{
 	}
 
 	void Draw()
