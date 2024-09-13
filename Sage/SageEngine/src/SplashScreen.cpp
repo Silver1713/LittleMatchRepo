@@ -12,8 +12,10 @@
 /* End Header **************************************************************************/
 #include "AssetLoader.hpp"
 #include "Prefabs.hpp"
+#include "Key_Inputs.h"
 
 #include <string>
+#include <iostream>
 
 #define FADE_TIME 0.75f
 #define WAIT_TIME 1.5f
@@ -28,29 +30,37 @@ namespace Splash_Screen {
 	}
 
 	void Init()
-	{
-		Test_GO test;
-		Test_GO_2 test_go_2;
-		Test_GO test2;
-
-		Transform* t = dynamic_cast<Transform*>(test.Get_Component(TRANSFORM).get());
-		Sprite2D* s = dynamic_cast<Sprite2D*>(test.Get_Component(SPRITE2D).get());
-		Collision2D* c = dynamic_cast<Collision2D*>(test.Get_Component(COLLISION2D).get());
-
+	{		
 		Game_Objects::Init();
-
-		float a[3]{ 9.0f,9.0f,9.0f };
-		t->Set_Positions(a);
-
-		std::string str{ "s" };
-		s->Set_Texture_ID(str);
-
-		Game_Objects::Init();
+		SAGE_Input_Handler::init();
 	}
 
 	void Input()
 	{
+		SAGE_Input_Handler::update();
+		
 
+		if (SAGE_Input_Handler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
+		{
+			std::cout << "ASdsad" << std::endl;
+			Test_GO test;
+			Test_GO_2 test_go_2;
+
+			Transform* t = dynamic_cast<Transform*>(test.Get_Component(TRANSFORM).get());
+			Sprite2D* s = dynamic_cast<Sprite2D*>(test.Get_Component(SPRITE2D).get());
+			Collision2D* c = dynamic_cast<Collision2D*>(test.Get_Component(COLLISION2D).get());
+
+			float a[3]{ t->Get_Positions()[0],t->Get_Positions()[1] ,t->Get_Positions()[2] };
+			a[0]++;
+			a[1]++;
+			a[2]++;
+			t->Set_Positions(a);
+
+			std::string str{ "s" };
+			s->Set_Texture_ID(str);
+
+			Game_Objects::Init();
+		}
 	}
 
 	void Update()

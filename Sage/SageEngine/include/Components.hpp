@@ -36,6 +36,7 @@ class Transform : public Component
 private:
 	float positions[3]{};
 	float rotations[3]{};
+	float scale[3]{};
 
 public:
 	Transform();
@@ -46,10 +47,12 @@ public:
 	void Exit() override;
 	ComponentType Get_Component_Type() override;
 
-	void Set_Positions(float const _new_pos[3]);
+	void Set_Positions(float const* _new_pos);
 	float const* Get_Positions();
-	void Set_Rotations(float const _new_rot[3]);
+	void Set_Rotations(float const* _new_rot);
 	float const* Get_Rotations();
+	void Set_Scale(float const* _new_scale);
+	float const* Get_Scale();
 };
 
 class Sprite2D : public Component

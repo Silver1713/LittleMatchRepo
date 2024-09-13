@@ -38,7 +38,7 @@ void Transform::Exit()
 }
 
 ComponentType Transform::Get_Component_Type() { return TRANSFORM; }
-void Transform::Set_Positions(float const _new_pos[3])
+void Transform::Set_Positions(float const* _new_pos)
 {
 	for (unsigned int i{}; i < 3; i++)
 	{
@@ -49,7 +49,7 @@ float const* Transform::Get_Positions()
 {
 	return positions;
 }
-void Transform::Set_Rotations(float const _new_rot[3])
+void Transform::Set_Rotations(float const* _new_rot)
 {
 	for (unsigned int i{}; i < 3; i++)
 	{
@@ -59,6 +59,18 @@ void Transform::Set_Rotations(float const _new_rot[3])
 float const* Transform::Get_Rotations()
 {
 	return rotations;
+}
+
+void Transform::Set_Scale(float const* _new_scale)
+{
+	for (unsigned int i{}; i < 3; i++)
+	{
+		scale[i] = _new_scale[i];
+	}
+}
+float const* Transform::Get_Scale()
+{
+	return scale;
 }
 
 #pragma endregion

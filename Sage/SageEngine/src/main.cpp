@@ -46,7 +46,7 @@ int main()
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{
-		glfwPollEvents();
+		glfwPollEvents();        
 		update();
 		draw();
 
@@ -81,7 +81,7 @@ void init()
 void update()
 {
     SageHelper::update();
-    //SageMain::update();
+    SM::Input();
     SM::Update();
 }
 
