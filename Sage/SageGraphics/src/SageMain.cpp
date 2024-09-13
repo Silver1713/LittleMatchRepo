@@ -9,8 +9,8 @@
 #include "SageModelManager.hpp"
 #include "SageObjectManager.hpp"
 #include "SageObject.hpp"
-const char* base_vtx_path = "../SageLite/shaders/BaseVertexShader.glsl";
-const char* base_frag_path = "../SageLite/shaders/BaseFragmentShader.glsl";
+const char* base_vtx_path = "../SageGraphics/shaders/BaseVertexShader.glsl";
+const char* base_frag_path = "../SageGraphics/shaders/BaseFragmentShader.glsl";
 
 SageModel model;
 SageShader shdr;
@@ -23,11 +23,11 @@ void SageMain::init()
 	vp.calculate_viewport_xform();
 	SageRenderer::SetViewport(vp);
 
-	
 
 
-	SageObjectManager::CreatePrimitiveObject("Rect1", PRIMITIVE_OBJECT_RECT , {0,0}, {1000,500}, {0,0}, {1,0,1,1},
-		{0,0,0,1}, 0.5f);
+
+	SageObjectManager::CreatePrimitiveObject("Rect1", PRIMITIVE_OBJECT_RECT, { 0,0 }, { 1000,500 }, { 0,0 }, { 1,0,1,1 },
+		{ 0,0,0,1 }, 0.5f);
 
 	SageObjectManager::CreatePrimitiveObject("Rect2", PRIMITIVE_OBJECT_RECT, { 1000,2000 }, { 1000,500 }, { 0,0 }, { 1,1,0,1 },
 		{ 0,0,0,1 }, 0.5f);
@@ -66,10 +66,10 @@ void SageMain::init()
 		SageObjectManager::objects[std::to_string(i).c_str()].GetMaterial().color = { (float)rand() / RAND_MAX, (float)rand() / RAND_MAX, (float)rand() / RAND_MAX, 1 };
 
 	}*/
-	
-	
+
+
 	vp.setViewport();
-	
+
 }
 
 void SageMain::update()
@@ -79,25 +79,25 @@ void SageMain::update()
 		obj.second.update();
 	}
 
-	
+
 }
 
 void SageMain::draw()
 {
-	
-	
+
+
 
 	glClearColor(1, 1, 1, 1);
-	glClear(GL_COLOR_BUFFER_BIT );
+	glClear(GL_COLOR_BUFFER_BIT);
 	std::ostringstream ss{ "Scene 1" };
 
-	ss << "Scene 1 | " << "FPS: " << std::fixed <<  SageHelper::FPS;
+	ss << "Scene 1 | " << "FPS: " << std::fixed << SageHelper::FPS;
 	//glfwSetWindowTitle(SageHelper::ptr_window, ss.str().c_str());
 	SageHelper::sage_ptr_window->set_title(ss.str().c_str());
-	
-	
-	
-	
+
+
+
+
 	for (auto& obj : SageObjectManager::objects)
 	{
 		SageRenderer::DrawFilled(obj.second, {

@@ -1,11 +1,12 @@
-#ifndef SAGE_SHADER_HPP
-#define SAGE_SHADER_HPP
+#ifndef SAGE_SHADER_INTERNAL_HPP
+#define SAGE_SHADER_INTERNAL_HPP
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
 
+
 // A library for loading and compiling shaders
-class SageShader
+class SageShaderInternal
 {
 private:
 	unsigned int pgm_handle;
@@ -13,21 +14,21 @@ private:
 	std::string log_string;
 
 public:
-	enum class SHADER_TYPE
+	enum class SAGE_INTERNAL_SHADER_TYPE
 	{
-		VERTEX_SHADER,
-		FRAGMENT_SHADER,
-		GEOMETRY_SHADER,
-		TESS_CONTROL_SHADER,
-		TESS_EVALUATION_SHADER,
-		COMPUTE_SHADER,
-		count // number of shader types
+		S_INTERNAL_VERTEX_SHADER,
+		S_INTERNAL_FRAGMENT_SHADER,
+		S_INTERNAL_GEOMETRY_SHADER,
+		S_INTERNAL_TESS_CONTROL_SHADER,
+		S_INTERNAL_TESS_EVALUATION_SHADER,
+		S_INTERNAL_COMPUTE_SHADER,
+		S_INTERNAL_count // number of shader types
 	};
-	SageShader();
-	GLboolean CompileFromString(SHADER_TYPE shader_type, std::string const& source, std::string const& path="");
-	GLboolean CompileFromFile(SHADER_TYPE shader_type, std::string const& file_name);
-	
-	
+	SageShaderInternal();
+	GLboolean CompileFromString(SAGE_INTERNAL_SHADER_TYPE shader_type, std::string const& source, std::string const& path = "");
+	GLboolean CompileFromFile(SAGE_INTERNAL_SHADER_TYPE shader_type, std::string const& file_name);
+
+
 
 
 	GLboolean Link();
@@ -40,12 +41,12 @@ public:
 	GLboolean Validate();
 
 	//Compile Link and Validate
-	GLboolean CompileLinkValidate(SHADER_TYPE shader_type, std::string const& source);
+	GLboolean CompileLinkValidate(SAGE_INTERNAL_SHADER_TYPE shader_type, std::string const& source);
 
 	// Program Info  - Getters
 
 	// Get the program handle
-	
+
 	GLuint GetProgramHandle() const;
 	GLboolean IsLinked() const;
 

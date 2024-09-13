@@ -7,8 +7,9 @@
 
 std::map<std::string, SageObject> SageObjectManager::objects{};
 
-SageObject& SageObjectManager::CreatePrimitiveObject(char const * name, PrimitiveObject OBJ_SHAPE)
+SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, PrimitiveObject OBJ_SHAPE)
 {
+	
 	SageObject obj;
 	if (OBJ_SHAPE == PRIMITIVE_OBJECT_RECT)
 	{
@@ -26,7 +27,8 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const * name, Primitiv
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end()) {
 			SageShader& shdr = SageShaderManager::CreateShaderProgram("BASE_SHADER", "../SageLite/shaders/BaseVertexShader.glsl", "../SageLite/shaders/BaseFragmentShader.glsl");
 			mdl.AssignShaderProgram(&shdr);
-		}else
+		}
+		else
 			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
 
 		obj.init(name, &SageModelManager::models["PRIMITIVE_RECT"]);
@@ -61,7 +63,7 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 
 		//Create base shader
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end()) {
-			SageShader& shdr = SageShaderManager::CreateShaderProgram("BASE_SHADER", "../SageLite/shaders/BaseVertexShader.glsl", "../SageLite/shaders/BaseFragmentShader.glsl");
+			SageShader& shdr = SageShaderManager::CreateShaderProgram("BASE_SHADER", "../SageGraphics/shaders/BaseVertexShader.glsl", "../SageGraphics/shaders/BaseFragmentShader.glsl");
 			mdl.AssignShaderProgram(&shdr);
 		}
 		else

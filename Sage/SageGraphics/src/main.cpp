@@ -14,7 +14,7 @@ int loop = 60;
 int window = 3;
 #define ENABLE_NVIDIA_OPTIMUS 1
 
-#if ENABLE_NVIDIA_OPTIMUS == 1
+#if ENABLE_NVIDIA_OPTIMUS == 0
 extern "C"
 {
 	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;

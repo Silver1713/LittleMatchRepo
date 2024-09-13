@@ -8,7 +8,7 @@ SageShader& SageShaderManager::CreateShaderProgram(std::string name, const char*
 {
 	SageShader shdr = SageHelper::CompileShadersFromFile(vertex_shader_path, fragment_shader_path);
 
-	shaders[name] = shdr;
+	shaders[name] = std::move(shdr);
 
 	return shaders[name];
 }
