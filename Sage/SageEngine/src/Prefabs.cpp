@@ -33,7 +33,7 @@ namespace Prefabs
 		if (!(_p.audio_data == "Nil"))
 		{
 			g.Add_Component(std::make_unique<Audio>());
-		}		
+		}
 		return g;
 	}
 }
