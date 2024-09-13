@@ -1,5 +1,7 @@
 #include "PNG_Container.hpp"
 
+#include <GLFW/glfw3.h>
+
 PNG_Container::PNG_Container(PNG_Container&& other) noexcept
 {
 	
@@ -155,6 +157,7 @@ void PNG_Container::load_data()
 	while (image_file)
 	{
 		reader = static_cast<char>(image_file.peek());
+		
 		if (reader == 'I')
 		{
 			std::string chunk_header{};
