@@ -1,5 +1,4 @@
 #include "PNG_Container.hpp"
-#include <stb_image.h>
 #define STB_IMAGE_IMPLEMENTATION
 const char* image = "../SageIO/image/image_asset.png";
 int main()
