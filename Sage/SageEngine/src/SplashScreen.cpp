@@ -42,7 +42,6 @@ namespace Splash_Screen {
 
 		if (SAGE_Input_Handler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
 		{
-			std::cout << "ASdsad" << std::endl;
 			Test_GO test;
 			Test_GO_2 test_go_2;
 
