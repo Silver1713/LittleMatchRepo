@@ -95,9 +95,9 @@ namespace Assets
 					p.positions[0] = std::stof(source.comma_seperated_data[i].associated_data[POS_X]);
 					p.positions[1] = std::stof(source.comma_seperated_data[i].associated_data[POS_Y]);
 					p.positions[2] = std::stof(source.comma_seperated_data[i].associated_data[POS_Z]);
-					p.positions[0] = std::stof(source.comma_seperated_data[i].associated_data[ROT_X]);
-					p.positions[1] = std::stof(source.comma_seperated_data[i].associated_data[ROT_Y]);
-					p.positions[2] = std::stof(source.comma_seperated_data[i].associated_data[ROT_Z]);
+					p.rotations[0] = std::stof(source.comma_seperated_data[i].associated_data[ROT_X]);
+					p.rotations[1] = std::stof(source.comma_seperated_data[i].associated_data[ROT_Y]);
+					p.rotations[2] = std::stof(source.comma_seperated_data[i].associated_data[ROT_Z]);
 					p.sprite_texture_ID = source.comma_seperated_data[i].associated_data[SPRITE_TEXTURE_ID];
 					p.collision_data = source.comma_seperated_data[i].associated_data[COL_D];
 					p.audio_data = source.comma_seperated_data[i].associated_data[AUDIO_D];

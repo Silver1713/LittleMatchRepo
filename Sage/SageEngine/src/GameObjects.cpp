@@ -3,7 +3,7 @@
 #include <memory>
 #include <iostream>
 
-std::unordered_map<unsigned int, GameObject> g_game_objects;
+std::unordered_map<unsigned int, GameObject*> g_game_objects;
 unsigned int g_go_counter{};
 
 namespace Game_Objects
@@ -12,7 +12,8 @@ namespace Game_Objects
 	{
 		for (auto & _g : g_game_objects)
 		{
-			_g.second.Init();
+			_g.second->Init();
+			std::cout << "GameObject::Init() number " << _g.first << " is successful" << "\n";
 		}
 	}
 
@@ -20,7 +21,7 @@ namespace Game_Objects
 	{
 		for (auto& _g : g_game_objects)
 		{
-			_g.second.Update();
+			_g.second->Update();
 		}
 	}
 
@@ -28,18 +29,18 @@ namespace Game_Objects
 	{
 		for (auto& _g : g_game_objects)
 		{
-			_g.second.Exit();
+			_g.second->Exit();
 		}
 		g_game_objects.clear();
 	}
 
-	void Add_Game_Object(GameObject const& _game_object)
+	void Add_Game_Object(GameObject* _g)
 	{
-		//g_go_counter++;
-		//g_game_objects[g_go_counter] = _game_object;
+		g_go_counter++;
+		g_game_objects[g_go_counter] = _g;
 	}
 
-	std::unordered_map<unsigned int, GameObject>& Get_Game_Objects()
+	std::unordered_map<unsigned int, GameObject*> Get_Game_Objects()
 	{
 		return g_game_objects;
 	}
@@ -50,15 +51,16 @@ namespace Game_Objects
 	}
 }
 
-GameObject::GameObject(){}
+GameObject::GameObject()
+{	
+}
 
 void GameObject::Init()
 {	
 	for (auto& _c : components)
 	{
 		_c->Init();
-	}
-	std::cout << "GameObject::Init() Successful" << "\n";
+	}	
 }
 
 void GameObject::Update()
@@ -83,7 +85,7 @@ void GameObject::Exit()
 	}
 }
 
-void GameObject::Add_Component(std::unique_ptr<Component> _c, ComponentType _type)
+void GameObject::Add_Component(std::unique_ptr<Component> _c)
 {
 	components.push_back(std::move(_c));
 }
@@ -97,4 +99,7 @@ std::unique_ptr<Component>& GameObject::Get_Component(ComponentType _type)
 			return c;
 		}
 	}
+
+	static std::unique_ptr<Component> a;
+	return a;
 }

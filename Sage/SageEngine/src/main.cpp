@@ -14,12 +14,12 @@
 #include <iostream>
 #include <numeric>
 
-
 #include "SageMain.hpp"
 #include "SageHelper.hpp"
 
 #include "AssetLoader.hpp"
 #include "SceneManager.hpp"
+#include "Prefabs.hpp"
 
 // Forward declaration
 void init();
@@ -41,6 +41,7 @@ int main()
 {
     Assets::Textures::Init();
     Assets::Prefabs::Init();
+    Prefabs::Init();
 	init();
 
 	while (!SageHelper::sage_ptr_window->should_window_close())

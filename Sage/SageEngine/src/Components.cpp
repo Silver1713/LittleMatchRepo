@@ -17,7 +17,16 @@ Transform::Transform(float const _new_pos[3], float const _new_rot[3]) : positio
 
 void Transform::Init()
 {
-	std::cout << "Transform Component Reporting" << "\n";
+	for (unsigned int i{}; i < 3; i++)
+	{
+		std::cout << "Positions[" << i << "] = " << positions[i] << "\n";
+	}
+	
+	for (unsigned int i{}; i < 3; i++)
+	{
+		std::cout << "Rotations[" << i << "] = " << rotations[i] << "\n";
+	}
+
 }
 void Transform::Update()
 {
@@ -27,8 +36,8 @@ void Transform::Exit()
 {
 
 }
-ComponentType Transform::Get_Component_Type() { return TRANSFORM; }
 
+ComponentType Transform::Get_Component_Type() { return TRANSFORM; }
 void Transform::Set_Positions(float const _new_pos[3])
 {
 	for (unsigned int i{}; i < 3; i++)
@@ -55,9 +64,12 @@ float const* Transform::Get_Rotations()
 #pragma endregion
 
 #pragma region Sprite2D
+Sprite2D::Sprite2D() {}
+Sprite2D::Sprite2D(std::string _texture_ID) : sprite_texture_ID{ _texture_ID } {}
+
 void Sprite2D::Init()
 {
-	std::cout << "Sprite Component Reporting" << "\n";
+	std::cout << "Sprite ID: " << sprite_texture_ID << "\n";
 }
 void Sprite2D::Update()
 {

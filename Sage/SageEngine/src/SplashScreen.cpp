@@ -27,8 +27,14 @@ namespace Splash_Screen {
 
 	void Init()
 	{
-		Test_GO test_game_object;
-		test_game_object.Init();
+		Test_GO test;
+
+		//how to access the member component? help
+		//Transform* t = dynamic_cast<Transform*>(test.Get_Component(TRANSFORM));
+
+		Test_GO_2 test_2;
+
+		Game_Objects::Init();
 	}
 
 	void Input()

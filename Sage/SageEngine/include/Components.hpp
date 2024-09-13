@@ -58,6 +58,9 @@ private:
 	std::string sprite_texture_ID{};
 
 public:
+	Sprite2D();
+	Sprite2D(std::string _texture_ID);
+
 	void Init() override;
 	void Update() override;
 	void Exit() override;
