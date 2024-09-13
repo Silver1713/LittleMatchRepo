@@ -214,7 +214,7 @@ void PNG_Container::load_data()
 
 void DEFLATE()
 {
-	//Deflating :((
+	//Deflating :((	
 
 	
 }

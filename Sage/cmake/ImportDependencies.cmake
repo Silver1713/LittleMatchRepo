@@ -108,7 +108,30 @@ macro(import_stb)
         include_directories(${stb_SOURCE_DIR}/stb)
     endif()
 endmacro()
- 
+
+macro (import_backward_stacktrace)
+    if (NOT TARGET backward)
+        FetchContent_Declare(
+            backward
+            GIT_REPOSITORY https://github.com/bombela/backward-cpp
+            GIT_TAG master
+            SOURCE_DIR ${DEP_DIR}/backward
+        )
+        FetchContent_MakeAvailable(backward)
+        include_directories(${backward_SOURCE_DIR})
+    endif()
+
+    if (TARGET backward)
+    add_deps_all_targets("PUBLIC Backward::Backward")
+    endif()
+endmacro()
+
+macro(add_deps_all_targets dep_target_name)
+
+list(APPEND ${ALL_LIBS} ${dep_target_name})
+
+endmacro()
+
 # Macro to import all dependencies
 macro(importDependencies)
    # import_tinyobjloader()
@@ -117,5 +140,6 @@ macro(importDependencies)
     import_glm()
     import_lodepng()
     import_soil()
-    import_stb()   
+    import_stb()  
+    import_backward_stacktrace() 
 endmacro()

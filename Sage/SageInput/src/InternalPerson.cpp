@@ -22,6 +22,7 @@ void InternalPerson::greet(const char* name)
 void InternalPerson::say(const char* message)
 {
 	std::cout << message << std::endl;
+	
 }
 
 bool InternalPerson::getKeyPress(int key)

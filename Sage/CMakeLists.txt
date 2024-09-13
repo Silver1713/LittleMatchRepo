@@ -7,7 +7,6 @@ add_definitions(-DGLEW_STATIC)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(ImportDependencies)
 
-importDependencies()
 
 # All libraries - GLFW, glew , include libraries here for ALL
 set(ALL_LIBS
@@ -15,6 +14,10 @@ set(ALL_LIBS
     PRIVATE libglew_static
     PRIVATE soil
 )
+
+
+importDependencies()
+
 
 option(GENERATE_ENGINE_CORE "Generate Engine Core" ON)
 option(COMPILE_USING_OBJECT "Compile using object" ON)
@@ -126,6 +129,8 @@ foreach(dir ${PROJECT_DIRECTORIES})
                 ${SAGE_INTERNALS_H_FILES}
             )
         ENDIF()
+
+        
 
         target_link_libraries(${DIR_NAME}_lib ${ALL_LIBS})
         set_property(TARGET ${DIR_NAME}_lib PROPERTY CXX_STANDARD 20)
