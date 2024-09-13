@@ -34,7 +34,14 @@ foreach(dir ${PROJECT_DIRECTORIES})
     set(INERNAL_H_FILE_NAME "Internal Header Files")
     
     if(IS_DIRECTORY ${dir} AND NOT DIR_NAME STREQUAL "SageEngine" AND NOT DIR_NAME STREQUAL "Sage" AND NOT DIR_NAME STREQUAL "SageInputUnit")
-        file(GLOB_RECURSE SAGE_SOURCE_FILE
+        set(SAGE_SHADER_FILES)
+    if (DIR_NAME STREQUAL "SageGraphics")
+            file(GLOB_RECURSE SAGE_SHADER_FILES
+                ${dir}/shaders/*.glsl
+            )
+            source_group("Shader Files" FILES ${SAGE_SHADER_FILES})
+        endif()
+    file(GLOB_RECURSE SAGE_SOURCE_FILE
             ${dir}/src/*.[ch]pp
             ${dir}/src/*/*.[ch]pp
             ${dir}/include/*.[h]pp
@@ -82,8 +89,9 @@ foreach(dir ${PROJECT_DIRECTORIES})
         add_executable(
             ${DIR_NAME}
             ${SAGE_SOURCE_FILE}
-            ${SAGE_INTERNALS_H_FILES})
-
+            ${SAGE_INTERNALS_H_FILES}
+            ${SAGE_SHADER_FILES})
+        set(SAGE_SHADER_FILES "")
         target_link_libraries(${DIR_NAME} ${ALL_LIBS})
         set_property(TARGET ${DIR_NAME} PROPERTY CXX_STANDARD 20)
 

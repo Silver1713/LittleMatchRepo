@@ -220,7 +220,7 @@ void SageShader::SetUniform(const char* name, double val)
 void SageShader::SetUniform(const char* name, bool val)
 {
 	GLint loc = GetUniformLocation(name);
-	glUniform1i(loc, val);
+	glUniform1i(loc, val ? GL_TRUE : GL_FALSE);
 }
 // Uniform setter - Vector - Singular
 

@@ -21,6 +21,7 @@
 #include "SceneManager.hpp"
 #include "Prefabs.hpp"
 
+
 // Forward declaration
 void init();
 void update();
@@ -70,10 +71,10 @@ void init()
         std::exit(EXIT_FAILURE);
     }
 
-    //SageMain::init();
+    SageMain::init();
     
-	SM::Load();
-    SM::Init();
+	/*SM::Load();
+    SM::Init();*/
 
 }
 
@@ -81,23 +82,23 @@ void init()
 void update()
 {
     SageHelper::update();
-    SM::Input();
-    SM::Update();
+    /*SM::Input();
+    SM::Update();*/
 }
 
 void draw()
 {
     SageHelper::draw();
-    //SageMain::draw();
-    SM::Draw();
+    SageMain::draw();
+    //SM::Draw();
 }
 
 
 void exit()
 {
-    SM::Free();
-    SM::Unload();
+    /*SM::Free();
+    SM::Unload();*/
     SageHelper::exit();
-    //SageMain::exit();
+    SageMain::exit();
 
 }

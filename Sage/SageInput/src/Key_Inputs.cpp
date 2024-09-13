@@ -84,7 +84,7 @@ void SAGE_Input_Handler::update()
 
 void SAGE_Input_Handler::init()
 {
-	impl::setcallback();
+	SageInput_PIML::Set_Callback();
 }
 
 

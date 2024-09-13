@@ -6,9 +6,12 @@ uniform bool uUseColor;
 uniform bool uUseBorderColor;
 uniform float uBorderSize;
 uniform float uCornerRadius;  // New uniform to control corner radius
+uniform bool uUseTexture;
 uniform vec4 uColor;
 uniform vec4 uBorderColor;
 uniform vec2 uObjectSize;
+
+uniform sampler2D uTex2D;
 
 out vec4 color;
 
@@ -47,12 +50,21 @@ void main() {
             c_clr = uBorderColor;  // Border color
         }
         else {
-            c_clr = (!uUseColor) ? vec4(aFragColor,1.0) : uColor;  // Fill color
+			if (uUseTexture) {
+				c_clr = texture(uTex2D, aTextCoords);  // Texture color
+			}
+            else {
+                c_clr = (!uUseColor) ? vec4(aFragColor, 1.0) : uColor;  // Fill color
+            }
         }
     }
     else if (uUseColor) {
+        
         c_clr = uColor;
-    }
+	}
+	else if (uUseTexture) {
+        c_clr = uColor;
+	}
 
     color = c_clr;
 }

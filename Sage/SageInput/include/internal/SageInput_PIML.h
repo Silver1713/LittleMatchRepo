@@ -33,9 +33,10 @@ public:
 		GLFW_Input_Handler::Poll_Events();
 	}
 
-	static void setcallback()
+	static void Set_Callback()
 	{
 		// Link Callback
-		// glfwSetKeyCallback(window, GLFW_Input_Handler::key_cb);
+		glfwSetKeyCallback(glfwGetCurrentContext(), GLFW_Input_Handler::key_cb);
+		glfwSetMouseButtonCallback(glfwGetCurrentContext(), GLFW_Input_Handler::mouse_cb);
 	}
 };

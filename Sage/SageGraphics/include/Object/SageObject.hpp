@@ -6,6 +6,7 @@
 #include "SageModel.hpp"
 #include "SageViewport.hpp"
 #include "SageShader.hpp"
+#include "SageTexture.h"
 
 class SageModel;
 class SageObject
@@ -47,6 +48,7 @@ public:
 		float border_radius;
 
 		SageShader* shader_ref;
+		SageTexture* texture_ref;
 	};
 private:
 	GLuint object_id;
@@ -63,6 +65,7 @@ public:
 	void init(char const* name, SageModel* model);
 	void update();
 	void draw(SageViewport* vp);
+	void attach_texture(SageTexture* texture);
 	//Camera;
 
 

@@ -32,6 +32,24 @@ void SageObject::init(char const * name, SageModel* model)
 }
 
 
+void SageObject::attach_texture(SageTexture* texture)
+{
+	if (texture == nullptr)
+	{
+		material.enable_texture = false;
+		return;
+	}
+
+	material.texture_ref = texture;
+}
+
+
+
+
+
+
+
+
 void SageObject::update()
 {
 	transform.calculate_model_matrix();
@@ -70,13 +88,21 @@ void SageObject::draw(SageViewport* vp)
 	shader->SetUniform("uBorderSize", material.border_width);
 	shader->SetUniform("uCornerRadius", material.border_radius);
 	shader->SetUniform("uObjectSize", transform.scale);
-	shader->SetUniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix);	
+	shader->SetUniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix);
+	shader->SetUniform("uUseTexture", material.enable_texture);
+	if (material.enable_texture)
+	{
+		shader->SetUniform("uTex2D", material.texture_ref->getTextureUnit());
+	}
 
-	
+
+
+
 	
 	
 	if (obj_mesh.model_ref->is_idx_enabled())
 	{
+		glEnable(GL_TEXTURE_2D);
 		glDrawElements(GL_TRIANGLES, obj_mesh.idx_cnt, GL_UNSIGNED_SHORT, nullptr);
 		// Check for errors
 
