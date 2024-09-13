@@ -14,12 +14,12 @@
 #include <iostream>
 #include <numeric>
 
-
 #include "SageMain.hpp"
 #include "SageHelper.hpp"
 
 #include "AssetLoader.hpp"
 #include "SceneManager.hpp"
+#include "Prefabs.hpp"
 
 // Forward declaration
 void init();
@@ -40,11 +40,13 @@ extern "C"
 int main()
 {
     Assets::Textures::Init();
+    Assets::Prefabs::Init();
+    Prefabs::Init();
 	init();
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{
-		glfwPollEvents();
+		glfwPollEvents();        
 		update();
 		draw();
 
@@ -79,7 +81,7 @@ void init()
 void update()
 {
     SageHelper::update();
-    //SageMain::update();
+    SM::Input();
     SM::Update();
 }
 

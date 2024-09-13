@@ -78,19 +78,16 @@ namespace SM {
 	{
 		if (scene_faded_out && scene_has_initialized)
 		{
-			//Input::Update();
 			SM::fp_input();
 		}
 		else if (ignore_safety_bools && scene_has_initialized)
 		{
-			//Input::Update();
 			SM::fp_input();
 		}
 	}
 
 	void Update()
-	{
-		
+	{		
 		SM::fp_update();
 	}
 
@@ -107,10 +104,6 @@ namespace SM {
 	void Unload()
 	{
 		SM::fp_unload();
-		//Renderer::Exit();
-		//Textures::Exit();
-		//Fonts::Exit();
-		//Audio::Exit();
 	}
 
 	void Set_Next_Scene(void(*_load)(), void(*_init)(), void (*_input)(), void(*_update)(), void (*_draw)(), void (*_free)(), void (*_unload)())

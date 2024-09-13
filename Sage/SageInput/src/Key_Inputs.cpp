@@ -40,7 +40,8 @@ public:
 	static void setcallback()
 	{
 		// Link Callback
-		// glfwSetKeyCallback(window, GLFW_Input_Handler::key_cb);
+		 glfwSetKeyCallback(glfwGetCurrentContext(), GLFW_Input_Handler::key_cb);
+		 glfwSetMouseButtonCallback(glfwGetCurrentContext(), GLFW_Input_Handler::mouse_cb);
 	}
 };
 #endif
@@ -79,6 +80,11 @@ bool SAGE_Input_Handler::Get_Mouse(int mouse)
 void SAGE_Input_Handler::update()
 {
 	GLFW_Input_Handler::Poll_Events();
+}
+
+void SAGE_Input_Handler::init()
+{
+	impl::setcallback();
 }
 
 

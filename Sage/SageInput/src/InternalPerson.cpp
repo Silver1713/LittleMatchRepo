@@ -15,7 +15,6 @@ void InternalPerson::greet()
 void InternalPerson::greet(const char* name)
 {
 	std::cout << "Hello " << name << "!" << std::endl;
-
 }
 
 

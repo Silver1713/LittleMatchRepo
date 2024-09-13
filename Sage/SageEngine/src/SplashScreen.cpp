@@ -11,6 +11,11 @@
 */
 /* End Header **************************************************************************/
 #include "AssetLoader.hpp"
+#include "Prefabs.hpp"
+#include "Key_Inputs.h"
+
+#include <string>
+#include <iostream>
 
 #define FADE_TIME 0.75f
 #define WAIT_TIME 1.5f
@@ -21,53 +26,49 @@ namespace Splash_Screen {
 
 	void Load()
 	{
-		Assets::Textures::Load("DIGIPEN_SPLASH_SCREEN");
-		//Textures::Load(TEXTURE_DIGIPEN_SPLASH_SCREEN);
-		//Audio::Load_SFX(SFX_BUTTON_CLICK);
+		Assets::Textures::Load("DIGIPEN_SPLASH_SCREEN");		
 	}
 
 	void Init()
-	{
-		//SM::Reset_Fade_In();
-		//SM::Reset_Fade_Out();
-		//SM::Set_Next_Scene(Main_Menu::Load, Main_Menu::Init, Main_Menu::Input, Main_Menu::Update, Main_Menu::Draw, Main_Menu::Free, Main_Menu::Unload);
-		//SM::Ignore_Safety_Bools(true);
+	{		
+		Game_Objects::Init();
+		SAGE_Input_Handler::init();
 	}
 
 	void Input()
 	{
-		//if (AEInputCheckReleased(AEVK_ESCAPE) || AEInputCheckReleased(AEVK_SPACE) || AEInputCheckReleased(AEVK_RETURN))
-		//{
-		//	SM::Ignore_Safety_Bools(false);
-		//	Audio::Play_SFX(SFX_BUTTON_CLICK);
-		//	time_elapsed = 5.0f;
-		//}
+		SAGE_Input_Handler::update();
+		
 
-		//if (AEInputCheckReleased(AEVK_LBUTTON) || AEInputCheckReleased(AEVK_RBUTTON))
-		//{
-		//	SM::Ignore_Safety_Bools(false);
-		//	Audio::Play_SFX(SFX_BUTTON_CLICK);
-		//	time_elapsed = 5.0f;
-		//}
+		if (SAGE_Input_Handler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
+		{
+			std::cout << "ASdsad" << std::endl;
+			Test_GO test;
+			Test_GO_2 test_go_2;
+
+			Transform* t = dynamic_cast<Transform*>(test.Get_Component(TRANSFORM).get());
+			Sprite2D* s = dynamic_cast<Sprite2D*>(test.Get_Component(SPRITE2D).get());
+			Collision2D* c = dynamic_cast<Collision2D*>(test.Get_Component(COLLISION2D).get());
+
+			float a[3]{ t->Get_Positions()[0],t->Get_Positions()[1] ,t->Get_Positions()[2] };
+			a[0]++;
+			a[1]++;
+			a[2]++;
+			t->Set_Positions(a);
+
+			std::string str{ "s" };
+			s->Set_Texture_ID(str);
+
+			Game_Objects::Init();
+		}
 	}
 
 	void Update()
-	{						
-		float dt = 0.0f; //(float)AEFrameRateControllerGetFrameTime();
-		time_elapsed += dt;		
+	{
 	}
 
 	void Draw()
-	{		
-		//AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);		
-		//Renderer::Set_Modes(AE_GFX_RM_TEXTURE, AE_GFX_BM_BLEND, AE_GFX_TM_AVERAGE, RENDER_CONFIG_DEFAULT);
-		//Renderer::Draw_Sprite(TEXTURE_DIGIPEN_SPLASH_SCREEN, 0.0f, 0.0f, (float)(*Settings::Get_Screen_Width()), (float)(*Settings::Get_Screen_Height()), 0.0f, 255.0f);
-
-		//SM::Fade_In(FADE_TIME);
-		//if (time_elapsed > FADE_TIME + WAIT_TIME)
-		//{
-		//	SM::Fade_Out(FADE_TIME);
-		//}
+	{
 	}
 
 	void Free()

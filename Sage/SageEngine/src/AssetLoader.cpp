@@ -43,35 +43,24 @@ namespace Assets
 			}
 		}
 
-		void Load(std::string const& ID)
+		void Load(std::string const& _ID)
 		{
-			if (!(textures[ID].is_loaded))
+			if (!(textures[_ID].is_loaded))
 			{
-				loaded_textures[ID] = SOIL_load_OGL_texture(
-					textures[ID].filepath.c_str(),
+				loaded_textures[_ID] = SOIL_load_OGL_texture(
+					textures[_ID].filepath.c_str(),
 					SOIL_LOAD_AUTO,
 					SOIL_CREATE_NEW_ID,
 					SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT
 				);
-				textures[ID].is_loaded = true;
-				//std::cout << loaded_textures[ID] << std::endl;
+				textures[_ID].is_loaded = true;
 
-				if (textures[ID].sprites_num > 1)
+				if (textures[_ID].sprites_num > 1)
 				{
 					//Renderer::Sprite_Sheet_Mesh_Init(textures[ID].sprites_per_row,textures[ID].sprites_per_col,textures[ID].sprites_num,ID);
 				}
 			}
 		}
-
-		// AEGfxTexture* Get_AEGfxTexture(std::string const& ID)
-		// {
-		// 	return loaded_textures[ID];
-		// }
-
-		// Texture* Get_Texture(std::string const& ID)
-		// {
-		// 	return &textures[ID];
-		// }
 
 		void Unload()
 		{
@@ -86,6 +75,49 @@ namespace Assets
 			}
 
 			loaded_textures.clear();
+		}
+	}
+
+	namespace Prefabs 
+	{
+		Parsed_CSV source;
+		std::unordered_map<std::string, Prefab> generated_prefabs;
+
+		void Init()
+		{
+			source = Parse_CSV("../SageEngine/data/prefabs/prefabs.csv");
+			for (int i{ 1 }; i < source.num_rows; i++)
+			{
+				Prefab p;
+				try
+				{
+					p.prefab_ID = source.comma_seperated_data[i].associated_data[PREFAB_ID];
+					p.positions[0] = std::stof(source.comma_seperated_data[i].associated_data[POS_X]);
+					p.positions[1] = std::stof(source.comma_seperated_data[i].associated_data[POS_Y]);
+					p.positions[2] = std::stof(source.comma_seperated_data[i].associated_data[POS_Z]);
+					p.rotations[0] = std::stof(source.comma_seperated_data[i].associated_data[ROT_X]);
+					p.rotations[1] = std::stof(source.comma_seperated_data[i].associated_data[ROT_Y]);
+					p.rotations[2] = std::stof(source.comma_seperated_data[i].associated_data[ROT_Z]);
+					p.sprite_texture_ID = source.comma_seperated_data[i].associated_data[SPRITE_TEXTURE_ID];
+					p.collision_data = source.comma_seperated_data[i].associated_data[COL_D];
+					p.audio_data = source.comma_seperated_data[i].associated_data[AUDIO_D];
+
+					generated_prefabs[p.prefab_ID] = p;
+				}
+				catch (const std::invalid_argument& e)
+				{
+					std::cerr << "Invalid argument: " << e.what() << " at index " << i << std::endl;
+				}
+				catch (const std::out_of_range& e)
+				{
+					std::cerr << "Out of range: " << e.what() << " at index " << i << std::endl;
+				}				
+			}
+		}
+
+		std::unordered_map<std::string, Prefab> const& Get_Prefabs()
+		{
+			return generated_prefabs;
 		}
 	}
 }
