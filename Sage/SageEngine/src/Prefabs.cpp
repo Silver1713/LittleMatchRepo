@@ -8,35 +8,24 @@
 #include <memory>
 
 std::unordered_map<std::string, std::vector<std::unique_ptr<Component>>> runtime_prefabs;
-//std::unordered_map<std::string, std::vector<Component>> runtime_prefabs;
 std::unordered_map<std::string, Assets::Prefabs::Prefab> prefabs;
 
-void Init()
+namespace Prefabs
 {
-	prefabs = Assets::Prefabs::Get_Prefabs();
-	
-	//converting prefabs into components
-	for (std::pair<std::string,Assets::Prefabs::Prefab> p : prefabs)
+	void Init()
 	{
-		std::vector<std::unique_ptr<Component>> vc;
+		prefabs = Assets::Prefabs::Get_Prefabs();
+	}
 
-		vc.push_back(std::make_unique<Transform>(p.second.positions,p.second.rotations));
-
-		if (p.second.collision_data != "Nil")
-		{		
-			vc.push_back(std::make_unique<Collision2D>());
-		}
-
-		if (p.second.audio_data != "Nil")
-		{
-			vc.push_back(std::make_unique<Audio>());
-		}
-
-		//runtime_prefabs[p.first] = vc;
+	GameObject Create_Copy(Assets::Prefabs::Prefab _p)
+	{
+		GameObject g;
+		g.Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations), TRANSFORM);
+		return g;
 	}
 }
 
-Test_GO::Test_GO() : GameObject(runtime_prefabs["TEST_GO"])
+Test_GO::Test_GO() : GameObject(Prefabs::Create_Copy(prefabs["TEST_GO"]))
 {
 	
 }

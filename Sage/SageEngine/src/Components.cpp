@@ -3,6 +3,7 @@
 #include <iostream>
 //here to include everything that all components need to function so this script will
 // be the only one to be dependent on all other systems
+
 #pragma region Component
 void Component::Init() {}
 void Component::Update() {}

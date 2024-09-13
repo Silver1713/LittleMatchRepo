@@ -10,7 +10,7 @@ namespace Game_Objects
 {
 	void Init()
 	{
-		for (std::pair<unsigned int,GameObject> _g : g_game_objects)
+		for (auto & _g : g_game_objects)
 		{
 			_g.second.Init();
 		}
@@ -18,7 +18,7 @@ namespace Game_Objects
 
 	void Update()
 	{
-		for (std::pair<unsigned int, GameObject> _g : g_game_objects)
+		for (auto& _g : g_game_objects)
 		{
 			_g.second.Update();
 		}
@@ -26,7 +26,7 @@ namespace Game_Objects
 
 	void Exit()
 	{
-		for (std::pair<unsigned int, GameObject> _g : g_game_objects)
+		for (auto& _g : g_game_objects)
 		{
 			_g.second.Exit();
 		}
@@ -35,8 +35,8 @@ namespace Game_Objects
 
 	void Add_Game_Object(GameObject const& _game_object)
 	{
-		g_go_counter++;
-		g_game_objects[g_go_counter] = _game_object;
+		//g_go_counter++;
+		//g_game_objects[g_go_counter] = _game_object;
 	}
 
 	std::unordered_map<unsigned int, GameObject>& Get_Game_Objects()
@@ -50,22 +50,13 @@ namespace Game_Objects
 	}
 }
 
-GameObject::GameObject() {}
-
-GameObject::GameObject(std::vector<std::unique_ptr<Component>> const& _components)
-{
-	components = _components;
-}
-
+GameObject::GameObject(){}
 
 void GameObject::Init()
 {	
-	if (!components.empty())
+	for (auto& _c : components)
 	{
-		for (const auto& _c : components)
-		{
-			_c->Init();
-		}
+		_c->Init();
 	}
 	std::cout << "GameObject::Init() Successful" << "\n";
 }
@@ -92,63 +83,18 @@ void GameObject::Exit()
 	}
 }
 
-void GameObject::Add_Component(std::unique_ptr<Component> _component, ComponentType _type)
+void GameObject::Add_Component(std::unique_ptr<Component> _c, ComponentType _type)
 {
-	if (components.size() != NUM_OF_TYPES_OF_COMPONENTS)
-	{
-		components.resize(NUM_OF_TYPES_OF_COMPONENTS);
-	}
-
-	//components[_type] = _component;
+	components.push_back(std::move(_c));
 }
 
-void GameObject::Add_Component(ComponentType _component)
+std::unique_ptr<Component>& GameObject::Get_Component(ComponentType _type)
 {
-	if (components.size() != NUM_OF_TYPES_OF_COMPONENTS)
+	for (auto& c : components)
 	{
-		components.resize(NUM_OF_TYPES_OF_COMPONENTS);
-	}
-
-	switch (_component)
-	{
-	case TRANSFORM:
-		//components[TRANSFORM] = Transform();
-		break;
-
-	case SPRITE2D:
-		//components[SPRITE2D] = Sprite2D();
-		break;
-
-	case COLLISION2D:
-		//components[COLLISION2D] = Collision2D();
-		break;
-
-	case AUDIO:
-		//components[AUDIO] = Audio();
-		break;
-
-	default:
-		break;
-	}
-}
-
-std::unique_ptr<Component> GameObject::Get_Component(ComponentType _type)
-{
-	switch (_type)
-	{
-	case TRANSFORM:
-		break;
-
-	case SPRITE2D:
-		break;
-
-	case COLLISION2D:
-		break;
-
-	case AUDIO:
-		break;
-
-	default:
-		break;
+		if ((*c).Get_Component_Type() == _type)
+		{
+			return c;
+		}
 	}
 }
