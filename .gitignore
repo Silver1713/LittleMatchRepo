@@ -40,7 +40,7 @@ Sage/Makefile
 
 Sage/build
 Sage/mark-for-delete
-
+Sage/FMOD/api
 
 # Ignore logs, temporary files, and other system files
 *.log

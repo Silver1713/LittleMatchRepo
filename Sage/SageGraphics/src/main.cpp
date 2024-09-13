@@ -12,11 +12,12 @@ void draw();
 void exit();
 int loop = 60;
 int window = 3;
-#define ENABLE_NVIDIA_OPTIMUS 1
+#define ENABLE_HIGH_PERFORMANCE_GPU 1 // IDK why SOIL DOESNT WORK WITHOUT THIS :< does not work with iGPU
 
-#if ENABLE_NVIDIA_OPTIMUS == 0
+#if ENABLE_HIGH_PERFORMANCE_GPU == 1
 extern "C"
 {
+	_declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 	__declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
 }
 #endif

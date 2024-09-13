@@ -63,7 +63,7 @@ void main() {
         c_clr = uColor;
 	}
 	else if (uUseTexture) {
-        c_clr = uColor;
+        c_clr = texture(uTex2D, aTextCoords);
 	}
 
     color = c_clr;

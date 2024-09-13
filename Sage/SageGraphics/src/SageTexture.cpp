@@ -9,10 +9,14 @@
 
 int SageTexture::tex_count{};
 SageTexture::SageTexture(const char* source) : texture_path(source){
+	std::ifstream file(source);
+	
 	
 	texture_id = SOIL_load_OGL_texture(texture_path.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT);
-	std::cout << SOIL_last_result();
+
+	//std::cout << SOIL_last_result();
 	texture_unit = ++tex_count;
+	
 	glBindTextureUnit(texture_unit, texture_id);
 	setTextureRepeat();
 }
@@ -20,7 +24,7 @@ SageTexture::SageTexture(const char* source) : texture_path(source){
 SageTexture::SageTexture(const SageTexture& other) :  texture_path(other.texture_path) {
 	if (this != &other)
 	{
-		texture_id = SOIL_load_OGL_texture(texture_path.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT);
+		texture_id = SOIL_load_OGL_texture(texture_path.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT );
 		texture_unit = tex_count++;
 		glBindTextureUnit(texture_unit, texture_id);
 		setTextureRepeat();

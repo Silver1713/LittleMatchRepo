@@ -23,7 +23,7 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, PrimitiveSha
 			glm::vec2(1.f,0.f),
 			glm::vec2(1.f,1.f),
 			glm::vec2(0.f,1.f),
-			glm::vec2(0.f,0.f)
+			glm::vec2(0.f,0.f),
 		};
 
 		std::vector<glm::vec4> clr_vtx{
@@ -34,8 +34,8 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, PrimitiveSha
 		};
 
 		std::vector<GLushort> idx_vtx{
+			2,3,0,
 			0,1,2,
-			2,3,0
 		};
 
 		SageModel mdl_square{ name.c_str(), &pos_vtx, &tex_vtx, &clr_vtx, &idx_vtx };

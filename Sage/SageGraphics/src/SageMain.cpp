@@ -21,11 +21,12 @@ SageTexture* p;
 
 void SageMain::init()
 {
-	p = new SageTexture("../SageEngine/data/assets/textures/digipen_splash_screen.png");
+	p = new SageTexture("../SageIO/image/digipen_splash_screen.png");
 	vp = { glm::vec2{0,0}, {SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT} };
 	vp.calculate_viewport_xform();
 	SageRenderer::SetViewport(vp);
 
+	
 
 
 
@@ -51,14 +52,16 @@ void SageMain::init()
 	// 3rd object
 
 	// Random transform
-	SageObjectManager::objects["Rect3"].transform.position = { 500,4000 };
-	SageObjectManager::objects["Rect3"].transform.scale = { 1000,500 };
+	SageObjectManager::objects["Rect3"].transform.position = { 0,0 };
+	SageObjectManager::objects["Rect3"].transform.scale = { 5000,5000 };
 	SageObjectManager::objects["Rect3"].transform.orientation = { 0,0 };
 
-	/*SageObject* obj = &SageObjectManager::objects["Rect3"];
-
+	SageObject* obj = &SageObjectManager::objects["Rect3"];
+	
 	obj->GetMaterial().enable_texture = true;
-	obj->attach_texture(p);*/
+	obj->attach_texture(p);
+
+
 
 	//CreaTE 2500 objects randomize position and scale and color
 

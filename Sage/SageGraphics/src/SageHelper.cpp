@@ -41,7 +41,7 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 	WINDOW_HEIGHT = height;
 	WINDOW_TITLE = const_cast<char*>(title);
 
-
+	
 	//Error Callback
 	glfwSetErrorCallback(error_cb);
 

@@ -78,6 +78,7 @@ void SageObject::draw(SageViewport* vp)
 	SageViewport* viewport = vp;
 
 	glBindVertexArray(obj_mesh.model_ref->get_vao_handle());
+	
 	shader->Activate();
 	shader->SetUniform("uUseColor", !material.enable_vertex_color);
 	shader->SetUniform("uUseBorderColor", material.enable_border_color);
@@ -92,6 +93,7 @@ void SageObject::draw(SageViewport* vp)
 	shader->SetUniform("uUseTexture", material.enable_texture);
 	if (material.enable_texture)
 	{
+		glActiveTexture(GL_TEXTURE0 + material.texture_ref->getTextureUnit());
 		shader->SetUniform("uTex2D", material.texture_ref->getTextureUnit());
 	}
 
@@ -103,6 +105,8 @@ void SageObject::draw(SageViewport* vp)
 	if (obj_mesh.model_ref->is_idx_enabled())
 	{
 		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glDrawElements(GL_TRIANGLES, obj_mesh.idx_cnt, GL_UNSIGNED_SHORT, nullptr);
 		// Check for errors
 
@@ -115,6 +119,8 @@ void SageObject::draw(SageViewport* vp)
 
 	glBindVertexArray(0);
 	shader->Deactivate();
+	glDisable(GL_BLEND);
+	
 	
 }
 
