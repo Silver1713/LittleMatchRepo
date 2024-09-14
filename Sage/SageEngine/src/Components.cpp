@@ -107,7 +107,6 @@ void Sprite2D::Init(GameObject* _parent)
 	SageTexture* texture = Assets::Textures::Get_Texture(sprite_texture_ID);
 	if (texture != nullptr)
 	{
-		std::cout << " texture exists" << std::endl;
 		obj->attach_texture(texture);
 	}
 }
