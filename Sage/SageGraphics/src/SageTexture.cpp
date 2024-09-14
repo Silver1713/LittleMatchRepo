@@ -8,8 +8,8 @@
 
 
 int SageTexture::tex_count{};
-SageTexture::SageTexture(const char* source) : texture_path(source){
-	std::ifstream file(source);
+SageTexture::SageTexture(const char* _source, TEXTURE_UNIT_TYPE _type) : texture_path(_source){
+	std::ifstream file(_source);
 	
 	
 	texture_id = SOIL_load_OGL_texture(texture_path.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT);

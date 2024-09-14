@@ -25,7 +25,7 @@ private:
 	static int  tex_count;
 public:
 	SageTexture() = delete;
-	SageTexture(const char* name, TEXTURE_UNIT_TYPE type);
+	SageTexture(const char* name, TEXTURE_UNIT_TYPE type = SAGE_NORMAL_TEXTURE_UNIT);
 	SageTexture(const SageTexture& other);
 	SageTexture& operator=(const SageTexture& other);
 	~SageTexture();
