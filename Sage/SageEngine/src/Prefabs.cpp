@@ -21,10 +21,10 @@ namespace Prefabs
 	GameObject Create_Copy(Assets::Prefabs::Prefab& _p)
 	{
 		GameObject g;
-		g.Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations));		
+		g.Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
 		if (!(_p.sprite_texture_ID == "Nil"))
 		{
-			g.Add_Component(std::make_unique<Sprite2D>(_p.sprite_texture_ID));
+			g.Add_Component(std::make_unique<Sprite2D>(_p.sprite_texture_ID, _p.colour));
 		}
 		if (!(_p.collision_data == "Nil"))
 		{

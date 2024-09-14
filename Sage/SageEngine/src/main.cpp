@@ -63,6 +63,7 @@ int main()
 void init()
 {
     int status = SageHelper::init(1920, 1080, "Hello World");
+    const GLubyte* a = glGetString(GL_EXTENSIONS);
 
     if (status)
     {
@@ -72,9 +73,8 @@ void init()
     }
 
     SageMain::init();
-    
-	/*SM::Load();
-    SM::Init();*/
+    SM::Load();
+    SM::Init();
 
 }
 
@@ -82,8 +82,9 @@ void init()
 void update()
 {
     SageHelper::update();
-    /*SM::Input();
-    SM::Update();*/
+    SageMain::update();
+    //SM::Input();
+    SM::Update();
 }
 
 void draw()
@@ -96,8 +97,8 @@ void draw()
 
 void exit()
 {
-    /*SM::Free();
-    SM::Unload();*/
+    SM::Free();
+    SM::Unload();
     SageHelper::exit();
     SageMain::exit();
 
