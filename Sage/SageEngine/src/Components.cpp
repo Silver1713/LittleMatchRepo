@@ -110,7 +110,6 @@ void Sprite2D::Init(GameObject* _parent)
 }
 void Sprite2D::Update() 
 {
-	transform = dynamic_cast<Transform*>(Get_Parent()->Get_Component(TRANSFORM).get());
 	obj->transform.position[0] = transform->Get_Positions()[0];
 	obj->transform.position[1] = transform->Get_Positions()[1];
 	obj->transform.scale[0] = transform->Get_Scale()[0];
