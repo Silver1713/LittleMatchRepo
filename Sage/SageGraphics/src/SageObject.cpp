@@ -4,6 +4,8 @@
 #include <ostream>
 #include <glm/ext/matrix_transform.hpp>
 
+#include "SageHelper.hpp"
+
 long int SageObject::object_count{};
 long int SageObject::current_object_count{};
 SageObject::SageObject() : object_id(0), object_name("default"), obj_mesh(), transform(), material()
@@ -108,7 +110,8 @@ void SageObject::draw(SageViewport* vp)
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glDrawElements(GL_TRIANGLES, obj_mesh.idx_cnt, GL_UNSIGNED_SHORT, nullptr);
+		//if (this->obj_mesh->model_ref->)
+		glDrawElements(GL_TRIANGLE_FAN, obj_mesh.idx_cnt, GL_UNSIGNED_SHORT, nullptr);
 		// Check for errors
 
 		
