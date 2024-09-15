@@ -49,7 +49,7 @@ namespace Assets
 		{
 			if (!(textures[_ID].is_loaded))
 			{
-				loaded_textures[_ID] = new SageTexture(textures[_ID].filepath.c_str());
+				loaded_textures[_ID] = new SageTexture(textures[_ID].filepath.c_str(), SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
 				textures[_ID].is_loaded = true;
 
 				if (textures[_ID].sprites_num > 1)

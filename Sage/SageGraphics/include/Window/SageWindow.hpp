@@ -63,6 +63,8 @@ public:
 
 	int get_pos_x() const;
 	int get_pos_y() const;
+	int get_size_x() const;
+	int get_size_y() const;
 	std::string get_title() const;
 
 
