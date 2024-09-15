@@ -30,7 +30,7 @@ namespace Assets
 
 		void Init();
 		void Load(std::string const& _ID);
-		SageTexture* Get_Texture(std::string const& _ID);
+		SageTexture& Get_Texture(std::string const& _ID);
 		void Unload();
 	}
 

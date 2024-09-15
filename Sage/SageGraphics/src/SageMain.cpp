@@ -20,7 +20,7 @@ SageTexture p;
 void SageMain::init()
 {
 	
-	p.load_texture("../SageIO/image/digipen_splash_screen.png", SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
+	//p.load_texture("../SageIO/image/digipen_splash_screen.png", SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
 	vp = { glm::vec2{0,0}, {SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT} };
 	vp.calculate_viewport_xform();
 	SageRenderer::SetViewport(vp);
@@ -29,36 +29,36 @@ void SageMain::init()
 
 
 
-	SageObjectManager::CreatePrimitiveObject("Rect1", PRIMITIVE_OBJECT_RECT, { 0,0 }, { 1000,500 }, { 0,0 }, { 1,0,1,1 },
-		{ 0,0,0,1 }, 0.5f);
+	//SageObjectManager::CreatePrimitiveObject("Rect1", PRIMITIVE_OBJECT_RECT, { 0,0 }, { 1000,500 }, { 0,0 }, { 1,0,1,1 },
+	//	{ 0,0,0,1 }, 0.5f);
 
-	SageObjectManager::CreatePrimitiveObject("Rect2", PRIMITIVE_OBJECT_RECT, { 1000,2000 }, { 1000,500 }, { 0,0 }, { 1,1,0,1 },
-		{ 0,0,0,1 }, 0.5f);
-	SageObjectManager::CreatePrimitiveObject("Rect3", PRIMITIVE_OBJECT_RECT, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,1,1,1 },
-		{ 0,0,0,1 }, 0.5f);
+	//SageObjectManager::CreatePrimitiveObject("Rect2", PRIMITIVE_OBJECT_RECT, { 1000,2000 }, { 1000,500 }, { 0,0 }, { 1,1,0,1 },
+	//	{ 0,0,0,1 }, 0.5f);
+	//SageObjectManager::CreatePrimitiveObject("Rect3", PRIMITIVE_OBJECT_RECT, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,1,1,1 },
+	//	{ 0,0,0,1 }, 0.5f);
 
-	SageObjectManager::objects["Rect1"].transform.position = { 0,0 };
-	//set scale
-	SageObjectManager::objects["Rect1"].transform.scale = { 1000,500 };
-	SageObjectManager::objects["Rect1"].transform.orientation = { 0,0 };
+	//SageObjectManager::objects["Rect1"].transform.position = { 0,0 };
+	////set scale
+	//SageObjectManager::objects["Rect1"].transform.scale = { 1000,500 };
+	//SageObjectManager::objects["Rect1"].transform.orientation = { 0,0 };
 
 
-	// 2nd object
-	SageObjectManager::objects["Rect2"].transform.position = { -500,2000 };
-	SageObjectManager::objects["Rect2"].transform.scale = { 1000,500 };
-	SageObjectManager::objects["Rect2"].transform.orientation = { 0,0 };
+	//// 2nd object
+	//SageObjectManager::objects["Rect2"].transform.position = { -500,2000 };
+	//SageObjectManager::objects["Rect2"].transform.scale = { 1000,500 };
+	//SageObjectManager::objects["Rect2"].transform.orientation = { 0,0 };
 
 	// 3rd object
 
 	// Random transform
-	SageObjectManager::objects["Rect3"].transform.position = { 0,0 };
-	SageObjectManager::objects["Rect3"].transform.scale = { 5000,5000 };
-	SageObjectManager::objects["Rect3"].transform.orientation = { 0,0 };
+	//SageObjectManager::objects["Rect3"].transform.position = { 0,0 };
+	//SageObjectManager::objects["Rect3"].transform.scale = { 5000,5000 };
+	//SageObjectManager::objects["Rect3"].transform.orientation = { 0,0 };
 
 	//SageObject* obj = &SageObjectManager::objects["Rect3"];
-	
-	obj->GetMaterial().enable_texture = true;
-	obj->attach_texture(&p);
+	//
+	//obj->GetMaterial().enable_texture = true;
+	//obj->attach_texture(&p);
 
 
 
@@ -88,8 +88,6 @@ void SageMain::update()
 	{
 		obj.second.update();
 	}
-
-
 }
 
 void SageMain::draw()

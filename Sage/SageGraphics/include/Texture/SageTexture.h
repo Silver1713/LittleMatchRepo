@@ -11,8 +11,8 @@ class SageTexture {
 private:
 	class SageTextureInternalImpl;
 	std::unique_ptr<SageTextureInternalImpl> sage_internal_impl;
-	unsigned int texture_id;
-	unsigned int texture_unit;
+	unsigned int texture_id{};
+	unsigned int texture_unit{};
 	std::string texture_path;
 public:
 	enum class TEXTURE_UNIT_TYPE

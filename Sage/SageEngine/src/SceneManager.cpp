@@ -10,6 +10,8 @@
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
+#include "SageMain.hpp"
+#include "SageHelper.hpp"
 #include "SplashScreen.hpp"
 #include "SceneManager.hpp"
 
@@ -68,6 +70,7 @@ namespace SM {
 
 	void Init()
 	{
+		SageMain::init();
 		SM::fp_init();
 		//if (!scene_has_initialized)
 		//{
@@ -81,17 +84,20 @@ namespace SM {
 	}
 
 	void Update()
-	{		
+	{
+		SageMain::update();
 		SM::fp_update();
 	}
 
 	void Draw()
 	{
+		SageMain::draw();
 		SM::fp_draw();
 	}
 
 	void Free()
 	{
+		SageMain::exit();
 		SM::fp_free();			
 	}
 
@@ -143,7 +149,7 @@ namespace SM {
 		if (transition_period <= 0.0f) { return; }
 
 		static float alpha = 255.0f;
-		float dt = 0.0f; //(float)AEFrameRateControllerGetFrameTime();
+		float dt = SageHelper::delta_time;
 
 		if (alpha > 0.0f)
 		{

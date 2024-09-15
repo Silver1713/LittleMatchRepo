@@ -26,7 +26,7 @@ void Component::Set_Parent(GameObject* const _parent)
 
 #pragma region Transform
 Transform::Transform() {}
-Transform::Transform(float const* _pos, float const* _rot, float const* _scale, bool _is_UI_element) : positions{ *_pos }, rotations{ *_rot }, scale{ *_scale } {}
+Transform::Transform(float const* _pos, float const* _rot, float const* _scale, bool _is_UI_element) : positions{ *_pos,*(_pos + 1),*(_pos+2)}, rotations{*_rot, *(_rot+1), *(_rot+2)}, scale{*_scale, *(_scale+1), *(_scale+2)} {}
 Transform::Transform(std::initializer_list<float> const& _pos, std::initializer_list<float> const& _rot, std::initializer_list<float> const& _scale) : Transform(_pos.begin(), _rot.begin(), _scale.begin()) {}
 
 void Transform::Init(GameObject* _parent)
@@ -88,8 +88,8 @@ bool& Transform::Is_UI_Element()
 
 #pragma region Sprite2D
 Sprite2D::Sprite2D() {}
-Sprite2D::Sprite2D(std::string const& _texture_ID, float const* _colour) : sprite_texture_ID{ _texture_ID }, colour{*_colour} {}
-Sprite2D::Sprite2D(std::string const& _texture_ID, std::initializer_list<float> const& _colour) : Sprite2D(_texture_ID,_colour.begin()){}
+Sprite2D::Sprite2D(std::string const& _texture_ID, float const* _colour) : sprite_texture_ID{ _texture_ID }, colour{ *_colour, *(_colour + 1),*(_colour + 2),*(_colour + 3) }{}
+Sprite2D::Sprite2D(std::string const& _texture_ID, std::initializer_list<float> const& _colour) : Sprite2D(_texture_ID, _colour.begin()) {}
 
 void Sprite2D::Init(GameObject* _parent)
 {
@@ -102,31 +102,26 @@ void Sprite2D::Init(GameObject* _parent)
 		{ transform->Get_Rotations()[0],transform->Get_Rotations()[1] },
 		{ colour[0],colour[1],colour[2],colour[3] });
 
+	std::cout << std::endl;
 	obj = &SageObjectManager::objects[std::to_string(Get_Parent()->Get_ID())];
 	obj->GetMaterial().enable_texture = true;
-	SageTexture* texture = Assets::Textures::Get_Texture(sprite_texture_ID);
-	if (texture != nullptr)
-	{
-		obj->attach_texture(texture);
-	}
+	SageTexture* texture = &Assets::Textures::Get_Texture(sprite_texture_ID);
+	obj->attach_texture(texture);
 }
-void Sprite2D::Update()
-{
+void Sprite2D::Update() {}
+void Sprite2D::Draw() {}
+void Sprite2D::Exit() {}
 
-}
-void Sprite2D::Draw()
-{
-	
-}
-void Sprite2D::Exit()
-{
-
-}
 ComponentType Sprite2D::Get_Component_Type() { return SPRITE2D; }
 
 void Sprite2D::Set_Texture_ID(std::string _ID)
 {
 	sprite_texture_ID = _ID;
+}
+
+void Sprite2D::Set_Transparency(float& _a) 
+{
+	colour[3] = _a;
 }
 #pragma endregion
 
@@ -134,15 +129,9 @@ void Sprite2D::Set_Texture_ID(std::string _ID)
 void Collision2D::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
-	std::cout << "Collision Component Reporting" << "\n";
 }
-void Collision2D::Update()
-{
-}
-void Collision2D::Exit()
-{
-
-}
+void Collision2D::Update(){}
+void Collision2D::Exit(){}
 ComponentType Collision2D::Get_Component_Type() { return COLLISION2D; }
 #pragma endregion
 
@@ -150,7 +139,6 @@ ComponentType Collision2D::Get_Component_Type() { return COLLISION2D; }
 void Audio::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
-	std::cout << "Audio Component Reporting" << "\n";
 }
 void Audio::Update()
 {

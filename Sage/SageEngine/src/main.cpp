@@ -71,8 +71,7 @@ void init()
 
         std::exit(EXIT_FAILURE);
     }
-
-    SageMain::init();
+    
     SM::Load();
     SM::Init();
 

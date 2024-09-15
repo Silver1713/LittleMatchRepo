@@ -16,7 +16,7 @@ namespace Assets
 	{
 		Parsed_CSV source;
 		std::unordered_map<std::string, Texture> textures;
-		std::unordered_map<std::string, SageTexture*> loaded_textures;
+		std::unordered_map<std::string, SageTexture> loaded_textures;
 
 		void Init()
 		{
@@ -49,7 +49,7 @@ namespace Assets
 		{
 			if (!(textures[_ID].is_loaded))
 			{
-				loaded_textures[_ID] = new SageTexture(textures[_ID].filepath.c_str());
+				loaded_textures[_ID].load_texture(textures[_ID].filepath.c_str(), SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
 				textures[_ID].is_loaded = true;
 
 				if (textures[_ID].sprites_num > 1)
@@ -59,7 +59,7 @@ namespace Assets
 			}
 		}
 
-		SageTexture* Get_Texture(std::string const& _ID)
+		SageTexture& Get_Texture(std::string const& _ID)
 		{
 			if (textures[_ID].is_loaded)
 			{
@@ -67,17 +67,13 @@ namespace Assets
 			}
 			else 
 			{
-				return nullptr;
+				Load(_ID);
+				return loaded_textures[_ID];
 			}
 		}
 
 		void Unload()
 		{
-			for (auto& t : loaded_textures)
-			{
-				delete t.second;
-			}
-
 			for (auto& t : textures)
 			{
 				t.second.is_loaded = false;

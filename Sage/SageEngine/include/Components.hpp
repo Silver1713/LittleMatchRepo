@@ -89,6 +89,7 @@ public:
 	void Exit() override;
 	ComponentType Get_Component_Type() override;
 	void Set_Texture_ID(std::string _ID);
+	void Set_Transparency(float& _a);
 };
 
 class Collision2D : public Component
