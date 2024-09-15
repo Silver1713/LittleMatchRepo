@@ -64,7 +64,8 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 	//glfwMakeContextCurrent(ptr_window);
 
 	sage_ptr_window->Activate_Context();
-
+	
+	sage_ptr_window->set_framebuffer_callback();
 
 
 	if (!ptr_window && !sage_ptr_window->check_active())

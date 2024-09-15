@@ -52,6 +52,8 @@ public:
 	void set_pos_x(int pos_x);
 	void set_pos_y(int pos_y);
 
+	void set_framebuffer_callback();
+
 	void swap_buffers();
 
 

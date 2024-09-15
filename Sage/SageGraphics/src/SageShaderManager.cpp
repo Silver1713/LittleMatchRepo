@@ -51,7 +51,7 @@ std::string SageShaderManager::get_shader_file_path(std::string& name)
 		if (file.is_open())
 		{
 			file.close();
-			std::string path = prev_found_shader_dir + name + ".glsl";
+			std::string	 path = prev_found_shader_dir + name + ".glsl";
 			prev_found_shader_dir.clear();
 			return path;
 		}
