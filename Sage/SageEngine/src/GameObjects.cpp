@@ -56,6 +56,11 @@ namespace Game_Objects
 		g_game_objects[g_go_counter] = _g;
 	}
 
+	void Create_Prefab_Instance(std::string str)
+	{
+		
+	}
+
 	std::unordered_map<unsigned int, GameObject*>& Get_Game_Objects()
 	{
 		return g_game_objects;
@@ -63,8 +68,8 @@ namespace Game_Objects
 
 	void Clear_Game_Objects()
 	{
-		g_game_objects.clear();
 		SageObjectManager::DestroyAllObjects();
+		g_game_objects.clear();		
 		g_go_counter = 0;
 	}
 }

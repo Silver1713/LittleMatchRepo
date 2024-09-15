@@ -10,16 +10,23 @@
 #include <iostream>
 
 std::unordered_map<std::string, Assets::Prefabs::Prefab> prefabs;
+static bool is_initialized{ false };
 
 namespace Prefabs
 {
 	void Init()
 	{
+		if (is_initialized)
+		{
+			return;
+		}
 		prefabs = Assets::Prefabs::Get_Prefabs();
+		is_initialized = true;
 	}
 
 	GameObject Create_Copy(Assets::Prefabs::Prefab& _p)
 	{
+		Init();
 		GameObject g;
 		g.Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
 		if (!(_p.sprite_texture_ID == "Nil"))
@@ -39,7 +46,7 @@ namespace Prefabs
 }
 
 Red::Red() : GameObject(Prefabs::Create_Copy(prefabs["RED"]))
-{
+{	
 	Game_Objects::Add_Game_Object(this);
 }
 
