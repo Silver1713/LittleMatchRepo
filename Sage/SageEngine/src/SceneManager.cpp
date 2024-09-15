@@ -80,7 +80,7 @@ namespace SM {
 	{
 		SM::fp_load();
 
-		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 5000.f,5000.f, 0.0f });
+		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 1000.f,1000.f, 0.0f });
 		fade_screen.Add_Component(std::make_unique<Transform>(t));
 		Sprite2D s({ "" }, { 0.f,0.f,0.f,1.f });
 		fade_screen.Add_Component(std::make_unique<Sprite2D>(s));
