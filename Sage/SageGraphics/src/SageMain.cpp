@@ -38,15 +38,15 @@ void SageMain::init()
 	//SageObjectManager::CreatePrimitiveObject("Rect3", PRIMITIVE_OBJECT_RECT, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,1,1,1 },
 		//{ 0,0,0,1 }, 0.5f);
 
-	SageObjectManager::objects["Rect1"].transform.position = { 0,0 };
+	SageObjectManager::objects["Rect1"].transform.position = { -500,0 };
 	//set scale
-	SageObjectManager::objects["Rect1"].transform.scale = { 1000,1000 };
+	SageObjectManager::objects["Rect1"].transform.scale = { 100,100 };
 	SageObjectManager::objects["Rect1"].transform.orientation = { 0,0 };
 
 
 	// 2nd object
-	SageObjectManager::objects["Rect2"].transform.position = { -500,2000 };
-	SageObjectManager::objects["Rect2"].transform.scale = { 1000,500 };
+	SageObjectManager::objects["Rect2"].transform.position = { -50,100 };
+	SageObjectManager::objects["Rect2"].transform.scale = { 100,200 };
 	SageObjectManager::objects["Rect2"].transform.orientation = { 0,0 };
 
 	// 3rd object
@@ -112,7 +112,7 @@ void SageMain::draw()
 	for (auto& obj : SageObjectManager::objects)
 	{
 		SageRenderer::DrawFilled(obj.second, {
-			true,false,15.f,0.f,{0,0,0,1},false
+			false,true,15.f,0.f,{0,0,0,1},false
 			});
 	}
 

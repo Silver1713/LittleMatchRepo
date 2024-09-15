@@ -28,7 +28,7 @@ glm::vec2 SageViewport::get_dims() const
 glm::mat3& SageViewport::calculate_viewport_xform()
 {
 	// Set the viewport transformation matrix
-	vp_xform = { 2 / default_world_bounds, 0,0,0,2 / default_world_bounds,0,0,0,1 };
+	vp_xform = { 2 / size.x, 0,0,0,2 / size.y,0,0,0,1 };
 
 	return vp_xform;
 

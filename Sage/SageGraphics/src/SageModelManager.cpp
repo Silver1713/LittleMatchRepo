@@ -54,8 +54,9 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, PrimitiveSha
 	// Use triangle fan for circle shape
 	else if (shape == PrimitiveShape::PRIMITIVE_CIRCLE)
 	{
+		
 		// default radius
-		float radius = 50.0f;
+		float radius = 8.f;
 		int slices = static_cast<int>(10.0f * sqrt(radius));
 		float angle_step = 2.0f * pi / static_cast<float>(slices);
 

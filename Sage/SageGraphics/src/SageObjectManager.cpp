@@ -127,7 +127,7 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end())
 		{
-			SageShader& shdr = SageShaderManager::CreateShaderProgram("BASE_SHADER", "../SageGraphics/shaders/BaseVertexShader.glsl", "../SageGraphics/shaders/BaseFragmentShader.glsl");
+			SageShader& shdr = SageShaderManager::search_and_create_shader_program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
 			mdl.AssignShaderProgram(&shdr);
 		}
 		else

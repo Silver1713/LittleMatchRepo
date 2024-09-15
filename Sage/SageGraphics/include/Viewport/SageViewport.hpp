@@ -9,7 +9,7 @@ class SageViewport
 	glm::vec2 position;
 	glm::vec2 size;
 
-	float default_world_bounds{10000.f};
+	float default_world_bounds{ 10000.f };
 	glm::mat3 vp_xform; // world to ndc
 
 
