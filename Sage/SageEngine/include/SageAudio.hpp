@@ -2,11 +2,11 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
-#include "../../../../FMOD/api/core/inc/fmod.hpp"
-#include "../../../../FMOD/api/core/inc/fmod_errors.h"
+#include "fmod.hpp"
+#include "fmod_errors.h"
 #include "SageAudioFiles.hpp";
 
-#define PATH "Audio/"
+#define PATH "Sage/build"
 
 namespace fs = std::filesystem;
 

@@ -9,7 +9,7 @@ static const char* Audio_BGM_Filepath(size_t _index)
 {
     switch (_index)
     {
-    case HALO_2:        return "Audio/BGM/Halo 2 Soundtrack V2_ Epilogue.mp3";
+    case HALO_2:        return "../SageEngine/data/assets/audio/bgm/Halo 2 Soundtrack V2_ Epilogue.mp3";
     default:            return "";
     };
 }
@@ -25,7 +25,7 @@ static const char* Audio_SFX_Filepath(size_t _index)
 {
     switch (_index)
     {
-    case BABABOOEY:     return "Audio/SFX/bababooey.mp3";
+    case BABABOOEY:     return "../SageEngine/data/assets/audio/sfx/bababooey.mp3";
     default:            return "";
     };
 }
@@ -41,7 +41,7 @@ static const char* Audio_UI_Filepath(size_t _index)
 {
     switch (_index)
     {
-    case CLICK:         return "Audio/UI/click.ogg";
+    case CLICK:         return "../SageEngine/data/assets/audio/ui/click.ogg";
     default:            return "";
     };
 }
@@ -57,7 +57,7 @@ static const char* Audio_Ambient_Filepath(size_t _index)
 {
     switch (_index)
     {
-    case RAIN:          return "Audio/Ambient/rain.ogg";
+    case RAIN:          return "../SageEngine/data/assets/audio/ambient/rain.ogg";
     default:            return "";
     };
 }

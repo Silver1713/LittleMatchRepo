@@ -48,6 +48,7 @@ int main()
     Assets::Prefabs::Init();
     Prefabs::Init();
 	init();
+    SageAudio::Play_Sound(HALO_2, NO_LOOP);
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{
