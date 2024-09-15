@@ -57,9 +57,9 @@ void SageMain::init()
 	//SageObjectManager::objects["Rect3"].transform.orientation = { 0,0 };
 
 	//SageObject* obj = &SageObjectManager::objects["Rect3"];
-	//
-	//obj->GetMaterial().enable_texture = true;
-	//obj->attach_texture(&p);
+	
+	/*obj->GetMaterial().enable_texture = true;
+	obj->attach_texture(&p);*/
 
 
 
@@ -110,7 +110,7 @@ void SageMain::draw()
 	for (auto& obj : SageObjectManager::objects)
 	{
 		SageRenderer::DrawFilled(obj.second, {
-			true,false,15.f,0.f,{0,0,0,1},false
+			false,true,15.f,0.f,{0,0,0,1},false
 			});
 	}
 

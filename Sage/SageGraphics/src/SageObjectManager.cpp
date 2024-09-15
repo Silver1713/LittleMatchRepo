@@ -39,6 +39,35 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 
 		return objects[name];
 	}
+
+	if (OBJ_SHAPE == PRIMITIVE_OBJECT_CIRCLE)
+	{
+		if (SageModelManager::models.find("PRIMITIVE_CIRCLE") == SageModelManager::models.end())
+		{
+			SageModelManager::CreatePrimitiveModel("PRIMITIVE_CIRCLE", PRIMITIVE_CIRCLE, TYPE_TRIANGLE_FAN);
+		}
+
+		SageModel& mdl = SageModelManager::models["PRIMITIVE_CIRCLE"];
+
+		mdl.setup_gpu_buffer();
+
+		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end())
+		{
+			SageShader& shdr = SageShaderManager::search_and_create_shader_program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
+			mdl.AssignShaderProgram(&shdr);
+		}
+		else
+		{
+			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
+		}
+
+		obj.init(name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
+		obj.transform = {};
+
+		objects[name] = obj;
+
+		return objects[name];
+	}
 	else
 	{
 		std::cerr << "Error: Shape not supported." << '\n';
@@ -79,6 +108,44 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 		obj.GetMaterial().border_color = borderColor;
 		obj.GetMaterial().border_width = borderWidth;
 		obj.GetMaterial().border_radius = borderRadius;
+
+		objects[name] = obj;
+
+		return objects[name];
+	}
+
+	if (OBJ_SHAPE == PRIMITIVE_OBJECT_CIRCLE)
+	{
+		if (SageModelManager::models.find("PRIMITIVE_CIRCLE") == SageModelManager::models.end())
+		{
+			SageModelManager::CreatePrimitiveModel("PRIMITIVE_CIRCLE", PRIMITIVE_CIRCLE, TYPE_TRIANGLE_FAN);
+		}
+
+		SageModel& mdl = SageModelManager::models["PRIMITIVE_CIRCLE"];
+
+		mdl.setup_gpu_buffer();
+
+		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end())
+		{
+			SageShader& shdr = SageShaderManager::search_and_create_shader_program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
+			mdl.AssignShaderProgram(&shdr);
+		}
+		else
+		{
+			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
+		}
+
+		obj.init(name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
+
+		obj.transform.position = position;
+		obj.transform.scale = scale;
+		obj.transform.orientation = orientation;
+
+		obj.GetMaterial().color = color;
+		obj.GetMaterial().border_color = borderColor;
+		obj.GetMaterial().border_width = borderWidth;
+		obj.GetMaterial().border_radius = borderRadius;
+		
 
 		objects[name] = obj;
 
