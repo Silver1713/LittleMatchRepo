@@ -31,7 +31,7 @@ namespace Splash_Screen {
 	{
 		Assets::Textures::Load("DIGIPEN_SPLASH_SCREEN");
 
-		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 5000.f,5000.f, 0.0f });
+		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 960.f,540.f, 0.0f });
 		digipen_splash_screen.Add_Component(std::make_unique<Transform>(t));
 		Sprite2D s({ "DIGIPEN_SPLASH_SCREEN" }, {1.f,1.f,1.f,1.f});
 		digipen_splash_screen.Add_Component(std::make_unique<Sprite2D>(s));
