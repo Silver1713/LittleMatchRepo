@@ -1,33 +1,116 @@
+#include "SageTextureInternal.hpp"
 #include "SageTexture.h"
-
 #include <iostream>
 
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
-#include <SOIL.h>
+class SageTexture::SageTextureInternalImpl
+{
+	std::string texture_path{};
+	unsigned int texture_handle;
+	int texture_unit;
+	int _type;
 
+	bool is_loaded = false;
+public:
 
-int SageTexture::tex_count{};
-SageTexture::SageTexture(const char* source) : texture_path(source){
-	std::ifstream file(source);
-	
-	
-	texture_id = SOIL_load_OGL_texture(texture_path.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT);
+	SageTextureInternal texture_internal;
 
-	//std::cout << SOIL_last_result();
-	texture_unit = ++tex_count;
+	SageTextureInternalImpl()
+	{
+		texture_handle = -1;
+		texture_unit = -1;
+		_type = -1;
+
+	}
+
+	SageTextureInternalImpl(std::string const& path, int type) : texture_path(path), texture_handle(0), texture_unit(0), _type(type), texture_internal(path, type)
+	{
+		texture_internal = SageTextureInternal(texture_path, type);
+		texture_unit = texture_internal.get_texture_unit();
+		texture_handle = texture_internal.get_texture_handle();
+		is_loaded = true;
+
+	}
+
+	~SageTextureInternalImpl()
+	{
+		texture_internal.unload();
+
+	}
+
+	int load(const char* src, TEXTURE_UNIT_TYPE const& type)
+	{
+		texture_unit = texture_internal.load(src, static_cast<int>(type));
+		texture_path = src;
+
+		texture_handle = texture_internal.get_texture_handle();
+		_type = static_cast<int>(type);
+
+		if (texture_unit == -1)
+		{
+			std::cout << "Error loading texture" << std::endl;
+			return -1;
+		}
+		is_loaded = true;
+		return texture_unit;
+	}
+	bool bind_texture() const
+	{
+
+		return texture_internal.bind_texture();
+	}
+	void unload()
+	{
+		texture_internal.unload();
+		is_loaded = false;
+	}
+
+	int get_unit() const
+	{
+		return texture_unit;
+	}
+
+	void set_texture_repeat() const
+	{
+		texture_internal.set_texture_repeat();
+	}
+	void set_texture_clamp() const
+	{
+		texture_internal.set_texture_clamp();
+	}
+	void set_texture_mirror_repeat() const
+	{
+		texture_internal.set_texture_mirror_repeat();
+	}
+	unsigned int get_handle() const
+	{
+		return texture_handle;
+	}
+
+	bool is_loaded_texture() const
+	{
+		return is_loaded;
+	}
+};
+
+SageTexture::SageTexture() : sage_internal_impl(std::make_unique<SageTextureInternalImpl>()),texture_unit(-1),texture_id(-1) {
 	
-	glBindTextureUnit(texture_unit, texture_id);
-	setTextureRepeat();
+
 }
 
-SageTexture::SageTexture(const SageTexture& other) :  texture_path(other.texture_path) {
+SageTexture::SageTexture(const char* source, TEXTURE_UNIT_TYPE type) : texture_path(source), sage_internal_impl(std::make_unique<SageTextureInternalImpl>(source, static_cast
+	<int>(type))) {
+	texture_id = sage_internal_impl->get_handle();
+	texture_unit = sage_internal_impl->get_unit();
+
+}
+
+SageTexture::SageTexture(const SageTexture& other) : texture_path(other.texture_path) {
 	if (this != &other)
 	{
-		texture_id = SOIL_load_OGL_texture(texture_path.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT );
-		texture_unit = tex_count++;
-		glBindTextureUnit(texture_unit, texture_id);
-		setTextureRepeat();
+		//To load or not to load
+		texture_id = other.get_texture_handle();
+		texture_unit = other.texture_unit;
+
 	}
 }
 
@@ -39,35 +122,51 @@ SageTexture& SageTexture::operator=(const SageTexture& other) {
 }
 
 // Getters
-int SageTexture::getTextureID() const {
+int SageTexture::get_texture_handle() const {
 	return texture_id;
 }
 
-int SageTexture::getTextureUnit() const {
+int SageTexture::get_texture_unit() const {
 	return texture_unit;
 }
 
 // Setters
 // Default state
 void SageTexture::setTextureRepeat() {
-	glTextureParameteri(texture_id, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTextureParameteri(texture_id, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	sage_internal_impl->set_texture_repeat();
 }
 
 void SageTexture::setTextureClamp() {
-	glTextureParameteri(texture_id, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTextureParameteri(texture_id, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	sage_internal_impl->set_texture_clamp();
 }
 
 void SageTexture::setTextureMirrorRepeat() {
-	glTextureParameteri(texture_id, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	glTextureParameteri(texture_id, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	sage_internal_impl->set_texture_mirror_repeat();
 }
 
 SageTexture::~SageTexture()
 {
-//	glDeleteTextures(1, reinterpret_cast<GLuint*>( & texture_id));
-	tex_count--;
+	sage_internal_impl->unload();
 }
+
+
+
+void SageTexture::load_texture(const char* filepath, TEXTURE_UNIT_TYPE type)
+{
+	int status = sage_internal_impl->load(filepath, type);
+	if (status == -1)
+	{
+		std::cout << "Error loading texture" << std::endl;
+	}
+	texture_path = filepath;
+	texture_id = sage_internal_impl->get_handle();
+	texture_unit = sage_internal_impl->get_unit();
+}
+
+bool SageTexture::bind_texture()
+{
+	return sage_internal_impl->bind_texture();
+}
+
 
 

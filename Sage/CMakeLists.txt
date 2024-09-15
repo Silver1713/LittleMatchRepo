@@ -2,14 +2,13 @@ cmake_minimum_required(VERSION 2.8...3.13)
 
 project(Sage)
 
-#Remove when finished!
+# Remove when finished!
 set(CMAKE_SUPPRESS_REGENERATION false)
 
 add_definitions(-DGLEW_STATIC)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(ImportDependencies)
-
 
 # All libraries - GLFW, glew , include libraries here for ALL
 set(ALL_LIBS
@@ -18,10 +17,9 @@ set(ALL_LIBS
     PRIVATE soil
 )
 
-
 importDependencies()
-
-
+include(GenerateCoreComponents)
+message(STATUS "All Libraries: ${ALL_LIBS}")
 option(GENERATE_ENGINE_CORE "Generate Engine Core" ON)
 option(COMPILE_USING_OBJECT "Compile using object" ON)
 
@@ -35,16 +33,18 @@ foreach(dir ${PROJECT_DIRECTORIES})
     string(REGEX REPLACE "/$" "" dir ${dir})
     get_filename_component(DIR_NAME ${dir} NAME)
     set(INERNAL_H_FILE_NAME "Internal Header Files")
-    
+
     if(IS_DIRECTORY ${dir} AND NOT DIR_NAME STREQUAL "SageEngine" AND NOT DIR_NAME STREQUAL "Sage" AND NOT DIR_NAME STREQUAL "SageInputUnit")
         set(SAGE_SHADER_FILES)
-    if (DIR_NAME STREQUAL "SageGraphics")
+
+        if(DIR_NAME STREQUAL "SageGraphics")
             file(GLOB_RECURSE SAGE_SHADER_FILES
                 ${dir}/shaders/*.glsl
             )
             source_group("Shader Files" FILES ${SAGE_SHADER_FILES})
         endif()
-    file(GLOB_RECURSE SAGE_SOURCE_FILE
+
+        file(GLOB_RECURSE SAGE_SOURCE_FILE
             ${dir}/src/*.[ch]pp
             ${dir}/src/*/*.[ch]pp
             ${dir}/include/*.[h]pp
@@ -60,6 +60,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
 
         foreach(subdirsrc ${PROJECT_SUBDIRECTORIES_SRC})
             set(SUB_NAMESRC)
+
             if(IS_DIRECTORY ${subdirsrc})
                 get_filename_component(SUB_NAMESRC ${subdirsrc} NAME)
                 FILE(GLOB_RECURSE DIR_SRC_FILE
@@ -78,6 +79,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
         foreach(subdirh ${PROJECT_SUBDIRECTORIES_HEADER})
             set(SUB_NAME)
             get_filename_component(SUB_NAME ${subdirh} NAME)
+
             if(IS_DIRECTORY ${subdirh} AND NOT SUB_NAME STREQUAL "internal")
                 FILE(GLOB_RECURSE DIR_H_FILE
                     ${subdirh}/*.h
@@ -97,6 +99,13 @@ foreach(dir ${PROJECT_DIRECTORIES})
         set(SAGE_SHADER_FILES "")
         target_link_libraries(${DIR_NAME} ${ALL_LIBS})
         set_property(TARGET ${DIR_NAME} PROPERTY CXX_STANDARD 20)
+
+        if(WIN32 AND FMOD_IMPORT_SUCCESS)
+            add_custom_command(TARGET ${DIR_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "$<$<CONFIG:Debug>:${FMOD_LIB_DIR}/fmodL.dll>$<$<NOT:$<CONFIG:Debug>>:${FMOD_LIB_DIR}/fmod.dll>"
+                $<TARGET_FILE_DIR:${DIR_NAME}>)
+        endif()
 
         IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(${DIR_NAME} PRIVATE -Wall ${DisableWarnings})
@@ -141,8 +150,6 @@ foreach(dir ${PROJECT_DIRECTORIES})
             )
         ENDIF()
 
-        
-
         target_link_libraries(${DIR_NAME}_lib ${ALL_LIBS})
         set_property(TARGET ${DIR_NAME}_lib PROPERTY CXX_STANDARD 20)
 
@@ -154,9 +161,10 @@ foreach(dir ${PROJECT_DIRECTORIES})
 
         file(GLOB PROJECT_LIB_SUBDIRECTORIES_HEADER ${dir}/include/*/)
 
-        FOREACH (SUB_DIR_LIB ${PROJECT_LIB_SUBDIRECTORIES_HEADER})
+        FOREACH(SUB_DIR_LIB ${PROJECT_LIB_SUBDIRECTORIES_HEADER})
             set(SUB_NAME_LIB)
             get_filename_component(SUB_NAME_LIB ${SUB_DIR_LIB} NAME)
+
             IF(IS_DIRECTORY ${SUB_DIR_LIB} AND NOT SUB_NAME_LIB STREQUAL "internal")
                 FILE(GLOB_RECURSE DIR_H_FILE_LIB
                     ${SUB_DIR_LIB}/*.h
@@ -172,12 +180,9 @@ foreach(dir ${PROJECT_DIRECTORIES})
 
         target_include_directories(${DIR_NAME}_lib PUBLIC
             ${dir}/include
-
         )
-        target_include_directories(${DIR_NAME}_lib 
-        PRIVATE ${dir}/include/internal
-
-        
+        target_include_directories(${DIR_NAME}_lib
+            PRIVATE ${dir}/include/internal
         )
         list(APPEND LIB_LIST "${DIR_NAME}_lib")
         list(APPEND OBJECT_LIST "$<TARGET_OBJECTS:${DIR_NAME}_lib>")
@@ -195,24 +200,24 @@ include(UnitTest)
 
 # # Gather source files for the single executable
 # file(GLOB_RECURSE SageLite_source_files
-#     ${CMAKE_SOURCE_DIR}/SageLite/src/*.[c]pp
-#     ${CMAKE_SOURCE_DIR}/SageLite/include/*.h
-#     ${CMAKE_SOURCE_DIR}/SageLite/include/*.hpp
+# ${CMAKE_SOURCE_DIR}/SageLite/src/*.[c]pp
+# ${CMAKE_SOURCE_DIR}/SageLite/include/*.h
+# ${CMAKE_SOURCE_DIR}/SageLite/include/*.hpp
 # )
 
 # file(GLOB_RECURSE SageInput_source_files
-#     ${CMAKE_SOURCE_DIR}/SageInput/src/*.[ch]pp
-#     ${CMAKE_SOURCE_DIR}/SageInput/include/*.[h]
-#     ${CMAKE_SOURCE_DIR}/SageInput/include/*.[h]pp
+# ${CMAKE_SOURCE_DIR}/SageInput/src/*.[ch]pp
+# ${CMAKE_SOURCE_DIR}/SageInput/include/*.[h]
+# ${CMAKE_SOURCE_DIR}/SageInput/include/*.[h]pp
 # )
 # file(GLOB_RECURSE INternal_SAGELITE_H_FILES
-#     ${CMAKE_SOURCE_DIR}/SageLite/include/internal/*.h
-#     ${CMAKE_SOURCE_DIR}/SageLite/include/internal/*.hpp
+# ${CMAKE_SOURCE_DIR}/SageLite/include/internal/*.h
+# ${CMAKE_SOURCE_DIR}/SageLite/include/internal/*.hpp
 # )
 
 # file(GLOB_RECURSE INternal_SAGEINPUT_H_FILES
-#     ${CMAKE_SOURCE_DIR}/SageInput/include/internal/*.h
-#     ${CMAKE_SOURCE_DIR}/SageInput/include/internal/*.hpp
+# ${CMAKE_SOURCE_DIR}/SageInput/include/internal/*.h
+# ${CMAKE_SOURCE_DIR}/SageInput/include/internal/*.hpp
 # )
 if(${IS_UNIT_TEST_ENABLED})
     enable_testing()

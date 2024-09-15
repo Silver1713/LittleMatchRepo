@@ -2,9 +2,9 @@
 #include <iostream>
 #include <numeric>
 
-
 #include "SageMain.hpp"
 #include "SageHelper.hpp"
+#include "Test.h"
 // Forward declaration
 void init();
 void update();
@@ -25,7 +25,8 @@ extern "C"
 int main()
 {
 	init();
-	
+	// SceneMain: A example of a scene that can be used in the main loop
+	// SageHelper: A utility class that enable compiling of sjhaders and the calculation of deltatime	
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{
 		glfwPollEvents();
