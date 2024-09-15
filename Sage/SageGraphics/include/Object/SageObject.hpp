@@ -58,6 +58,8 @@ private:
 
 	SageMesh obj_mesh;
 
+	bool is_enabled;
+
 	
 
 
@@ -80,6 +82,8 @@ public:
 	SageMaterial& GetMaterial();
 
 	void set_alpha(float transparency); // 0: Transparent, 1: Opaque
+
+	void disable_object();
 
 	
 
