@@ -40,11 +40,11 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 	WINDOW_WIDTH = width;
 	WINDOW_HEIGHT = height;
 	WINDOW_TITLE = const_cast<char*>(title);
-	
+
 	
 	//Error Callback
 	glfwSetErrorCallback(error_cb);
-	
+
 
 	if (glfwInit())
 	{
@@ -58,18 +58,6 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 	}
 
 
-	//// Forward compatibility with OpenGL 4.5
-	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	////Specify minimum OpenGL version
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	//glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
-	//glfwWindowHint(GLFW_DEPTH_BITS, 24);
-	//glfwWindowHint(GLFW_RED_BITS, 8); glfwWindowHint(GLFW_GREEN_BITS, 8);
-	//glfwWindowHint(GLFW_BLUE_BITS, 8); glfwWindowHint(GLFW_ALPHA_BITS, 8);
-
 	sage_ptr_window = new SageWindow(WINDOW_WIDTH, WINDOW_HEIGHT, title);
 	//ptr_window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, NULL, NULL);
 
@@ -77,7 +65,7 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 
 	sage_ptr_window->Activate_Context();
 
-	
+
 
 	if (!ptr_window && !sage_ptr_window->check_active())
 	{
@@ -114,9 +102,9 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 #endif
 	}
 
-	
-	
-	
+
+
+
 	//Event Callbacks
 	/*glfwSetFramebufferSizeCallback(ptr_window, framebuffer_size_cb);
 	glfwSetKeyCallback(ptr_window, key_cb);
@@ -154,7 +142,7 @@ void SageHelper::update_time(double update_fps_interval)
 {
 	static double last_time = glfwGetTime();
 	double current_time = glfwGetTime();
-	delta_time = current_time - last_time ;
+	delta_time = current_time - last_time;
 	last_time = current_time;
 
 	static double last_fps_time{};
@@ -185,7 +173,7 @@ void SageHelper::draw()
 
 void SageHelper::exit()
 {
-	
+
 	glfwTerminate();
 }
 
@@ -274,10 +262,10 @@ void SageHelper::error_cb(int error, const char* description)
 
 SageShader SageHelper::CompileShadersFromFile(const char* vertex_shader, const char* fragment_shader)
 {
-	SageShader shader;
-	bool a = shader.CompileFromFile(SageShader::SHADER_TYPE::VERTEX_SHADER, vertex_shader);
-	
-	bool b = shader.CompileFromFile(SageShader::SHADER_TYPE::FRAGMENT_SHADER, fragment_shader);
+	SageShader shader{};
+	bool a = shader.CompileFromFile(SageShader::SAGE_SHADER_TYPE::SAGE_VERTEX_SHADER, vertex_shader);
+
+	bool b = shader.CompileFromFile(SageShader::SAGE_SHADER_TYPE::SAGE_FRAGMENT_SHADER, fragment_shader);
 	if (a & b)
 	{
 		std::cout << "Shaders compiled successfully" << '\n';
@@ -309,7 +297,7 @@ SageShader SageHelper::CompileShadersFromFile(const char* vertex_shader, const c
 		std::cerr << "Shaders failed to validate" << '\n';
 		std::exit(EXIT_FAILURE);
 	}
-
+	shader.GetProgramHandle();
 	return shader;
 }
 

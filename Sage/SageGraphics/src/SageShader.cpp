@@ -1,229 +1,184 @@
-#include "SageShader.hpp"
-
 #include <iostream>
 #include <fstream>
-#include <glm/gtc/type_ptr.hpp>
 
+#include "SageShaderInternal.hpp"
+#include "SageShader.hpp"
 
-SageShader::SageShader() : pgm_handle(0), is_linked(false) {};
+#include "glm/gtc/type_ptr.inl"
 
-//SageShader::~SageShader()
-//{
-//	if (pgm_handle != 0)
-//	{
-//		bool delete_status = DeleteShaderProgram();
-//		if (!delete_status)
-//		{
-//			std::cout << "Error: Failed to delete shader program.";
-//			std::exit(EXIT_FAILURE);
-//		}
-//		pgm_handle = 0;
-//		is_linked = false;
-//
-//	}
-//}
-GLboolean SageShader::CompileFromString(SHADER_TYPE shader_type, std::string const& source, std::string const& path)
+class SageShader::SageShaderInternalImpl
 {
-	GLuint shader_handle = 0;
-	GLint status = 0;
-	const char* src = source.c_str();
-	if (pgm_handle <= 0)
-	{
-		pgm_handle = glCreateProgram();
-		if (pgm_handle == 0)
-		{
-			std::cerr << "Error: Failed to create shader program." << '\n';
-			return false;
-		}
+private:
+	std::unique_ptr<SageShaderInternal> internal_impl;
+public:
+	SageShaderInternalImpl() : internal_impl(std::make_unique<SageShaderInternal>()) {};
 
-	}
-	switch (shader_type)
+	bool Compile(std::string const& path, SAGE_SHADER_TYPE type)
 	{
-	case SHADER_TYPE::VERTEX_SHADER:
-		shader_handle = glCreateShader(GL_VERTEX_SHADER);
-		break;
-	case SHADER_TYPE::FRAGMENT_SHADER:
-		shader_handle = glCreateShader(GL_FRAGMENT_SHADER);
-		break;
-	case SHADER_TYPE::GEOMETRY_SHADER:
-		shader_handle = glCreateShader(GL_GEOMETRY_SHADER);
-		break;
-	case SHADER_TYPE::TESS_CONTROL_SHADER:
-		shader_handle = glCreateShader(GL_TESS_CONTROL_SHADER);
-		break;
-	case SHADER_TYPE::TESS_EVALUATION_SHADER:
-		shader_handle = glCreateShader(GL_TESS_EVALUATION_SHADER);
-		break;
-	case SHADER_TYPE::COMPUTE_SHADER:
-		shader_handle = glCreateShader(GL_COMPUTE_SHADER);
-		break;
-	default:
-		std::cerr << "Error: Invalid shader type." << '\n';
-		return false;
+		return internal_impl->CompileFromFile(static_cast<SageShaderInternal::SAGE_INTERNAL_SHADER_TYPE>(type), path);
 	}
 
-
-	char const* src_code[] = { src };
-	glShaderSource(shader_handle, 1, src_code, NULL);
-	glCompileShader(shader_handle);
-
-	glGetShaderiv(shader_handle, GL_COMPILE_STATUS, &status);
-
-	if (status == GL_FALSE)
+	bool Compile_Raw_String(std::string const& source, SAGE_SHADER_TYPE type, std::string const& path)
 	{
-		GLint log_length = 0;
-		glGetShaderiv(shader_handle, GL_INFO_LOG_LENGTH, &log_length);
-
-		std::string log(log_length, ' ');
-		glGetShaderInfoLog(shader_handle, log_length, &log_length, &log[0]);
-
-		log_string = log;
-
-		std::cerr << "Error: Failed to compile (" << ((shader_type == SHADER_TYPE::VERTEX_SHADER) ? "VERTEX" : "FRAGMENT") << ')'  << '\n';
-		if (path != "")
-			std::cerr << "At: " << path << '\n';
-		std::cerr << log << '\n';
-
-		return false;
+		return internal_impl->CompileFromString(static_cast<SageShaderInternal::SAGE_INTERNAL_SHADER_TYPE>(type), source, path);
 	}
 
-	glAttachShader(pgm_handle, shader_handle);
+	bool Link()
+	{
+		return internal_impl->Link();
 
+	}
+
+	bool Validate()
+	{
+		return internal_impl->Validate();
+	}
 	
 
-	return true;
+	void Use()
+	{
+		internal_impl->Activate();
+
+	}
+
+	void Unuse()
+	{
+		internal_impl->Deactivate();
+	}
+
+
+	std::string GetLog()
+	{
+		return internal_impl->GetLog();
+	}
+
+	unsigned int GetProgramID()
+	{
+		return internal_impl->GetProgramHandle();
+
+	}
+
+
+
+	void PrintActiveAttribs()
+	{
+		internal_impl->PrintActiveAttribs();
+	}
+
+	void PrintActiveUniform()
+	{
+		internal_impl->PrintActiveUniforms();
+
+	}
+
+	bool DeleteShaderProgram()
+	{
+		return internal_impl->DeleteShaderProgram();
+
+	}
+};
+
+
+SageShader::SageShader() : sage_impl{ std::make_unique<SageShaderInternalImpl>() }, pgm_handle(0), is_linked(false)
+{
+
+};
+
+
+SageShader::SageShader(SageShader&& other) noexcept : sage_impl(std::move(other.sage_impl)), pgm_handle(other.pgm_handle), is_linked(other.is_linked)
+{
+	other.pgm_handle = 0;
+	other.is_linked = false;
 }
 
-GLboolean SageShader::CompileFromFile(SHADER_TYPE shader_type, std::string const& file_name)
+SageShader& SageShader::operator=(SageShader&& other) noexcept
 {
-	std::ifstream file(file_name);
-
-	if (!file)
+	if (this != &other)
 	{
-		std::cerr << "Error: Failed to open file." << '\n';
-		return false;
-	}
-	if (pgm_handle <= 0)
-	{
-		pgm_handle = glCreateProgram();
-		if (pgm_handle == 0)
-		{
-			std::cerr << "Error: Failed to create shader program." << '\n';
-			return false;
-		}
+		sage_impl = std::move(other.sage_impl);
+		pgm_handle = other.pgm_handle;
+		is_linked = other.is_linked;
 
+		other.pgm_handle = 0;
+		other.is_linked = false;
 	}
 
-	std::string source((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-	return CompileFromString(shader_type, source, file_name);
+	return *this;
+}
+
+
+
+bool SageShader::CompileFromString(SAGE_SHADER_TYPE shader_type, std::string const& source, std::string const& path)
+{
+	return sage_impl->Compile_Raw_String(source, shader_type, path);
+}
+
+bool SageShader::CompileFromFile(SAGE_SHADER_TYPE shader_type, std::string const& file_name)
+{
+	return sage_impl->Compile(file_name, shader_type);
 }
 
 
 // Helper function to link the shader program
 
-GLboolean SageShader::Link()
+bool SageShader::Link()
 {
-	GLint status = 0;
-	glLinkProgram(pgm_handle);
 
-	glGetProgramiv(pgm_handle, GL_LINK_STATUS, &status);
-
-	if (status == GL_FALSE)
-	{
-		GLint log_length = 0;
-		glGetProgramiv(pgm_handle, GL_INFO_LOG_LENGTH, &log_length);
-
-		std::string log(log_length, ' ');
-		glGetProgramInfoLog(pgm_handle, log_length, &log_length, &log[0]);
-
-		log_string = log;
-
-		std::cerr << "Error: Failed to link shader program." << '\n';
-		std::cerr << log << '\n';
-
-		return false;
-	}
-
-	is_linked = true;
-	//glDeleteShader();
-	return true;
+	is_linked = sage_impl->Link();
+	return is_linked;
 }
 
 
-GLboolean SageShader::Validate()
+bool SageShader::Validate()
 {
-	GLint status = 0;
-	glValidateProgram(pgm_handle);
-
-	glGetProgramiv(pgm_handle, GL_VALIDATE_STATUS, &status);
-
-	if (status == GL_FALSE)
-	{
-		GLint log_length = 0;
-		glGetProgramiv(pgm_handle, GL_INFO_LOG_LENGTH, &log_length);
-
-		std::string log(log_length, ' ');
-		glGetProgramInfoLog(pgm_handle, log_length, &log_length, &log[0]);
-
-		log_string = log;
-
-		std::cerr << "Error: Failed to validate shader program." << '\n';
-		std::cerr << log << '\n';
-
-		return false;
-	}
-
-	return true;
+	return sage_impl->Validate();
 }
 
 
 void SageShader::Activate()
 {
-	if (pgm_handle > 0 && is_linked)
-		glUseProgram(pgm_handle);
-	
-	
+	sage_impl->Use();
+
+
 }
 
 void SageShader::Deactivate()
 {
-	glUseProgram(0);
+	sage_impl->Unuse();
 }
 
 
 
 
-GLuint SageShader::GetProgramHandle() const
+unsigned int SageShader::GetProgramHandle()
 {
-	return pgm_handle;
+	pgm_handle = sage_impl->GetProgramID();
+	return sage_impl->GetProgramID();
 }
 
 std::string SageShader::GetLog() const
 {
-	return log_string;
+	return sage_impl->GetLog();
 }
 
-GLboolean SageShader::IsLinked() const
+bool SageShader::IsLinked() const
 {
 	return is_linked;
 }
 
-void SageShader::BindVertexAttribLocation(GLuint index, const char* name)
+void SageShader::BindVertexAttribLocation(int index, const char* name)
 {
 	glBindAttribLocation(pgm_handle, index, name);
 }
 
-void SageShader::BindFragAttribLocation(GLuint index, const char* name)
+void SageShader::BindFragAttribLocation(int index, const char* name)
 {
 	glBindFragDataLocation(pgm_handle, index, name);
 
 }
 
-GLint SageShader::GetUniformLocation(const char* name, bool exit_on_error)
+int SageShader::GetUniformLocation(const char* name, bool exit_on_error)
 {
-#if _DEBUG
-	std::cout << "Getting uniform location for: " << name << '\n';
-#endif
 
 	GLint loc = glGetUniformLocation(pgm_handle, name);
 
@@ -240,29 +195,23 @@ GLint SageShader::GetUniformLocation(const char* name, bool exit_on_error)
 
 // Uniform setter - Numerical
 
-void SageShader::SetUniform(const char* name, GLint val)
+void SageShader::SetUniform(const char* name, int val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform1i(loc, val);
 }
 
 
-void SageShader::SetUniform(const char* name, GLfloat val)
+void SageShader::SetUniform(const char* name, float val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform1f(loc, val);
 }
 
-void SageShader::SetUniform(const char* name, GLdouble val)
+void SageShader::SetUniform(const char* name, double val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform1d(loc, val);
-}
-
-void SageShader::SetUniform(const char* name, GLboolean val)
-{
-	GLint loc = GetUniformLocation(name);
-	glUniform1i(loc, val);
 }
 
 void SageShader::SetUniform(const char* name, bool val)
@@ -270,22 +219,21 @@ void SageShader::SetUniform(const char* name, bool val)
 	GLint loc = GetUniformLocation(name);
 	glUniform1i(loc, val ? GL_TRUE : GL_FALSE);
 }
-
 // Uniform setter - Vector - Singular
 
-void SageShader::SetUniform(const char* name, GLfloat x, GLfloat y)
+void SageShader::SetUniform(const char* name, float x, float y)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform2f(loc, x, y);
 }
-void SageShader::SetUniform(const char* name, GLfloat x, GLfloat y, GLfloat z)
+void SageShader::SetUniform(const char* name, float x, float y, float z)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform3f(loc, x, y, z);
 
 }
 
-void SageShader::SetUniform(const char* name, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
+void SageShader::SetUniform(const char* name, float x, float y, float z, float w)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform4f(loc, x, y, z, w);
@@ -340,62 +288,22 @@ bool SageShader::FileExists(const std::string& file_name)
 
 bool SageShader::DeleteShaderProgram()
 {
-	glDeleteProgram(pgm_handle);
-	return true;
+	return sage_impl->DeleteShaderProgram();
 }
 
 // Print Active Attributes in a neatly table format
 void SageShader::PrintActiveAttribs() const
 {
-	GLint num_attribs = 0;
-	glGetProgramInterfaceiv(pgm_handle, GL_PROGRAM_INPUT, GL_ACTIVE_RESOURCES, &num_attribs);
 
-	std::vector<GLchar> name_data(256);
-	std::vector<GLenum> properties = { GL_NAME_LENGTH, GL_TYPE, GL_LOCATION };
-
-	std::cout << "Active Attributes" << '\n';
-	std::cout << "Index | Name" << '\n';
-	std::cout << "----------------" << '\n';
-
-	for (int i = 0; i < num_attribs; i++)
-	{
-		GLint attrib[3];
-		glGetProgramResourceiv(pgm_handle, GL_PROGRAM_INPUT, i, 3, &properties[0], 3, NULL, attrib);
-
-		name_data.resize(attrib[0]);
-		glGetProgramResourceName(pgm_handle, GL_PROGRAM_INPUT, i, name_data.size(), NULL, &name_data[0]);
-
-		std::string name((char*)&name_data[0], name_data.size() - 1);
-		std::cout << attrib[2] << " | " << name << '\n';
-	}
+	sage_impl->PrintActiveAttribs();
 }
 
 void SageShader::PrintActiveUniforms() const
 {
-	GLint num_uniforms = 0;
-	glGetProgramInterfaceiv(pgm_handle, GL_UNIFORM, GL_ACTIVE_RESOURCES, &num_uniforms);
-
-	std::vector<GLchar> name_data(256);
-	std::vector<GLenum> properties = { GL_NAME_LENGTH, GL_TYPE, GL_LOCATION };
-
-	std::cout << "Active Uniforms" << '\n';
-	std::cout << "Index | Name" << '\n';
-	std::cout << "----------------" << '\n';
-
-	for (int i = 0; i < num_uniforms; i++)
-	{
-		GLint uniform[3];
-		glGetProgramResourceiv(pgm_handle, GL_UNIFORM, i, 3, &properties[0], 3, NULL, uniform);
-
-		name_data.resize(uniform[0]);
-		glGetProgramResourceName(pgm_handle, GL_UNIFORM, i, name_data.size(), NULL, &name_data[0]);
-
-		std::string name((char*)&name_data[0], name_data.size() - 1);
-		std::cout << uniform[2] << " | " << name << '\n';
-	}
+	sage_impl->PrintActiveUniform();
 }
 
-
+SageShader::~SageShader() = default;
 
 
 

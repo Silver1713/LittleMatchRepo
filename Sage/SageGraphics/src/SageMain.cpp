@@ -9,16 +9,19 @@
 #include "SageModelManager.hpp"
 #include "SageObjectManager.hpp"
 #include "SageObject.hpp"
-const char* base_vtx_path = "../SageLite/shaders/BaseVertexShader.glsl";
-const char* base_frag_path = "../SageLite/shaders/BaseFragmentShader.glsl";
+#include "SageShaderManager.hpp"
+const char* base_vtx_path = "../SageGraphics/shaders/BaseVertexShader.glsl";
+const char* base_frag_path = "../SageGraphics/shaders/BaseFragmentShader.glsl";
 
 SageModel model;
-SageShader shdr;
-//SageObject obj;
 SageViewport vp;
+SageTexture p;
 
 void SageMain::init()
 {
+	SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
+	
+	p.load_texture("../SageIO/image/digipen_splash_screen.png", SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
 	vp = { glm::vec2{0,0}, {SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT} };
 	vp.calculate_viewport_xform();
 	SageRenderer::SetViewport(vp);
@@ -26,8 +29,9 @@ void SageMain::init()
 	
 
 
-	SageObjectManager::CreatePrimitiveObject("Rect1", PRIMITIVE_OBJECT_RECT , {0,0}, {1000,500}, {0,0}, {1,0,1,1},
-		{0,0,0,1}, 0.5f);
+
+	SageObjectManager::CreatePrimitiveObject("Rect1", PRIMITIVE_OBJECT_RECT, { 0,0 }, { 1000,500 }, { 0,0 }, { 1,0,1,1 },
+		{ 0,0,0,1 }, 0.5f);
 
 	SageObjectManager::CreatePrimitiveObject("Rect2", PRIMITIVE_OBJECT_RECT, { 1000,2000 }, { 1000,500 }, { 0,0 }, { 1,1,0,1 },
 		{ 0,0,0,1 }, 0.5f);
@@ -48,9 +52,16 @@ void SageMain::init()
 	// 3rd object
 
 	// Random transform
-	SageObjectManager::objects["Rect3"].transform.position = { 500,4000 };
-	SageObjectManager::objects["Rect3"].transform.scale = { 1000,500 };
+	SageObjectManager::objects["Rect3"].transform.position = { 0,0 };
+	SageObjectManager::objects["Rect3"].transform.scale = { 5000,5000 };
 	SageObjectManager::objects["Rect3"].transform.orientation = { 0,0 };
+
+	SageObject* obj = &SageObjectManager::objects["Rect3"];
+	
+	obj->GetMaterial().enable_texture = true;
+	obj->attach_texture(&p);
+
+
 
 	//CreaTE 2500 objects randomize position and scale and color
 
@@ -66,10 +77,10 @@ void SageMain::init()
 		SageObjectManager::objects[std::to_string(i).c_str()].GetMaterial().color = { (float)rand() / RAND_MAX, (float)rand() / RAND_MAX, (float)rand() / RAND_MAX, 1 };
 
 	}*/
-	
-	
+
+
 	vp.setViewport();
-	
+
 }
 
 void SageMain::update()
@@ -79,25 +90,25 @@ void SageMain::update()
 		obj.second.update();
 	}
 
-	
+
 }
 
 void SageMain::draw()
 {
-	
-	
+
+
 
 	glClearColor(1, 1, 1, 1);
-	glClear(GL_COLOR_BUFFER_BIT );
+	glClear(GL_COLOR_BUFFER_BIT);
 	std::ostringstream ss{ "Scene 1" };
 
-	ss << "Scene 1 | " << "FPS: " << std::fixed <<  SageHelper::FPS;
+	ss << "Scene 1 | " << "FPS: " << std::fixed << SageHelper::FPS;
 	//glfwSetWindowTitle(SageHelper::ptr_window, ss.str().c_str());
 	SageHelper::sage_ptr_window->set_title(ss.str().c_str());
-	
-	
-	
-	
+
+
+
+
 	for (auto& obj : SageObjectManager::objects)
 	{
 		SageRenderer::DrawFilled(obj.second, {

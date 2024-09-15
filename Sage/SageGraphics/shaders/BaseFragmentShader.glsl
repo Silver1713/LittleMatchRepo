@@ -5,10 +5,14 @@ layout(location = 3) in vec3 aFragColor;
 uniform bool uUseColor;
 uniform bool uUseBorderColor;
 uniform float uBorderSize;
-uniform float uCornerRadius;  // New uniform to control corner radius
+uniform float uCornerRadius;  
+uniform bool uUseTexture;
+uniform float uTransparency;
 uniform vec4 uColor;
 uniform vec4 uBorderColor;
 uniform vec2 uObjectSize;
+
+uniform sampler2D uTex2D;
 
 out vec4 color;
 
@@ -16,8 +20,8 @@ void main() {
     vec4 c_clr = vec4(aFragColor, 1.0);
 
     if (uUseBorderColor) {
-        float borderSizeX = uBorderSize / uObjectSize.x; // Normalize border size relative to object width
-        float borderSizeY = uBorderSize / uObjectSize.y; // Normalize border size relative to object height
+        float borderSizeX = uBorderSize / uObjectSize.x; 
+        float borderSizeY = uBorderSize / uObjectSize.y; 
 
         // Calculate normalized corner radius
         float normalizedCornerRadiusX = uCornerRadius / uObjectSize.x;
@@ -42,17 +46,26 @@ void main() {
             isInCorner = (length(aTextCoords - vec2(1.0 - normalizedCornerRadiusX, 1.0 - normalizedCornerRadiusY)) > normalizedCornerRadiusX);
         }
 
-        // Apply the appropriate color
+
         if (isInBorder && !isInCorner) {
-            c_clr = uBorderColor;  // Border color
+            c_clr = uBorderColor;  
         }
         else {
-            c_clr = (!uUseColor) ? vec4(aFragColor,1.0) : uColor;  // Fill color
+			if (uUseTexture) {
+				c_clr = texture(uTex2D, aTextCoords); 
+			}
+            else {
+                c_clr = (!uUseColor) ? vec4(aFragColor, 1.0) : uColor;  
+            }
         }
     }
     else if (uUseColor) {
+        
         c_clr = uColor;
-    }
+	}
+	else if (uUseTexture) {
+        c_clr = texture(uTex2D, aTextCoords);
+	}
 
-    color = c_clr;
+    color = vec4(c_clr.x, c_clr.y, c_clr.z, uTransparency);
 }
