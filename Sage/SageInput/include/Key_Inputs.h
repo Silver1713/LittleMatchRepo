@@ -131,6 +131,7 @@
 #define SAGE_MOUSE_BUTTON_RIGHT         1
 #define SAGE_MOUSE_BUTTON_MIDDLE         2
 #include <memory>
+class SageInput_PIML;
 
 class SAGE_Input_Handler
 {
@@ -147,7 +148,7 @@ public:
 
 
 private:
-	class impl;
-	static std::unique_ptr<impl> impl_pointer;
+	static void customSageInputPIMPLDelete(void*& p);
+	static std::unique_ptr<void, decltype(&customSageInputPIMPLDelete)> impl_pointer;
 };
 

@@ -179,9 +179,6 @@ void SageShader::BindFragAttribLocation(int index, const char* name)
 
 int SageShader::GetUniformLocation(const char* name, bool exit_on_error)
 {
-#if _DEBUG
-	std::cout << "Getting uniform location for: " << name << '\n';
-#endif
 
 	GLint loc = glGetUniformLocation(pgm_handle, name);
 
@@ -220,7 +217,7 @@ void SageShader::SetUniform(const char* name, double val)
 void SageShader::SetUniform(const char* name, bool val)
 {
 	GLint loc = GetUniformLocation(name);
-	glUniform1i(loc, val);
+	glUniform1i(loc, val ? GL_TRUE : GL_FALSE);
 }
 // Uniform setter - Vector - Singular
 

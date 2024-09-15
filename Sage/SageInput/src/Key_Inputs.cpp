@@ -1,6 +1,10 @@
 #include "Key_Inputs.h"
-#include "GLFW_Handler.h"
 
+#include <iostream>
+
+#include "GLFW_Handler.h"
+#include "SageInput_PIML.h"
+#if 0
 class SAGE_Input_Handler::impl
 {
 public:
@@ -40,25 +44,37 @@ public:
 		 glfwSetMouseButtonCallback(glfwGetCurrentContext(), GLFW_Input_Handler::mouse_cb);
 	}
 };
+#endif
+
+void SAGE_Input_Handler::customSageInputPIMPLDelete(void*& p)
+{
+	delete static_cast<SageInput_PIML*>(p);
+
+	p = nullptr;
+
+}
+
+std::unique_ptr<void, decltype(&SAGE_Input_Handler::customSageInputPIMPLDelete)> SAGE_Input_Handler::impl_pointer{std::make_unique<SageInput_PIML>().release()	, customSageInputPIMPLDelete};
 
 bool SAGE_Input_Handler::Get_Key_Pressed(int keycode)
 {
-	return impl::Get_Key_Pressed(keycode);
+	
+	return SageInput_PIML::Get_Key_Pressed(keycode);
 }
 
 bool SAGE_Input_Handler::Get_Key(int keycode)
 {
-	return impl::Get_Key(keycode);
+	return SageInput_PIML::Get_Key(keycode);
 }
 
 bool SAGE_Input_Handler::Get_Mouse_Clicked(int mouse)
 {
-	return impl::Get_Mouse_Clicked(mouse);
+	return SageInput_PIML::Get_Mouse_Clicked(mouse);
 }
 
 bool SAGE_Input_Handler::Get_Mouse(int mouse)
 {
-	return impl::Get_Mouse(mouse);
+	return SageInput_PIML::Get_Mouse(mouse);
 }
 
 void SAGE_Input_Handler::update()
@@ -68,9 +84,8 @@ void SAGE_Input_Handler::update()
 
 void SAGE_Input_Handler::init()
 {
-	impl::setcallback();
+	SageInput_PIML::Set_Callback();
 }
 
 
 
-std::unique_ptr<SAGE_Input_Handler::impl> SAGE_Input_Handler::impl_pointer{std::make_unique<SAGE_Input_Handler::impl>()};

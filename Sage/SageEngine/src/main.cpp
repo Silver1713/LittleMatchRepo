@@ -21,6 +21,8 @@
 #include "SceneManager.hpp"
 #include "Prefabs.hpp"
 
+
+
 // Forward declaration
 void init();
 void update();
@@ -39,6 +41,8 @@ extern "C"
 
 int main()
 {
+
+
     Assets::Textures::Init();
     Assets::Prefabs::Init();
     Prefabs::Init();
@@ -62,6 +66,7 @@ int main()
 void init()
 {
     int status = SageHelper::init(1920, 1080, "Hello World");
+    const GLubyte* a = glGetString(GL_EXTENSIONS);
 
     if (status)
     {
@@ -70,9 +75,8 @@ void init()
         std::exit(EXIT_FAILURE);
     }
 
-    //SageMain::init();
-    
-	SM::Load();
+    SageMain::init();
+    SM::Load();
     SM::Init();
 
 }
@@ -81,15 +85,16 @@ void init()
 void update()
 {
     SageHelper::update();
-    SM::Input();
+    SageMain::update();
+    //SM::Input();
     SM::Update();
 }
 
 void draw()
 {
     SageHelper::draw();
-    //SageMain::draw();
-    SM::Draw();
+    SageMain::draw();
+    //SM::Draw();
 }
 
 
@@ -98,6 +103,6 @@ void exit()
     SM::Free();
     SM::Unload();
     SageHelper::exit();
-    //SageMain::exit();
+    SageMain::exit();
 
 }
