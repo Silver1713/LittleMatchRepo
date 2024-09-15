@@ -55,7 +55,7 @@ void SageMain::init()
 	SageObjectManager::objects["Rect3"].transform.scale = { 5000,5000 };
 	SageObjectManager::objects["Rect3"].transform.orientation = { 0,0 };
 
-	//SageObject* obj = &SageObjectManager::objects["Rect3"];
+	SageObject* obj = &SageObjectManager::objects["Rect3"];
 	
 	obj->GetMaterial().enable_texture = true;
 	obj->attach_texture(&p);
