@@ -7,6 +7,7 @@ uniform bool uUseBorderColor;
 uniform float uBorderSize;
 uniform float uCornerRadius;  
 uniform bool uUseTexture;
+uniform float uTransparency;
 uniform vec4 uColor;
 uniform vec4 uBorderColor;
 uniform vec2 uObjectSize;
@@ -66,5 +67,5 @@ void main() {
         c_clr = texture(uTex2D, aTextCoords);
 	}
 
-    color = c_clr;
+    color = vec4(c_clr.x, c_clr.y, c_clr.z, uTransparency);
 }
