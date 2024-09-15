@@ -152,6 +152,7 @@ namespace SM {
 		SM::fp_draw = fp_draw_tmp;
 		SM::fp_free = fp_free_tmp;
 		SM::fp_unload = fp_unload_tmp;
+		Load();
 		Init();
 		//AESysReset();
 	}

@@ -16,19 +16,20 @@
 
 #include <iostream>
 
-static Red r;
-static Green g;
-static Blue b;
-
 namespace Game {
 
 	void Load()
 	{
-
 	}
 
 	void Init()
 	{	
+		std::cout << Game_Objects::Get_Game_Objects().size() << std::endl;
+
+		Red r;
+		Green g;
+		Blue b;
+
 		dynamic_cast<Transform*>(r.Get_Component(TRANSFORM).get())->Set_Positions({ 0.f,0.f,0.f });
 		dynamic_cast<Transform*>(g.Get_Component(TRANSFORM).get())->Set_Positions({ 100.f,100.f,0.f });
 		dynamic_cast<Transform*>(b.Get_Component(TRANSFORM).get())->Set_Positions({ -100.f,-100.f,0.f });

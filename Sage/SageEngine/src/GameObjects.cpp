@@ -1,4 +1,5 @@
 #include "GameObjects.hpp"
+#include "SageObjectManager.hpp"
 #include <unordered_map>
 #include <memory>
 #include <iostream>
@@ -63,6 +64,7 @@ namespace Game_Objects
 	void Clear_Game_Objects()
 	{
 		g_game_objects.clear();
+		SageObjectManager::DestroyAllObjects();
 		g_go_counter = 0;
 	}
 }
