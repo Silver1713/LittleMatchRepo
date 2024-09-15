@@ -14,14 +14,13 @@ const char* base_frag_path = "../SageGraphics/shaders/BaseFragmentShader.glsl";
 
 SageModel model;
 SageShader shdr;
-//SageObject obj;
 SageViewport vp;
-
-SageTexture* p;
+SageTexture p;
 
 void SageMain::init()
 {
-	//p = new SageTexture("../SageIO/image/digipen_splash_screen.png");
+	
+	p.load_texture("../SageIO/image/digipen_splash_screen.png", SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
 	vp = { glm::vec2{0,0}, {SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT} };
 	vp.calculate_viewport_xform();
 	SageRenderer::SetViewport(vp);
@@ -58,8 +57,8 @@ void SageMain::init()
 
 	//SageObject* obj = &SageObjectManager::objects["Rect3"];
 	
-	//obj->GetMaterial().enable_texture = true;
-	//obj->attach_texture(p);
+	obj->GetMaterial().enable_texture = true;
+	obj->attach_texture(&p);
 
 
 

@@ -13,6 +13,8 @@ private:
 	bool is_linked;
 	std::string log_string;
 
+	bool loaded;
+
 public:
 	enum class SAGE_INTERNAL_SHADER_TYPE
 	{
@@ -49,6 +51,7 @@ public:
 
 	GLuint GetProgramHandle() const;
 	GLboolean IsLinked() const;
+	GLboolean is_loaded() const;
 
 	std::string GetLog() const;
 
@@ -97,6 +100,8 @@ public:
 	bool DeleteShaderProgram();
 
 
+
+	~SageShaderInternal();
 
 
 

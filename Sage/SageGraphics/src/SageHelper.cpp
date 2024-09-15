@@ -58,18 +58,6 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 	}
 
 
-	//// Forward compatibility with OpenGL 4.5
-	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	////Specify minimum OpenGL version
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	//glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
-	//glfwWindowHint(GLFW_DEPTH_BITS, 24);
-	//glfwWindowHint(GLFW_RED_BITS, 8); glfwWindowHint(GLFW_GREEN_BITS, 8);
-	//glfwWindowHint(GLFW_BLUE_BITS, 8); glfwWindowHint(GLFW_ALPHA_BITS, 8);
-
 	sage_ptr_window = new SageWindow(WINDOW_WIDTH, WINDOW_HEIGHT, title);
 	//ptr_window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, NULL, NULL);
 

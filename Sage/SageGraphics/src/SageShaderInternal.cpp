@@ -5,23 +5,23 @@
 #include <glm/gtc/type_ptr.hpp>
 
 
-SageShaderInternal::SageShaderInternal() : pgm_handle(0), is_linked(false) {};
+SageShaderInternal::SageShaderInternal() : pgm_handle(0), is_linked(false), loaded(false) {};
 
-//SageShaderInternal::~SageShaderInternal()
-//{
-//	if (pgm_handle != 0)
-//	{
-//		bool delete_status = DeleteShaderProgram();
-//		if (!delete_status)
-//		{
-//			std::cout << "Error: Failed to delete shader program.";
-//			std::exit(EXIT_FAILURE);
-//		}
-//		pgm_handle = 0;
-//		is_linked = false;
-//
-//	}
-//}
+SageShaderInternal::~SageShaderInternal()
+{
+	if (pgm_handle > 0)
+	{
+		bool delete_status = DeleteShaderProgram();
+		if (!delete_status)
+		{
+			std::cout << "Error: Failed to delete shader program.";
+			std::exit(EXIT_FAILURE);
+		}
+		pgm_handle = 0;
+		is_linked = false;
+
+	}
+}
 GLboolean SageShaderInternal::CompileFromString(SAGE_INTERNAL_SHADER_TYPE shader_type, std::string const& source, std::string const& path)
 {
 	GLuint shader_handle = 0;
@@ -189,6 +189,14 @@ void SageShaderInternal::Deactivate()
 {
 	glUseProgram(0);
 }
+
+
+GLboolean SageShaderInternal::is_loaded() const
+{
+	return pgm_handle > 0;
+}
+
+
 
 
 
