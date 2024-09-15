@@ -77,8 +77,9 @@ public:
 	
 
 
+	void set_fb_callback();
 
-
+	static void frame_buffersize_cb(GLFWwindow* window, int width, int height);
 
 
 };

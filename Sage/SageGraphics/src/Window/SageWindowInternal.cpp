@@ -3,8 +3,10 @@
 #include <iostream>
 #include <ostream>
 
+#include "SageHelper.hpp"
+
 SageWindowInternal::SageWindowInternal(int width, int height, const char* title) : posx{}, posy{}, width(width), height(height), title(title), window(nullptr),
-should_close(false), is_fullscreen(false), is_resizable(false), enable_maximize(false), is_active(false)
+                                                                                   should_close(false), is_fullscreen(false), is_resizable(false), enable_maximize(false), is_active(false)
 {
 	// Initialize GLFW
 	if (!glfwInit())
@@ -36,6 +38,7 @@ should_close(false), is_fullscreen(false), is_resizable(false), enable_maximize(
 
 
 	glfwMakeContextCurrent(window);
+	glfwSetWindowUserPointer(window, this);
 
 
 }
@@ -174,6 +177,21 @@ void SageWindowInternal::swap_buffers()
 {
 	glfwSwapBuffers(window);
 }
+
+
+void SageWindowInternal::set_fb_callback()
+{
+	glfwSetFramebufferSizeCallback(window, [](GLFWwindow* win, int w, int h)
+	{
+		SageWindowInternal* internal_win = static_cast<SageWindowInternal*>(glfwGetWindowUserPointer(win));
+		internal_win->height = h;
+		internal_win->width = w;
+		std::cout << "Width: " << w << " Height: " << h << '\n';
+		
+	});
+}
+
+
 
 
 

@@ -101,6 +101,11 @@ public:
 	{
 		window->swap_buffers();
 	}
+
+	void set_framebuffer_callback()
+	{
+		window->set_fb_callback();
+	}
 };
 
 
@@ -240,6 +245,10 @@ int SageWindow::get_size_y() const
 	return height;
 }
 
+void SageWindow::set_framebuffer_callback()
+{
+	window_internal_impl->set_framebuffer_callback();
+}
 
 
 
