@@ -38,38 +38,56 @@ namespace Prefabs
 	}
 }
 
-Test_GO::Test_GO() : GameObject(Prefabs::Create_Copy(prefabs["TEST_GO"])) 
+Red::Red() : GameObject(Prefabs::Create_Copy(prefabs["RED"]))
 {
 	Game_Objects::Add_Game_Object(this);
 }
 
-void Test_GO::Init()
+void Red::Init()
 {
 	GameObject::Init();
 }
-void Test_GO::Update()
+void Red::Update()
 {
 
 }
-void Test_GO::Exit()
+void Red::Exit()
 {
 
 }
 
-Test_GO_2::Test_GO_2() : GameObject(Prefabs::Create_Copy(prefabs["TEST_GO_2"]))
+Green::Green() : GameObject(Prefabs::Create_Copy(prefabs["GREEN"]))
 {
 	Game_Objects::Add_Game_Object(this);
 }
 
-void Test_GO_2::Init()
+void Green::Init()
 {
 	GameObject::Init();
 }
-void Test_GO_2::Update()
+void Green::Update()
 {
 
 }
-void Test_GO_2::Exit()
+void Green::Exit()
+{
+
+}
+
+Blue::Blue() : GameObject(Prefabs::Create_Copy(prefabs["BLUE"]))
+{
+	Game_Objects::Add_Game_Object(this);
+}
+
+void Blue::Init()
+{
+	GameObject::Init();
+}
+void Blue::Update()
+{
+
+}
+void Blue::Exit()
 {
 
 }

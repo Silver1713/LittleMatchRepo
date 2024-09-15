@@ -16,6 +16,10 @@
 
 #include <iostream>
 
+static Red r;
+static Green g;
+static Blue b;
+
 namespace Game {
 
 	void Load()
@@ -24,12 +28,14 @@ namespace Game {
 	}
 
 	void Init()
-	{
-		std::cout << "Arrived at Game Scene." << std::endl;
+	{	
+		dynamic_cast<Transform*>(r.Get_Component(TRANSFORM).get())->Set_Positions({ 0.f,0.f,0.f });
+		dynamic_cast<Transform*>(g.Get_Component(TRANSFORM).get())->Set_Positions({ 100.f,100.f,0.f });
+		dynamic_cast<Transform*>(b.Get_Component(TRANSFORM).get())->Set_Positions({ -100.f,-100.f,0.f });
 	}
 
 	void Input()
-	{		
+	{
 	}
 
 	void Update()

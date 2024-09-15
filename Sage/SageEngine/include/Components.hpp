@@ -61,6 +61,7 @@ public:
 	ComponentType Get_Component_Type() override;
 
 	void Set_Positions(float const* _new_pos);
+	void Set_Positions(std::initializer_list<float> const& _new_pos);
 	float const* Get_Positions();
 	void Set_Rotations(float const* _new_rot);
 	float const* Get_Rotations();

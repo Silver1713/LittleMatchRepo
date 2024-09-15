@@ -32,16 +32,6 @@ Transform::Transform(std::initializer_list<float> const& _pos, std::initializer_
 void Transform::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
-	//for (unsigned int i{}; i < 3; i++)
-	//{
-	//	std::cout << "Positions[" << i << "] = " << positions[i] << "\n";
-	//}
-	//
-	//for (unsigned int i{}; i < 3; i++)
-	//{
-	//	std::cout << "Rotations[" << i << "] = " << rotations[i] << "\n";
-	//}
-
 }
 void Transform::Update()
 {
@@ -56,6 +46,12 @@ ComponentType Transform::Get_Component_Type() { return TRANSFORM; }
 void Transform::Set_Positions(float const* _new_pos)
 {
 	*positions = *_new_pos;
+}
+void Transform::Set_Positions(std::initializer_list<float> const& _new_pos)
+{
+	positions[0] = *(_new_pos.begin());
+	positions[1] = *(_new_pos.begin() + 1);
+	positions[2] = *(_new_pos.begin() + 2);
 }
 float const* Transform::Get_Positions()
 {
@@ -103,7 +99,7 @@ void Sprite2D::Init(GameObject* _parent)
 		{ colour[0],colour[1],colour[2],colour[3] });
 
 	std::cout << std::endl;
-	obj = &SageObjectManager::objects[std::to_string(Get_Parent()->Get_ID())];
+	obj = &SageObjectManager::objects[std::to_string(Get_Parent()->Get_ID())];	
 	
 	if (sprite_texture_ID != "")
 	{
@@ -112,7 +108,16 @@ void Sprite2D::Init(GameObject* _parent)
 		obj->attach_texture(texture);
 	}
 }
-void Sprite2D::Update() {}
+void Sprite2D::Update() 
+{
+	transform = dynamic_cast<Transform*>(Get_Parent()->Get_Component(TRANSFORM).get());
+	obj->transform.position[0] = transform->Get_Positions()[0];
+	obj->transform.position[1] = transform->Get_Positions()[1];
+	obj->transform.scale[0] = transform->Get_Scale()[0];
+	obj->transform.scale[1] = transform->Get_Scale()[1];
+	obj->transform.orientation[0] = transform->Get_Rotations()[0];
+	obj->transform.orientation[1] = transform->Get_Rotations()[1];
+}
 void Sprite2D::Draw() {}
 void Sprite2D::Exit() {}
 

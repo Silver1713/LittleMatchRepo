@@ -10,6 +10,8 @@
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
+#include "AssetLoader.hpp"
+#include "Prefabs.hpp"
 #include "SageMain.hpp"
 #include "SageHelper.hpp"
 #include "Key_Inputs.h"
@@ -150,6 +152,7 @@ namespace SM {
 		SM::fp_draw = fp_draw_tmp;
 		SM::fp_free = fp_free_tmp;
 		SM::fp_unload = fp_unload_tmp;
+		Init();
 		//AESysReset();
 	}
 

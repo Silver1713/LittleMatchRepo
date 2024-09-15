@@ -81,8 +81,9 @@ namespace Splash_Screen {
 			}			
 			if (SM::Has_Faded_Out())
 			{
-				is_triggered = false;
+				is_triggered = false;				
 				SM::Go_To_Next_Scene();
+				SM::Start_Fade_In();
 			}
 		}
 	}
@@ -98,7 +99,6 @@ namespace Splash_Screen {
 	}
 
 	void Unload()
-	{		
-		Assets::Textures::Unload();
+	{
 	}
 }

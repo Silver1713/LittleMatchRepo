@@ -41,11 +41,6 @@ extern "C"
 
 int main()
 {
-
-
-    Assets::Textures::Init();
-    Assets::Prefabs::Init();
-    Prefabs::Init();
 	init();
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
@@ -75,6 +70,9 @@ void init()
         std::exit(EXIT_FAILURE);
     }
     
+    Assets::Textures::Init();
+    Assets::Prefabs::Init();
+    Prefabs::Init();
     SM::Load();
     SM::Init();
 
@@ -100,6 +98,7 @@ void draw()
 void exit()
 {
     SM::Free();
+    Assets::Textures::Unload();
     SM::Unload();
     SageHelper::exit();
     //SageMain::exit();
