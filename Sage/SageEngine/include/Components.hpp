@@ -12,6 +12,10 @@
 /* End Header **************************************************************************/
 #pragma once
 #include <string>
+#include <initializer_list>
+
+class GameObject;
+class SageObject;
 
 typedef enum {
 	COMPONENT,
@@ -24,11 +28,18 @@ typedef enum {
 
 class Component
 {
+private:
+	GameObject* parent{ nullptr };
+
 public:
-	virtual void Init();
+	virtual void Init(GameObject* _parent);
 	virtual void Update();
+	virtual void Draw();
 	virtual void Exit();
 	virtual ComponentType Get_Component_Type();
+
+	GameObject* Get_Parent();
+	void Set_Parent(GameObject* const _parent);
 };
 
 class Transform : public Component
@@ -37,12 +48,14 @@ private:
 	float positions[3]{};
 	float rotations[3]{};
 	float scale[3]{};
+	bool is_UI_Element{false};
 
 public:
 	Transform();
-	Transform(float const _new_pos[3], float const _new_rot[3]);
+	Transform(float const* _pos, float const* _rot, float const* _scale, bool _is_UI_element = false);
+	Transform(std::initializer_list<float> const& _pos, std::initializer_list<float> const& _rot, std::initializer_list<float> const& _scale);
 
-	void Init() override;
+	void Init(GameObject* _parent) override;
 	void Update() override;
 	void Exit() override;
 	ComponentType Get_Component_Type() override;
@@ -53,19 +66,26 @@ public:
 	float const* Get_Rotations();
 	void Set_Scale(float const* _new_scale);
 	float const* Get_Scale();
+
+	bool& Is_UI_Element();
 };
 
 class Sprite2D : public Component
 {
 private:
 	std::string sprite_texture_ID{};
+	float colour[4]{};
+	Transform* transform{ nullptr };
+	SageObject* obj{ nullptr };
 
 public:
 	Sprite2D();
-	Sprite2D(std::string _texture_ID);
+	Sprite2D(std::string const& _texture_ID, float const* _colour);
+	Sprite2D(std::string const& _texture_ID, std::initializer_list<float> const& _colour);
 
-	void Init() override;
+	void Init(GameObject* _parent) override;
 	void Update() override;
+	void Draw() override;
 	void Exit() override;
 	ComponentType Get_Component_Type() override;
 	void Set_Texture_ID(std::string _ID);
@@ -73,7 +93,7 @@ public:
 
 class Collision2D : public Component
 {
-	void Init() override;
+	void Init(GameObject* _parent) override;
 	void Update() override;
 	void Exit() override;
 	ComponentType Get_Component_Type() override;
@@ -81,7 +101,7 @@ class Collision2D : public Component
 
 class Audio : public Component
 {
-	void Init() override;
+	void Init(GameObject* _parent) override;
 	void Update() override;
 	void Exit() override;
 	ComponentType Get_Component_Type() override;

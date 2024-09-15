@@ -58,32 +58,26 @@ namespace SM {
 
 	void Load()
 	{
-		if (!scene_has_loaded)
-		{
-			SM::fp_load();
-			scene_has_loaded = true;
-		}
+		SM::fp_load();
+		//if (!scene_has_loaded)
+		//{
+		//	
+		//	scene_has_loaded = true;
+		//}
 	}
 
 	void Init()
 	{
-		if (!scene_has_initialized)
-		{
-			SM::fp_init();
-			scene_has_initialized = true;
-		}
+		SM::fp_init();
+		//if (!scene_has_initialized)
+		//{
+		//	
+		//	scene_has_initialized = true;
+		//}
 	}
 
 	void Input()
 	{
-		if (scene_faded_out && scene_has_initialized)
-		{
-			SM::fp_input();
-		}
-		else if (ignore_safety_bools && scene_has_initialized)
-		{
-			SM::fp_input();
-		}
 	}
 
 	void Update()

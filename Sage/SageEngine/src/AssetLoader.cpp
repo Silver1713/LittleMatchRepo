@@ -1,6 +1,8 @@
 #include "AssetLoader.hpp"
 #include "CSVParser.hpp"
 
+#include "SageEngine.hpp"
+
 #include <unordered_map>
 #include <string>
 #include <vector>
@@ -14,7 +16,7 @@ namespace Assets
 	{
 		Parsed_CSV source;
 		std::unordered_map<std::string, Texture> textures;
-		std::unordered_map<std::string, GLuint> loaded_textures;
+		std::unordered_map<std::string, SageTexture*> loaded_textures;
 
 		void Init()
 		{
@@ -47,12 +49,7 @@ namespace Assets
 		{
 			if (!(textures[_ID].is_loaded))
 			{
-				loaded_textures[_ID] = SOIL_load_OGL_texture(
-					textures[_ID].filepath.c_str(),
-					SOIL_LOAD_AUTO,
-					SOIL_CREATE_NEW_ID,
-					SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT
-				);
+				loaded_textures[_ID] = new SageTexture(textures[_ID].filepath.c_str());
 				textures[_ID].is_loaded = true;
 
 				if (textures[_ID].sprites_num > 1)
@@ -62,14 +59,26 @@ namespace Assets
 			}
 		}
 
+		SageTexture* Get_Texture(std::string const& _ID)
+		{
+			if (textures[_ID].is_loaded)
+			{
+				return loaded_textures[_ID];
+			}
+			else 
+			{
+				return nullptr;
+			}
+		}
+
 		void Unload()
 		{
-			for (std::pair<std::string, GLuint> t : loaded_textures)
+			for (auto& t : loaded_textures)
 			{
-				glDeleteTextures(1,&t.second);
+				delete t.second;
 			}
 
-			for (std::pair <std::string, Texture> t : textures)
+			for (auto& t : textures)
 			{
 				t.second.is_loaded = false;
 			}
@@ -98,6 +107,13 @@ namespace Assets
 					p.rotations[0] = std::stof(source.comma_seperated_data[i].associated_data[ROT_X]);
 					p.rotations[1] = std::stof(source.comma_seperated_data[i].associated_data[ROT_Y]);
 					p.rotations[2] = std::stof(source.comma_seperated_data[i].associated_data[ROT_Z]);
+					p.scale[0] = std::stof(source.comma_seperated_data[i].associated_data[SCALE_X]);
+					p.scale[1] = std::stof(source.comma_seperated_data[i].associated_data[SCALE_Y]);
+					p.scale[2] = std::stof(source.comma_seperated_data[i].associated_data[SCALE_Z]);
+					p.colour[0] = std::stof(source.comma_seperated_data[i].associated_data[COLOR_R]);
+					p.colour[1] = std::stof(source.comma_seperated_data[i].associated_data[COLOR_G]);
+					p.colour[2] = std::stof(source.comma_seperated_data[i].associated_data[COLOR_B]);
+					p.colour[3] = std::stof(source.comma_seperated_data[i].associated_data[COLOR_A]);
 					p.sprite_texture_ID = source.comma_seperated_data[i].associated_data[SPRITE_TEXTURE_ID];
 					p.collision_data = source.comma_seperated_data[i].associated_data[COL_D];
 					p.audio_data = source.comma_seperated_data[i].associated_data[AUDIO_D];

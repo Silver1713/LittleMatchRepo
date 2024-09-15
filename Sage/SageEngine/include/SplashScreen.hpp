@@ -18,5 +18,5 @@ namespace Splash_Screen {
 	void Update();
 	void Draw();
 	void Free();
-	void Unload();	
+	void Unload();
 }
