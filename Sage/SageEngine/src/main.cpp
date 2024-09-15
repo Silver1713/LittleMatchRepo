@@ -84,16 +84,16 @@ void init()
 void update()
 {
     SageHelper::update();
-    SageMain::update();
-    //SM::Input();
+    //SageMain::update();
+    SM::Input();
     SM::Update();
 }
 
 void draw()
 {
     SageHelper::draw();
-    SageMain::draw();
-    //SM::Draw();
+    //SageMain::draw();
+    SM::Draw();
 }
 
 
@@ -102,6 +102,6 @@ void exit()
     SM::Free();
     SM::Unload();
     SageHelper::exit();
-    SageMain::exit();
+    //SageMain::exit();
 
 }

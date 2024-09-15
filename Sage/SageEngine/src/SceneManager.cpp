@@ -12,18 +12,26 @@
 /* End Header **************************************************************************/
 #include "SageMain.hpp"
 #include "SageHelper.hpp"
+#include "Key_Inputs.h"
 #include "SplashScreen.hpp"
 #include "SceneManager.hpp"
 
-//#include "LevelSelect.hpp"
+#include "GameObjects.hpp"
+
+#include <iostream>
 
 static bool scene_has_loaded{ false };
 static bool scene_has_initialized{ false };
-static bool scene_faded_in{ true };
+
+static bool scene_faded_in{ false };
 static bool scene_faded_out{ true };
 
 static bool game_running{ true };
 static bool ignore_safety_bools{ false };
+
+const float fade_time{ 1.f };
+
+GameObject fade_screen;
 
 #pragma region Public Functions
 namespace SM {	
@@ -48,44 +56,56 @@ namespace SM {
 		ignore_safety_bools = _is_ignoring;
 	}
 
-	void Reset_Fade_In()
+	void Start_Fade_In()
 	{
 		scene_faded_in = false;
 	}
 
-	void Reset_Fade_Out()
+	void Start_Fade_Out()
 	{
 		scene_faded_out = false;
+	}
+
+	bool const& Has_Faded_In()
+	{
+		return scene_faded_in;
+	}
+
+	bool const& Has_Faded_Out()
+	{
+		return scene_faded_out;
 	}
 
 	void Load()
 	{
 		SM::fp_load();
-		//if (!scene_has_loaded)
-		//{
-		//	
-		//	scene_has_loaded = true;
-		//}
+
+		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 5000.f,5000.f, 0.0f });
+		fade_screen.Add_Component(std::make_unique<Transform>(t));
+		Sprite2D s({ "" }, { 0.f,0.f,0.f,1.f });
+		fade_screen.Add_Component(std::make_unique<Sprite2D>(s));
+		Game_Objects::Add_Game_Object(&fade_screen);
 	}
 
 	void Init()
 	{
 		SageMain::init();
+		SAGE_Input_Handler::init();
+		Game_Objects::Init();
 		SM::fp_init();
-		//if (!scene_has_initialized)
-		//{
-		//	
-		//	scene_has_initialized = true;
-		//}
 	}
 
 	void Input()
 	{
+		SAGE_Input_Handler::update();
 	}
 
 	void Update()
 	{
+		Fade_In();
+		Fade_Out();
 		SageMain::update();
+		Game_Objects::Update();
 		SM::fp_update();
 	}
 
@@ -104,6 +124,7 @@ namespace SM {
 	void Unload()
 	{
 		SM::fp_unload();
+		Game_Objects::Exit();
 	}
 
 	void Set_Next_Scene(void(*_load)(), void(*_init)(), void (*_input)(), void(*_update)(), void (*_draw)(), void (*_free)(), void (*_unload)())
@@ -129,8 +150,6 @@ namespace SM {
 		SM::fp_draw = fp_draw_tmp;
 		SM::fp_free = fp_free_tmp;
 		SM::fp_unload = fp_unload_tmp;
-		scene_has_initialized = false;
-		scene_has_loaded = false;
 		//AESysReset();
 	}
 
@@ -142,66 +161,54 @@ namespace SM {
 		//AESysReset();
 	}
 
-	void Fade_In(float transition_period)
+	void Fade_In()
 	{
-		if (scene_faded_in) { return; }
+		static float alpha{ 1.f };
 
-		if (transition_period <= 0.0f) { return; }
-
-		static float alpha = 255.0f;
-		float dt = SageHelper::delta_time;
+		if ((fade_time <= 0.f) || scene_faded_in)
+		{
+			return;
+		}
+		
+		float dt = (float)SageHelper::delta_time;
 
 		if (alpha > 0.0f)
-		{
-			alpha -= dt * (255.0f / transition_period);
-			//Renderer::Set_Modes(AE_GFX_RM_TEXTURE, AE_GFX_BM_BLEND, AE_GFX_TM_PRECISE, RENDER_CONFIG_CUSTOM);
-			//AEGfxSetColorToAdd(-1.f, -1.f, -1.f, 0.0f);
-			//Renderer::Draw_Sprite(TEXTURE_PRIMITIVE_SQUARE, 0.0f, 0.0f, (float)*Settings::Get_Screen_Width(), (float)*Settings::Get_Screen_Height(), 0.0f, alpha);
-			//AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.0f);
+		{			
+			alpha -= dt * (1.0f / fade_time);
+			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D).get());
+			s->Set_Transparency(alpha);			
 			return;
 		}
 		else
 		{
-			alpha = 0.0f;
-			//Renderer::Set_Modes(AE_GFX_RM_TEXTURE, AE_GFX_BM_BLEND, AE_GFX_TM_PRECISE, RENDER_CONFIG_CUSTOM);
-			//AEGfxSetColorToAdd(-1.f, -1.f, -1.f, 0.0f);
-			//Renderer::Draw_Sprite(TEXTURE_PRIMITIVE_SQUARE, 0.0f, 0.0f, (float)*Settings::Get_Screen_Width(), (float)*Settings::Get_Screen_Height(), 0.0f, alpha);
-			//AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.0f);
+			alpha = 1.f;
 			scene_faded_in = true;
-			alpha = 255.0f;
 			return;
 		}
 	}
 
-	void Fade_Out(float transition_period)
+	void Fade_Out()
 	{
-		if (scene_faded_out) { return; }
+		static float alpha{ 0.f };
 
-		if (transition_period <= 0.0f) { return; }
-
-		static float alpha = 0.0f;
-		float dt = 0.0f; //(float)AEFrameRateControllerGetFrameTime();
-
-		if (alpha < 255.0f)
+		if ((fade_time <= 0.f) || scene_faded_out)
 		{
-			alpha += dt * (255.0f / transition_period);
-			//Renderer::Set_Modes(AE_GFX_RM_TEXTURE, AE_GFX_BM_BLEND, AE_GFX_TM_PRECISE, RENDER_CONFIG_CUSTOM);
-			//AEGfxSetColorToAdd(-1.f, -1.f, -1.f, 0.0f);
-			//Renderer::Draw_Sprite(TEXTURE_PRIMITIVE_SQUARE, 0.0f, 0.0f, (float)*Settings::Get_Screen_Width(), (float)*Settings::Get_Screen_Width(), 0.0f, alpha);
-			//AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.0f);
+			return;
+		}
+
+		float dt = (float)SageHelper::delta_time;
+
+		if (alpha < 1.0f)
+		{
+			alpha += dt * (1.0f / fade_time);
+			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D).get());
+			s->Set_Transparency(alpha);
 			return;
 		}
 		else
 		{
-			//AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-			alpha = 255.0f;
-			//Renderer::Set_Modes(AE_GFX_RM_TEXTURE, AE_GFX_BM_BLEND, AE_GFX_TM_PRECISE, RENDER_CONFIG_CUSTOM);
-			//AEGfxSetColorToAdd(-1.f, -1.f, -1.f, 0.0f);
-			//Renderer::Draw_Sprite(TEXTURE_PRIMITIVE_SQUARE, 0.0f, 0.0f, (float)*Settings::Get_Screen_Width(), (float)*Settings::Get_Screen_Width(), 0.0f, alpha);
-			//AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.0f);
+			alpha = 0.f;
 			scene_faded_out = true;
-			alpha = 0.0f;
-			SM::Go_To_Next_Scene();
 			return;
 		}
 	}

@@ -73,7 +73,7 @@ public:
 class Sprite2D : public Component
 {
 private:
-	std::string sprite_texture_ID{};
+	std::string sprite_texture_ID{""};
 	float colour[4]{};
 	Transform* transform{ nullptr };
 	SageObject* obj{ nullptr };

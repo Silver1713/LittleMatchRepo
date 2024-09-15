@@ -32,15 +32,15 @@ Transform::Transform(std::initializer_list<float> const& _pos, std::initializer_
 void Transform::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
-	for (unsigned int i{}; i < 3; i++)
-	{
-		std::cout << "Positions[" << i << "] = " << positions[i] << "\n";
-	}
-	
-	for (unsigned int i{}; i < 3; i++)
-	{
-		std::cout << "Rotations[" << i << "] = " << rotations[i] << "\n";
-	}
+	//for (unsigned int i{}; i < 3; i++)
+	//{
+	//	std::cout << "Positions[" << i << "] = " << positions[i] << "\n";
+	//}
+	//
+	//for (unsigned int i{}; i < 3; i++)
+	//{
+	//	std::cout << "Rotations[" << i << "] = " << rotations[i] << "\n";
+	//}
 
 }
 void Transform::Update()
@@ -104,9 +104,13 @@ void Sprite2D::Init(GameObject* _parent)
 
 	std::cout << std::endl;
 	obj = &SageObjectManager::objects[std::to_string(Get_Parent()->Get_ID())];
-	obj->GetMaterial().enable_texture = true;
-	SageTexture* texture = &Assets::Textures::Get_Texture(sprite_texture_ID);
-	obj->attach_texture(texture);
+	
+	if (sprite_texture_ID != "")
+	{
+		obj->GetMaterial().enable_texture = true;
+		SageTexture* texture = &Assets::Textures::Get_Texture(sprite_texture_ID);
+		obj->attach_texture(texture);
+	}
 }
 void Sprite2D::Update() {}
 void Sprite2D::Draw() {}
@@ -122,6 +126,7 @@ void Sprite2D::Set_Texture_ID(std::string _ID)
 void Sprite2D::Set_Transparency(float& _a) 
 {
 	colour[3] = _a;
+	obj->set_alpha(_a);
 }
 #pragma endregion
 

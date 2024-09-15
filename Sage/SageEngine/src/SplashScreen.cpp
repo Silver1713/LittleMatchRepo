@@ -13,15 +13,17 @@
 #include "AssetLoader.hpp"
 #include "Prefabs.hpp"
 #include "Key_Inputs.h"
+#include "SageHelper.hpp"
+
+#include "SceneManager.hpp"
+#include "Game.hpp"
 
 #include <string>
 #include <iostream>
 
-#define FADE_TIME 0.75f
-#define WAIT_TIME 1.5f
-
-float time_elapsed{};
-GameObject digipen_splash_screen;
+static float time_elapsed{};
+static float const wait_time{ 2.f };
+static GameObject digipen_splash_screen;
 
 namespace Splash_Screen {
 
@@ -29,7 +31,7 @@ namespace Splash_Screen {
 	{
 		Assets::Textures::Load("DIGIPEN_SPLASH_SCREEN");
 
-		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 5000.0f,5000.0f, 0.0f });
+		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 5000.f,5000.f, 0.0f });
 		digipen_splash_screen.Add_Component(std::make_unique<Transform>(t));
 		Sprite2D s({ "DIGIPEN_SPLASH_SCREEN" }, {1.f,1.f,1.f,1.f});
 		digipen_splash_screen.Add_Component(std::make_unique<Sprite2D>(s));
@@ -38,15 +40,11 @@ namespace Splash_Screen {
 
 	void Init()
 	{
-		Game_Objects::Init();
-		SAGE_Input_Handler::init();
+		time_elapsed = 0.f;
 	}
 
 	void Input()
 	{
-		SAGE_Input_Handler::update();
-		
-
 		if (SAGE_Input_Handler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
 		{
 			//Test_GO test;
@@ -64,18 +62,34 @@ namespace Splash_Screen {
 
 			//std::string str{ "s" };
 			//s->Set_Texture_ID(str);
-
-			//Game_Objects::Init();
 		}		
 	}
 
 	void Update()
 	{
-		Game_Objects::Update();
+		time_elapsed += (float)SageHelper::delta_time;
+
+		static bool is_triggered{ false };
+
+		if (time_elapsed > wait_time)
+		{
+			if (!is_triggered)
+			{
+				SM::Start_Fade_Out();
+				SM::Set_Next_Scene(Game::Load, Game::Init, Game::Input, Game::Update, Game::Draw, Game::Free, Game::Unload);
+				is_triggered = true;
+			}			
+			if (SM::Has_Faded_Out())
+			{
+				is_triggered = false;
+				SM::Go_To_Next_Scene();
+			}
+		}
 	}
 
 	void Draw()
 	{
+
 	}
 
 	void Free()
@@ -84,8 +98,7 @@ namespace Splash_Screen {
 	}
 
 	void Unload()
-	{
-		Game_Objects::Exit();
+	{		
 		Assets::Textures::Unload();
 	}
 }
