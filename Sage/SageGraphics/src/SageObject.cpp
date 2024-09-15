@@ -31,6 +31,8 @@ void SageObject::init(char const * name, SageModel* model)
 	object_id = object_count++;
 
 	current_object_count++;
+
+	is_enabled = true;
 }
 
 
@@ -138,5 +140,12 @@ void SageObject::set_alpha(float transparency)
 {
 	material.mat_transparency = transparency;
 }
+
+
+void SageObject::disable_object()
+{
+	is_enabled = false;
+}
+
 
 

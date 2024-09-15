@@ -13,7 +13,7 @@
 
 #include <iostream>
 #include <numeric>
-
+#include <backward.hpp>
 #include "SageMain.hpp"
 #include "SageHelper.hpp"
 
@@ -41,7 +41,6 @@ extern "C"
 
 int main()
 {
-
 
     Assets::Textures::Init();
     Assets::Prefabs::Init();
