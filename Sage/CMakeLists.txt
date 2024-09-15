@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 2.8...3.13)
 
 project(Sage)
 
-# Remove when finished!
-set(CMAKE_SUPPRESS_REGENERATION false)
 
 add_definitions(-DGLEW_STATIC)
 
