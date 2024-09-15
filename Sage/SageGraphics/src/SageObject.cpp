@@ -80,6 +80,7 @@ void SageObject::draw(SageViewport* vp)
 	glBindVertexArray(obj_mesh.model_ref->get_vao_handle());
 	
 	shader->Activate();
+	shader->SetUniform("uTransparency", material.mat_transparency);
 	shader->SetUniform("uUseColor", !material.enable_vertex_color);
 	shader->SetUniform("uUseBorderColor", material.enable_border_color);
 
@@ -130,5 +131,9 @@ SageObject::SageMaterial& SageObject::GetMaterial()
 	return material;
 }
 
+void SageObject::set_alpha(float transparency)
+{
+	material.mat_transparency = transparency;
+}
 
 

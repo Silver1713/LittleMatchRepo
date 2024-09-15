@@ -49,6 +49,8 @@ public:
 
 		SageShader* shader_ref;
 		SageTexture* texture_ref;
+
+		float mat_transparency{ 1 }; // 1 : opaque, 0 : transparent
 	};
 private:
 	GLuint object_id;
@@ -56,7 +58,7 @@ private:
 
 	SageMesh obj_mesh;
 
-	SageMaterial material;
+	
 
 
 
@@ -70,11 +72,16 @@ public:
 
 
 	SageTransform2D transform;
+	SageMaterial material;
 	static long int object_count;
 	static long int current_object_count;
 
 
 	SageMaterial& GetMaterial();
+
+	void set_alpha(float transparency); // 0: Transparent, 1: Opaque
+
+	
 
 };
 

@@ -230,6 +230,16 @@ void SageWindow::swap_buffers()
 	window_internal_impl->swap_buffers();
 }
 
+int SageWindow::get_size_x() const
+{
+	return width;
+}
+
+int SageWindow::get_size_y() const
+{
+	return height;
+}
+
 
 
 

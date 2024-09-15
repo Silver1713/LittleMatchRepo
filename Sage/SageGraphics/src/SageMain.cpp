@@ -9,16 +9,17 @@
 #include "SageModelManager.hpp"
 #include "SageObjectManager.hpp"
 #include "SageObject.hpp"
+#include "SageShaderManager.hpp"
 const char* base_vtx_path = "../SageGraphics/shaders/BaseVertexShader.glsl";
 const char* base_frag_path = "../SageGraphics/shaders/BaseFragmentShader.glsl";
 
 SageModel model;
-SageShader shdr;
 SageViewport vp;
 SageTexture p;
 
 void SageMain::init()
 {
+	SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
 	
 	//p.load_texture("../SageIO/image/digipen_splash_screen.png", SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
 	vp = { glm::vec2{0,0}, {SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT} };

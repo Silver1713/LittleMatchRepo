@@ -22,6 +22,7 @@
 #include "Prefabs.hpp"
 
 
+
 // Forward declaration
 void init();
 void update();
@@ -40,6 +41,8 @@ extern "C"
 
 int main()
 {
+
+
     Assets::Textures::Init();
     Assets::Prefabs::Init();
     Prefabs::Init();

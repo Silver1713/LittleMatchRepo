@@ -50,5 +50,6 @@ Sage/FMOD/api
 *.swo
 *.DS_Store
 .vs
+.vscode
 .idea/
 
