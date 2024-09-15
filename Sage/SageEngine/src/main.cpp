@@ -20,6 +20,7 @@
 #include "AssetLoader.hpp"
 #include "SceneManager.hpp"
 #include "Prefabs.hpp"
+#include "SageAudio.hpp";
 
 
 
@@ -77,6 +78,7 @@ void init()
     
     SM::Load();
     SM::Init();
+    SageAudio::Init();
 
 }
 
@@ -87,6 +89,7 @@ void update()
     //SageMain::update();
     SM::Input();
     SM::Update();
+    SageAudio::Update();
 }
 
 void draw()
@@ -103,5 +106,6 @@ void exit()
     SM::Unload();
     SageHelper::exit();
     //SageMain::exit();
+    SageAudio::Exit();
 
 }
