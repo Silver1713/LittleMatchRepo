@@ -20,6 +20,7 @@
 #include "AssetLoader.hpp"
 #include "SceneManager.hpp"
 #include "Prefabs.hpp"
+#include "SageAudio.hpp";
 
 
 
@@ -42,6 +43,7 @@ extern "C"
 int main()
 {
 	init();
+    SageAudio::Play_Sound(HALO_2, NO_LOOP);
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{
@@ -75,6 +77,7 @@ void init()
     Prefabs::Init();
     SM::Load();
     SM::Init();
+    SageAudio::Init();
 
 }
 
@@ -85,6 +88,7 @@ void update()
     //SageMain::update();
     SM::Input();
     SM::Update();
+    SageAudio::Update();
 }
 
 void draw()
@@ -102,5 +106,6 @@ void exit()
     SM::Unload();
     SageHelper::exit();
     //SageMain::exit();
+    SageAudio::Exit();
 
 }
