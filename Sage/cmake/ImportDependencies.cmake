@@ -182,6 +182,22 @@ macro(import_fmod)
     ENDIF()
 endmacro()
 
+macro(import_freetype)
+
+if (NOT TARGET freetype)
+    FetchContent_Declare(
+        freetype
+        GIT_REPOSITORY https://gitlab.freedesktop.org/freetype/freetype.git
+        GIT_TAG master
+        SOURCE_DIR ${DEP_DIR}/freetype
+    )
+    FetchContent_MakeAvailable(freetype)
+    include_directories(${freetype_SOURCE_DIR}/include)
+    add_deps_all_targets(PUBLIC freetype)
+endif()
+
+endmacro()
+
 macro(add_deps_all_targets ...)
     list(APPEND ALL_LIBS ${ARGN})
 endmacro()
@@ -197,4 +213,5 @@ macro(importDependencies)
     import_stb()
     import_backward_stacktrace()
     import_fmod()
+    import_freetype()
 endmacro()

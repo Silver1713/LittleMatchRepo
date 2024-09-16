@@ -24,6 +24,7 @@ extern "C"
 
 int main()
 {
+	
 	init();
 	// SceneMain: A example of a scene that can be used in the main loop
 	// SageHelper: A utility class that enable compiling of sjhaders and the calculation of deltatime	
