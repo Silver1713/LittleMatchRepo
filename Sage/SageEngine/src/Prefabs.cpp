@@ -43,8 +43,9 @@ void Red::Exit()
 
 }
 
-Green::Green() : GameObject()
+Green::Green() : GameObject(prefabs["GREEN"])
 {
+	Init();
 }
 
 void Green::Init()
@@ -60,9 +61,9 @@ void Green::Exit()
 
 }
 
-Blue::Blue() : GameObject()
+Blue::Blue() : GameObject(prefabs["BLUE"])
 {
-	Game_Objects::Add_Game_Object(std::move(this));
+	Init();
 }
 
 void Blue::Init()
