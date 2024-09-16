@@ -63,14 +63,14 @@ namespace Game_Objects
 
 	void Clear_Game_Objects()
 	{
-		g_game_objects.clear();
 		SageObjectManager::DestroyAllObjects();
+		g_game_objects.clear();		
 		g_go_counter = 0;
 	}
 }
 
 GameObject::GameObject(){}
-GameObject::GameObject(unsigned int _iD) : GameObject()
+GameObject::GameObject(unsigned int const& _iD) : GameObject()
 {
 	iD = _iD;
 };
@@ -127,7 +127,7 @@ void GameObject::Exit()
 	}
 }
 
-void GameObject::Set_ID(unsigned int _iD)
+void GameObject::Set_ID(unsigned int const& _iD)
 {
 	iD = _iD;
 }
@@ -142,16 +142,14 @@ void GameObject::Add_Component(std::unique_ptr<Component> _c)
 	components.push_back(std::move(_c));
 }
 
-std::unique_ptr<Component>& GameObject::Get_Component(ComponentType _type)
+std::unique_ptr<Component>* GameObject::Get_Component(ComponentType _type)
 {
 	for (auto& c : components)
 	{
-		if ((*c).Get_Component_Type() == _type)
+		if (c->Get_Component_Type() == _type)
 		{
-			return c;
+			return &c;
 		}
 	}
-
-	static std::unique_ptr<Component> a{};
-	return a;
+	return nullptr;
 }

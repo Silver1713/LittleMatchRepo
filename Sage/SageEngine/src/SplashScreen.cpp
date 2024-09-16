@@ -44,25 +44,7 @@ namespace Splash_Screen {
 	}
 
 	void Input()
-	{
-		if (SAGE_Input_Handler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
-		{
-			//Test_GO test;
-			//Test_GO_2 test_go_2;
-
-			//Transform* t = dynamic_cast<Transform*>(test.Get_Component(TRANSFORM).get());
-			//Sprite2D* s = dynamic_cast<Sprite2D*>(test.Get_Component(SPRITE2D).get());
-			//Collision2D* c = dynamic_cast<Collision2D*>(test.Get_Component(COLLISION2D).get());
-
-			//float a[3]{ t->Get_Positions()[0],t->Get_Positions()[1] ,t->Get_Positions()[2] };
-			//a[0]++;
-			//a[1]++;
-			//a[2]++;
-			//t->Set_Positions(a);
-
-			//std::string str{ "s" };
-			//s->Set_Texture_ID(str);
-		}		
+	{	
 	}
 
 	void Update()

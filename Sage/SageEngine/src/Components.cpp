@@ -90,7 +90,7 @@ Sprite2D::Sprite2D(std::string const& _texture_ID, std::initializer_list<float> 
 void Sprite2D::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
-	transform = dynamic_cast<Transform*>(_parent->Get_Component(TRANSFORM).get());
+	transform = dynamic_cast<Transform*>(_parent->Get_Component(TRANSFORM)->get());
 
 	SageObjectManager::CreatePrimitiveObject((std::to_string(Get_Parent()->Get_ID())).c_str(), PRIMITIVE_OBJECT_RECT,
 		{ transform->Get_Positions()[0],transform->Get_Positions()[1] },

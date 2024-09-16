@@ -10,12 +10,18 @@
 #include <iostream>
 
 std::unordered_map<std::string, Assets::Prefabs::Prefab> prefabs;
+static bool is_initialized{ false };
 
 namespace Prefabs
 {
 	void Init()
 	{
+		if (is_initialized)
+		{
+			return;
+		}
 		prefabs = Assets::Prefabs::Get_Prefabs();
+		is_initialized = true;
 	}
 
 	GameObject Create_Copy(Assets::Prefabs::Prefab& _p)
@@ -40,7 +46,7 @@ namespace Prefabs
 
 Red::Red() : GameObject(Prefabs::Create_Copy(prefabs["RED"]))
 {
-	Game_Objects::Add_Game_Object(this);
+	Game_Objects::Add_Game_Object(std::move(this));
 }
 
 void Red::Init()
@@ -58,7 +64,7 @@ void Red::Exit()
 
 Green::Green() : GameObject(Prefabs::Create_Copy(prefabs["GREEN"]))
 {
-	Game_Objects::Add_Game_Object(this);
+	Game_Objects::Add_Game_Object(std::move(this));
 }
 
 void Green::Init()
@@ -76,7 +82,7 @@ void Green::Exit()
 
 Blue::Blue() : GameObject(Prefabs::Create_Copy(prefabs["BLUE"]))
 {
-	Game_Objects::Add_Game_Object(this);
+	Game_Objects::Add_Game_Object(std::move(this));
 }
 
 void Blue::Init()
