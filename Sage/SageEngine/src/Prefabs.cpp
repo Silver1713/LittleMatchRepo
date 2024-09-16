@@ -46,13 +46,12 @@ namespace Prefabs
 
 Red::Red() : GameObject(Prefabs::Create_Copy(prefabs["RED"]))
 {
-	//Game_Objects::Add_Game_Object(this);
+	Game_Objects::Add_Game_Object(std::move(this));
 }
 
 void Red::Init()
 {
 	GameObject::Init();
-	std::cout << dynamic_cast<Transform*>(this->Get_Component(TRANSFORM)->get())->Get_Scale()[1] << std::endl;
 }
 void Red::Update()
 {
@@ -65,7 +64,7 @@ void Red::Exit()
 
 Green::Green() : GameObject(Prefabs::Create_Copy(prefabs["GREEN"]))
 {
-	Game_Objects::Add_Game_Object(this);
+	Game_Objects::Add_Game_Object(std::move(this));
 }
 
 void Green::Init()
@@ -83,7 +82,7 @@ void Green::Exit()
 
 Blue::Blue() : GameObject(Prefabs::Create_Copy(prefabs["BLUE"]))
 {
-	Game_Objects::Add_Game_Object(this);
+	Game_Objects::Add_Game_Object(std::move(this));
 }
 
 void Blue::Init()

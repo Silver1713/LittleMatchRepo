@@ -56,11 +56,6 @@ namespace Game_Objects
 		g_game_objects[g_go_counter] = _g;
 	}
 
-	void Create_Prefab_Instance(std::string str)
-	{
-		
-	}
-
 	std::unordered_map<unsigned int, GameObject*>& Get_Game_Objects()
 	{
 		return g_game_objects;
