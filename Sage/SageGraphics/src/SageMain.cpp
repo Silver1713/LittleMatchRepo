@@ -41,18 +41,18 @@ void SageMain::init()
 
 
 
-	SageObjectManager::CreatePrimitiveObject("Rect1", PRIMITIVE_OBJECT_CIRCLE, { 0,0 }, { 10,50 }, { 0,0 }, { 1,0,1,1 },
-		{ 0,0,0,1 }, 0.5f);
+	//SageObjectManager::CreatePrimitiveObject("Rect1", PRIMITIVE_OBJECT_CIRCLE, { 0,0 }, { 10,50 }, { 0,0 }, { 1,0,1,1 },
+	//	{ 0,0,0,1 }, 0.5f);
 
 	/*SageObjectManager::CreatePrimitiveObject("Rect2", PRIMITIVE_OBJECT_RECT, { 1000,2000 }, { 1000,500 }, { 0,0 }, { 1,1,0,1 },
 		{ 0,0,0,1 }, 0.5f);
 	SageObjectManager::CreatePrimitiveObject("Rect3", PRIMITIVE_OBJECT_RECT, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,1,1,1 },
 		{ 0,0,0,1 }, 0.5f);*/
 
-	SageObjectManager::objects["Rect1"].transform.position = { 0,0 };
-	//set scale
-	SageObjectManager::objects["Rect1"].transform.scale = { 100.f,100.f };
-	SageObjectManager::objects["Rect1"].transform.orientation = { 0,0 };
+	//SageObjectManager::objects["Rect1"].transform.position = { 0,0 };
+	////set scale
+	//SageObjectManager::objects["Rect1"].transform.scale = { 100.f,100.f };
+	//SageObjectManager::objects["Rect1"].transform.orientation = { 0,0 };
 
 
 	//// 2nd object

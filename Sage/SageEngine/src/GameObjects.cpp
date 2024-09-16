@@ -1,5 +1,6 @@
 #include "GameObjects.hpp"
 #include "SageObjectManager.hpp"
+#include "Prefabs.hpp"
 #include <unordered_map>
 #include <memory>
 #include <iostream>
@@ -53,7 +54,7 @@ namespace Game_Objects
 
 		_g->Set_ID(g_go_counter);
 		g_go_counter++;
-		g_game_objects[g_go_counter] = _g;
+		g_game_objects[g_go_counter] = std::move(_g);
 	}
 
 	std::unordered_map<unsigned int, GameObject*>& Get_Game_Objects()
@@ -70,13 +71,34 @@ namespace Game_Objects
 }
 
 GameObject::GameObject(){}
+GameObject::GameObject(Assets::Prefabs::Prefab& _p)
+{
+	Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
+	if (!(_p.sprite_texture_ID == "Nil"))
+	{
+		Add_Component(std::make_unique<Sprite2D>(_p.sprite_texture_ID, _p.colour));
+	}
+	else
+	{
+		Add_Component(std::make_unique<Sprite2D>("", _p.colour));
+	}
+	if (!(_p.collision_data == "Nil"))
+	{
+		Add_Component(std::make_unique<Collision2D>());
+	}
+	if (!(_p.audio_data == "Nil"))
+	{
+		Add_Component(std::make_unique<Audio>());
+	}
+	std::cout << components.size() << std::endl;
+}
 GameObject::GameObject(unsigned int const& _iD) : GameObject()
 {
 	iD = _iD;
 };
 
 void GameObject::Init()
-{	
+{
 	if (components.empty())
 	{
 		return;

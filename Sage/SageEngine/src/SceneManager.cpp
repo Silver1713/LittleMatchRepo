@@ -33,7 +33,7 @@ static bool ignore_safety_bools{ false };
 
 const float fade_time{ 1.f };
 
-GameObject fade_screen;
+static GameObject fade_screen;
 
 #pragma region Public Functions
 namespace SM {	
@@ -93,8 +93,9 @@ namespace SM {
 	{
 		SageMain::init();
 		SAGE_Input_Handler::init();
-		Game_Objects::Init();
+
 		SM::fp_init();
+		Game_Objects::Init();		
 	}
 
 	void Input()
@@ -119,8 +120,8 @@ namespace SM {
 
 	void Free()
 	{
-		SageMain::exit();
-		SM::fp_free();			
+		SM::fp_free();
+		SageMain::exit();		
 	}
 
 	void Unload()
@@ -142,7 +143,6 @@ namespace SM {
 
 	void Go_To_Next_Scene()
 	{
-		//AESysFrameEnd();
 		SM::Free();
 		SM::Unload();
 		SM::fp_load = fp_load_tmp;
@@ -154,15 +154,12 @@ namespace SM {
 		SM::fp_unload = fp_unload_tmp;
 		Load();
 		Init();
-		//AESysReset();
 	}
 
 	void Restart_Scene()
 	{
-		//AESysFrameEnd();
 		SM::fp_free();
 		scene_has_initialized = false;
-		//AESysReset();
 	}
 
 	void Fade_In()

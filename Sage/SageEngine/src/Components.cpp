@@ -75,6 +75,27 @@ float const* Transform::Get_Scale()
 	return scale;
 }
 
+void Transform::Translate(float const* _delta_pos)
+{
+	positions[0] += _delta_pos[0];
+	positions[1] += _delta_pos[1];
+}
+void Transform::Translate(std::initializer_list<float> const& _delta_pos)
+{
+	positions[0] += *(_delta_pos.begin());
+	positions[1] += *(_delta_pos.begin()+1);
+}
+void Transform::Rotate(float const* _delta_rot)
+{
+	rotations[0] += _delta_rot[0];
+	rotations[1] += _delta_rot[1];
+}
+void Transform::Rotate(std::initializer_list<float> const& _delta_rot)
+{
+	rotations[0] += *(_delta_rot.begin());
+	rotations[1] += *(_delta_rot.begin() + 1);
+}
+
 bool& Transform::Is_UI_Element()
 {
 	return is_UI_Element;
