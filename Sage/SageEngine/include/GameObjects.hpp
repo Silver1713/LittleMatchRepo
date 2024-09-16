@@ -1,4 +1,5 @@
 #pragma once
+#include "AssetLoader.hpp"
 #include "Components.hpp"
 #include <vector>
 #include <memory>
@@ -12,6 +13,7 @@ protected:
 
 public:
 	GameObject();
+	GameObject(Assets::Prefabs::Prefab& _p);
 	GameObject(unsigned int const& _iD);
 
 	virtual void Init();

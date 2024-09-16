@@ -68,6 +68,11 @@ public:
 	void Set_Scale(float const* _new_scale);
 	float const* Get_Scale();
 
+	void Translate(float const* _delta_pos);
+	void Translate(std::initializer_list<float> const& _delta_pos);
+	void Rotate(float const* _delta_rot);
+	void Rotate(std::initializer_list<float> const& _delta_rot);
+
 	bool& Is_UI_Element();
 };
 

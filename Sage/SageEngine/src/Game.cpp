@@ -11,41 +11,29 @@
 */
 /* End Header **************************************************************************/
 #include "AssetLoader.hpp"
+#include "SageHelper.hpp"
 #include "Prefabs.hpp"
 #include "Key_Inputs.h"
 
 #include <iostream>
 
-static std::vector<GameObject> game_objects;
+static std::unordered_map<std::string, GameObject> game_objects;
+static std::unordered_map<std::string, Transform*> transform_cache;
 
 namespace Game {
 
 	void Load()
 	{
-		//Red r;
-		//game_objects.push_back(std::move(r));
-		/*GameObject g;
-		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 100.f,100.f, 0.0f });
-		Sprite2D s({ "" }, { 1.f,1.f,1.f,1.f });
-		g.Add_Component(std::make_unique<Transform>(t));
-		g.Add_Component(std::make_unique<Sprite2D>(s));
-		game_objects.push_back(std::move(g));
+		game_objects.clear();
+		transform_cache.clear();
 
-		Game_Objects::Add_Game_Object(&game_objects[0]);*/
-		
-
-		//Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 100.f,100.f, 0.0f });
-		//game_objects[0].Add_Component(std::make_unique<Transform>(t));
-		//Sprite2D s({ "" }, { 1.f,1.f,1.f,1.f });
-		//game_objects[0].Add_Component(std::make_unique<Sprite2D>(s));
-		//Game_Objects::Add_Game_Object(&game_objects[0]);
+		game_objects["Player"] = Red();
+		Game_Objects::Add_Game_Object(&game_objects["Player"]);
 	}
 
 	void Init()
-	{	
-		std::cout << Game_Objects::Get_Game_Objects().size() << std::endl;
-
-		//dynamic_cast<Transform*>(game_objects[0].Get_Component(TRANSFORM)->get())->Set_Positions({ 110.f,0.f,0.f });
+	{
+		transform_cache["Player"] = dynamic_cast<Transform*>(game_objects["Player"].Get_Component(TRANSFORM)->get());
 	}
 
 	void Input()
@@ -54,6 +42,8 @@ namespace Game {
 
 	void Update()
 	{
+		transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * 5.0f,0.f });
+		transform_cache["Player"]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f });
 	}
 
 	void Draw()
@@ -62,10 +52,9 @@ namespace Game {
 
 	void Free()
 	{
-
 	}
 
 	void Unload()
-	{
+	{		
 	}
 }
