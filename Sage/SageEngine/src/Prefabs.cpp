@@ -26,7 +26,6 @@ namespace Prefabs
 
 	GameObject Create_Copy(Assets::Prefabs::Prefab& _p)
 	{
-		Init();
 		GameObject g;
 		g.Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
 		if (!(_p.sprite_texture_ID == "Nil"))
@@ -46,13 +45,14 @@ namespace Prefabs
 }
 
 Red::Red() : GameObject(Prefabs::Create_Copy(prefabs["RED"]))
-{	
-	Game_Objects::Add_Game_Object(this);
+{
+	//Game_Objects::Add_Game_Object(this);
 }
 
 void Red::Init()
 {
 	GameObject::Init();
+	std::cout << dynamic_cast<Transform*>(this->Get_Component(TRANSFORM)->get())->Get_Scale()[1] << std::endl;
 }
 void Red::Update()
 {

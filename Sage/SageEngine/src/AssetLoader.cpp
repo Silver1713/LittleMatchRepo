@@ -87,6 +87,7 @@ namespace Assets
 	{
 		Parsed_CSV source;
 		std::unordered_map<std::string, Prefab> generated_prefabs;
+		static bool has_initialized{ false };
 
 		void Init()
 		{
@@ -123,12 +124,17 @@ namespace Assets
 				catch (const std::out_of_range& e)
 				{
 					std::cerr << "Out of range: " << e.what() << " at index " << i << std::endl;
-				}				
+				}
 			}
+			has_initialized = true;
 		}
 
 		std::unordered_map<std::string, Prefab> const& Get_Prefabs()
 		{
+			if (!has_initialized)
+			{
+				Init();
+			}
 			return generated_prefabs;
 		}
 	}

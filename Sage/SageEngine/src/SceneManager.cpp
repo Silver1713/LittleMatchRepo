@@ -179,7 +179,7 @@ namespace SM {
 		if (alpha > 0.0f)
 		{			
 			alpha -= dt * (1.0f / fade_time);
-			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D).get());
+			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D)->get());
 			s->Set_Transparency(alpha);			
 			return;
 		}
@@ -205,7 +205,7 @@ namespace SM {
 		if (alpha < 1.0f)
 		{
 			alpha += dt * (1.0f / fade_time);
-			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D).get());
+			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D)->get());
 			s->Set_Transparency(alpha);
 			return;
 		}
