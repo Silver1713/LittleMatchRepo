@@ -187,7 +187,7 @@ macro(import_freetype)
 if (NOT TARGET freetype)
     FetchContent_Declare(
         freetype
-        GIT_REPOSITORY https://gitlab.freedesktop.org/freetype/freetype.git
+        GIT_REPOSITORY https://github.com/freetype/freetype/
         GIT_TAG master
         SOURCE_DIR ${DEP_DIR}/freetype
     )
