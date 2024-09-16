@@ -11,7 +11,7 @@ layout(location = 3) out vec3 fOutColor;
 uniform mat3 uModel_xform;
 void main() {
 	vec3 pos = uModel_xform * vec3(aPosition, 1.f);
-	gl_Position = vec4(pos, 1.f);
+	gl_Position = vec4(pos, 1.f);	
 	fOutTexture = aTextCoords;
 	fOutColor = aColor;
 }

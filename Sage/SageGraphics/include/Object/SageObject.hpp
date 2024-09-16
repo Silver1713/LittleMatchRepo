@@ -3,6 +3,7 @@
 #include <string>
 #include <GL/glew.h>
 
+//#include "SageCameraInternal.hpp"
 #include "SageModel.hpp"
 #include "SageViewport.hpp"
 #include "SageShader.hpp"
@@ -69,6 +70,7 @@ public:
 	void init(char const* name, SageModel* model);
 	void update();
 	void draw(SageViewport* vp);
+	//void draw(SageCameraInternal2D* vp);
 	void attach_texture(SageTexture* texture);
 	//Camera;
 
