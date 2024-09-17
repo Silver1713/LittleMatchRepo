@@ -1,6 +1,7 @@
 #include "SageRenderer.hpp"
 
 SageViewport SageRenderer::viewport;
+//SageCameraInternal2D* SageRenderer::camera;
 void SageRenderer::DrawFilled(SageObject& object, RENDER_CONFIG config)
 {
 	SageObject::SageMaterial& mat = object.GetMaterial();
@@ -25,11 +26,23 @@ void SageRenderer::DrawFilled(SageObject& object, RENDER_CONFIG config)
 		mat.enable_vertex_color = false;
 		
 	}
-
-	object.draw(&viewport);
+	if (config.useCamera)
+	{
+		//object.draw(camera);
+	}
+	else
+	{
+		object.draw(&viewport);
+	}
+	//object.draw(&viewport);
 }
 
-void SageRenderer::SetViewport(SageViewport& view)
+void SageRenderer::SetCurrentView(SageViewport& view)
 {
 	viewport = view;
 }
+
+//void SageRenderer::SetCurrentView(SageCameraInternal2D* view)
+//{
+//	camera = view;
+//}

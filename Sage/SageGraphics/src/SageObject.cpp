@@ -31,6 +31,8 @@ void SageObject::init(char const * name, SageModel* model)
 	object_id = object_count++;
 
 	current_object_count++;
+
+	is_enabled = true;
 }
 
 
@@ -92,7 +94,10 @@ void SageObject::draw(SageViewport* vp)
 	shader->SetUniform("uBorderSize", material.border_width);
 	shader->SetUniform("uCornerRadius", material.border_radius);
 	shader->SetUniform("uObjectSize", transform.scale);
-	shader->SetUniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix);
+	glm::mat3 d = viewport->get_viewport_xform() * transform.model_matrix;
+	glm::vec3 result = d * glm::vec3(-1, 1, 1);
+	shader->SetUniform("uModel_xform", d);
+	//shader->SetUniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix);
 	shader->SetUniform("uUseTexture", material.enable_texture);
 	if (material.enable_texture)
 	{
@@ -128,6 +133,64 @@ void SageObject::draw(SageViewport* vp)
 	
 }
 
+// Draw with default shader
+//void SageObject::draw(SageCameraInternal2D* cam)
+//{
+//	SageShader* shader = obj_mesh.model_ref->get_shader_program();
+//	SageCameraInternal2D& camera = *cam;
+//
+//	glBindVertexArray(obj_mesh.model_ref->get_vao_handle());
+//
+//	shader->Activate();
+//	shader->SetUniform("uTransparency", material.mat_transparency);
+//	shader->SetUniform("uUseColor", !material.enable_vertex_color);
+//	shader->SetUniform("uUseBorderColor", material.enable_border_color);
+//
+//	shader->SetUniform("uColor", material.color);
+//	shader->SetUniform("uBorderColor", material.border_color);
+//
+//	shader->SetUniform("uBorderSize", material.border_width);
+//	shader->SetUniform("uCornerRadius", material.border_radius);
+//	shader->SetUniform("uObjectSize", transform.scale);
+//	
+//	
+//	shader->SetUniform("uModel_xform", cam->GetProjectionMatrix() * (cam->GetViewMatrix() * transform.model_matrix));
+//	shader->SetUniform("uUseTexture", material.enable_texture);
+//	if (material.enable_texture)
+//	{
+//		glActiveTexture(GL_TEXTURE0 + material.texture_ref->get_texture_unit());
+//		shader->SetUniform("uTex2D", material.texture_ref->get_texture_unit());
+//	}
+//
+//
+//
+//
+//
+//
+//	if (obj_mesh.model_ref->is_idx_enabled())
+//	{
+//		glEnable(GL_TEXTURE_2D);
+//		glEnable(GL_BLEND);
+//		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//		//if (this->obj_mesh->model_ref->)
+//		glDrawElements(GL_TRIANGLE_FAN, obj_mesh.idx_cnt, GL_UNSIGNED_SHORT, nullptr);
+//		// Check for errors
+//
+//
+//	}
+//	else
+//	{
+//		glDrawArrays(GL_TRIANGLES, 0, obj_mesh.vtx_cnt);
+//	}
+//
+//	glBindVertexArray(0);
+//	shader->Deactivate();
+//	glDisable(GL_BLEND);
+//
+//
+//}
+
+
 
 SageObject::SageMaterial& SageObject::GetMaterial()
 {
@@ -138,5 +201,12 @@ void SageObject::set_alpha(float transparency)
 {
 	material.mat_transparency = transparency;
 }
+
+
+void SageObject::disable_object()
+{
+	is_enabled = false;
+}
+
 
 

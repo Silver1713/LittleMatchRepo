@@ -1,4 +1,6 @@
 #include "GameObjects.hpp"
+#include "SageObjectManager.hpp"
+#include "Prefabs.hpp"
 #include <unordered_map>
 #include <memory>
 #include <iostream>
@@ -52,7 +54,7 @@ namespace Game_Objects
 
 		_g->Set_ID(g_go_counter);
 		g_go_counter++;
-		g_game_objects[g_go_counter] = _g;
+		g_game_objects[g_go_counter] = std::move(_g);
 	}
 
 	std::unordered_map<unsigned int, GameObject*>& Get_Game_Objects()
@@ -62,19 +64,41 @@ namespace Game_Objects
 
 	void Clear_Game_Objects()
 	{
-		g_game_objects.clear();
+		SageObjectManager::DestroyAllObjects();
+		g_game_objects.clear();		
 		g_go_counter = 0;
 	}
 }
 
 GameObject::GameObject(){}
-GameObject::GameObject(unsigned int _iD) : GameObject()
+GameObject::GameObject(Assets::Prefabs::Prefab& _p)
+{
+	Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
+	if (!(_p.sprite_texture_ID == "Nil"))
+	{
+		Add_Component(std::make_unique<Sprite2D>(_p.sprite_texture_ID, _p.colour));
+	}
+	else
+	{
+		Add_Component(std::make_unique<Sprite2D>("", _p.colour));
+	}
+	if (!(_p.collision_data == "Nil"))
+	{
+		Add_Component(std::make_unique<Collision2D>());
+	}
+	if (!(_p.audio_data == "Nil"))
+	{
+		Add_Component(std::make_unique<Audio>());
+	}
+	std::cout << components.size() << std::endl;
+}
+GameObject::GameObject(unsigned int const& _iD) : GameObject()
 {
 	iD = _iD;
 };
 
 void GameObject::Init()
-{	
+{
 	if (components.empty())
 	{
 		return;
@@ -125,7 +149,7 @@ void GameObject::Exit()
 	}
 }
 
-void GameObject::Set_ID(unsigned int _iD)
+void GameObject::Set_ID(unsigned int const& _iD)
 {
 	iD = _iD;
 }
@@ -140,16 +164,14 @@ void GameObject::Add_Component(std::unique_ptr<Component> _c)
 	components.push_back(std::move(_c));
 }
 
-std::unique_ptr<Component>& GameObject::Get_Component(ComponentType _type)
+std::unique_ptr<Component>* GameObject::Get_Component(ComponentType _type)
 {
 	for (auto& c : components)
 	{
-		if ((*c).Get_Component_Type() == _type)
+		if (c->Get_Component_Type() == _type)
 		{
-			return c;
+			return &c;
 		}
 	}
-
-	static std::unique_ptr<Component> a{};
-	return a;
+	return nullptr;
 }

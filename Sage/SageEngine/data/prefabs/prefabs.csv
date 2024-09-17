@@ -1,3 +1,4 @@
 Prefab ID,Position X,Position Y,Position Z,Rotation X,Rotation Y,Rotation Z,Scale X ,Scale Y,Scale Z,R,G ,B,A,Sprite Texture ID,Collision Data,Audio Data
-TEST_GO,1,2,3,4,5,6,100,100,100,1,1,1,1,DIGIPEN_SPLASH_SCREEN,Nil,Nil
-TEST_GO_2,7,8,9,10,11,12,100,100,100,1,1,1,1,Nil,Nil,Nil
+RED,0,0,0,0,0,0,100,100,0,1,0,0,1,Nil,Nil,Nil
+GREEN,0,0,0,0,0,0,100,100,0,0,1,0,1,Nil,Nil,Nil
+BLUE,0,0,0,0,0,0,100,100,0,0,0,1,1,Nil,Nil,Nil

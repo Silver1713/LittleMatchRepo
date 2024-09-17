@@ -13,7 +13,7 @@
 
 #include <iostream>
 #include <numeric>
-
+#include <backward.hpp>
 #include "SageMain.hpp"
 #include "SageHelper.hpp"
 
@@ -42,11 +42,6 @@ extern "C"
 
 int main()
 {
-
-
-    Assets::Textures::Init();
-    Assets::Prefabs::Init();
-    Prefabs::Init();
 	init();
     SageAudio::Play_Sound(HALO_2, NO_LOOP);
     SageAudio::Play_Sound(BABABOOEY, LOOP);
@@ -78,6 +73,9 @@ void init()
         std::exit(EXIT_FAILURE);
     }
     
+    Assets::Textures::Init();
+    Assets::Prefabs::Init();
+    Prefabs::Init();
     SM::Load();
     SM::Init();
     SageAudio::Init();
@@ -105,6 +103,7 @@ void draw()
 void exit()
 {
     SM::Free();
+    Assets::Textures::Unload();
     SM::Unload();
     SageHelper::exit();
     //SageMain::exit();

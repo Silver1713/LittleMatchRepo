@@ -60,8 +60,9 @@ struct RENDER_CONFIG
 struct SageRenderer
 {
 	static SageViewport viewport;
-
-	static void SetViewport(SageViewport& view);
+	//static SageCameraInternal2D* camera;
+	static void SetCurrentView(SageViewport& view);
+	//static void SetCurrentView(SageCameraInternal2D* view);
 	static void DrawFilled(SageObject& object , RENDER_CONFIG config={false,false,0,0,{},false});
 
 };

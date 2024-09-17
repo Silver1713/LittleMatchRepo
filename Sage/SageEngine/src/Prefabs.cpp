@@ -10,66 +10,71 @@
 #include <iostream>
 
 std::unordered_map<std::string, Assets::Prefabs::Prefab> prefabs;
+static bool is_initialized{ false };
 
 namespace Prefabs
 {
 	void Init()
 	{
+		if (is_initialized)
+		{
+			return;
+		}
 		prefabs = Assets::Prefabs::Get_Prefabs();
-	}
-
-	GameObject Create_Copy(Assets::Prefabs::Prefab& _p)
-	{
-		GameObject g;
-		g.Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
-		if (!(_p.sprite_texture_ID == "Nil"))
-		{
-			g.Add_Component(std::make_unique<Sprite2D>(_p.sprite_texture_ID, _p.colour));
-		}
-		if (!(_p.collision_data == "Nil"))
-		{
-			g.Add_Component(std::make_unique<Collision2D>());
-		}
-		if (!(_p.audio_data == "Nil"))
-		{
-			g.Add_Component(std::make_unique<Audio>());
-		}
-		return g;
+		is_initialized = true;
 	}
 }
 
-Test_GO::Test_GO() : GameObject(Prefabs::Create_Copy(prefabs["TEST_GO"])) 
+Red::Red() : GameObject(prefabs["RED"])
 {
-	Game_Objects::Add_Game_Object(this);
+	Init();
 }
 
-void Test_GO::Init()
+void Red::Init()
 {
 	GameObject::Init();
 }
-void Test_GO::Update()
+void Red::Update()
 {
 
 }
-void Test_GO::Exit()
+void Red::Exit()
 {
 
 }
 
-Test_GO_2::Test_GO_2() : GameObject(Prefabs::Create_Copy(prefabs["TEST_GO_2"]))
+Green::Green() : GameObject(prefabs["GREEN"])
 {
-	Game_Objects::Add_Game_Object(this);
+	Init();
 }
 
-void Test_GO_2::Init()
+void Green::Init()
 {
 	GameObject::Init();
 }
-void Test_GO_2::Update()
+void Green::Update()
 {
 
 }
-void Test_GO_2::Exit()
+void Green::Exit()
+{
+
+}
+
+Blue::Blue() : GameObject(prefabs["BLUE"])
+{
+	Init();
+}
+
+void Blue::Init()
+{
+	GameObject::Init();
+}
+void Blue::Update()
+{
+
+}
+void Blue::Exit()
 {
 
 }

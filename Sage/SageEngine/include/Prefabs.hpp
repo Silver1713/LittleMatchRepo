@@ -9,19 +9,28 @@ namespace Prefabs
 }
 
 
-class Test_GO : public GameObject
+class Red : public GameObject
 {
 public:
-	Test_GO();
+	Red();
 	void Init() override;
 	void Update() override;
 	void Exit() override;
 };
 
-class Test_GO_2 : public GameObject
+class Green : public GameObject
 {
 public:
-	Test_GO_2();
+	Green();
+	void Init() override;
+	void Update() override;
+	void Exit() override;
+};
+
+class Blue : public GameObject
+{
+public:
+	Blue();
 	void Init() override;
 	void Update() override;
 	void Exit() override;

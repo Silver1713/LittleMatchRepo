@@ -11,29 +11,39 @@
 */
 /* End Header **************************************************************************/
 #include "AssetLoader.hpp"
+#include "SageHelper.hpp"
 #include "Prefabs.hpp"
 #include "Key_Inputs.h"
 
 #include <iostream>
 
+static std::unordered_map<std::string, GameObject> game_objects;
+static std::unordered_map<std::string, Transform*> transform_cache;
+
 namespace Game {
 
 	void Load()
 	{
+		game_objects.clear();
+		transform_cache.clear();
 
+		game_objects["Player"] = Red();
+		Game_Objects::Add_Game_Object(&game_objects["Player"]);
 	}
 
 	void Init()
 	{
-		std::cout << "Arrived at Game Scene." << std::endl;
+		transform_cache["Player"] = dynamic_cast<Transform*>(game_objects["Player"].Get_Component(TRANSFORM)->get());
 	}
 
 	void Input()
-	{		
+	{
 	}
 
 	void Update()
 	{
+		transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * 5.0f,0.f });
+		transform_cache["Player"]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f });
 	}
 
 	void Draw()
@@ -42,10 +52,9 @@ namespace Game {
 
 	void Free()
 	{
-
 	}
 
 	void Unload()
-	{
+	{		
 	}
 }

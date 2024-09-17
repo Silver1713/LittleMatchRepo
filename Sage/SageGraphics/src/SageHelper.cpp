@@ -125,7 +125,7 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(openglErrorCallback, nullptr);*/
 
-
+	glfwSetKeyCallback(glfwGetCurrentContext(), key_cb);
 	return 0;
 }
 

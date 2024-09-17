@@ -10,6 +10,8 @@
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
+#include "AssetLoader.hpp"
+#include "Prefabs.hpp"
 #include "SageMain.hpp"
 #include "SageHelper.hpp"
 #include "Key_Inputs.h"
@@ -31,7 +33,7 @@ static bool ignore_safety_bools{ false };
 
 const float fade_time{ 1.f };
 
-GameObject fade_screen;
+static GameObject fade_screen;
 
 #pragma region Public Functions
 namespace SM {	
@@ -91,8 +93,9 @@ namespace SM {
 	{
 		SageMain::init();
 		SAGE_Input_Handler::init();
-		Game_Objects::Init();
+
 		SM::fp_init();
+		Game_Objects::Init();		
 	}
 
 	void Input()
@@ -117,8 +120,8 @@ namespace SM {
 
 	void Free()
 	{
-		SageMain::exit();
-		SM::fp_free();			
+		SM::fp_free();
+		SageMain::exit();		
 	}
 
 	void Unload()
@@ -140,7 +143,6 @@ namespace SM {
 
 	void Go_To_Next_Scene()
 	{
-		//AESysFrameEnd();
 		SM::Free();
 		SM::Unload();
 		SM::fp_load = fp_load_tmp;
@@ -150,15 +152,14 @@ namespace SM {
 		SM::fp_draw = fp_draw_tmp;
 		SM::fp_free = fp_free_tmp;
 		SM::fp_unload = fp_unload_tmp;
-		//AESysReset();
+		Load();
+		Init();
 	}
 
 	void Restart_Scene()
 	{
-		//AESysFrameEnd();
 		SM::fp_free();
 		scene_has_initialized = false;
-		//AESysReset();
 	}
 
 	void Fade_In()
@@ -175,7 +176,7 @@ namespace SM {
 		if (alpha > 0.0f)
 		{			
 			alpha -= dt * (1.0f / fade_time);
-			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D).get());
+			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D)->get());
 			s->Set_Transparency(alpha);			
 			return;
 		}
@@ -201,7 +202,7 @@ namespace SM {
 		if (alpha < 1.0f)
 		{
 			alpha += dt * (1.0f / fade_time);
-			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D).get());
+			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D)->get());
 			s->Set_Transparency(alpha);
 			return;
 		}

@@ -3,6 +3,7 @@
 #include <string>
 #include <GL/glew.h>
 
+//#include "SageCameraInternal.hpp"
 #include "SageModel.hpp"
 #include "SageViewport.hpp"
 #include "SageShader.hpp"
@@ -58,6 +59,8 @@ private:
 
 	SageMesh obj_mesh;
 
+	bool is_enabled;
+
 	
 
 
@@ -67,6 +70,7 @@ public:
 	void init(char const* name, SageModel* model);
 	void update();
 	void draw(SageViewport* vp);
+	//void draw(SageCameraInternal2D* vp);
 	void attach_texture(SageTexture* texture);
 	//Camera;
 
@@ -80,6 +84,8 @@ public:
 	SageMaterial& GetMaterial();
 
 	void set_alpha(float transparency); // 0: Transparent, 1: Opaque
+
+	void disable_object();
 
 	
 

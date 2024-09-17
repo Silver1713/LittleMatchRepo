@@ -157,3 +157,9 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 		std::exit(EXIT_FAILURE);
 	}
 }
+
+
+void SageObjectManager::DestroyAllObjects()
+{
+	objects.clear();
+}

@@ -1,4 +1,5 @@
 #pragma once
+#include "AssetLoader.hpp"
 #include "Components.hpp"
 #include <vector>
 #include <memory>
@@ -12,18 +13,19 @@ protected:
 
 public:
 	GameObject();
-	GameObject(unsigned int _iD);
+	GameObject(Assets::Prefabs::Prefab& _p);
+	GameObject(unsigned int const& _iD);
 
 	virtual void Init();
 	virtual void Update();
 	virtual void Draw();
 	virtual void Exit();
 
-	void Set_ID(unsigned int _iD);
+	void Set_ID(unsigned int const& _iD);
 	unsigned int const Get_ID();
 
 	void Add_Component(std::unique_ptr<Component> _c);
-	std::unique_ptr<Component>& Get_Component(ComponentType _component);
+	std::unique_ptr<Component>* Get_Component(ComponentType _component);
 };
 
 namespace Game_Objects
