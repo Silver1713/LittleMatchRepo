@@ -23,71 +23,71 @@ SageTexture p;
 void SageMain::init()
 {
 	SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
-	
+
 	//p.load_texture("../SageIO/image/digipen_splash_screen.png", SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
 	vp = { glm::vec2{0,0}, {SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT} };
 	vp.calculate_viewport_xform();
 	//camera.Init({ 0,0 }, { SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT }, { 0,0 });
-	
 
 
-	
+
+
 	SageRenderer::SetCurrentView(vp);
 
 
 
 
-	
 
 
 
-	//SageObjectManager::CreatePrimitiveObject("Rect1", PRIMITIVE_OBJECT_CIRCLE, { 0,0 }, { 10,50 }, { 0,0 }, { 1,0,1,1 },
-	//	{ 0,0,0,1 }, 0.5f);
+
+	SageObjectManager::CreatePrimitiveObject("Rect1", PRIMITIVE_OBJECT_CIRCLE, { 0,0 }, { 50,50 }, { 0,0 }, { 1,0,1,1 },
+		{ 0,0,0,1 }, 0.5f);
 
 	/*SageObjectManager::CreatePrimitiveObject("Rect2", PRIMITIVE_OBJECT_RECT, { 1000,2000 }, { 1000,500 }, { 0,0 }, { 1,1,0,1 },
 		{ 0,0,0,1 }, 0.5f);
 	SageObjectManager::CreatePrimitiveObject("Rect3", PRIMITIVE_OBJECT_RECT, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,1,1,1 },
 		{ 0,0,0,1 }, 0.5f);*/
 
-	//SageObjectManager::objects["Rect1"].transform.position = { 0,0 };
-	////set scale
-	//SageObjectManager::objects["Rect1"].transform.scale = { 100.f,100.f };
-	//SageObjectManager::objects["Rect1"].transform.orientation = { 0,0 };
+		//SageObjectManager::objects["Rect1"].transform.position = { 0,0 };
+		////set scale
+		//SageObjectManager::objects["Rect1"].transform.scale = { 100.f,100.f };
+		//SageObjectManager::objects["Rect1"].transform.orientation = { 0,0 };
 
 
-	//// 2nd object
-	//SageObjectManager::objects["Rect2"].transform.position = { -100,200 };
-	//SageObjectManager::objects["Rect2"].transform.scale = { 200,200 };
-	//SageObjectManager::objects["Rect2"].transform.orientation = { 0,0 };
+		//// 2nd object
+		//SageObjectManager::objects["Rect2"].transform.position = { -100,200 };
+		//SageObjectManager::objects["Rect2"].transform.scale = { 200,200 };
+		//SageObjectManager::objects["Rect2"].transform.orientation = { 0,0 };
 
-	// // 3rd object
+		// // 3rd object
 
-	// // Random transform
-	//SageObjectManager::objects["Rect3"].transform.position = { 0,0 };
-	//SageObjectManager::objects["Rect3"].transform.scale = { 100,0 };
-	//SageObjectManager::objects["Rect3"].transform.orientation = { 0,0 };
+		// // Random transform
+		//SageObjectManager::objects["Rect3"].transform.position = { 0,0 };
+		//SageObjectManager::objects["Rect3"].transform.scale = { 100,0 };
+		//SageObjectManager::objects["Rect3"].transform.orientation = { 0,0 };
 
-	//SageObject* obj = &SageObjectManager::objects["Rect3"];
-	
-	/*obj->GetMaterial().enable_texture = true;
-	obj->attach_texture(&p);*/
+		//SageObject* obj = &SageObjectManager::objects["Rect3"];
+
+		/*obj->GetMaterial().enable_texture = true;
+		obj->attach_texture(&p);*/
 
 
 
-	//// CreaTE 2500 objects randomize position and scale and color
+		//// CreaTE 2500 objects randomize position and scale and color
 
-	//for (int i =0; i < 2499; i++)
-	//{
-	//	SageObjectManager::CreatePrimitiveObject(std::to_string(i).c_str() ,PRIMITIVE_OBJECT_RECT, { 0,0 }, { 1000,500 }, { 0,0 }, { 1,0,1,1 },
-	//		{ 0,0,0,1 }, 0.5f);
+		//for (int i =0; i < 2499; i++)
+		//{
+		//	SageObjectManager::CreatePrimitiveObject(std::to_string(i).c_str() ,PRIMITIVE_OBJECT_RECT, { 0,0 }, { 1000,500 }, { 0,0 }, { 1,0,1,1 },
+		//		{ 0,0,0,1 }, 0.5f);
 
-	//	SageObjectManager::objects[std::to_string(i).c_str()].transform.position = { rand() % SageHelper::WINDOW_WIDTH - 1000, rand() % 2000 - 1000 };
-	//	SageObjectManager::objects[std::to_string(i).c_str()].transform.scale = { rand() % 2000 - 1000, rand() % 2000 - 1000 };
-	//	SageObjectManager::objects[std::to_string(i).c_str()].transform.orientation = { 0,0 };
+		//	SageObjectManager::objects[std::to_string(i).c_str()].transform.position = { rand() % SageHelper::WINDOW_WIDTH - 1000, rand() % 2000 - 1000 };
+		//	SageObjectManager::objects[std::to_string(i).c_str()].transform.scale = { rand() % 2000 - 1000, rand() % 2000 - 1000 };
+		//	SageObjectManager::objects[std::to_string(i).c_str()].transform.orientation = { 0,0 };
 
-	//	SageObjectManager::objects[std::to_string(i).c_str()].GetMaterial().color = { (float)rand() / RAND_MAX, (float)rand() / RAND_MAX, (float)rand() / RAND_MAX, 1 };
+		//	SageObjectManager::objects[std::to_string(i).c_str()].GetMaterial().color = { (float)rand() / RAND_MAX, (float)rand() / RAND_MAX, (float)rand() / RAND_MAX, 1 };
 
-	//}
+		//}
 
 
 	vp.setViewport();
@@ -143,7 +143,12 @@ void SageMain::draw()
 	for (auto& obj : SageObjectManager::objects)
 	{
 		SageRenderer::DrawFilled(obj.second, {
-			false,true,15.f,0.f,{0,0,0,1},false
+			SageRenderer::SAGE_ENABLE_ALPHA | SageRenderer::SAGE_ENABLE_TEXTURE | SageRenderer::SAGE_ENABLE_VERTEX_COLOR,
+			15.f,0.f,
+			{
+				0,0,
+				0,1
+			}
 			});
 	}
 

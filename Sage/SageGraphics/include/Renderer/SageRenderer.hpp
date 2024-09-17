@@ -42,8 +42,9 @@ enum SHAPE
 
 struct RENDER_CONFIG
 {
-	bool enableBorder;
-	bool useVertexColor;
+	unsigned int options;
+
+	
 
 	float border_width;
 	float border_radius;
@@ -52,20 +53,38 @@ struct RENDER_CONFIG
 	glm::vec4 border_color;
 
 
-	bool useCamera;
+	
 
 };
 
 
 struct SageRenderer
 {
+	enum
+	{
+		SAGE_ENABLE_ALPHA = 1,
+		SAGE_ENABLE_Border = 2,
+		SAGE_ENABLE_VERTEX_COLOR = 4,
+		SAGE_ENABLE_TEXTURE = 8,
+		SAGE_ENABLE_CAMERA = 16,
+	};
+
+	static RENDER_CONFIG default_config;
 	static SageViewport viewport;
+
+
 	//static SageCameraInternal2D* camera;
 	static void SetCurrentView(SageViewport& view);
 	//static void SetCurrentView(SageCameraInternal2D* view);
-	static void DrawFilled(SageObject& object , RENDER_CONFIG config={false,false,0,0,{},false});
+	static void DrawFilled(SageObject& object, RENDER_CONFIG config = { (SAGE_ENABLE_ALPHA | SAGE_ENABLE_Border),0,0,{} });
+	static void DrawFilled(SageObject& object);
+
+	static void SetOptionOn(int options);
+	static void SetOptionOff(int options);
 
 };
+
+
 
 
 #endif //SAFERENDERER_HPP
