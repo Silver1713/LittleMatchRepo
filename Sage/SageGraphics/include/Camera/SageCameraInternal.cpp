@@ -54,7 +54,7 @@ void SageCameraInternal2D::CalculateCameraMatrix()
 
 	// Calculate the view projection matrix
 	view_projection_matrix = projection_matrix * view_matrix;
-	//glm::vec3 result = view_projection_matrix * glm::vec3{ 1280,0,1.f };
+	
 }
 
 

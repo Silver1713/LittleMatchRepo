@@ -10,8 +10,12 @@
 
 class GLFW_Input_Handler {
 public:
+	static double mouse_pos_x;
+	static double mouse_pos_y;
 
 	static std::unordered_map<int, int> key_map;
+
+
 
 	static void Poll_Events(); // Function to poll events
 
@@ -22,4 +26,6 @@ public:
 	static void key_cb(GLFWwindow* window, int keycode, int scancode, int action, int mods);
 
 	static void mouse_cb(GLFWwindow* window, int button, int action, int mods);
+
+	static void mouse_pos_cb(GLFWwindow* window, double xpos, double ypos);
 };
