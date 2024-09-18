@@ -63,7 +63,7 @@ struct SageRenderer
 	enum
 	{
 		SAGE_ENABLE_ALPHA = 1,
-		SAGE_ENABLE_Border = 2,
+		SAGE_ENABLE_BORDER = 2,
 		SAGE_ENABLE_VERTEX_COLOR = 4,
 		SAGE_ENABLE_TEXTURE = 8,
 		SAGE_ENABLE_CAMERA = 16,
@@ -76,7 +76,7 @@ struct SageRenderer
 	//static SageCameraInternal2D* camera;
 	static void SetCurrentView(SageViewport& view);
 	//static void SetCurrentView(SageCameraInternal2D* view);
-	static void DrawFilled(SageObject& object, RENDER_CONFIG config = { (SAGE_ENABLE_ALPHA | SAGE_ENABLE_Border),0,0,{} });
+	static void DrawFilled(SageObject& object, RENDER_CONFIG config = { (SAGE_ENABLE_ALPHA | SAGE_ENABLE_BORDER),0,0,{} });
 	static void DrawFilled(SageObject& object);
 
 	static void SetOptionOn(int options);
