@@ -33,6 +33,17 @@ namespace Game_Objects
 		}
 	}
 
+	void Draw()
+	{
+		for (auto& _g : g_game_objects)
+		{
+			if (_g.second)
+			{
+				_g.second->Draw();
+			}
+		}
+	}
+
 	void Exit()
 	{
 		for (auto& _g : g_game_objects)

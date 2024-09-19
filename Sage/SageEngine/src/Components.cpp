@@ -138,7 +138,17 @@ void Sprite2D::Update()
 	obj->transform.orientation[0] = transform->Get_Rotations()[0];
 	obj->transform.orientation[1] = transform->Get_Rotations()[1];
 }
-void Sprite2D::Draw() {}
+void Sprite2D::Draw() 
+{
+	SageRenderer::DrawFilled(*obj, {
+			SageRenderer::SAGE_ENABLE_ALPHA | SageRenderer::SAGE_ENABLE_TEXTURE,
+			15.f,0.f,
+			{
+				0,0,
+				0,1
+			}
+		});
+}
 void Sprite2D::Exit() {}
 
 ComponentType Sprite2D::Get_Component_Type() { return SPRITE2D; }

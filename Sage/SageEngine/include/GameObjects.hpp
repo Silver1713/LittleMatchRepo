@@ -32,6 +32,7 @@ namespace Game_Objects
 {
 	void Init();
 	void Update();
+	void Draw();
 	void Exit();
 
 	void Add_Game_Object(GameObject* _g);

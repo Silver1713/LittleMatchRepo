@@ -115,6 +115,7 @@ namespace SM {
 	void Draw()
 	{
 		SageMain::draw();
+		Game_Objects::Draw();
 		SM::fp_draw();
 	}
 

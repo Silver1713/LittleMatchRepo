@@ -41,8 +41,8 @@ void SageMain::init()
 
 
 
-	SageObjectManager::CreatePrimitiveObject("Rect1", PRIMITIVE_OBJECT_CIRCLE, { 0,0 }, { 50,50 }, { 0,0 }, { 1,0,1,1 },
-		{ 0,0,0,1 }, 0.5f);
+	/*SageObjectManager::CreatePrimitiveObject("Rect1", PRIMITIVE_OBJECT_CIRCLE, { 0,0 }, { 50,50 }, { 0,0 }, { 1,0,1,1 },
+		{ 0,0,0,1 }, 0.5f);*/
 
 	/*SageObjectManager::CreatePrimitiveObject("Rect2", PRIMITIVE_OBJECT_RECT, { 1000,2000 }, { 1000,500 }, { 0,0 }, { 1,1,0,1 },
 		{ 0,0,0,1 }, 0.5f);
@@ -140,17 +140,17 @@ void SageMain::draw()
 
 
 
-	for (auto& obj : SageObjectManager::objects)
-	{
-		SageRenderer::DrawFilled(obj.second, {
-			SageRenderer::SAGE_ENABLE_ALPHA | SageRenderer::SAGE_ENABLE_TEXTURE | SageRenderer::SAGE_ENABLE_VERTEX_COLOR,
-			15.f,0.f,
-			{
-				0,0,
-				0,1
-			}
-			});
-	}
+	//for (auto& obj : SageObjectManager::objects)
+	//{
+	//	SageRenderer::DrawFilled(obj.second, {
+	//		SageRenderer::SAGE_ENABLE_ALPHA | SageRenderer::SAGE_ENABLE_TEXTURE | SageRenderer::SAGE_ENABLE_VERTEX_COLOR,
+	//		15.f,0.f,
+	//		{
+	//			0,0,
+	//			0,1
+	//		}
+	//		});
+	//}
 
 	// SageHelper::sage_ptr_window->set_title("Scene 1");
 	//glfwSetWindowTitle(SageHelper::ptr_window, "Scene 1");

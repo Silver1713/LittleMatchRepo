@@ -6,7 +6,7 @@ RENDER_CONFIG SageRenderer::default_config{SageRenderer::SAGE_ENABLE_TEXTURE | S
 void SageRenderer::DrawFilled(SageObject& object, RENDER_CONFIG config)
 {
 	SageObject::SageMaterial& mat = object.GetMaterial();
-	if (config.options & SAGE_ENABLE_Border)
+	if (config.options & SAGE_ENABLE_BORDER)
 	{
 		mat.enable_border_color = true;
 		mat.border_color = config.border_color;
@@ -52,7 +52,7 @@ void SageRenderer::SetCurrentView(SageViewport& view)
 void SageRenderer::DrawFilled(SageObject& object)
 {
 	SageObject::SageMaterial& mat = object.GetMaterial();
-	if (default_config.options & SAGE_ENABLE_Border)
+	if (default_config.options & SAGE_ENABLE_BORDER)
 	{
 		mat.enable_border_color = true;
 		mat.border_color = default_config.border_color;
