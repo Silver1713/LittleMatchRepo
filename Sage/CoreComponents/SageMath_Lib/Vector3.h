@@ -58,7 +58,7 @@ namespace ToastBox {
 		void operator%=(const Vec3& pVec0);
 		Vec3 operator%(const Vec3& pVec0) const;
 
-		void Vec3::clear();
+		void clear();
 
 	};
 }

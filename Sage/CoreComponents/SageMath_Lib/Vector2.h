@@ -12,6 +12,8 @@ Brief		 : Vector2 class and class operation declaration
 
 #pragma once
 
+#include <cmath>
+
 #define real_sqrt sqrtf
 #define real_pow powf
 
@@ -73,10 +75,10 @@ namespace ToastBox {
 		float operator*(const Vec2& pVec0) const;
 
 		//Cross product magnitude
-		float productCrossMag(const Vec2& pVec0);
+		float productCrossMag(const Vec2& pVec0) const;
 
 		//Rotate
-		//void rotate(float angle);
+		void rotate(float angle);
 
 		void clear();
 
