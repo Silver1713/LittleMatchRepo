@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{9e6bc4b7-9c4b-438a-9e2d-a64e17aa4039}</ProjectGuid>
+    <ProjectGuid>{c1181aef-188f-47c9-92d5-9529921d6e20}</ProjectGuid>
     <RootNamespace>SageMathLib</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -133,11 +133,11 @@
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Matrix3x3.h" />
-    <ClInclude Include="include\Matrix4x4.h" />
-    <ClInclude Include="include\Shapes.h" />
-    <ClInclude Include="include\Vector2.h" />
-    <ClInclude Include="include\Vector3.h" />
+    <ClInclude Include="Shapes.h" />
+    <ClInclude Include="Matrix3x3.h" />
+    <ClInclude Include="Matrix4x4.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

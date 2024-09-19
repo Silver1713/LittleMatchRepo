@@ -18,30 +18,30 @@
     <ClCompile Include="Vector2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vector3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Matrix3x3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Matrix4x4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Vector3.h">
+    <ClInclude Include="Vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Vector2.h">
+    <ClInclude Include="Vector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Matrix3x3.h">
+    <ClInclude Include="Matrix3x3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Matrix4x4.h">
+    <ClInclude Include="Matrix4x4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Shapes.h">
+    <ClInclude Include="Shapes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
