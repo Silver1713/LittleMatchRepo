@@ -95,8 +95,39 @@ file(GLOB_RECURSE SageEngine_source_files
     ${CMAKE_SOURCE_DIR}/SageEngine/include/*.[h]pp
     ${CMAKE_SOURCE_DIR}/SageEngine/include/*.h
 )
+
+file(GLOB SAGEENGINE_INC_SUBDIR
+    ${CMAKE_SOURCE_DIR}/SageEngine/include/*/
+)
+
+file(GLOB SAGEENGINE_SRC_SUBDIR
+    ${CMAKE_SOURCE_DIR}/SageEngine/src/*/
+)
+set(ENGINE_SUB_INC_FILES)
+foreach(SAGEENGINE_INC_SUBDIRS ${SAGEENGINE_INC_SUBDIR})
+    get_filename_component(SAGEENGINE_INC_SUBDIR_NAME ${SAGEENGINE_INC_SUBDIRS} NAME)
+    file(GLOB SAGEENGINE_INC_SUBDIR_FILES
+        ${SAGEENGINE_INC_SUBDIRS}/*.[h]pp
+    )
+    source_group("Header Files/${SAGEENGINE_INC_SUBDIR_NAME}" FILES ${SAGEENGINE_INC_SUBDIR_FILES})
+
+    list(APPEND ENGINE_SUB_INC_FILES ${SAGEENGINE_INC_SUBDIR_FILES})
+endforeach()
+set(ENGINE_SUB_SRC_FILES)
+foreach(SAGEENGINE_SRC_SUBDIRS ${SAGEENGINE_SRC_SUBDIR})
+    get_filename_component(SAGEENGINE_SRC_SUBDIR_NAME ${SAGEENGINE_SRC_SUBDIRS} NAME)
+    file(GLOB SAGEENGINE_SRC_SUBDIR_FILES
+        ${SAGEENGINE_SRC_SUBDIRS}/*.[ch]pp
+        ${SAGEENGINE_SRC_SUBDIRS}/*.h
+    )
+    source_group("Source Files/${SAGEENGINE_SRC_SUBDIR_NAME}" FILES ${SAGEENGINE_SRC_SUBDIR_FILES})
+    list(APPEND ENGINE_SUB_SRC_FILES ${SAGEENGINE_SRC_SUBDIR_FILES})
+endforeach()
+
+
 add_executable(SageEngine
     ${SageEngine_source_files}
+    ${ENGINE_SUB_SRC_FILES}
 )
 
 # Link the executable with the necessary libraries
@@ -113,8 +144,16 @@ elseif(MSVC)
     target_compile_options(SageEngine PRIVATE /W3 /WX-)
 endif()
 
+if(WIN32 AND FMOD_IMPORT_SUCCESS)
+            add_custom_command(TARGET SageEngine POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "$<$<CONFIG:Debug>:${FMOD_LIB_DIR}/fmodL.dll>$<$<NOT:$<CONFIG:Debug>>:${FMOD_LIB_DIR}/fmod.dll>"
+                $<TARGET_FILE_DIR:SageEngine>)
+        endif()
+
 target_include_directories(SageEngine PRIVATE
     ${CMAKE_SOURCE_DIR}/SageEngine/include
     ${CMAKE_SOURCE_DIR}/SageEngine/include/internal
+    ${ENGINE_SUB_INC_FILES}
     ${INCLUDES_LIST}
 )
