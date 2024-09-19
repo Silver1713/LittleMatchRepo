@@ -69,21 +69,21 @@ namespace Game {
 
 	void Input()
 	{
-		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_W))
+		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_W))
 		{
-
+			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * 100.0f });
 		}
-		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_A))
+		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_A))
 		{
-
+			transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * (-100.0f),0.f });
 		}
-		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_S))
+		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_S))
 		{
-
+			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * (-100.0f) });
 		}
-		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_D))
+		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_D))
 		{
-
+			transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * 100.0f,0.f });
 		}
 
 		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_1))
@@ -118,13 +118,11 @@ namespace Game {
 
 	void Update()
 	{
-		transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * 5.0f,0.f });
-		transform_cache["Player"]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f });
+		//transform_cache["Player"]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f });
 
 
 		for (int i{}; i < game_objects_to_create; ++i)
 		{
-			transform_cache[std::to_string(i)]->Translate({ (float)SageHelper::delta_time * 5.0f,0.f });
 			transform_cache[std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f });
 		}
 
