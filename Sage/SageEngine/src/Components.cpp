@@ -61,6 +61,12 @@ void Transform::Set_Rotations(float const* _new_rot)
 {
 	*rotations = *_new_rot;
 }
+void Transform::Set_Rotations(std::initializer_list<float> const& _new_rot)
+{
+	rotations[0] = *(_new_rot.begin());
+	rotations[1] = *(_new_rot.begin() + 1);
+	rotations[2] = *(_new_rot.begin() + 2);
+}
 float const* Transform::Get_Rotations()
 {
 	return rotations;
@@ -69,6 +75,12 @@ float const* Transform::Get_Rotations()
 void Transform::Set_Scale(float const* _new_scale)
 {
 	*scale = *_new_scale;
+}
+void Transform::Set_Scale(std::initializer_list<float> const& _new_scale)
+{
+	scale[0] = *(_new_scale.begin());
+	scale[1] = *(_new_scale.begin() + 1);
+	scale[2] = *(_new_scale.begin() + 2);
 }
 float const* Transform::Get_Scale()
 {
@@ -157,7 +169,23 @@ void Sprite2D::Set_Texture_ID(std::string _ID)
 {
 	sprite_texture_ID = _ID;
 }
+void Sprite2D::Set_Colour(float const* _new_col)
+{
+	*colour = *_new_col;
+	for (unsigned int i{}; i < 3; i++)
+	{
+		obj->GetMaterial().color[i] = colour[i];
+	}
 
+}
+void Sprite2D::Set_Colour(std::initializer_list<float> const& _new_col)
+{
+	for (unsigned int i{}; i < 3; i++)
+	{
+		colour[i] = *(_new_col.begin()+i);
+		obj->GetMaterial().color[i] = colour[i];
+	}
+}
 void Sprite2D::Set_Transparency(float& _a) 
 {
 	colour[3] = _a;

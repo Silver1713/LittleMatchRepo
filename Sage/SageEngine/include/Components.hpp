@@ -64,8 +64,10 @@ public:
 	void Set_Positions(std::initializer_list<float> const& _new_pos);
 	float const* Get_Positions();
 	void Set_Rotations(float const* _new_rot);
+	void Set_Rotations(std::initializer_list<float> const& _new_rot);
 	float const* Get_Rotations();
 	void Set_Scale(float const* _new_scale);
+	void Set_Scale(std::initializer_list<float> const& _new_scale);
 	float const* Get_Scale();
 
 	void Translate(float const* _delta_pos);
@@ -95,6 +97,8 @@ public:
 	void Exit() override;
 	ComponentType Get_Component_Type() override;
 	void Set_Texture_ID(std::string _ID);
+	void Set_Colour(float const* _new_col);
+	void Set_Colour(std::initializer_list<float> const& _new_col);
 	void Set_Transparency(float& _a);
 };
 
