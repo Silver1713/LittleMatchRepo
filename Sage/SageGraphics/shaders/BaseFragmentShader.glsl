@@ -7,7 +7,7 @@ uniform bool uUseBorderColor;
 uniform float uBorderSize;
 uniform float uCornerRadius;  
 uniform bool uUseTexture;
-uniform float uTransparency;
+uniform float uAlpha;
 uniform vec4 uColor;
 uniform vec4 uBorderColor;
 uniform vec2 uObjectSize;

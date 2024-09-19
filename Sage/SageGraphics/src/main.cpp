@@ -4,7 +4,6 @@
 
 #include "SageMain.hpp"
 #include "SageHelper.hpp"
-#include "Test.h"
 // Forward declaration
 void init();
 void update();
