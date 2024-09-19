@@ -4,7 +4,8 @@
 #include <unordered_map>
 
 std::unordered_map<int, int> GLFW_Input_Handler::key_map{};
-
+double GLFW_Input_Handler::mouse_pos_x = 0;
+double GLFW_Input_Handler::mouse_pos_y = 0;
 // Base Layer of glfw handler
 static GLFW_Input_Handler* instance = nullptr;
 
@@ -48,6 +49,16 @@ void GLFW_Input_Handler::Poll_Events()
 {
 	glfwPollEvents();
 }
+
+
+void GLFW_Input_Handler::mouse_pos_cb(GLFWwindow* window, double xpos, double ypos)
+{
+	mouse_pos_x = xpos;
+	mouse_pos_y = ypos;
+
+	std::cout << "Mouse X: " << mouse_pos_x << " Mouse Y: " << mouse_pos_y << std::endl;
+}
+
 
 
  
