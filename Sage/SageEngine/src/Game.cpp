@@ -32,7 +32,7 @@ namespace Game {
 		Game_Objects::Add_Game_Object(&game_objects["Player"]);
 		transform_cache["Player"] = dynamic_cast<Transform*>(game_objects["Player"].Get_Component(TRANSFORM)->get());
 
-		for (int i{}; i < 1000; ++i)
+		for (int i{}; i < 2500; ++i)
 		{
 			game_objects[std::to_string(i)] = White();
 			Game_Objects::Add_Game_Object(&game_objects[std::to_string(i)]);
@@ -55,7 +55,7 @@ namespace Game {
 		transform_cache["Player"]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f });
 
 
-		for (int i{}; i < 1000; ++i)
+		for (int i{}; i < 2500; ++i)
 		{
 			transform_cache[std::to_string(i)]->Translate({ 0.f,0.f });
 			transform_cache[std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f });
