@@ -60,7 +60,7 @@ namespace Game {
 
 		for (int i{}; i < game_objects_to_create; ++i)
 		{
-			transform_cache[std::to_string(i)]->Translate({ 0.f,0.f });
+			transform_cache[std::to_string(i)]->Translate({ (float)SageHelper::delta_time * 5.0f,0.f });
 			transform_cache[std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f });
 		}
 
