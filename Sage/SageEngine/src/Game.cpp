@@ -40,6 +40,7 @@ namespace Game {
 		Game_Objects::Add_Game_Object(&game_objects["Player"]);
 		transform_cache["Player"] = dynamic_cast<Transform*>(game_objects["Player"].Get_Component(TRANSFORM)->get());
 
+		//2.5k objects test
 		for (int i{}; i < game_objects_to_create; ++i)
 		{
 			game_objects[std::to_string(i)] = White();
@@ -69,6 +70,7 @@ namespace Game {
 
 	void Input()
 	{
+		//tests
 		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_W))
 		{
 			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * 100.0f });
@@ -123,6 +125,7 @@ namespace Game {
 
 		for (int i{}; i < game_objects_to_create; ++i)
 		{
+			//transform_cache[std::to_string(i)]->Translate({ (float)SageHelper::delta_time * 50.0f,0.f });
 			transform_cache[std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f });
 		}
 
