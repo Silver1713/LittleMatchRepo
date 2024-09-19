@@ -8,6 +8,14 @@ namespace Prefabs
 	GameObject Create_Copy(Assets::Prefabs::Prefab& _p);
 }
 
+class White : public GameObject
+{
+public:
+	White();
+	void Init() override;
+	void Update() override;
+	void Exit() override;
+};
 
 class Red : public GameObject
 {

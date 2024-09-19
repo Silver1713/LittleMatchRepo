@@ -16,6 +16,7 @@
 #include "Key_Inputs.h"
 
 #include <iostream>
+#include <cstdlib>
 
 static std::unordered_map<std::string, GameObject> game_objects;
 static std::unordered_map<std::string, Transform*> transform_cache;
@@ -29,11 +30,19 @@ namespace Game {
 
 		game_objects["Player"] = Red();
 		Game_Objects::Add_Game_Object(&game_objects["Player"]);
+		transform_cache["Player"] = dynamic_cast<Transform*>(game_objects["Player"].Get_Component(TRANSFORM)->get());
+
+		for (int i{}; i < 1000; ++i)
+		{
+			game_objects[std::to_string(i)] = White();
+			Game_Objects::Add_Game_Object(&game_objects[std::to_string(i)]);
+			transform_cache[std::to_string(i)] = dynamic_cast<Transform*>(game_objects[std::to_string(i)].Get_Component(TRANSFORM)->get());
+		}
 	}
 
 	void Init()
 	{
-		transform_cache["Player"] = dynamic_cast<Transform*>(game_objects["Player"].Get_Component(TRANSFORM)->get());
+		
 	}
 
 	void Input()
@@ -44,6 +53,14 @@ namespace Game {
 	{
 		transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * 5.0f,0.f });
 		transform_cache["Player"]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f });
+
+
+		for (int i{}; i < 1000; ++i)
+		{
+			transform_cache[std::to_string(i)]->Translate({ 0.f,0.f });
+			transform_cache[std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f });
+		}
+
 	}
 
 	void Draw()

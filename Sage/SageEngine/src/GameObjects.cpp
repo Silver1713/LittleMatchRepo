@@ -18,7 +18,7 @@ namespace Game_Objects
 			{
 				_g.second->Init();
 			}
-			std::cout << "GameObject::Init() number " << _g.first << " is successful" << "\n";
+			//std::cout << "GameObject::Init() number " << _g.first << " is successful" << "\n";
 		}
 	}
 
