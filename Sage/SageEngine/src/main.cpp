@@ -44,6 +44,7 @@ int main()
 {
 	init();
     SageAudio::Play_Sound(HALO_2, NO_LOOP);
+    SageAudio::Play_Sound(BABABOOEY, LOOP);
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{
