@@ -97,7 +97,7 @@ namespace SageAudio
 			{
 				continue;
 			}
-			std::cout << "Creating sound from " << Filepath_Getter(i) << '\n';
+			//std::cout << "Creating sound from " << Filepath_Getter(i) << '\n';
 			result = p_system->createSound(Filepath_Getter(i), FMOD_DEFAULT, nullptr, &p_sound[i]);
 			FMOD_ErrorCheck(result);
 		}
@@ -114,7 +114,7 @@ namespace SageAudio
 		std::cout << "Exiting";
 		for (size_t i{ 0 }; i < g_maxAudio; i++)
 		{
-			if (i == NUM_AUDIO_BGM)
+			if (i == NUM_AUDIO_BGM || i == NUM_AUDIO_SFX || i == NUM_AUDIO_UI || i == NUM_AUDIO_AMBIENT)
 			{
 				continue;
 			}
