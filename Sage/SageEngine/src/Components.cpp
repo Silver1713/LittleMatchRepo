@@ -49,9 +49,10 @@ void Transform::Set_Positions(float const* _new_pos)
 }
 void Transform::Set_Positions(std::initializer_list<float> const& _new_pos)
 {
-	positions[0] = *(_new_pos.begin());
-	positions[1] = *(_new_pos.begin() + 1);
-	positions[2] = *(_new_pos.begin() + 2);
+	for (unsigned int i{}; i < 3; i++)
+	{
+		positions[i] = *(_new_pos.begin()+i);
+	}
 }
 float const* Transform::Get_Positions()
 {
@@ -63,9 +64,10 @@ void Transform::Set_Rotations(float const* _new_rot)
 }
 void Transform::Set_Rotations(std::initializer_list<float> const& _new_rot)
 {
-	rotations[0] = *(_new_rot.begin());
-	rotations[1] = *(_new_rot.begin() + 1);
-	rotations[2] = *(_new_rot.begin() + 2);
+	for (unsigned int i{}; i < 3; i++)
+	{
+		rotations[i] = *(_new_rot.begin() + i);
+	}
 }
 float const* Transform::Get_Rotations()
 {
@@ -78,9 +80,10 @@ void Transform::Set_Scale(float const* _new_scale)
 }
 void Transform::Set_Scale(std::initializer_list<float> const& _new_scale)
 {
-	scale[0] = *(_new_scale.begin());
-	scale[1] = *(_new_scale.begin() + 1);
-	scale[2] = *(_new_scale.begin() + 2);
+	for (unsigned int i{}; i < 3; i++)
+	{
+		scale[i] = *(_new_scale.begin() + i);
+	}
 }
 float const* Transform::Get_Scale()
 {
@@ -89,23 +92,36 @@ float const* Transform::Get_Scale()
 
 void Transform::Translate(float const* _delta_pos)
 {
-	positions[0] += _delta_pos[0];
-	positions[1] += _delta_pos[1];
+	*positions = *_delta_pos;
 }
 void Transform::Translate(std::initializer_list<float> const& _delta_pos)
 {
-	positions[0] += *(_delta_pos.begin());
-	positions[1] += *(_delta_pos.begin()+1);
+	for (unsigned int i{}; i < 3; i++)
+	{
+		positions[i] += *(_delta_pos.begin() + i);
+	}
 }
 void Transform::Rotate(float const* _delta_rot)
 {
-	rotations[0] += _delta_rot[0];
-	rotations[1] += _delta_rot[1];
+	*rotations = *_delta_rot;
 }
 void Transform::Rotate(std::initializer_list<float> const& _delta_rot)
 {
-	rotations[0] += *(_delta_rot.begin());
-	rotations[1] += *(_delta_rot.begin() + 1);
+	for (unsigned int i{}; i < 3; i++)
+	{
+		rotations[i] += *(_delta_rot.begin() + i);
+	}
+}
+void Transform::Scale(float const* _delta_scale)
+{
+	*scale = *_delta_scale;
+}
+void Transform::Scale(std::initializer_list<float> const& _delta_scale)
+{
+	for (unsigned int i{}; i < 3; i++)
+	{
+		scale[i] += *(_delta_scale.begin() + i);
+	}
 }
 
 bool& Transform::Is_UI_Element()

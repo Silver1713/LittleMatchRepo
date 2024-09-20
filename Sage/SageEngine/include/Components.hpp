@@ -74,6 +74,8 @@ public:
 	void Translate(std::initializer_list<float> const& _delta_pos);
 	void Rotate(float const* _delta_rot);
 	void Rotate(std::initializer_list<float> const& _delta_rot);
+	void Scale(float const* _delta_scale);
+	void Scale(std::initializer_list<float> const& _delta_scale);
 
 	bool& Is_UI_Element();
 };

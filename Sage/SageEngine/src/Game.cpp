@@ -73,19 +73,35 @@ namespace Game {
 		//tests
 		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_W))
 		{
-			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * 100.0f });
+			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * 100.0f,0.f });
 		}
 		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_A))
 		{
-			transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * (-100.0f),0.f });
+			transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * (-100.0f),0.f,0.f });
 		}
 		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_S))
 		{
-			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * (-100.0f) });
+			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * (-100.0f),0.f });
 		}
 		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_D))
 		{
-			transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * 100.0f,0.f });
+			transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * 100.0f,0.f,0.f });
+		}
+		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_Q))
+		{
+			transform_cache["Player"]->Rotate({ (float)SageHelper::delta_time * 10.0f,0.0f,0.f });
+		}
+		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_E))
+		{
+			transform_cache["Player"]->Rotate({ (float)SageHelper::delta_time * (-10.0f),0.0f,0.f });
+		}
+		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_Z))
+		{
+			transform_cache["Player"]->Scale({ (float)SageHelper::delta_time * 100.0f,(float)SageHelper::delta_time * 100.0f,0.f });
+		}
+		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_X))
+		{
+			transform_cache["Player"]->Scale({ (float)SageHelper::delta_time * (-100.0f),(float)SageHelper::delta_time * (-100.0f),0.f });
 		}
 
 		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_1))
@@ -114,7 +130,7 @@ namespace Game {
 		}
 		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_3))
 		{
-
+			//other tests
 		}
 	}
 
@@ -126,7 +142,7 @@ namespace Game {
 		for (int i{}; i < game_objects_to_create; ++i)
 		{
 			//transform_cache[std::to_string(i)]->Translate({ (float)SageHelper::delta_time * 50.0f,0.f });
-			transform_cache[std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f });
+			transform_cache[std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f,0.0f });
 		}
 
 	}
