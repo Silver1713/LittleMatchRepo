@@ -147,7 +147,6 @@ void Sprite2D::Init(GameObject* _parent)
 		{ transform->Get_Rotations()[0],transform->Get_Rotations()[1] },
 		{ colour[0],colour[1],colour[2],colour[3] });
 
-	std::cout << std::endl;
 	obj = &SageObjectManager::objects[std::to_string(Get_Parent()->Get_ID())];	
 	
 	if (sprite_texture_ID != "")

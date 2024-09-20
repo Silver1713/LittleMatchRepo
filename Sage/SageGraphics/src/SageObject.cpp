@@ -108,6 +108,7 @@ void SageObject::draw(SageViewport* vp)
 	shader->SetUniform("uUseTexture", material.enable_texture);
 	if (material.enable_texture)
 	{
+		material.texture_ref->bind_texture();
 		glActiveTexture(material.texture_ref->get_texture_unit());
 		shader->SetUniform("uTex2D", material.texture_ref->get_texture_unit());
 	}
@@ -125,6 +126,7 @@ void SageObject::draw(SageViewport* vp)
 		//if (this->obj_mesh->model_ref->)
 		glDrawElements(GL_TRIANGLE_FAN, obj_mesh.idx_cnt, GL_UNSIGNED_SHORT, nullptr);
 		// Check for errors
+		
 
 		
 	}
