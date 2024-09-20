@@ -163,3 +163,12 @@ void SageObjectManager::DestroyAllObjects()
 {
 	objects.clear();
 }
+
+
+
+
+
+
+
+
+

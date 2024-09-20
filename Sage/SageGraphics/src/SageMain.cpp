@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "Main.h"
+#include "SageCameraInternal.hpp"
 #include "SageModel.hpp"
 #include "SageShader.hpp"
 #include "SageModelManager.hpp"
@@ -18,16 +19,16 @@ SageModel model;
 SageViewport vp;
 SageTexture p;
 
-//SageCameraInternal2D camera;
+SageCameraInternal2D camera;
 
 void SageMain::init()
 {
 	SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
 
-	//p.load_texture("../SageIO/image/digipen_splash_screen.png", SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
+	p.load_texture("../SageIO/image/digipen_splash_screen.png", SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
 	vp = { glm::vec2{0,0}, {SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT} };
 	vp.calculate_viewport_xform();
-	//camera.Init({ 0,0 }, { SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT }, { 0,0 });
+	camera.Init({ 0,0 }, { SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT }, { 0,0 });
 
 
 
@@ -37,7 +38,8 @@ void SageMain::init()
 
 
 
-
+	SageObjectManager::CreatePrimitiveObject("Rect3", PRIMITIVE_OBJECT_RECT, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,1,1,1 },
+		{ 0,0,0,1 }, 0.5f);
 
 
 
@@ -46,8 +48,7 @@ void SageMain::init()
 
 	/*SageObjectManager::CreatePrimitiveObject("Rect2", PRIMITIVE_OBJECT_RECT, { 1000,2000 }, { 1000,500 }, { 0,0 }, { 1,1,0,1 },
 		{ 0,0,0,1 }, 0.5f);
-	SageObjectManager::CreatePrimitiveObject("Rect3", PRIMITIVE_OBJECT_RECT, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,1,1,1 },
-		{ 0,0,0,1 }, 0.5f);*/
+	*/
 
 		//SageObjectManager::objects["Rect1"].transform.position = { 0,0 };
 		////set scale
@@ -60,17 +61,17 @@ void SageMain::init()
 		//SageObjectManager::objects["Rect2"].transform.scale = { 200,200 };
 		//SageObjectManager::objects["Rect2"].transform.orientation = { 0,0 };
 
-		// // 3rd object
+		 // 3rd object
 
-		// // Random transform
-		//SageObjectManager::objects["Rect3"].transform.position = { 0,0 };
-		//SageObjectManager::objects["Rect3"].transform.scale = { 100,0 };
-		//SageObjectManager::objects["Rect3"].transform.orientation = { 0,0 };
+		 // Random transform
+		SageObjectManager::objects["Rect3"].transform.position = { 0,0 };
+		SageObjectManager::objects["Rect3"].transform.scale = { 1000,1020 };
+		SageObjectManager::objects["Rect3"].transform.orientation = { 0,0 };
 
-		//SageObject* obj = &SageObjectManager::objects["Rect3"];
+		SageObject* obj = &SageObjectManager::objects["Rect3"];
 
-		/*obj->GetMaterial().enable_texture = true;
-		obj->attach_texture(&p);*/
+		obj->GetMaterial().enable_texture = true;
+		obj->attach_texture(&p);
 
 
 
@@ -98,8 +99,9 @@ void SageMain::update()
 {
 	// Camera movement
 	float camSpeed = 500.f;
-	/*if (SageHelper::Get_Key_Pressed(GLFW_KEY_D))
+	if (SageHelper::Get_Key_Pressed(GLFW_KEY_D))
 	{
+		
 		camera.move_camera({ 1,0 }, camSpeed);
 
 	}
@@ -114,7 +116,7 @@ void SageMain::update()
 	else if (SageHelper::Get_Key_Pressed(GLFW_KEY_S))
 	{
 		camera.move_camera({ 0,-1 }, camSpeed);
-	}*/
+	}
 
 	for (auto& obj : SageObjectManager::objects)
 	{
@@ -140,19 +142,17 @@ void SageMain::draw()
 
 
 
-	//for (auto& obj : SageObjectManager::objects)
-	//{
-	//	SageRenderer::DrawFilled(obj.second, {
-	//		SageRenderer::SAGE_ENABLE_ALPHA | SageRenderer::SAGE_ENABLE_TEXTURE | SageRenderer::SAGE_ENABLE_VERTEX_COLOR,
-	//		15.f,0.f,
-	//		{
-	//			0,0,
-	//			0,1
-	//		}
-	//		});
-	//}
 
-	// SageHelper::sage_ptr_window->set_title("Scene 1");
+	for (auto& obj : SageObjectManager::objects)
+	{
+		SageRenderer::DrawFilled(obj.second, {
+			SageRenderer::SAGE_ENABLE_ALPHA | SageRenderer::SAGE_ENABLE_TEXTURE | SageRenderer::SAGE_ENABLE_VERTEX_COLOR	,
+			15.f, 15.f, 15.f, {0,0,0,1}, nullptr, {1}, {},
+			nullptr
+		});
+	}
+
+	 SageHelper::sage_ptr_window->set_title("Scene 1");
 	//glfwSetWindowTitle(SageHelper::ptr_window, "Scene 1");
 }
 
