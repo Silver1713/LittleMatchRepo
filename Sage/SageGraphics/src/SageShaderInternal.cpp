@@ -228,10 +228,10 @@ void SageShaderInternal::BindFragAttribLocation(GLuint index, const char* name)
 }
 
 GLint SageShaderInternal::GetUniformLocation(const char* name, bool exit_on_error) const
-{
+{/*
 #if _DEBUG
 	std::cout << "Getting uniform location for: " << name << '\n';
-#endif
+#endif*/
 
 	GLint loc = glGetUniformLocation(pgm_handle, name);
 

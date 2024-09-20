@@ -84,7 +84,7 @@ struct SageRenderer
 	static void Set_Default_Shader(SageShader* shader);
 	static void SetCurrentView(SageViewport& view);
 	//static void SetCurrentView(SageCameraInternal2D* view);
-	static void DrawFilled(SageObject& object, RENDER_CONFIG config = { (SAGE_ENABLE_ALPHA | SAGE_ENABLE_BORDER),0,0,{} });
+	static void DrawFilled(SageObject& object, RENDER_CONFIG config);
 	static void DrawFilled(SageObject& object);
 	static void DrawFilled(SageModel& model, glm::mat3& matrix, RENDER_CONFIG config = { (SAGE_ENABLE_ALPHA | SAGE_ENABLE_BORDER),0,0,{} });
 	static void DrawFilled(SageModel& model);

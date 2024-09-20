@@ -1,10 +1,10 @@
 #pragma once
 #ifndef SAGE_HELPER_HPP
 #define  SAGE_HELPER_HPP
+#include "GLFW/glfw3.h"
 #include <map>
 #include "SageWindow.hpp"
 #include "SageShader.hpp"
-#include "GLFW/glfw3.h"
 
 
 struct SageHelper

@@ -91,9 +91,9 @@ void SageObject::draw(SageViewport* vp)
 
 	shader->Activate();
 	shader->SetUniform("uAlpha", material.mat_transparency);
-	shader->SetUniform("uUseColor", !material.enable_vertex_color);
+	shader->SetUniform("uUseColor",! material.enable_vertex_color);
 	shader->SetUniform("uUseBorderColor", material.enable_border_color);
-
+	shader->SetUniform("uColor", material.color.r, material.color.g, material.color.b, material.color.a);
 	ToastBox::Vector4 color = { material.border_color.r, material.border_color.g, material.border_color.b,material.border_color.a };
 	shader->SetUniform("uBorderColor",color);
 

@@ -14,6 +14,7 @@
 #include <iostream>
 #include <numeric>
 #include <backward.hpp>
+#include "SageShaderManager.hpp"
 #include "SageMain.hpp"
 #include "SageHelper.hpp"
 #include "Key_Inputs.h"
@@ -22,6 +23,7 @@
 #include "SceneManager.hpp"
 #include "Prefabs.hpp"
 #include "SageAudio.hpp"
+
 
 
 
@@ -64,6 +66,8 @@ int main()
 
 void init()
 {
+    
+
     int status = SageHelper::init(1920, 1080, "Hello World");
     const GLubyte* a = glGetString(GL_EXTENSIONS);
 
@@ -73,6 +77,7 @@ void init()
 
         std::exit(EXIT_FAILURE);
     }
+    
     Assets::Textures::Init();
     Assets::Prefabs::Init();
     Prefabs::Init();
