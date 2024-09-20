@@ -1,6 +1,6 @@
 #include "PhysicsCollision.h"
 
-namespace PogEngine {
+namespace MFEngine {
 	bool CollisionBody::Colliding(PhysicsBody* a, PhysicsBody* b, PhysicsContact& contact) {
 		bool aCircleCheck = a->shape->GetType() == ShapeType::CIRCLE;
 		bool bCircleCheck = b->shape->GetType() == ShapeType::CIRCLE;
