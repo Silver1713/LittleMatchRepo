@@ -12,10 +12,11 @@ Brief		 : Matrix4x4 class and class operation definition
 
 
 #include "Matrix3x3.h"
-#include "Matrix3x3.cpp"
 #include "Matrix4x4.h"
 #include <cmath>
 
+
+const float PI = 3.14159265358979323846f;
 
 
 namespace ToastBox {
@@ -748,5 +749,18 @@ namespace ToastBox {
 		return result;
 
 	}
+
+
+	float* Matrix4::data()
+	{
+		return matrixArray;
+	}
+
+	const float* Matrix4::data() const
+	{
+		return matrixArray;
+	}
+
+
 
 }

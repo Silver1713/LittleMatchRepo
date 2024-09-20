@@ -1,3 +1,4 @@
+#include "Vector4.h"
 #include "SageObject.hpp"
 
 #include <iostream>
@@ -5,6 +6,8 @@
 #include <glm/ext/matrix_transform.hpp>
 
 #include "SageHelper.hpp"
+#include "glm/gtc/type_ptr.inl"
+
 
 long int SageObject::object_count{};
 long int SageObject::current_object_count{};
@@ -84,21 +87,23 @@ void SageObject::draw(SageViewport* vp)
 	SageViewport* viewport = vp;
 
 	glBindVertexArray(obj_mesh.model_ref->get_vao_handle());
-	
+
+
 	shader->Activate();
 	shader->SetUniform("uAlpha", material.mat_transparency);
 	shader->SetUniform("uUseColor", !material.enable_vertex_color);
 	shader->SetUniform("uUseBorderColor", material.enable_border_color);
 
-	shader->SetUniform("uColor", material.color);
-	shader->SetUniform("uBorderColor", material.border_color);
+	ToastBox::Vector4 color = { material.border_color.r, material.border_color.g, material.border_color.b,material.border_color.a };
+	shader->SetUniform("uBorderColor",color);
 
 	shader->SetUniform("uBorderSize", material.border_width);
 	shader->SetUniform("uCornerRadius", material.border_radius);
-	shader->SetUniform("uObjectSize", transform.scale);
+	shader->SetUniform("uObjectSize", transform.scale.x, transform.scale.y);
 	glm::mat3 d = viewport->get_viewport_xform() * transform.model_matrix;
-	glm::vec3 result = d * glm::vec3(-1, 1, 1);
-	shader->SetUniform("uModel_xform", d);
+	glm::mat3 m = glm::mat3(1.0f);
+	ToastBox::Matrix3x3 mtx = glm::value_ptr(d); 
+	shader->SetUniform("uModel_xform", mtx);
 	//shader->SetUniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix);
 	shader->SetUniform("uUseTexture", material.enable_texture);
 	if (material.enable_texture)

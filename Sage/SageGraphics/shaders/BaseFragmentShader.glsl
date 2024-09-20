@@ -67,5 +67,5 @@ void main() {
         c_clr = texture(uTex2D, aTextCoords);
 	}
 
-    color = vec4(c_clr.x, c_clr.y, c_clr.z, uTransparency);
+    color = vec4(c_clr.x, c_clr.y, c_clr.z, uAlpha);
 }

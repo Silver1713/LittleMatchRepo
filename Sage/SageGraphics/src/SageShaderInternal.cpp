@@ -227,7 +227,7 @@ void SageShaderInternal::BindFragAttribLocation(GLuint index, const char* name)
 
 }
 
-GLint SageShaderInternal::GetUniformLocation(const char* name, bool exit_on_error)
+GLint SageShaderInternal::GetUniformLocation(const char* name, bool exit_on_error) const
 {
 #if _DEBUG
 	std::cout << "Getting uniform location for: " << name << '\n';
@@ -401,8 +401,35 @@ void SageShaderInternal::PrintActiveUniforms() const
 		std::string name((char*)&name_data[0], name_data.size() - 1);
 		std::cout << uniform[2] << " | " << name << '\n';
 	}
+
+	
 }
 
+
+void SageShaderInternal::SetUniform3fm(const char* name, float* data)
+{
+	GLint loc = GetUniformLocation(name);
+	glUniform3fv(loc, 1, data);
+}
+
+void SageShaderInternal::SetUniform4fm(const char* name, float* data)
+{
+	GLint loc = GetUniformLocation(name);
+	glUniform4fv(loc, 1, data);
+}
+
+
+void SageShaderInternal::SetUniform3fm(const char* name, const float* data) const
+{
+	GLint loc = GetUniformLocation(name);
+	glUniformMatrix3fv(loc, 1,GL_FALSE, data);
+}
+
+void SageShaderInternal::SetUniform4fm(const char* name, const float* data) const
+{
+	GLint loc = GetUniformLocation(name);
+	glUniformMatrix4fv(loc, 1,GL_FALSE, data);
+}
 
 
 

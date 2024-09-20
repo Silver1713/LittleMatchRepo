@@ -1,8 +1,16 @@
 #ifndef SAGE_SHADER_HPP
 #define SAGE_SHADER_HPP
+
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Matrix3x3.h"
+#include "Matrix4x4.h"
+
 #include <memory>
 #include <glm/glm.hpp>
 #include <string>
+
+#include "Vector4.h"
 
 // A library for loading and compiling shaders
 class SageShader
@@ -89,14 +97,17 @@ public:
 	void SetUniform(const char* name, float x, float y, float z, float w);
 
 	//Vector - glm
-	void SetUniform(const char* name, const glm::vec2& val);
-	void SetUniform(const char* name, const glm::vec3& val);
-	void SetUniform(const char* name, const glm::vec4& val);
+	void SetUniform(const char* name,  ToastBox::Vec2 const& val);
+	void SetUniform(const char* name,  ToastBox::Vec3 const& val);
+	void SetUniform(const char* name,  ToastBox::Vec4 const& val);
 
 	// Uniform Matrices
 	void SetUniform(const char* name, const glm::mat2& val);
 	void SetUniform(const char* name, const glm::mat3& val);
 	void SetUniform(const char* name, const glm::mat4& val);
+
+	void SetUniform(const char* name, const ToastBox::Matrix3x3& val);
+	void SetUniform(const char* name, const ToastBox::Matrix4& val);
 
 
 

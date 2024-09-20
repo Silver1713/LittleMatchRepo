@@ -60,5 +60,7 @@ namespace ToastBox {
 
 		void clear();
 
+
+
 	};
 }

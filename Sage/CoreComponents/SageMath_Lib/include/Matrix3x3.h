@@ -80,5 +80,8 @@ namespace ToastBox {
 
 		//Mutate matrix
 		Matrix3x3 setMatrix(float, float, float, float, float, float, float, float, float);
+
+		const float* data() const { return m; }
+		float* data() { return m; }
 	};
 }

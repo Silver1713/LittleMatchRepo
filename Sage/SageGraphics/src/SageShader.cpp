@@ -76,6 +76,54 @@ public:
 		return internal_impl->DeleteShaderProgram();
 
 	}
+
+
+	void SetUniform(const char* name, int const& val) const
+	{
+		internal_impl->SetUniform(name, val);
+	}
+
+	void SetUniform(const char* name, float const& val) const
+	{
+		internal_impl->SetUniform(name, val);
+	}
+
+	void SetUniform(const char* name, double const& val) const
+	{
+		internal_impl->SetUniform(name, val);
+	}
+
+
+	void SetUniform(const char* name, bool val) const
+	{
+		internal_impl->SetUniform(name, val);
+	}
+
+	void SetUniform(const char* name, float x, float y) const
+	{
+		internal_impl->SetUniform(name, x, y);
+	}
+
+	void SetUniform(const char* name, float x, float y, float z) const
+	{
+		internal_impl->SetUniform(name, x, y, z);
+	}
+
+	void SetUniform(const char* name, float x, float y, float z, float w) const
+	{
+		internal_impl->SetUniform(name, x, y, z, w);
+	}
+
+	void SetUniform(const char* name, const ToastBox::Matrix3x3& val) const
+	{
+		internal_impl->SetUniform3fm(name, val.data());
+	}
+
+	void SetUniform(const char* name, const ToastBox::Matrix4& val) const
+	{
+		internal_impl->SetUniform4fm(name, val.data());
+	}
+
 };
 
 
@@ -197,74 +245,63 @@ int SageShader::GetUniformLocation(const char* name, bool exit_on_error)
 
 void SageShader::SetUniform(const char* name, int val)
 {
-	GLint loc = GetUniformLocation(name);
-	glUniform1i(loc, val);
+	sage_impl->SetUniform(name, val);
 }
 
 
 void SageShader::SetUniform(const char* name, float val)
 {
-	GLint loc = GetUniformLocation(name);
-	glUniform1f(loc, val);
+	sage_impl->SetUniform(name, val);
 }
 
 void SageShader::SetUniform(const char* name, double val)
 {
-	GLint loc = GetUniformLocation(name);
-	glUniform1d(loc, val);
+	sage_impl->SetUniform(name, val);
 }
 
 void SageShader::SetUniform(const char* name, bool val)
 {
-	GLint loc = GetUniformLocation(name);
-	glUniform1i(loc, val ? GL_TRUE : GL_FALSE);
+	sage_impl->SetUniform(name, val);
 }
 // Uniform setter - Vector - Singular
 
 void SageShader::SetUniform(const char* name, float x, float y)
 {
-	GLint loc = GetUniformLocation(name);
-	glUniform2f(loc, x, y);
+	sage_impl->SetUniform(name, x, y);
 }
 void SageShader::SetUniform(const char* name, float x, float y, float z)
 {
-	GLint loc = GetUniformLocation(name);
-	glUniform3f(loc, x, y, z);
+	sage_impl->SetUniform(name, x, y, z);
 
 }
 
 void SageShader::SetUniform(const char* name, float x, float y, float z, float w)
 {
-	GLint loc = GetUniformLocation(name);
-	glUniform4f(loc, x, y, z, w);
+	sage_impl->SetUniform(name, x, y, z, w);
 }
 
 // Uniform setter - Vector - glm
 
-void SageShader::SetUniform(const char* name, const glm::vec2& val)
+void SageShader::SetUniform(const char* name, const ToastBox::Vec2& val)
 {
-	GLint loc = GetUniformLocation(name);
-	glUniform2fv(loc, 1, glm::value_ptr(val));
+	sage_impl->SetUniform(name, val.getX(), val.getY());
 }
 
-void SageShader::SetUniform(const char* name, const glm::vec3& val)
+void SageShader::SetUniform(const char* name, const ToastBox::Vec3& val)
 {
-	GLint loc = GetUniformLocation(name);
-	glUniform3fv(loc, 1, glm::value_ptr(val));
+	sage_impl->SetUniform(name, val.x, val.y, val.z);
 }
 
-void SageShader::SetUniform(const char* name, const glm::vec4& val)
+void SageShader::SetUniform(const char* name,  ToastBox::Vec4 const& val)
 {
-	GLint loc = GetUniformLocation(name);
-	glUniform4fv(loc, 1, glm::value_ptr(val));
+	sage_impl->SetUniform(name, val.x, val.y, val.z, val.w);
 }
 
 // Uniform setter - Matrices - glm
 
 void SageShader::SetUniform(const char* name, const glm::mat2& val)
 {
-	GLint loc = GetUniformLocation(name);
-	glUniformMatrix2fv(loc, 1, GL_FALSE, glm::value_ptr(val));
+	return;
 
 }
 
@@ -302,6 +339,19 @@ void SageShader::PrintActiveUniforms() const
 {
 	sage_impl->PrintActiveUniform();
 }
+
+void SageShader::SetUniform(const char* name, const ToastBox::Matrix3x3& val)
+{
+	sage_impl->SetUniform(name, val);
+
+}
+
+void SageShader::SetUniform(const char* name, const ToastBox::Matrix4& val)
+{
+	sage_impl->SetUniform(name, val);
+}
+
+
 
 SageShader::~SageShader() = default;
 

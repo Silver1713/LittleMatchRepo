@@ -87,7 +87,8 @@ namespace ToastBox {
 			float, float, float, float,
 			float, float, float, float);
 
-
+		float* data();
+		const float* data() const;
 
 	};
 }
