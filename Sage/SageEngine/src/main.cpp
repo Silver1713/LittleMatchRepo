@@ -16,11 +16,12 @@
 #include <backward.hpp>
 #include "SageMain.hpp"
 #include "SageHelper.hpp"
+#include "Key_Inputs.h"
 
 #include "AssetLoader.hpp"
 #include "SceneManager.hpp"
 #include "Prefabs.hpp"
-#include "SageAudio.hpp";
+#include "SageAudio.hpp"
 
 
 
@@ -44,6 +45,7 @@ int main()
 {
 	init();
     SageAudio::Play_Sound(HALO_2, NO_LOOP);
+    SageAudio::Play_Sound(BABABOOEY, LOOP);
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{
@@ -71,7 +73,6 @@ void init()
 
         std::exit(EXIT_FAILURE);
     }
-    
     Assets::Textures::Init();
     Assets::Prefabs::Init();
     Prefabs::Init();
@@ -85,7 +86,6 @@ void init()
 void update()
 {
     SageHelper::update();
-    //SageMain::update();
     SM::Input();
     SM::Update();
     SageAudio::Update();
@@ -94,7 +94,6 @@ void update()
 void draw()
 {
     SageHelper::draw();
-    //SageMain::draw();
     SM::Draw();
 }
 
@@ -105,7 +104,6 @@ void exit()
     Assets::Textures::Unload();
     SM::Unload();
     SageHelper::exit();
-    //SageMain::exit();
     SageAudio::Exit();
 
 }

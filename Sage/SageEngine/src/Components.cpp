@@ -49,9 +49,10 @@ void Transform::Set_Positions(float const* _new_pos)
 }
 void Transform::Set_Positions(std::initializer_list<float> const& _new_pos)
 {
-	positions[0] = *(_new_pos.begin());
-	positions[1] = *(_new_pos.begin() + 1);
-	positions[2] = *(_new_pos.begin() + 2);
+	for (unsigned int i{}; i < 3; i++)
+	{
+		positions[i] = *(_new_pos.begin()+i);
+	}
 }
 float const* Transform::Get_Positions()
 {
@@ -60,6 +61,13 @@ float const* Transform::Get_Positions()
 void Transform::Set_Rotations(float const* _new_rot)
 {
 	*rotations = *_new_rot;
+}
+void Transform::Set_Rotations(std::initializer_list<float> const& _new_rot)
+{
+	for (unsigned int i{}; i < 3; i++)
+	{
+		rotations[i] = *(_new_rot.begin() + i);
+	}
 }
 float const* Transform::Get_Rotations()
 {
@@ -70,6 +78,13 @@ void Transform::Set_Scale(float const* _new_scale)
 {
 	*scale = *_new_scale;
 }
+void Transform::Set_Scale(std::initializer_list<float> const& _new_scale)
+{
+	for (unsigned int i{}; i < 3; i++)
+	{
+		scale[i] = *(_new_scale.begin() + i);
+	}
+}
 float const* Transform::Get_Scale()
 {
 	return scale;
@@ -77,23 +92,36 @@ float const* Transform::Get_Scale()
 
 void Transform::Translate(float const* _delta_pos)
 {
-	positions[0] += _delta_pos[0];
-	positions[1] += _delta_pos[1];
+	*positions = *_delta_pos;
 }
 void Transform::Translate(std::initializer_list<float> const& _delta_pos)
 {
-	positions[0] += *(_delta_pos.begin());
-	positions[1] += *(_delta_pos.begin()+1);
+	for (unsigned int i{}; i < 3; i++)
+	{
+		positions[i] += *(_delta_pos.begin() + i);
+	}
 }
 void Transform::Rotate(float const* _delta_rot)
 {
-	rotations[0] += _delta_rot[0];
-	rotations[1] += _delta_rot[1];
+	*rotations = *_delta_rot;
 }
 void Transform::Rotate(std::initializer_list<float> const& _delta_rot)
 {
-	rotations[0] += *(_delta_rot.begin());
-	rotations[1] += *(_delta_rot.begin() + 1);
+	for (unsigned int i{}; i < 3; i++)
+	{
+		rotations[i] += *(_delta_rot.begin() + i);
+	}
+}
+void Transform::Scale(float const* _delta_scale)
+{
+	*scale = *_delta_scale;
+}
+void Transform::Scale(std::initializer_list<float> const& _delta_scale)
+{
+	for (unsigned int i{}; i < 3; i++)
+	{
+		scale[i] += *(_delta_scale.begin() + i);
+	}
 }
 
 bool& Transform::Is_UI_Element()
@@ -138,16 +166,42 @@ void Sprite2D::Update()
 	obj->transform.orientation[0] = transform->Get_Rotations()[0];
 	obj->transform.orientation[1] = transform->Get_Rotations()[1];
 }
-void Sprite2D::Draw() {}
+void Sprite2D::Draw() 
+{
+	SageRenderer::DrawFilled(*obj, {
+			SageRenderer::SAGE_ENABLE_ALPHA | SageRenderer::SAGE_ENABLE_TEXTURE,
+			15.f,0.f,
+			{
+				0,0,
+				0,1
+			}
+		});
+}
 void Sprite2D::Exit() {}
 
 ComponentType Sprite2D::Get_Component_Type() { return SPRITE2D; }
 
-void Sprite2D::Set_Texture_ID(std::string _ID)
+void Sprite2D::Set_Texture_ID(std::string const& _ID)
 {
 	sprite_texture_ID = _ID;
 }
+void Sprite2D::Set_Colour(float const* _new_col)
+{
+	*colour = *_new_col;
+	for (unsigned int i{}; i < 3; i++)
+	{
+		obj->GetMaterial().color[i] = colour[i];
+	}
 
+}
+void Sprite2D::Set_Colour(std::initializer_list<float> const& _new_col)
+{
+	for (unsigned int i{}; i < 3; i++)
+	{
+		colour[i] = *(_new_col.begin()+i);
+		obj->GetMaterial().color[i] = colour[i];
+	}
+}
 void Sprite2D::Set_Transparency(float& _a) 
 {
 	colour[3] = _a;

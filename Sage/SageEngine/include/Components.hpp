@@ -64,14 +64,18 @@ public:
 	void Set_Positions(std::initializer_list<float> const& _new_pos);
 	float const* Get_Positions();
 	void Set_Rotations(float const* _new_rot);
+	void Set_Rotations(std::initializer_list<float> const& _new_rot);
 	float const* Get_Rotations();
 	void Set_Scale(float const* _new_scale);
+	void Set_Scale(std::initializer_list<float> const& _new_scale);
 	float const* Get_Scale();
 
 	void Translate(float const* _delta_pos);
 	void Translate(std::initializer_list<float> const& _delta_pos);
 	void Rotate(float const* _delta_rot);
 	void Rotate(std::initializer_list<float> const& _delta_rot);
+	void Scale(float const* _delta_scale);
+	void Scale(std::initializer_list<float> const& _delta_scale);
 
 	bool& Is_UI_Element();
 };
@@ -94,7 +98,9 @@ public:
 	void Draw() override;
 	void Exit() override;
 	ComponentType Get_Component_Type() override;
-	void Set_Texture_ID(std::string _ID);
+	void Set_Texture_ID(std::string const& _ID);
+	void Set_Colour(float const* _new_col);
+	void Set_Colour(std::initializer_list<float> const& _new_col);
 	void Set_Transparency(float& _a);
 };
 

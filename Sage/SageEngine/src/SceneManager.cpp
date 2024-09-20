@@ -101,6 +101,7 @@ namespace SM {
 	void Input()
 	{
 		SAGE_Input_Handler::update();
+		SM::fp_input();
 	}
 
 	void Update()
@@ -115,6 +116,7 @@ namespace SM {
 	void Draw()
 	{
 		SageMain::draw();
+		Game_Objects::Draw();
 		SM::fp_draw();
 	}
 

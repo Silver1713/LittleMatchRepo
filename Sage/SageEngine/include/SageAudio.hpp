@@ -4,7 +4,7 @@
 #include <filesystem>
 #include "fmod.hpp"
 #include "fmod_errors.h"
-#include "SageAudioFiles.hpp";
+#include "SageAudioFiles.hpp"
 
 #define PATH "Sage/build"
 

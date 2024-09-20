@@ -18,7 +18,6 @@ namespace Game_Objects
 			{
 				_g.second->Init();
 			}
-			std::cout << "GameObject::Init() number " << _g.first << " is successful" << "\n";
 		}
 	}
 
@@ -29,6 +28,17 @@ namespace Game_Objects
 			if (_g.second)
 			{
 				_g.second->Update();
+			}
+		}
+	}
+
+	void Draw()
+	{
+		for (auto& _g : g_game_objects)
+		{
+			if (_g.second)
+			{
+				_g.second->Draw();
 			}
 		}
 	}
@@ -90,7 +100,6 @@ GameObject::GameObject(Assets::Prefabs::Prefab& _p)
 	{
 		Add_Component(std::make_unique<Audio>());
 	}
-	std::cout << components.size() << std::endl;
 }
 GameObject::GameObject(unsigned int const& _iD) : GameObject()
 {
@@ -112,7 +121,7 @@ void GameObject::Init()
 
 void GameObject::Update()
 {
-	if (components.empty())
+	if (components.empty() || (!is_enabled))
 	{
 		return;
 	}
@@ -125,7 +134,7 @@ void GameObject::Update()
 
 void GameObject::Draw()
 {
-	if (components.empty())
+	if (components.empty() || (!is_enabled))
 	{
 		return;
 	}
@@ -157,6 +166,19 @@ void GameObject::Set_ID(unsigned int const& _iD)
 unsigned int const GameObject::Get_ID()
 {
 	return iD;
+}
+
+bool const& GameObject::Is_Enabled() const
+{
+	return is_enabled;
+}
+void GameObject::Enable()
+{
+	is_enabled = true;
+}
+void GameObject::Disable()
+{
+	is_enabled = false;
 }
 
 void GameObject::Add_Component(std::unique_ptr<Component> _c)

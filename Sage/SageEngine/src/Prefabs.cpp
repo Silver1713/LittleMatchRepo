@@ -25,6 +25,24 @@ namespace Prefabs
 	}
 }
 
+White::White() : GameObject(prefabs["WHITE"])
+{
+	Init();
+}
+
+void White::Init()
+{
+	GameObject::Init();
+}
+void White::Update()
+{
+
+}
+void White::Exit()
+{
+
+}
+
 Red::Red() : GameObject(prefabs["RED"])
 {
 	Init();
