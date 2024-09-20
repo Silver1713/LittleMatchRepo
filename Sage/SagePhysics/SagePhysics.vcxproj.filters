@@ -15,12 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\PhysicsCollision.cpp">
+    <ClCompile Include="PhysicsCollision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\PhysicsCollision.h">
+    <ClInclude Include="PhysicsCollision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

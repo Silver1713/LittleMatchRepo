@@ -2,17 +2,6 @@
 
 namespace PogEngine {
 	bool CollisionBody::Colliding(PhysicsBody* a, PhysicsBody* b, PhysicsContact& contact) {
-		// Broad-phase collision detection using AABB
-		if (!a->aabb.Intersects(b->aabb)) {
-			return false; // Quickly discard non-colliding pairs
-		}
-
-		// Optionally add OBB check if objects are oriented
-		if (!a->obb.Intersects(b->obb)) {
-			return false;
-		}
-
-		// Narrow-phase collision detection
 		bool aCircleCheck = a->shape->GetType() == ShapeType::CIRCLE;
 		bool bCircleCheck = b->shape->GetType() == ShapeType::CIRCLE;
 		bool aPolygonCheck = a->shape->GetType() == ShapeType::POLYGON || a->shape->GetType() == ShapeType::BOX;
@@ -151,7 +140,7 @@ namespace PogEngine {
 					contact.a = pol;
 					contact.b = cir;
 					contact.collisionDepth = circleShape->radius - v1.magnitude();
-					contact.normal = v1.Normie();
+					contact.normal - v1.Normie();
 					contact.start = cir->bodyPosition + (contact.normal * -circleShape->radius);
 					contact.end = contact.start + (contact.normal * contact.collisionDepth);
 				}

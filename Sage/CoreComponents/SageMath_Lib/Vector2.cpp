@@ -269,14 +269,13 @@ namespace ToastBox {
 	Function: rotate
 	Param: angle in radians
 	Desc: Rotates the vector by a given angle around the origin (0, 0). */
-	void Vec2::rotate(float angle) {
+	Vec2 Vec2::rotate(const float angle) const {
 		float cosAngle = std::cos(angle);
 		float sinAngle = std::sin(angle);
-		float px = x * cosAngle - y * sinAngle;  // Calculate new x component
-		float py = x * sinAngle + y * cosAngle;  // Calculate new y component
-
-		x = px;  // Update x to new rotated x
-		y = py;  // Update y to new rotated y
+		return Vec2(
+			this->x * cosAngle - this->y * sinAngle,  // New x coordinate
+			this->x * sinAngle + this->y * cosAngle   // New y coordinate
+		);
 	}
 
 	/*
