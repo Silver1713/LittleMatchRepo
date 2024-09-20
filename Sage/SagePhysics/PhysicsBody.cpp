@@ -100,7 +100,7 @@ namespace MFEngine {
 			return;
 		}
 		bodyVelocity += j * bodyInverseMass;
-		bodyAngularVelocity += r.Cross(j) * bodyInverseI;
+		bodyAngularVelocity += r.cross(j) * bodyInverseI;
 	}
 
 	void PhysicsBody::bodyUpdate(float dt) {
