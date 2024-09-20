@@ -181,7 +181,7 @@ void Sprite2D::Exit() {}
 
 ComponentType Sprite2D::Get_Component_Type() { return SPRITE2D; }
 
-void Sprite2D::Set_Texture_ID(std::string _ID)
+void Sprite2D::Set_Texture_ID(std::string const& _ID)
 {
 	sprite_texture_ID = _ID;
 }
