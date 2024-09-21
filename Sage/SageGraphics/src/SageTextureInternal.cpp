@@ -1,10 +1,10 @@
 #include "SageTextureInternal.hpp"
 
+#include <GL/glew.h>
 #include <cassert>
 #include <iostream>
 #include <ostream>
 #include <SOIL.h>
-#include <GL/glew.h>
 
 
 

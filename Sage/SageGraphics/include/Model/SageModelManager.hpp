@@ -10,6 +10,8 @@ enum PrimitiveShape {
 	PRIMITIVE_SQUARE,
 	PRIMITIVE_CIRCLE,
 	PRIMITIVE_TRIANGLE,
+	PRIMITIVE_LINE,
+	PRIMITIVE_POINTS,
 	POLYGON,
 	count
 };
@@ -19,6 +21,8 @@ struct SageModelManager
 	static std::map<std::string, SageModel> models;
 
 	static SageModel& CreatePrimitiveModel(std::string name, PrimitiveShape shape, RENDER_TYPE type);
+	static SageModel& CreatePrimitiveMisc(std::string name,std::vector<ToastBox::Vec2> vtx, PrimitiveShape shape, RENDER_TYPE type);
+	
 };
 
 #endif

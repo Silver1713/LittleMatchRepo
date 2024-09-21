@@ -108,3 +108,19 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, PrimitiveSha
 	}
 
 }
+
+SageModel& SageModelManager::CreatePrimitiveMisc(std::string name,std::vector<ToastBox::Vec2> vtx, PrimitiveShape shape, RENDER_TYPE type)
+{
+	if (shape == PrimitiveShape::PRIMITIVE_LINE)
+	{
+		//Use ndc [-1,1] for square
+
+		
+		// Add to the map
+		//
+
+		return models[name];
+
+	}
+}
+
