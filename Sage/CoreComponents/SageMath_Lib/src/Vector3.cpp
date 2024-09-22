@@ -13,6 +13,7 @@ Brief		 : Vector3 class and class operation defination
 
 #include "Vector2.h"
 #include "Vector3.h"
+#include "Matrix3x3.h"
 
 namespace ToastBox {
 	Vec3::Vec3() :x{ 0 }, y{ 0 }, z{ 0 } {}
@@ -276,6 +277,18 @@ namespace ToastBox {
 		x = 0;
 		y = 0;
 		z = 0;
+	}
+
+	Vec3 operator*(const Matrix3x3& pMtx0, const Vec3& pVec0)
+	{
+		Matrix3x3 pTrans{};
+		pTrans.Matrix3Transpose(pMtx0);
+		Vec3 result;
+		result.x = pTrans.m00 * pVec0.x + pTrans.m01 * pVec0.y + pTrans.m02 * pVec0.z;
+		result.y = pTrans.m10 * pVec0.x + pTrans.m11 * pVec0.y + pTrans.m12 * pVec0.z;
+		result.z = pTrans.m20 * pVec0.x + pTrans.m21 * pVec0.y + pTrans.m22 * pVec0.z;
+		return result;
+		
 	}
 
 

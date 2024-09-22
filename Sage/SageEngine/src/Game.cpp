@@ -10,7 +10,10 @@
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.						
 */
 /* End Header **************************************************************************/
+
+
 #include "AssetLoader.hpp"
+#include "SageRenderer.hpp"
 #include "SageHelper.hpp"
 #include "Prefabs.hpp"
 #include "Key_Inputs.h"
@@ -103,6 +106,26 @@ namespace Game {
 		{
 			transform_cache["Player"]->Scale({ (float)SageHelper::delta_time * (-100.0f),(float)SageHelper::delta_time * (-100.0f),0.f });
 		}
+
+		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_I))
+		{
+			SageRenderer::camera->MoveCamera({ 0.f,1.f }, 100.f);
+		} else if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_K))
+		{
+			SageRenderer::camera->MoveCamera({ 0.f,-1.f }, 100.f);
+		}
+		else if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_J))
+		{
+			SageRenderer::camera->MoveCamera({ -1.f,0.f }, 100.f);
+		}
+		else if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_L))
+		{
+			SageRenderer::camera->MoveCamera({ 1.f,0.f }, 100.f);
+		}
+
+		
+
+		
 
 		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_1))
 		{

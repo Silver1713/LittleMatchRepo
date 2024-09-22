@@ -114,7 +114,7 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 		return objects[name];
 	}
 
-	if (OBJ_SHAPE == PRIMITIVE_OBJECT_CIRCLE)
+	else if (OBJ_SHAPE == PRIMITIVE_OBJECT_CIRCLE)
 	{
 		if (SageModelManager::models.find("PRIMITIVE_CIRCLE") == SageModelManager::models.end())
 		{
@@ -163,6 +163,24 @@ void SageObjectManager::DestroyAllObjects()
 {
 	objects.clear();
 }
+
+SageLine SageObjectManager::CreateLineObject(char const* name, glm::vec2 start, glm::vec2 end, glm::vec4 color, float width)
+{
+	if (SageModelManager::models.find("PRIMITIVE_LINE") == SageModelManager::models.end())
+	{
+		SageModelManager::CreatePrimitiveModel("PRIMITIVE_LINE", PRIMITIVE_LINE, TYPE_LINES);
+		SageModelManager::models["PRIMITIVE_LINE"].setup_gpu_buffer();
+	}
+
+	SageLine line(start, end, color, width);
+	line.line = &SageModelManager::models["PRIMITIVE_LINE"];
+	
+	line.calculate_matrix();
+
+
+	return line;
+}
+
 
 
 

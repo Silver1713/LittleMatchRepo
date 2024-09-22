@@ -50,8 +50,6 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, PrimitiveSha
 		return models[name];
 
 	}
-
-	// Use triangle fan for circle shape
 	else if (shape == PrimitiveShape::PRIMITIVE_CIRCLE)
 	{
 		
@@ -99,28 +97,51 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, PrimitiveSha
 		models[name] = mdl_circle;
 		return models[name];
 
+	} else if (shape == PRIMITIVE_LINE)
+	{
+		std::vector<glm::vec2> pos_vtx{
+			glm::vec2(-1.f,0.f),
+			glm::vec2(1.f,0.f)
+		};
+
+		std::vector<glm::vec2> tex_vtx{
+			glm::vec2(0.f,0.f),
+			glm::vec2(1.f,0.f)
+		};
+
+		std::vector<glm::vec4> clr_vtx{
+			glm::vec4(1.f,0.f,0.f,1.f),
+			glm::vec4(0.f,1.f,0.f,1.f)
+		};
+
+		std::vector<GLushort> idx_vtx{
+			0,1
+		};
+
+		SageModel mdl_line{ name.c_str(), &pos_vtx, &tex_vtx, &clr_vtx, &idx_vtx };
+		mdl_line.set_render_type(type);
+		mdl_line.set_shape_type(shape);
+
+		models[name] = mdl_line;
+		return models[name];
+	} else if (shape  == PRIMITIVE_POINTS)
+	{
+		std::vector<glm::vec2> pos_vtx{
+			glm::vec2{0.f,0.f}
+		};
+
+		SageModel mdl_points{ name.c_str(), &pos_vtx};
+		mdl_points.set_render_type(type);
+		mdl_points.set_shape_type(shape);
+
+		models[name] = mdl_points;
+		return models[name];
 	}
 	else
 	{
 		std::cerr << "Error: Shape not supported." << '\n';
 		std::exit(EXIT_FAILURE);
-
-	}
-
-}
-
-SageModel& SageModelManager::CreatePrimitiveMisc(std::string name,std::vector<ToastBox::Vec2> vtx, PrimitiveShape shape, RENDER_TYPE type)
-{
-	if (shape == PrimitiveShape::PRIMITIVE_LINE)
-	{
-		//Use ndc [-1,1] for square
-
-		
-		// Add to the map
-		//
-
-		return models[name];
-
 	}
 }
+
 

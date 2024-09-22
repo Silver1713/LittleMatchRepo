@@ -10,26 +10,30 @@ Brief		 : Matrix3x3 class and class operation declaration
 				rights reserved.
 ******************************************************************************/
 #pragma once
-#include "Vector2.h"
+
 
 namespace ToastBox {
+	class Vec3;
 	class Matrix3x3 {
 	private:
-		struct {
-			float m00{}, m01{}, m02{};
-			float m10{}, m11{}, m12{};
-			float m20{}, m21{}, m22{};
+		union {
+			struct {
+				float m00, m01, m02;
+				float m10, m11, m12;
+				float m20, m21, m22;
+			};
+			float m[9];
 		};
 
-		float m[9]{};
+		
 	public:
-		Matrix3x3() :m00{ 0 }, m01{ 0 }, m02{ 0 }, m10{ 0 }, m11{ 0 }, m12{ 0 }, m20{ 0 }, m21{ 0 }, m22{ 0 }, m{ 0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f } {};
+		Matrix3x3() :m00{ 0 }, m01{ 0 }, m02{ 0 }, m10{ 0 }, m11{ 0 }, m12{ 0 }, m20{ 0 }, m21{ 0 }, m22{ 0 }{};
 
 		Matrix3x3(const float* arr);
 
 
 		Matrix3x3(float _00, float _01, float _02, float _10, float _11, float _12, float _20, float _21, float _22)
-			:m00{ _00 }, m01{ _01 }, m02{ _02 }, m10{ _10 }, m11{ _11 }, m12{ _12 }, m20{ _20 }, m21{ _21 }, m22{ _22 }, m{ _00,_01,_02,_10,_11,_12,_20,_21,_22 } {}
+			:m00{ _00 }, m01{ _01 }, m02{ _02 }, m10{ _10 }, m11{ _11 }, m12{ _12 }, m20{ _20 }, m21{ _21 }, m22{ _22 }{}
 
 		Matrix3x3 operator=(const Matrix3x3& rhs);
 
@@ -83,5 +87,9 @@ namespace ToastBox {
 
 		const float* data() const { return m; }
 		float* data() { return m; }
+
+		friend Vec3 operator*(const Matrix3x3& pMtx0, const Vec3& pVec0);
+
+		friend Matrix3x3 operator*(const Matrix3x3& lhs, const Matrix3x3& rhs);
 	};
 }

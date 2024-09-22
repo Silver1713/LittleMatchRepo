@@ -47,7 +47,12 @@ public:
 
 
 	void move_camera(glm::vec2 _move_vector, float speed);
-	
+
+
+	void* GetCamera()
+	{
+		return this;
+	}
 
 };
 

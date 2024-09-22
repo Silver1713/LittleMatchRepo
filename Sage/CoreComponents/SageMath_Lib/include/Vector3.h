@@ -12,6 +12,7 @@ Brief		 : Vector3 class and class operation declaration
 #pragma once
 
 namespace ToastBox {
+	class Matrix3x3;
 	class Vec3 {
 	public:
 		float x{}, y{}, z{};
@@ -60,7 +61,11 @@ namespace ToastBox {
 
 		void clear();
 
+		friend Vec3 operator*(const Matrix3x3& pMtx0, const Vec3& pVec0);
 
 
 	};
+
+
+
 }
