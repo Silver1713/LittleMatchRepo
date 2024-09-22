@@ -21,11 +21,11 @@ SageCamera cp;
 
 void SageMain::init()
 {
-	SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
-	SageRenderer::init();
+	//SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
+	//SageRenderer::init();
 
-	p.load_texture("../SageIO/image/digipen_splash_screen.png", SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
-	vp = { glm::vec2{0,0}, {SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT} };
+	
+	/*vp = { glm::vec2{0,0}, {SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT} };
 	vp.calculate_viewport_xform();
 	
 	cp.init({ 0,0 }, { SageHelper::WINDOW_WIDTH / 1.f, SageHelper::WINDOW_HEIGHT / 1.f }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
@@ -38,7 +38,7 @@ void SageMain::init()
 
 
 	SageRenderer::camera->update();
-	vp.setViewport();
+	vp.setViewport();*/
 
 }
 
@@ -70,7 +70,7 @@ void SageMain::update()
 	//	obj.second.update();
 	//}
 
-	SageRenderer::camera->update();
+	//SageRenderer::camera->update();
 }
 
 void SageMain::draw()

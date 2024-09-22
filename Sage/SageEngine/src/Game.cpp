@@ -37,6 +37,10 @@ namespace Game {
 	static std::unordered_map<std::string, Transform*> transform_cache;
 	static GameObject background;
 
+
+	static SageCamera camera;
+	static SageViewport vp;
+
 	void Load()
 	{
 		game_objects.clear();
@@ -78,7 +82,15 @@ namespace Game {
 
 	void Init()
 	{
-		
+		camera.init({ 0,0 }, { static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
+		vp.set_dims({ static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) });
+		vp.calculate_viewport_xform();
+
+		SageRenderer::SetCurrentView(&camera);
+		SageRenderer::SetCurrentView(vp);
+
+
+		vp.setViewport();
 	}
 
 	void Input()
@@ -178,6 +190,8 @@ namespace Game {
 			//transform_cache[std::to_string(i)]->Translate({ (float)SageHelper::delta_time * 50.0f,0.f });
 			transform_cache[std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f,0.0f });
 		}
+
+		camera.update();
 
 	}
 

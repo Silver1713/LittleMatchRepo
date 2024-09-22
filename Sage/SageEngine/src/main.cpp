@@ -11,6 +11,7 @@
  *
  */
 
+
 #include <iostream>
 #include <numeric>
 #include <backward.hpp>
@@ -22,6 +23,7 @@
 #include "SceneManager.hpp"
 #include "Prefabs.hpp"
 #include "SageAudio.hpp"
+#include "SageShaderManager.hpp"
 
 
 // Forward declaration
@@ -40,8 +42,11 @@ extern "C"
 }
 #endif
 
+
 int main()
 {
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
 	init();
     SageAudio::Play_Sound("HALO_2");
     SageAudio::Play_Sound("MAIN_MENU");
@@ -65,7 +70,11 @@ int main()
 void init()
 {
     int status = SageHelper::init(1920, 1080, "Hello World");
-    const GLubyte* a = glGetString(GL_EXTENSIONS);
+    SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
+	SageRenderer::init();
+    
+
+
 
     if (status)
     {
@@ -107,5 +116,5 @@ void exit()
     SM::Unload();
     SageHelper::exit();
     SageAudio::Exit();
-
+    
 }
