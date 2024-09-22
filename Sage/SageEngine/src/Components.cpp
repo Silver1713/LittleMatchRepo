@@ -213,19 +213,3 @@ void BoxCollider2D::Update(){}
 void BoxCollider2D::Exit(){}
 ComponentType BoxCollider2D::Get_Component_Type() { return BOXCOLLIDER2D; }
 #pragma endregion
-
-#pragma region Audio
-void Audio::Init(GameObject* _parent)
-{
-	Component::Init(_parent);
-}
-void Audio::Update()
-{
-
-}
-void Audio::Exit()
-{
-
-}
-ComponentType Audio::Get_Component_Type() { return AUDIO; }
-#pragma endregion

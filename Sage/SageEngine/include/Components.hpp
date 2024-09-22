@@ -14,6 +14,9 @@
 #include <string>
 #include <initializer_list>
 
+class GameObject;
+class SageObject;
+
 typedef enum {
 	COMPONENT,
 	TRANSFORM,
@@ -102,14 +105,6 @@ public:
 };
 
 class BoxCollider2D : public Component
-{
-	void Init(GameObject* _parent) override;
-	void Update() override;
-	void Exit() override;
-	ComponentType Get_Component_Type() override;
-};
-
-class Audio : public Component
 {
 	void Init(GameObject* _parent) override;
 	void Update() override;

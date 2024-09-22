@@ -1,6 +1,8 @@
 #include "GameObjects.hpp"
 #include "SageObjectManager.hpp"
 #include "Prefabs.hpp"
+#include "Components/Audio.hpp"
+
 #include <unordered_map>
 #include <memory>
 #include <iostream>
