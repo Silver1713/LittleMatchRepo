@@ -208,7 +208,34 @@ if (NOT TARGET freetype)
     include_directories(${freetype_SOURCE_DIR}/include)
     add_deps_all_targets(PUBLIC freetype)
 endif()
+endmacro()
 
+macro (import_imgui)
+    if (NOT TARGET imgui)
+        FetchContent_Declare(
+            imgui
+            GIT_REPOSITORY https://github.com/ocornut/imgui
+            GIT_TAG master
+            SOURCE_DIR ${DEP_DIR}/imgui
+        )
+        FetchContent_MakeAvailable(imgui)
+        add_library(
+            imgui
+            ${imgui_SOURCE_DIR}/imgui.cpp
+            ${imgui_SOURCE_DIR}/imgui_demo.cpp
+            ${imgui_SOURCE_DIR}/imgui_draw.cpp
+            ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+            
+        )
+        add_library(
+            imgui_backends
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+        )
+        include_directories(${imgui_SOURCE_DIR})
+        include_directories(${imgui_SOURCE_DIR}/backends)
+        add_deps_all_targets(PUBLIC imgui imgui_backends)
+    endif()
 endmacro()
 
 macro(add_deps_all_targets ...)
@@ -228,4 +255,5 @@ macro(importDependencies)
     import_fmod()
     import_freetype()
     import_json()
+    import_imgui()
 endmacro()

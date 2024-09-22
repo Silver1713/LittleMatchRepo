@@ -196,27 +196,6 @@ ENDIF()
 
 include(UnitTest)
 
-# # Gather source files for the single executable
-# file(GLOB_RECURSE SageLite_source_files
-# ${CMAKE_SOURCE_DIR}/SageLite/src/*.[c]pp
-# ${CMAKE_SOURCE_DIR}/SageLite/include/*.h
-# ${CMAKE_SOURCE_DIR}/SageLite/include/*.hpp
-# )
-
-# file(GLOB_RECURSE SageInput_source_files
-# ${CMAKE_SOURCE_DIR}/SageInput/src/*.[ch]pp
-# ${CMAKE_SOURCE_DIR}/SageInput/include/*.[h]
-# ${CMAKE_SOURCE_DIR}/SageInput/include/*.[h]pp
-# )
-# file(GLOB_RECURSE INternal_SAGELITE_H_FILES
-# ${CMAKE_SOURCE_DIR}/SageLite/include/internal/*.h
-# ${CMAKE_SOURCE_DIR}/SageLite/include/internal/*.hpp
-# )
-
-# file(GLOB_RECURSE INternal_SAGEINPUT_H_FILES
-# ${CMAKE_SOURCE_DIR}/SageInput/include/internal/*.h
-# ${CMAKE_SOURCE_DIR}/SageInput/include/internal/*.hpp
-# )
 if(${IS_UNIT_TEST_ENABLED})
     enable_testing()
 endif()
