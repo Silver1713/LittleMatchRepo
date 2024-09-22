@@ -19,6 +19,8 @@ std::vector<FMOD::ChannelGroup*> channel_group = { audio_bgm_group, audio_sfx_gr
 std::vector<std::string> audio_group = { "bgm", "sfx", "ui", "ambient" };
 std::vector<std::vector<std::string>> filename;
 std::vector<FMOD::Sound*> p_sound;
+size_t p_sound_size{ 0 }, p_sound_index{ 0 };
+char* sound_name;
 
 namespace SageAudio
 {
@@ -56,19 +58,19 @@ namespace SageAudio
 #pragma region Private Functions
 	void Play_Sound(std::string _filename)
 	{
+		size_t index{ 0 };
 		for (size_t i{ 0 }; i < audio_group.size(); i++)
 		{
-			//std::cout << "Searching in " << audio_group[i] << std::endl;
 			for (const auto& filename : filename[i])
 			{
-				//std::cout << "Seeking " << filename << std::endl;
 				if (filename == _filename)
 				{
-					result = p_system->playSound(p_sound[i], channel_group[i], false, nullptr);
+					result = p_system->playSound(p_sound[index], channel_group[i], false, nullptr);
 					FMOD_ErrorCheck(result);
 					std::cout << "Playing " << filename << std::endl;
 					return;
 				}
+				++index;
 			}
 		}
 		std::cout << "ERROR: " << _filename << " doesn't exist!" << std::endl;
@@ -86,23 +88,18 @@ namespace SageAudio
 		result = p_system->init(512, FMOD_INIT_NORMAL, 0);
 		FMOD_ErrorCheck(result);
 
-		std::cout << "Creating music channel\n";
 		result = p_system->createChannelGroup("Music", &channel_group[0]);
 		FMOD_ErrorCheck(result);
-		std::cout << "Creating sound effects channel\n";
 		result = p_system->createChannelGroup("Sound Effects", &channel_group[1]);
 		FMOD_ErrorCheck(result);
-		std::cout << "Creating user interface channel\n";
 		result = p_system->createChannelGroup("User Interface", &channel_group[2]);
 		FMOD_ErrorCheck(result);
-		std::cout << "Creating ambience channel\n";
 		result = p_system->createChannelGroup("Ambience", &channel_group[3]);
 		FMOD_ErrorCheck(result);
 
-		std::cout << "Creating master channel\n";
 		result = p_system->getMasterChannelGroup(&channel_group.back());
 		FMOD_ErrorCheck(result);
-		for (size_t i{ 0 }; i < channel_group.size() - 1; i++)
+		for (size_t i{ 0 }; i < audio_group.size(); i++)
 		{
 			result = channel_group.back()->addGroup(channel_group[i]);
 			FMOD_ErrorCheck(result);
@@ -135,9 +132,10 @@ namespace SageAudio
 				}
 			}
 			std::sort(file.begin(), file.end());
+			p_sound_size += file.size();
 			filename.push_back(file);
 		}
-		p_sound.resize(filename.size());
+		p_sound.resize(p_sound_size);
 
 		for (size_t i{ 0 }; i < audio_group.size(); ++i)
 		{
@@ -146,8 +144,9 @@ namespace SageAudio
 			{
 				std::string full_path = folder_path + '/' + name + AUDIO_EXTENSION;
 				std::cout << "Creating sound from " << full_path << '\n';
-				result = p_system->createSound(full_path.c_str(), FMOD_DEFAULT, nullptr, &p_sound[i]);
+				result = p_system->createSound(full_path.c_str(), FMOD_DEFAULT, nullptr, &p_sound[p_sound_index]);
 				FMOD_ErrorCheck(result);
+				++p_sound_index;
 			}
 		}
 	}
@@ -160,14 +159,14 @@ namespace SageAudio
 
 	void Exit()
 	{
-		std::cout << "Exiting";
+		std::cout << "Exiting" << std::endl;
 
 		for (size_t i{ 0 }; i < p_sound.size(); i++)
 		{
 			result = p_sound[i]->release();
 			FMOD_ErrorCheck(result);
 		}
-		for (size_t i{ 0 }; i < channel_group.size(); i++)
+		for (size_t i{ 0 }; i < audio_group.size(); i++)
 		{
 			result = channel_group[i]->release();
 			FMOD_ErrorCheck(result);
