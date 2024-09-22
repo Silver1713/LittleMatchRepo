@@ -24,10 +24,6 @@
 #include <iostream>
 #include <random>
 
-static std::unordered_map<std::string, GameObject> game_objects;
-static std::unordered_map<std::string, Transform*> transform_cache;
-static GameObject background;
-
 //FOR TESTING PURPOSES
 #include <cstdlib> // for srand()
 static int const game_objects_to_create{ 2500 };
@@ -37,6 +33,9 @@ static float const min_scale[3]{ 1.0f,1.0f,0.0f }, max_scale[3]{ 10.0f,10.0f,0.0
 static float const min_col[3]{ 0.0f,0.0f,0.0f }, max_col[3]{100.0f,100.0f,100.0f };
 
 namespace Game {
+	static std::unordered_map<std::string, GameObject> game_objects;
+	static std::unordered_map<std::string, Transform*> transform_cache;
+	static GameObject background;
 
 	void Load()
 	{
@@ -45,13 +44,10 @@ namespace Game {
 
 		Assets::Textures::Load("BLUE_SKY");
 
-		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 960.f,540.f, 0.0f });
-		background.Add_Component(std::make_unique<Transform>(t));
-		Sprite2D s({ "BLUE_SKY" }, { 1.f,1.f,1.f,1.f });
-		background.Add_Component(std::make_unique<Sprite2D>(s));
+		background = GameObject(Prefabs::Get_Prefab("BLUE_SKY"));
 		Game_Objects::Add_Game_Object(&background);
 
-		game_objects["Player"] = Red();
+		game_objects["Player"] = std::move(GameObject(Prefabs::Get_Prefab("RED")));
 		Game_Objects::Add_Game_Object(&game_objects["Player"]);
 		transform_cache["Player"] = dynamic_cast<Transform*>(game_objects["Player"].Get_Component(TRANSFORM)->get());
 		//transform_cache["Player"]->Set_Positions({ 0.0f,0.0f,0.0f });
@@ -60,7 +56,7 @@ namespace Game {
 		//2.5k objects test
 		for (int i{}; i < game_objects_to_create; ++i)
 		{
-			game_objects[std::to_string(i)] = White();
+			game_objects[std::to_string(i)] = GameObject(Prefabs::Get_Prefab("WHITE"));
 			Game_Objects::Add_Game_Object(&game_objects[std::to_string(i)]);
 			transform_cache[std::to_string(i)] = dynamic_cast<Transform*>(game_objects[std::to_string(i)].Get_Component(TRANSFORM)->get());
 

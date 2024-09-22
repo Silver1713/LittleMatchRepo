@@ -11,6 +11,7 @@
 */
 /* End Header **************************************************************************/
 #pragma once
+
 namespace SM {
 	typedef void(*Function_Ptr)();
 

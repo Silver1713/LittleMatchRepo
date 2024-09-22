@@ -21,20 +21,16 @@
 #include <string>
 #include <iostream>
 
-static float time_elapsed{};
-static float const wait_time{ 2.f };
-static GameObject digipen_splash_screen;
-
 namespace Splash_Screen {
+	static float time_elapsed{};
+	static float const wait_time{ 2.f };
+	static GameObject digipen_splash_screen;
 
 	void Load()
 	{
 		Assets::Textures::Load("DIGIPEN_SPLASH_SCREEN");
 
-		Transform t({ 0,0,0.0f }, { 0.0f,0.0f,0.0f }, { 1920.f/2.f,1080.f/2.f, 0.0f });
-		digipen_splash_screen.Add_Component(std::make_unique<Transform>(t));
-		Sprite2D s({ "DIGIPEN_SPLASH_SCREEN" }, {1.f,1.f,1.f,1.f});
-		digipen_splash_screen.Add_Component(std::make_unique<Sprite2D>(s));
+		digipen_splash_screen = GameObject(Prefabs::Get_Prefab("DIGIPEN_SPLASH_SCREEN"));
 		Game_Objects::Add_Game_Object(&digipen_splash_screen);
 	}
 

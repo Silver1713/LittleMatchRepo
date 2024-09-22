@@ -1,6 +1,6 @@
 #pragma once
 #include "AssetLoader.hpp"
-#include "Components.hpp"
+#include "Components/Components.hpp"
 #include <vector>
 #include <memory>
 #include <unordered_map>
@@ -14,7 +14,7 @@ protected:
 
 public:
 	GameObject();
-	GameObject(Assets::Prefabs::Prefab& _p);
+	GameObject(Assets::Prefabs::Prefab const& _p);
 	GameObject(unsigned int const& _iD);
 
 	virtual void Init();

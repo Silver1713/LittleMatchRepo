@@ -1,6 +1,7 @@
 #include "GameObjects.hpp"
-#include "SageObjectManager.hpp"
 #include "Prefabs.hpp"
+#include "Components/Components.hpp"
+#include "SageObjectManager.hpp"
 #include <unordered_map>
 #include <memory>
 #include <iostream>
@@ -81,7 +82,7 @@ namespace Game_Objects
 }
 
 GameObject::GameObject(){}
-GameObject::GameObject(Assets::Prefabs::Prefab& _p)
+GameObject::GameObject(Assets::Prefabs::Prefab const& _p)
 {
 	Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
 	if (!(_p.sprite_texture_ID == "Nil"))
@@ -100,6 +101,8 @@ GameObject::GameObject(Assets::Prefabs::Prefab& _p)
 	{
 		Add_Component(std::make_unique<Audio>());
 	}
+
+	Init();
 }
 GameObject::GameObject(unsigned int const& _iD) : GameObject()
 {
