@@ -37,7 +37,6 @@ namespace Splash_Screen {
 	void Load()
 	{
 		Assets::Textures::Load("DIGIPEN_SPLASH_SCREEN");
-
 		digipen_splash_screen = GameObject(Prefabs::Get_Prefab("DIGIPEN_SPLASH_SCREEN"));
 		Game_Objects::Add_Game_Object(&digipen_splash_screen);
 	}

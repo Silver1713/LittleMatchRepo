@@ -112,7 +112,6 @@ namespace SM {
 
 	void Draw()
 	{
-
 		Game_Objects::Draw();
 		SM::fp_draw();
 	}
