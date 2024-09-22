@@ -67,8 +67,6 @@ int main()
 
 void init()
 {
-    
-
     int status = SageHelper::init(1920, 1080, "Hello World");
     const GLubyte* a = glGetString(GL_EXTENSIONS);
 
