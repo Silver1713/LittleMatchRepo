@@ -17,7 +17,6 @@
 #include "Key_Inputs.h"
 #include "SplashScreen.hpp"
 #include "SceneManager.hpp"
-
 #include "GameObjects.hpp"
 
 #include <iostream>

@@ -1,5 +1,5 @@
 #pragma once
-#include "Components.hpp"
+#include "Component.hpp"
 
 class Audio : public Component
 {

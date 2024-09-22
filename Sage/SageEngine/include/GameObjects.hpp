@@ -1,6 +1,7 @@
 #pragma once
 #include "AssetLoader.hpp"
-#include "Components.hpp"
+#include "Components/Component.hpp"
+#include "Components/Components.hpp"
 #include <vector>
 #include <memory>
 #include <unordered_map>

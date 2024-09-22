@@ -21,10 +21,6 @@
 #include <iostream>
 #include <random>
 
-static std::unordered_map<std::string, GameObject> game_objects;
-static std::unordered_map<std::string, Transform*> transform_cache;
-static GameObject background;
-
 //FOR TESTING PURPOSES
 #include <cstdlib> // for srand()
 static int const game_objects_to_create{ 2500 };
@@ -34,6 +30,9 @@ static float const min_scale[3]{ 1.0f,1.0f,0.0f }, max_scale[3]{ 10.0f,10.0f,0.0
 static float const min_col[3]{ 0.0f,0.0f,0.0f }, max_col[3]{100.0f,100.0f,100.0f };
 
 namespace Game {
+	static std::unordered_map<std::string, GameObject> game_objects;
+	static std::unordered_map<std::string, Transform*> transform_cache;
+	static GameObject background;
 
 	void Load()
 	{
@@ -42,11 +41,11 @@ namespace Game {
 
 		Assets::Textures::Load("BLUE_SKY");
 
-		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 960.f,540.f, 0.0f });
+		/*Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 960.f,540.f, 0.0f });
 		background.Add_Component(std::make_unique<Transform>(t));
 		Sprite2D s({ "BLUE_SKY" }, { 1.f,1.f,1.f,1.f });
 		background.Add_Component(std::make_unique<Sprite2D>(s));
-		Game_Objects::Add_Game_Object(&background);
+		Game_Objects::Add_Game_Object(&background);*/
 
 		game_objects["Player"] = Red();
 		Game_Objects::Add_Game_Object(&game_objects["Player"]);

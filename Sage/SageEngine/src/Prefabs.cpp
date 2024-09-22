@@ -9,11 +9,12 @@
 
 #include <iostream>
 
-std::unordered_map<std::string, Assets::Prefabs::Prefab> prefabs;
-static bool is_initialized{ false };
+static std::unordered_map<std::string, Assets::Prefabs::Prefab> prefabs;
 
 namespace Prefabs
-{
+{	
+	static bool is_initialized{ false };
+
 	void Init()
 	{
 		if (is_initialized)
@@ -22,6 +23,11 @@ namespace Prefabs
 		}
 		prefabs = Assets::Prefabs::Get_Prefabs();
 		is_initialized = true;
+	}
+
+	Assets::Prefabs::Prefab& Get_Prefab(std::string _ID)
+	{
+		return prefabs[_ID];
 	}
 }
 

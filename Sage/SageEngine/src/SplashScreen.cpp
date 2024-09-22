@@ -21,11 +21,10 @@
 #include <string>
 #include <iostream>
 
-static float time_elapsed{};
-static float const wait_time{ 2.f };
-static GameObject digipen_splash_screen;
-
 namespace Splash_Screen {
+	static float time_elapsed{};
+	static float const wait_time{ 2.f };
+	static GameObject digipen_splash_screen;
 
 	void Load()
 	{

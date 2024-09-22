@@ -5,7 +5,7 @@
 namespace Prefabs
 {
 	void Init();
-	GameObject Create_Copy(Assets::Prefabs::Prefab& _p);
+	Assets::Prefabs::Prefab& Get_Prefab(std::string _ID);
 }
 
 class White : public GameObject
