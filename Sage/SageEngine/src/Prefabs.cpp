@@ -25,80 +25,84 @@ namespace Prefabs
 		is_initialized = true;
 	}
 
-	Assets::Prefabs::Prefab& Get_Prefab(std::string _ID)
+	Assets::Prefabs::Prefab const& Get_Prefab(std::string _ID)
 	{
+		if (!is_initialized)
+		{
+			Init();
+		}
 		return prefabs[_ID];
 	}
 }
 
-White::White() : GameObject(prefabs["WHITE"])
-{
-	Init();
-}
-
-void White::Init()
-{
-	GameObject::Init();
-}
-void White::Update()
-{
-
-}
-void White::Exit()
-{
-
-}
-
-Red::Red() : GameObject(prefabs["RED"])
-{
-	Init();
-}
-
-void Red::Init()
-{
-	GameObject::Init();
-}
-void Red::Update()
-{
-
-}
-void Red::Exit()
-{
-
-}
-
-Green::Green() : GameObject(prefabs["GREEN"])
-{
-	Init();
-}
-
-void Green::Init()
-{
-	GameObject::Init();
-}
-void Green::Update()
-{
-
-}
-void Green::Exit()
-{
-
-}
-
-Blue::Blue() : GameObject(prefabs["BLUE"])
-{
-	Init();
-}
-
-void Blue::Init()
-{
-	GameObject::Init();
-}
-void Blue::Update()
-{
-
-}
-void Blue::Exit()
-{
-
-}
+//White::White() : GameObject(prefabs["WHITE"])
+//{
+//	Init();
+//}
+//
+//void White::Init()
+//{
+//	GameObject::Init();
+//}
+//void White::Update()
+//{
+//
+//}
+//void White::Exit()
+//{
+//
+//}
+//
+//Red::Red() : GameObject(prefabs["RED"])
+//{
+//	Init();
+//}
+//
+//void Red::Init()
+//{
+//	GameObject::Init();
+//}
+//void Red::Update()
+//{
+//
+//}
+//void Red::Exit()
+//{
+//
+//}
+//
+//Green::Green() : GameObject(prefabs["GREEN"])
+//{
+//	Init();
+//}
+//
+//void Green::Init()
+//{
+//	GameObject::Init();
+//}
+//void Green::Update()
+//{
+//
+//}
+//void Green::Exit()
+//{
+//
+//}
+//
+//Blue::Blue() : GameObject(prefabs["BLUE"])
+//{
+//	Init();
+//}
+//
+//void Blue::Init()
+//{
+//	GameObject::Init();
+//}
+//void Blue::Update()
+//{
+//
+//}
+//void Blue::Exit()
+//{
+//
+//}

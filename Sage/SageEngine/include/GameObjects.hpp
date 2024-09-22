@@ -14,7 +14,7 @@ protected:
 
 public:
 	GameObject();
-	GameObject(Assets::Prefabs::Prefab& _p);
+	GameObject(Assets::Prefabs::Prefab const& _p);
 	GameObject(unsigned int const& _iD);
 
 	virtual void Init();
