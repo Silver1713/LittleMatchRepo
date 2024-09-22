@@ -14,14 +14,11 @@
 #include <string>
 #include <initializer_list>
 
-class GameObject;
-class SageObject;
-
 typedef enum {
 	COMPONENT,
 	TRANSFORM,
 	SPRITE2D,
-	COLLISION2D,
+	BOXCOLLIDER2D,
 	AUDIO,
 	NUM_OF_TYPES_OF_COMPONENTS
 } ComponentType;
@@ -104,7 +101,7 @@ public:
 	void Set_Transparency(float& _a);
 };
 
-class Collision2D : public Component
+class BoxCollider2D : public Component
 {
 	void Init(GameObject* _parent) override;
 	void Update() override;

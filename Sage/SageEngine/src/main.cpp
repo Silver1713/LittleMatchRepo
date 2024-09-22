@@ -46,8 +46,9 @@ extern "C"
 int main()
 {
 	init();
-    SageAudio::Play_Sound(HALO_2, NO_LOOP);
-    SageAudio::Play_Sound(BABABOOEY, LOOP);
+    SageAudio::Play_Sound("HALO_2");
+    SageAudio::Play_Sound("MAIN_MENU");
+    SageAudio::Play_Sound("RAIN");
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{
@@ -66,8 +67,6 @@ int main()
 
 void init()
 {
-    
-
     int status = SageHelper::init(1920, 1080, "Hello World");
     const GLubyte* a = glGetString(GL_EXTENSIONS);
 

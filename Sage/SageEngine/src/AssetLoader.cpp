@@ -49,6 +49,7 @@ namespace Assets
 		{
 			if (!(textures[_ID].is_loaded))
 			{
+				std::cout << _ID << std::endl;
 				loaded_textures[_ID].load_texture(textures[_ID].filepath.c_str(), SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
 				textures[_ID].is_loaded = true;
 

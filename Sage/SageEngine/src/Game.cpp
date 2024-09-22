@@ -18,11 +18,15 @@
 #include "Prefabs.hpp"
 #include "Key_Inputs.h"
 
+#include "SceneManager.hpp"
+#include "SplashScreen.hpp"
+
 #include <iostream>
 #include <random>
 
 static std::unordered_map<std::string, GameObject> game_objects;
 static std::unordered_map<std::string, Transform*> transform_cache;
+static GameObject background;
 
 //FOR TESTING PURPOSES
 #include <cstdlib> // for srand()
@@ -39,9 +43,19 @@ namespace Game {
 		game_objects.clear();
 		transform_cache.clear();
 
+		Assets::Textures::Load("BLUE_SKY");
+
+		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 960.f,540.f, 0.0f });
+		background.Add_Component(std::make_unique<Transform>(t));
+		Sprite2D s({ "BLUE_SKY" }, { 1.f,1.f,1.f,1.f });
+		background.Add_Component(std::make_unique<Sprite2D>(s));
+		Game_Objects::Add_Game_Object(&background);
+
 		game_objects["Player"] = Red();
 		Game_Objects::Add_Game_Object(&game_objects["Player"]);
 		transform_cache["Player"] = dynamic_cast<Transform*>(game_objects["Player"].Get_Component(TRANSFORM)->get());
+		//transform_cache["Player"]->Set_Positions({ 0.0f,0.0f,0.0f });
+		//transform_cache["Player"]->Set_Scale({ 50.0f,50.0f,0.0f });
 
 		//2.5k objects test
 		for (int i{}; i < game_objects_to_create; ++i)
@@ -74,6 +88,7 @@ namespace Game {
 	void Input()
 	{
 		//tests
+
 		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_W))
 		{
 			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * 100.0f,0.f });
