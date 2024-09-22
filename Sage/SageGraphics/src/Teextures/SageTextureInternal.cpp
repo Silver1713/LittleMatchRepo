@@ -63,7 +63,7 @@ SageTextureInternal::SageTextureInternal(std::string const& path, int internal_t
 
 	texture_unit += (internal_type / 4) * 4;
 
-	texture_hdl = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_INVERT_Y);
+	texture_hdl = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT);
 	if (texture_hdl == 0)
 	{
 		erro_no = static_cast<int>(INTERNAL_SAGE_TEXTURE_ERRORS::I_SAGE_TEXTURE_FILE_NOT_FOUND);
@@ -95,7 +95,7 @@ void SageTextureInternal::set_texture_mirror_repeat() const
 
 bool SageTextureInternal::bind_texture() const
 {
-	glBindTextureUnit(texture_unit, texture_hdl);
+	glBindTextureUnit(texture_unit - GL_TEXTURE0, texture_hdl);
 	return (glGetError() == GL_NO_ERROR);
 }
 

@@ -94,6 +94,9 @@ public:
 
 	bool is_idx_enabled() const;
 
+
+	void update_vtx_buffer_GPU();
+
 	static int model_count;
 
 

@@ -10,6 +10,7 @@
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.						
 */
 /* End Header **************************************************************************/
+#include "SageRenderer.hpp"
 #include "AssetLoader.hpp"
 #include "Prefabs.hpp"
 #include "Key_Inputs.h"
@@ -21,10 +22,17 @@
 #include <string>
 #include <iostream>
 
+#include "SageCamera.hpp"
+#include "SageViewport.hpp"
+
 namespace Splash_Screen {
 	static float time_elapsed{};
 	static float const wait_time{ 2.f };
 	static GameObject digipen_splash_screen;
+
+	static SageCamera camera;
+	static SageViewport vp;
+
 
 	void Load()
 	{
@@ -37,6 +45,17 @@ namespace Splash_Screen {
 	void Init()
 	{
 		time_elapsed = 0.f;
+		vp.set_position({ 0,0 });
+		vp.set_dims({ static_cast<float>(SageHelper::WINDOW_WIDTH), static_cast<float>(SageHelper::WINDOW_HEIGHT)});
+		vp.calculate_viewport_xform();
+		vp.setViewport();
+
+		camera.init({ 0,0 }, { SageHelper::WINDOW_WIDTH / 1.f, SageHelper::WINDOW_HEIGHT / 1.f }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
+
+		SageRenderer::SetCurrentView(&camera);
+		SageRenderer::SetCurrentView(vp);
+
+	
 	}
 
 	void Input()

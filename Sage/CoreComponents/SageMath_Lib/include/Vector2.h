@@ -21,9 +21,8 @@ namespace ToastBox {
 
 
 	class Vec2 {
-	private:
-		float x{}, y{};
 	public:
+		float x{}, y{};
 		//Construction
 		Vec2();
 		Vec2(const float x, const float y);

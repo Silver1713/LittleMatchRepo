@@ -10,7 +10,10 @@
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.						
 */
 /* End Header **************************************************************************/
+
+
 #include "AssetLoader.hpp"
+#include "SageRenderer.hpp"
 #include "SageHelper.hpp"
 #include "Prefabs.hpp"
 #include "Key_Inputs.h"
@@ -33,6 +36,10 @@ namespace Game {
 	static std::unordered_map<std::string, GameObject> game_objects;
 	static std::unordered_map<std::string, Transform*> transform_cache;
 	static GameObject background;
+
+
+	static SageCamera camera;
+	static SageViewport vp;
 
 	void Load()
 	{
@@ -75,7 +82,15 @@ namespace Game {
 
 	void Init()
 	{
-		
+		camera.init({ 0,0 }, { static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
+		vp.set_dims({ static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) });
+		vp.calculate_viewport_xform();
+
+		SageRenderer::SetCurrentView(&camera);
+		SageRenderer::SetCurrentView(vp);
+
+
+		vp.setViewport();
 	}
 
 	void Input()
@@ -114,6 +129,26 @@ namespace Game {
 		{
 			transform_cache["Player"]->Scale({ (float)SageHelper::delta_time * (-100.0f),(float)SageHelper::delta_time * (-100.0f),0.f });
 		}
+
+		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_I))
+		{
+			SageRenderer::camera->MoveCamera({ 0.f,1.f }, 100.f);
+		} else if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_K))
+		{
+			SageRenderer::camera->MoveCamera({ 0.f,-1.f }, 100.f);
+		}
+		else if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_J))
+		{
+			SageRenderer::camera->MoveCamera({ -1.f,0.f }, 100.f);
+		}
+		else if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_L))
+		{
+			SageRenderer::camera->MoveCamera({ 1.f,0.f }, 100.f);
+		}
+
+		
+
+		
 
 		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_1))
 		{
@@ -155,6 +190,8 @@ namespace Game {
 			//transform_cache[std::to_string(i)]->Translate({ (float)SageHelper::delta_time * 50.0f,0.f });
 			transform_cache[std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f,0.0f });
 		}
+
+		camera.update();
 
 	}
 

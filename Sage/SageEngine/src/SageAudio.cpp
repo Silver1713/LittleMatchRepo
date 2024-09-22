@@ -11,7 +11,8 @@
 */
 /* End Header **************************************************************************/
 #include "SageAudio.hpp"
-
+#include <backward.hpp>
+#include <cassert>
 FMOD_RESULT result;
 FMOD::System* p_system;
 FMOD::ChannelGroup* audio_bgm_group, * audio_sfx_group, * audio_ui_group, * audio_ambient_group, * master_audio_group;
@@ -22,6 +23,8 @@ std::vector<FMOD::Sound*> p_sound;
 size_t p_sound_size{ 0 }, p_sound_index{ 0 };
 char* sound_name;
 
+backward::SignalHandling sh;
+
 namespace SageAudio
 {
 #pragma region Helper Functions
@@ -29,7 +32,9 @@ namespace SageAudio
 	{
 		if (_result != FMOD_OK)
 		{
+			
 			std::cerr << "FMOD ERROR! " << FMOD_ErrorString(_result);
+			assert(false);
 			exit(-1);
 		}
 	}
@@ -163,14 +168,19 @@ namespace SageAudio
 
 		for (size_t i{ 0 }; i < p_sound.size(); i++)
 		{
-			result = p_sound[i]->release();
-			FMOD_ErrorCheck(result);
+			if (p_sound[i] != nullptr) {
+				result = p_sound[i]->release();
+				FMOD_ErrorCheck(result);
+			}
 		}
 		for (size_t i{ 0 }; i < audio_group.size(); i++)
 		{
-			result = channel_group[i]->release();
-			FMOD_ErrorCheck(result);
+			if (channel_group[i] != nullptr) {
+				result = channel_group[i]->release();
+				FMOD_ErrorCheck(result);
+			}
 		}
+
 		result = p_system->release();
 		FMOD_ErrorCheck(result);
 	}

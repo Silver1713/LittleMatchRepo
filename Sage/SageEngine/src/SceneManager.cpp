@@ -12,7 +12,7 @@
 /* End Header **************************************************************************/
 #include "AssetLoader.hpp"
 #include "Prefabs.hpp"
-#include "SageMain.hpp"
+
 #include "SageHelper.hpp"
 #include "Key_Inputs.h"
 #include "SplashScreen.hpp"
@@ -90,7 +90,6 @@ namespace SM {
 
 	void Init()
 	{
-		SageMain::init();
 		SAGE_Input_Handler::init();
 
 		SM::fp_init();
@@ -107,14 +106,13 @@ namespace SM {
 	{
 		Fade_In();
 		Fade_Out();
-		SageMain::update();
 		Game_Objects::Update();
 		SM::fp_update();
 	}
 
 	void Draw()
 	{
-		SageMain::draw();
+
 		Game_Objects::Draw();
 		SM::fp_draw();
 	}
@@ -122,7 +120,7 @@ namespace SM {
 	void Free()
 	{
 		SM::fp_free();
-		SageMain::exit();		
+	
 	}
 
 	void Unload()

@@ -146,6 +146,7 @@ void GameObject::Draw()
 	{
 		_c->Draw();
 	}
+	
 }
 
 void GameObject::Exit()

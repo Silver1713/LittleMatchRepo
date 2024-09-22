@@ -38,15 +38,17 @@ void SageCameraInternal2D::CalculateCameraMatrix()
 
 	// Calculate the projection matrix
 
-	float left = -view_rect_size.x / 2.0f;
-	float right = view_rect_size.x / 2.0f;
-	float bottom = -view_rect_size.y / 2.0f;
-	float top = view_rect_size.y / 2.0f;
+
+	float r, l, t, b;
+	r = position.x + view_rect_size.x / 2.f;
+	l = position.x -view_rect_size.x/2.f;
+	t = position.y +view_rect_size.y/2.f;
+	b = position.y -view_rect_size.y/2.f;
 
 	projection_matrix = {
-	2.f / (right - left), 0, 0,
-	0, 2.f / (top - bottom), 0,
-	-(right + left) / (right - left), (top + bottom) / (top - bottom), 1
+		2.f / (r - l), 0.f, 0.f,
+		0, 2.f / (t - b), 0.f,
+		-(r + l) / (r - l), -(t + b) / (t - b), 1.f
 	};
 
 	

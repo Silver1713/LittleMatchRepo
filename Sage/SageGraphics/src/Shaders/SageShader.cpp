@@ -116,6 +116,7 @@ public:
 
 	void SetUniform(const char* name, const ToastBox::Matrix3x3& val) const
 	{
+		
 		internal_impl->SetUniform3fm(name, val.data());
 	}
 

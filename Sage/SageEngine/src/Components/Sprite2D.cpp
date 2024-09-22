@@ -2,7 +2,6 @@
 #include "Components/Transform.hpp"
 #include "Components/Sprite2D.hpp"
 #include "SageObjectManager.hpp"
-
 Sprite2D::Sprite2D() {}
 Sprite2D::Sprite2D(std::string const& _texture_ID, float const* _colour) : sprite_texture_ID{ _texture_ID }, colour{ *_colour, *(_colour + 1),*(_colour + 2),*(_colour + 3) } {}
 Sprite2D::Sprite2D(std::string const& _texture_ID, std::initializer_list<float> const& _colour) : Sprite2D(_texture_ID, _colour.begin()) {}
@@ -41,9 +40,7 @@ void Sprite2D::Draw()
 {
 
 	SageRenderer::DrawFilled(*obj, {
-		SageRenderer::SAGE_ENABLE_ALPHA | SageRenderer::SAGE_ENABLE_TEXTURE,
-		1.f,15.f,15.f,{0,0,0,1}, nullptr, {}, {}, nullptr
-		});
+		SageRenderer::SAGE_ENABLE_ALPHA | SageRenderer::SAGE_ENABLE_TEXTURE | SageRenderer::SAGE_ENABLE_CAMERA });
 }
 void Sprite2D::Exit() {}
 

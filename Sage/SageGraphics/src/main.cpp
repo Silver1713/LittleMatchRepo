@@ -2,8 +2,9 @@
 #include <iostream>
 #include <numeric>
 
-#include "SageMain.hpp"
+
 #include "SageHelper.hpp"
+#include "Scene/ExampleScene.h"
 // Forward declaration
 void init();
 void update();
@@ -44,7 +45,7 @@ int main()
 
 void init()
 {
-	int status = SageHelper::init(2560, 1080, "Hello World");
+	int status = SageHelper::init(1000.f, 1000.f, "Hello World");
 	const GLubyte* a = glGetString(GL_EXTENSIONS);
 
 	if (status)
@@ -53,7 +54,7 @@ void init()
 		std::exit(EXIT_FAILURE);
 	}
 
-	SageMain::init();
+	ExampleScene::init();
 
 	
 
@@ -64,20 +65,20 @@ void init()
 void update()
 {
 	SageHelper::update();
-	SageMain::update();
+	ExampleScene::update();
 }
 
 void draw()
 {
 	SageHelper::draw();
-	SageMain::draw();
+	ExampleScene::draw();
 }
 
 
 void exit()
 {
 	SageHelper::exit();
-	SageMain::exit();
+	ExampleScene::exit();
 	
 }
 
