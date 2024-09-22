@@ -1,5 +1,6 @@
 #include "SageCamera.hpp"
 #include "SageCameraInternal.hpp"
+#include "Vector3.h"
 #include "glm/gtc/type_ptr.inl"
 
 class SageCamera::SageCameraImpl
@@ -131,3 +132,44 @@ void* SageCamera::GetCamera()
 {
 	return impl->GetCam();
 }
+
+ToastBox::Vec2 SageCamera::Screen_To_World(ToastBox::Vec2 screen_pos)
+{
+	ToastBox::Vec2 world_pos;
+
+	world_pos.x = screen_pos.x * (1.f / (rect_size.x/2.f)) -1.f;
+	world_pos.y = screen_pos.y * (1.f / (rect_size.y/2.f)) -1.f;
+
+	world_pos.x *= rect_size.x / 2;
+	world_pos.y *= rect_size.y / 2;
+
+	world_pos.x += position.x;
+	world_pos.y += position.y;
+
+	world_pos.y = -world_pos.y;
+
+	return world_pos;
+
+	
+}
+
+ToastBox::Vec2 SageCamera::World_To_Screen(ToastBox::Vec2 world_pos)
+{
+	ToastBox::Vec2 screen_pos;
+	ToastBox::Vec3 pos{ world_pos.x, world_pos.y, 1.0f };
+
+	ToastBox::Vec3 result = view_projection_matrix * pos;
+	screen_pos.x = result.x;
+	screen_pos.y = -result.y;
+
+	screen_pos.x *= rect_size.x / 2;
+	screen_pos.x += rect_size.x / 2;
+	screen_pos.y *= rect_size.y / 2;
+	screen_pos.y += rect_size.y / 2
+
+	;
+
+	return screen_pos;
+}
+
+

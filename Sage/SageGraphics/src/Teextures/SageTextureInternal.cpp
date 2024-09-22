@@ -95,7 +95,7 @@ void SageTextureInternal::set_texture_mirror_repeat() const
 
 bool SageTextureInternal::bind_texture() const
 {
-	glBindTextureUnit(texture_unit, texture_hdl);
+	glBindTextureUnit(texture_unit - GL_TEXTURE0, texture_hdl);
 	return (glGetError() == GL_NO_ERROR);
 }
 

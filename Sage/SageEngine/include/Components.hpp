@@ -14,6 +14,9 @@
 #include <string>
 #include <initializer_list>
 
+class SageObject;
+class GameObject;
+
 typedef enum {
 	COMPONENT,
 	TRANSFORM,

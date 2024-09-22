@@ -169,6 +169,7 @@ void Sprite2D::Draw()
 	
 	SageRenderer::DrawFilled(*obj, {
 		SageRenderer::SAGE_ENABLE_ALPHA | SageRenderer::SAGE_ENABLE_TEXTURE | SageRenderer::SAGE_ENABLE_CAMERA });
+	
 }
 void Sprite2D::Exit() {}
 

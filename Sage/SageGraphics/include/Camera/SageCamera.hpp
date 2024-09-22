@@ -48,6 +48,10 @@ public:
 	void MoveCamera(ToastBox::Vec2 _move_vector, float speed);
 
 	void* GetCamera();
+
+	ToastBox::Vec2 World_To_Screen(ToastBox::Vec2 world_pos);
+	ToastBox::Vec2 Screen_To_World(ToastBox::Vec2 world_pos);
+
 };
 
 #endif

@@ -180,7 +180,9 @@ void SageObject::draw(SageCamera* cam)
 	shader->SetUniform("uUseTexture", material.enable_texture);
 	if (material.enable_texture)
 	{
-		glActiveTexture(material.texture_ref->get_texture_unit());
+		
+		material.texture_ref->bind_texture();
+		
 		shader->SetUniform("uTex2D", material.texture_ref->get_texture_unit());
 	}
 

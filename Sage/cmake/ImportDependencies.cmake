@@ -126,6 +126,19 @@ macro(import_backward_stacktrace)
     endif()
 endmacro()
 
+macro(import_json)
+    if(NOT TARGET json)
+        FetchContent_Declare(
+            json
+            GIT_REPOSITORY https://github.com/nlohmann/json
+            GIT_TAG b36f4c477c40356a0ae1204b567cca3c2a57d201
+            SOURCE_DIR ${DEP_DIR}/json
+        )
+        FetchContent_MakeAvailable(json)
+        include_directories(${json_SOURCE_DIR})
+    endif()
+endmacro()
+
 macro(import_fmod)
     # import LOCAL version of fmod in FMOD/ folder
     set(FMOD_IMPORT_SUCCESS TRUE)
@@ -214,4 +227,5 @@ macro(importDependencies)
     import_backward_stacktrace()
     import_fmod()
     import_freetype()
+    import_json()
 endmacro()

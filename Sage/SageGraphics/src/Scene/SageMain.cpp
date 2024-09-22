@@ -86,6 +86,7 @@ void SageMain::draw()
 	//glfwSetWindowTitle(SageHelper::ptr_window, ss.str().c_str());
 	SageHelper::sage_ptr_window->set_title(ss.str().c_str());
 
+	
 
 
 

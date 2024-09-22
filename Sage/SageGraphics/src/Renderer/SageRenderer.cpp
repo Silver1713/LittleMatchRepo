@@ -329,18 +329,15 @@ void SageRenderer::DrawLine(SageLine const& line)
 
 	if (default_config.options & SAGE_ENABLE_CAMERA)
 	{
-		ToastBox::Matrix3x3 mtx = { glm::value_ptr(line.transformation_matrix) };
-		shader->SetUniform("uModel_xform", camera->get_projection_view_matrix() * mtx);
+		
+		shader->SetUniform("uModel_xform", camera->get_projection_view_matrix());
 	}
 	else
 	{
-		ToastBox::Matrix3x3 mtx = { glm::value_ptr(line.transformation_matrix) };
+		//ToastBox::Matrix3x3 mtx = { glm::value_ptr(line.transformation_matrix) };
 		ToastBox::Matrix3x3 vp_xf = { glm::value_ptr(viewport.get_viewport_xform()) };
-		ToastBox::Matrix3x3 m1, m2, m3;
-		m1.Matrix3Transpose(mtx);
-		m2.Matrix3Transpose(vp_xf);
-		m3.Matrix3Transpose(m1 * m2);
-		shader->SetUniform("uModel_xform", m3);
+		
+		shader->SetUniform("uModel_xform", vp_xf);
 	}
 	
 	bool use_texture = false;
@@ -377,8 +374,7 @@ void SageRenderer::DrawLine(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::
 	SageLine line({ start.getX(), start.getY()}, {end.getX(), end.getY()}, {color.x,color.y,color.z,color.a}, 15.f);
 	line.line = &SageModelManager::models["PRIMITIVE_LINE"];
 
-	line.calculate_matrix();
-
+	line.update_dist(line.start,line.end);
 
 	DrawLine(line);
 
@@ -427,7 +423,7 @@ void SageRenderer::DrawPoint(SagePoint const& point)
 		ToastBox::Matrix3x3 m1, m2, m3;
 		m1.Matrix3Transpose(mtx);
 		m2.Matrix3Transpose(vp_xf);
-		m3.Matrix3Transpose(m1 * m2);
+		m3.Matrix3Transpose(m2 * m1);
 		shader->SetUniform("uModel_xform", m3);
 	}
 

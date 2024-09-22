@@ -14,8 +14,7 @@
 #include <iostream>
 #include <numeric>
 #include <backward.hpp>
-#include "SageShaderManager.hpp"
-#include "SageMain.hpp"
+#include "SageRenderer.hpp"
 #include "SageHelper.hpp"
 #include "Key_Inputs.h"
 
@@ -23,8 +22,6 @@
 #include "SceneManager.hpp"
 #include "Prefabs.hpp"
 #include "SageAudio.hpp"
-
-
 
 
 // Forward declaration
@@ -99,6 +96,7 @@ void draw()
 {
     SageHelper::draw();
     SM::Draw();
+	
 }
 
 

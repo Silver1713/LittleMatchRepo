@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "SageModelManager.hpp"
+
 int SageModel::model_count{};
 
 SageModel::SageModel(const char* name, std::vector<glm::vec2>* pos, std::vector<glm::vec2>* texture, std::vector<glm::vec4>* clr, std::vector<GLushort>* idx)
@@ -46,7 +48,14 @@ void SageModel::setup_gpu_buffer()
 	if (Enable_Vertex_Texture)
 		vbo_size += sizeof(glm::vec2) * tex_coords.size();
 
-	glNamedBufferStorage(vbo_hdl, static_cast<GLsizeiptr>(vbo_size), nullptr, GL_DYNAMIC_STORAGE_BIT);
+	if (shape_type == PrimitiveShape::PRIMITIVE_LINE || shape_type == PRIMITIVE_POINTS)
+	{
+		glNamedBufferData(vbo_hdl, static_cast<GLsizeiptr>(vbo_size), nullptr, GL_DYNAMIC_DRAW);
+	}
+	else
+	{
+		glNamedBufferStorage(vbo_hdl, static_cast<GLsizeiptr>(vbo_size), nullptr, GL_DYNAMIC_STORAGE_BIT);
+	}
 
 	glNamedBufferSubData(vbo_hdl, 0, sizeof(glm::vec2) * pos_vtx.size(), pos_vtx.data());
 
@@ -199,6 +208,12 @@ bool SageModel::is_idx_enabled() const
 {
 	return Enable_Vertex_Indices;
 }
+
+void SageModel::update_vtx_buffer_GPU()
+{
+	glNamedBufferSubData(vbo_hdl, 0, sizeof(glm::vec2) * pos_vtx.size(), pos_vtx.data());
+}
+
 
 
 

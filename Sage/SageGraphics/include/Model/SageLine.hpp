@@ -25,6 +25,8 @@ struct SageLine
 	void update();
 
 	void calculate_matrix();
+
+	void update_dist(glm::vec2 start, glm::vec2 end);
 };
 
 

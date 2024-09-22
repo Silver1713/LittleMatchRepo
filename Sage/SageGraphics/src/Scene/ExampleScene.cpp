@@ -161,11 +161,15 @@ void ExampleScene::draw()
 	}
 	ToastBox::Vec2 start = { 0,0 };
 	ToastBox::Vec2 end = { 100,0 };
-	SageRenderer::DrawLine(start, end, ToastBox::Vec4{ 0,0,0,1 });
+	SageRenderer::DrawLine(start, end, ToastBox::Vec4{ 0,0,1,1 });
 
 	SageRenderer::SetOptionOff(SageRenderer::SAGE_ENABLE_CAMERA | SageRenderer::SAGE_ENABLE_BORDER);
-	SageRenderer::DrawRect(100,100,50,50, {1,0,0,1});
-	SageRenderer::DrawPoint({ 100,100 }, {0,0,1,1}, 15.f);
+	SageRenderer::DrawRect(1000,500,50,50, {1,0,0,1});
+	SageRenderer::DrawLine({ 0,0 }, { 500,200 }, { 1,0,0,1 });
+	//SageRenderer::DrawPoint({ 500,100 }, { 0,0,1,1 }, 15.f);
+
+	std::cout << camera2d.Screen_To_World({ 0,-250.f }).x << " " << camera2d.Screen_To_World({ 500,1000.f }).y << std::endl;
+	SageRenderer::DrawPoint(camera2d.World_To_Screen({ 0,-250.f }), { 0,1,1,1 }, 15.f);
 }
 
 void ExampleScene::exit()
