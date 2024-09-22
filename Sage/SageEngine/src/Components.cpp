@@ -5,8 +5,6 @@
 
 #include <iostream>
 #include <initializer_list>
-//here to include everything that all components need to function so this script will
-// be the only one to be dependent on all other systems
 
 #pragma region Component
 void Component::Init(GameObject* _parent)
@@ -206,14 +204,14 @@ void Sprite2D::Set_Transparency(float& _a)
 }
 #pragma endregion
 
-#pragma region Collision2D
-void Collision2D::Init(GameObject* _parent)
+#pragma region BoxCollider2D
+void BoxCollider2D::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
 }
-void Collision2D::Update(){}
-void Collision2D::Exit(){}
-ComponentType Collision2D::Get_Component_Type() { return COLLISION2D; }
+void BoxCollider2D::Update(){}
+void BoxCollider2D::Exit(){}
+ComponentType BoxCollider2D::Get_Component_Type() { return BOXCOLLIDER2D; }
 #pragma endregion
 
 #pragma region Audio
@@ -231,4 +229,3 @@ void Audio::Exit()
 }
 ComponentType Audio::Get_Component_Type() { return AUDIO; }
 #pragma endregion
-

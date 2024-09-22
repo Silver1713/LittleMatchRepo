@@ -94,7 +94,7 @@ GameObject::GameObject(Assets::Prefabs::Prefab& _p)
 	}
 	if (!(_p.collision_data == "Nil"))
 	{
-		Add_Component(std::make_unique<Collision2D>());
+		Add_Component(std::make_unique<BoxCollider2D>());
 	}
 	if (!(_p.audio_data == "Nil"))
 	{
