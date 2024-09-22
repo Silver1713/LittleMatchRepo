@@ -21,21 +21,21 @@
 
 #include <iostream>
 
-static bool scene_has_loaded{ false };
-static bool scene_has_initialized{ false };
-
-static bool scene_faded_in{ false };
-static bool scene_faded_out{ true };
-
-static bool game_running{ true };
-static bool ignore_safety_bools{ false };
-
-const float fade_time{ 1.f };
-
-static GameObject fade_screen;
-
 #pragma region Public Functions
 namespace SM {	
+	static bool scene_has_loaded{ false };
+	static bool scene_has_initialized{ false };
+
+	static bool scene_faded_in{ false };
+	static bool scene_faded_out{ true };
+
+	static bool game_running{ true };
+	static bool ignore_safety_bools{ false };
+
+	const float fade_time{ 1.f };
+
+	static GameObject fade_screen;
+
 	static Function_Ptr fp_load = Splash_Screen::Load;
 	static Function_Ptr fp_init = Splash_Screen::Init;
 	static Function_Ptr fp_input = Splash_Screen::Input;
