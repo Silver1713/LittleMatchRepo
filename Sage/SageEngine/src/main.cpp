@@ -111,6 +111,7 @@ void draw()
 
 void exit()
 {
+    Game_Objects::Exit();
     SM::Free();
     Assets::Textures::Unload();
     SM::Unload();

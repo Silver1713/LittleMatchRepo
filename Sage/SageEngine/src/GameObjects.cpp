@@ -76,7 +76,7 @@ namespace Game_Objects
 	void Clear_Game_Objects()
 	{
 		SageObjectManager::DestroyAllObjects();
-		g_game_objects.clear();		
+		g_game_objects.clear();
 		g_go_counter = 0;
 	}
 }
