@@ -34,7 +34,7 @@ namespace SM {
 
 	const float fade_time{ 1.f };
 
-	static GameObject fade_screen;
+	static GameObject* fade_screen{ nullptr };
 
 	static Function_Ptr fp_load = Splash_Screen::Load;
 	static Function_Ptr fp_init = Splash_Screen::Init;
@@ -81,11 +81,13 @@ namespace SM {
 	{
 		SM::fp_load();
 
-		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 1000.f,1000.f, 0.0f });
-		fade_screen.Add_Component(std::make_unique<Transform>(t));
-		Sprite2D s({ "" }, { 0.f,0.f,0.f,1.f });
-		fade_screen.Add_Component(std::make_unique<Sprite2D>(s));
-		Game_Objects::Add_Game_Object(&fade_screen);
+		//Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 1000.f,1000.f, 0.0f });
+		//fade_screen.Add_Component(std::make_unique<Transform>(t));
+		//Sprite2D s({ "" }, { 0.f,0.f,0.f,1.f });
+		//fade_screen.Add_Component(std::make_unique<Sprite2D>(s));
+		//Game_Objects::Add_Game_Object(&fade_screen);
+		fade_screen = Game_Objects::Instantiate(Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen");
+
 	}
 
 	void Init()
@@ -172,10 +174,10 @@ namespace SM {
 		float dt = (float)SageHelper::delta_time;
 
 		if (alpha > 0.0f)
-		{			
+		{
 			alpha -= dt * (1.0f / fade_time);
-			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D)->get());
-			s->Set_Transparency(alpha);			
+			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen->Get_Component(SPRITE2D));
+			s->Set_Transparency(alpha);
 			return;
 		}
 		else
@@ -200,7 +202,7 @@ namespace SM {
 		if (alpha < 1.0f)
 		{
 			alpha += dt * (1.0f / fade_time);
-			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D)->get());
+			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen->Get_Component(SPRITE2D));
 			s->Set_Transparency(alpha);
 			return;
 		}

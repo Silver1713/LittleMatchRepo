@@ -63,6 +63,7 @@ int main()
 
 	}
 	exit();
+    std::cout << "End\n";
 	return 0;
 }
 
@@ -117,5 +118,4 @@ void exit()
     SM::Unload();
     SageHelper::exit();
     SageAudio::Exit();
-    
 }

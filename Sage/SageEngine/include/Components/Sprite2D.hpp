@@ -22,5 +22,5 @@ public:
 	void Set_Texture_ID(std::string const& _ID);
 	void Set_Colour(float const* _new_col);
 	void Set_Colour(std::initializer_list<float> const& _new_col);
-	void Set_Transparency(float& _a);
+	void Set_Transparency(float _a);
 };
