@@ -13,7 +13,7 @@ struct SageTimer
 	static double delta_time;
 
 	static void init();
-
+	static void Update();
 	static double GetCurrentTime();
 	static void SetTime(double time);
 

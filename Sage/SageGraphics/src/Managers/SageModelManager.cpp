@@ -6,7 +6,7 @@
 std::map<std::string, SageModel> SageModelManager::models{};
 float pi = static_cast<float>(std::atan(1) * 4);
 
-SageModel& SageModelManager::CreatePrimitiveModel(std::string name, PrimitiveShape shape, RENDER_TYPE type)
+SageModel& SageModelManager::CreatePrimitiveModel(std::string name, int shape, int type)
 {
 
 	if (shape == PrimitiveShape::PRIMITIVE_SQUARE)

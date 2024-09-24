@@ -12,6 +12,7 @@
  */
 
 
+
 #include <iostream>
 #include <numeric>
 #include <backward.hpp>
@@ -29,10 +30,20 @@
 // Forward declaration
 void init();
 void update();
+void PhysicsUpdate();
 void draw();
 void exit();
 int loop = 60;
 int window = 3;
+
+constexpr double physics_update_target = 0.02;
+namespace
+{
+    static double accumulator = 0;
+}
+
+
+
 #define ENABLE_NVIDIA_OPTIMUS 1
 
 #if ENABLE_NVIDIA_OPTIMUS == 1
@@ -56,6 +67,7 @@ int main()
 	{
 		glfwPollEvents();        
 		update();
+
 		draw();
 
 		SageHelper::sage_ptr_window->swap_buffers();
@@ -96,9 +108,22 @@ void init()
 void update()
 {
     SageHelper::update();
-    SM::Input();
+	accumulator += SageHelper::delta_time;
+	if (accumulator >= physics_update_target)
+	{
+        PhysicsUpdate();
+		accumulator -= physics_update_target;
+	}
+	SM::Input();
     SM::Update();
+    
     SageAudio::Update();
+}
+
+
+void PhysicsUpdate()
+{
+	SageHelper::fixed_delta_time = SageHelper::delta_time;
 }
 
 void draw()

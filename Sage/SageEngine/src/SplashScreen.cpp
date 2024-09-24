@@ -24,7 +24,6 @@
 
 #include "SageCamera.hpp"
 #include "SageViewport.hpp"
-
 namespace Splash_Screen {
 	static float time_elapsed{};
 	static float const wait_time{ 2.f };

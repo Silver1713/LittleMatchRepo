@@ -371,7 +371,7 @@ void SageShaderInternal::PrintActiveAttribs() const
 		glGetProgramResourceiv(pgm_handle, GL_PROGRAM_INPUT, i, 3, &properties[0], 3, NULL, attrib);
 
 		name_data.resize(attrib[0]);
-		glGetProgramResourceName(pgm_handle, GL_PROGRAM_INPUT, i, name_data.size(), NULL, &name_data[0]);
+		glGetProgramResourceName(pgm_handle, GL_PROGRAM_INPUT, i, static_cast<GLsizei>(name_data.size()), NULL, &name_data[0]);
 
 		std::string name((char*)&name_data[0], name_data.size() - 1);
 		std::cout << attrib[2] << " | " << name << '\n';
@@ -396,12 +396,11 @@ void SageShaderInternal::PrintActiveUniforms() const
 		glGetProgramResourceiv(pgm_handle, GL_UNIFORM, i, 3, &properties[0], 3, NULL, uniform);
 
 		name_data.resize(uniform[0]);
-		glGetProgramResourceName(pgm_handle, GL_UNIFORM, i, name_data.size(), NULL, &name_data[0]);
+		glGetProgramResourceName(pgm_handle, GL_UNIFORM, i, static_cast<GLsizei>(name_data.size()), NULL, &name_data[0]);
 
 		std::string name((char*)&name_data[0], name_data.size() - 1);
 		std::cout << uniform[2] << " | " << name << '\n';
 	}
-
 	
 }
 

@@ -6,6 +6,7 @@
 #include <memory>
 #include <iostream>
 
+
 std::unordered_map<unsigned int, GameObject*> g_game_objects;
 unsigned int g_go_counter{};
 

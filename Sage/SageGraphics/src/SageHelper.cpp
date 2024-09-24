@@ -175,7 +175,7 @@ void SageHelper::draw()
 
 void SageHelper::exit()
 {
-
+	delete sage_ptr_window;
 	glfwTerminate();
 }
 

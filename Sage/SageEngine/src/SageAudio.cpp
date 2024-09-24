@@ -13,6 +13,7 @@
 #include "SageAudio.hpp"
 #include <backward.hpp>
 #include <cassert>
+
 FMOD_RESULT result;
 FMOD::System* p_system;
 FMOD::ChannelGroup* audio_bgm_group, * audio_sfx_group, * audio_ui_group, * audio_ambient_group, * master_audio_group;

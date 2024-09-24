@@ -28,11 +28,11 @@ glm::vec2 SageViewport::get_dims() const
 glm::mat3& SageViewport::calculate_viewport_xform()
 {
 	// Set the viewport transformation matrix
-	int r, l, t, b;
+	float r, l, t, b;
 	r = size.x;
 	l = 0.f;
 	t = 0.f;
-	b = size.y;
+	b = size.y; 
 	
 	vp_xform = {
 		2.f / (r - l), 0.f, 0.f,
@@ -64,7 +64,8 @@ float SageViewport::get_default_world_bounds() const
 
 void SageViewport::setViewport()
 {
-	glViewport(0.f, 0.f, size.x, size.y);
+	int x{ static_cast<int>(size.x) }, y{ static_cast<int>(size.y) };
+	glViewport(static_cast<int>(position.x), static_cast<int>(position.y), x, y);
 }
 
 

@@ -2,10 +2,3 @@
 #include "SageTimer.hpp"
 
 
-int main()
-{
-	
-	
-
-
-}

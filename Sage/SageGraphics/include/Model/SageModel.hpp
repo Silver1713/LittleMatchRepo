@@ -91,6 +91,8 @@ public:
 
 	void set_shape_type(PrimitiveShape shape);
 	void set_render_type(RENDER_TYPE type);
+	void set_render_type(int type);
+	void set_shape_type(int shape);
 
 	bool is_idx_enabled() const;
 
