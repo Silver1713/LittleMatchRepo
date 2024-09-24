@@ -8,10 +8,11 @@
 #include <memory>
 #include <iostream>
 
-std::unordered_map<std::string, std::unique_ptr<GameObject>> g_game_objects;
 
 namespace Game_Objects
 {
+	static std::unordered_map<std::string, std::unique_ptr<GameObject>> g_game_objects;
+
 	void Init()
 	{
 		for (auto& _g : g_game_objects)
