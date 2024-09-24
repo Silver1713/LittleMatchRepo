@@ -24,17 +24,17 @@
 
 //FOR TESTING PURPOSES
 #include <cstdlib> // for srand()
-static int const game_objects_to_create{ 2500 };
+static int const game_objects_to_create{ 100 };
 static float const min_pos[3]{ -960.0f,-540.0f,0.0f }, max_pos[3]{ 1920.0f,1080.0f,0.0f };
 static float const min_rot[3]{ 0.0f,0.0f,0.0f }, max_rot[3]{ 360.0f,360.0f,0.0f };
 static float const min_scale[3]{ 1.0f,1.0f,0.0f }, max_scale[3]{ 10.0f,10.0f,0.0f };
 static float const min_col[3]{ 0.0f,0.0f,0.0f }, max_col[3]{100.0f,100.0f,100.0f };
 
 namespace Game {
-	static std::unordered_map<std::string, GameObject> game_objects;
+	static std::unordered_map<std::string, GameObject*> game_objects;
 	static std::unordered_map<std::string, Transform*> transform_cache;
-	static GameObject background;
-
+	static GameObject* background;
+	static GameObject* player;
 
 	static SageCamera camera;
 	static SageViewport vp;
@@ -44,23 +44,15 @@ namespace Game {
 		game_objects.clear();
 		transform_cache.clear();
 
-		Assets::Textures::Load("BLUE_SKY");
-
-		background = GameObject(Prefabs::Get_Prefab("BLUE_SKY"));
-		Game_Objects::Add_Game_Object(&background);
-
-		game_objects["Player"] = std::move(GameObject(Prefabs::Get_Prefab("RED")));
-		Game_Objects::Add_Game_Object(&game_objects["Player"]);
-		transform_cache["Player"] = dynamic_cast<Transform*>(game_objects["Player"].Get_Component(TRANSFORM)->get());
-		//transform_cache["Player"]->Set_Positions({ 0.0f,0.0f,0.0f });
-		//transform_cache["Player"]->Set_Scale({ 50.0f,50.0f,0.0f });
+		background = Game_Objects::Instantiate(Prefabs::Get_Prefab("BLUE_SKY"), "Blue_Sky");
+		player = Game_Objects::Instantiate(Prefabs::Get_Prefab("RED"), "Player");
+		transform_cache["Player"] = dynamic_cast<Transform*>(player->Get_Component(TRANSFORM));
 
 		//2.5k objects test
 		for (int i{}; i < game_objects_to_create; ++i)
 		{
-			game_objects[std::to_string(i)] = GameObject(Prefabs::Get_Prefab("WHITE"));
-			Game_Objects::Add_Game_Object(&game_objects[std::to_string(i)]);
-			transform_cache[std::to_string(i)] = dynamic_cast<Transform*>(game_objects[std::to_string(i)].Get_Component(TRANSFORM)->get());
+			game_objects[std::to_string(i)] = Game_Objects::Instantiate(Prefabs::Get_Prefab("WHITE"), "White_" + std::to_string(i));
+			transform_cache[std::to_string(i)] = dynamic_cast<Transform*>(game_objects[std::to_string(i)]->Get_Component(TRANSFORM));
 
 			float pos[3]{ (float)(std::rand() % (int)max_pos[0] + (int)min_pos[0]), (float)(std::rand() % (int)max_pos[1] + (int)min_pos[1]),0.0f };
 			float rot[3]{ (float)(std::rand() % (int)max_rot[0] + (int)min_rot[0]), (float)(std::rand() % (int)max_rot[1] + (int)min_rot[1]),0.0f };
@@ -71,10 +63,10 @@ namespace Game {
 			transform_cache[std::to_string(i)]->Set_Rotations({ rot[0],rot[1],rot[2]});
 			transform_cache[std::to_string(i)]->Set_Scale({ scale[0],scale[1],scale[2]});
 
-			Sprite2D* s = dynamic_cast<Sprite2D*>(game_objects[std::to_string(i)].Get_Component(SPRITE2D)->get());
+			Sprite2D* s = dynamic_cast<Sprite2D*>(game_objects[std::to_string(i)]->Get_Component(SPRITE2D));
 			s->Set_Colour({col[0],col[1],col[2]});
 
-			game_objects[std::to_string(i)].Disable();
+			game_objects[std::to_string(i)]->Disable();
 		}
 	}
 
@@ -146,30 +138,28 @@ namespace Game {
 
 		
 
-		
-
 		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_1))
 		{
-			if (game_objects["0"].Is_Enabled())
+			if (game_objects["0"]->Is_Enabled())
 			{
 				return;
 			}
 
 			for (int i{}; i < game_objects_to_create; ++i)
 			{
-				game_objects[std::to_string(i)].Enable();
+				game_objects[std::to_string(i)]->Enable();
 			}
 		}
 		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_2))
 		{
-			if (!(game_objects["0"].Is_Enabled()))
+			if (!game_objects["0"]->Is_Enabled())
 			{
 				return;
 			}
 
 			for (int i{}; i < game_objects_to_create; ++i)
 			{
-				game_objects[std::to_string(i)].Disable();
+				game_objects[std::to_string(i)]->Disable();
 			}
 		}
 		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_3))
@@ -180,12 +170,10 @@ namespace Game {
 
 	void Update()
 	{
-		//transform_cache["Player"]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f });
 
 
 		for (int i{}; i < game_objects_to_create; ++i)
 		{
-			//transform_cache[std::to_string(i)]->Translate({ (float)SageHelper::delta_time * 50.0f,0.f });
 			transform_cache[std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f,0.0f });
 		}
 

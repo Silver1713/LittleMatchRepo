@@ -9,28 +9,26 @@ class GameObject
 {
 protected:
 	std::vector<std::unique_ptr<Component>> components;
-	unsigned int iD{};
+	std::string identifier{};
 	bool is_enabled{true};
 
 public:
 	GameObject();
-	GameObject(Assets::Prefabs::Prefab const& _p);
-	GameObject(unsigned int const& _iD);
+	GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _identifier);
 
-	virtual void Init();
-	virtual void Update();
-	virtual void Draw();
-	virtual void Exit();
+	void Init();
+	void Update();
+	void Draw();
+	void Exit();
 
-	void Set_ID(unsigned int const& _iD);
-	unsigned int const Get_ID();
+	std::string const& Get_ID();
 
 	bool const& Is_Enabled() const;
 	void Enable();
 	void Disable();
 
 	void Add_Component(std::unique_ptr<Component> _c);
-	std::unique_ptr<Component>* Get_Component(ComponentType _component);
+	Component* Get_Component(ComponentType _component);
 };
 
 namespace Game_Objects
@@ -40,7 +38,8 @@ namespace Game_Objects
 	void Draw();
 	void Exit();
 
-	void Add_Game_Object(GameObject* _g);
-	std::unordered_map<unsigned int, GameObject*>& Get_Game_Objects();
+	std::unordered_map<std::string, std::unique_ptr<GameObject>>& Get_Game_Objects();
+	GameObject* Get_Game_Object(std::string const& _identifier);
+	GameObject* Instantiate(Assets::Prefabs::Prefab const& _p, std::string const& _identifer);
 	void Clear_Game_Objects();
 }

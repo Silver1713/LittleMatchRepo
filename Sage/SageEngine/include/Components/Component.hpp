@@ -32,6 +32,7 @@ private:
 	GameObject* parent{ nullptr };
 
 public:
+	virtual ~Component() = default;
 	virtual void Init(GameObject* _parent);
 	virtual void Update();
 	virtual void Draw();

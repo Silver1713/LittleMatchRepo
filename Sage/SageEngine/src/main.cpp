@@ -75,6 +75,7 @@ int main()
 
 	}
 	exit();
+    std::cout << "End\n";
 	return 0;
 }
 
@@ -136,10 +137,10 @@ void draw()
 
 void exit()
 {
+    Game_Objects::Exit();
     SM::Free();
     Assets::Textures::Unload();
     SM::Unload();
     SageHelper::exit();
     SageAudio::Exit();
-    
 }

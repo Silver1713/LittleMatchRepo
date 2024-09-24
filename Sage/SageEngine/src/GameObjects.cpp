@@ -2,13 +2,13 @@
 #include "Prefabs.hpp"
 #include "Components/Components.hpp"
 #include "SageObjectManager.hpp"
+
 #include <unordered_map>
+#include <string>
 #include <memory>
 #include <iostream>
 
-
-std::unordered_map<unsigned int, GameObject*> g_game_objects;
-unsigned int g_go_counter{};
+std::unordered_map<std::string, std::unique_ptr<GameObject>> g_game_objects;
 
 namespace Game_Objects
 {
@@ -57,33 +57,41 @@ namespace Game_Objects
 		Clear_Game_Objects();
 	}
 
-	void Add_Game_Object(GameObject* _g)
+	std::unique_ptr<GameObject>* Add_Game_Object(std::unique_ptr<GameObject> _g, std::string const& _identifier)
 	{
 		if (!_g)
 		{
-			return;
+			return nullptr;
 		}
 
-		_g->Set_ID(g_go_counter);
-		g_go_counter++;
-		g_game_objects[g_go_counter] = std::move(_g);
+		g_game_objects[_identifier] = std::move(_g);
+		return &g_game_objects[_identifier];
 	}
 
-	std::unordered_map<unsigned int, GameObject*>& Get_Game_Objects()
+	std::unordered_map<std::string, std::unique_ptr<GameObject>>& Get_Game_Objects()
 	{
 		return g_game_objects;
+	}
+
+	GameObject* Get_Game_Object(std::string const& _identifier)
+	{
+		return g_game_objects[_identifier].get();
+	}
+
+	GameObject* Instantiate(Assets::Prefabs::Prefab const& _p, std::string const& _identifier)
+	{
+		return (Add_Game_Object(std::make_unique<GameObject>(_p,_identifier), _identifier))->get();
 	}
 
 	void Clear_Game_Objects()
 	{
 		SageObjectManager::DestroyAllObjects();
-		g_game_objects.clear();		
-		g_go_counter = 0;
+		g_game_objects.clear();
 	}
 }
 
 GameObject::GameObject(){}
-GameObject::GameObject(Assets::Prefabs::Prefab const& _p)
+GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _identifier) : identifier{_identifier}
 {
 	Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
 	if (!(_p.sprite_texture_ID == "Nil"))
@@ -105,10 +113,6 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p)
 
 	Init();
 }
-GameObject::GameObject(unsigned int const& _iD) : GameObject()
-{
-	iD = _iD;
-};
 
 void GameObject::Init()
 {
@@ -163,14 +167,9 @@ void GameObject::Exit()
 	}
 }
 
-void GameObject::Set_ID(unsigned int const& _iD)
+std::string const& GameObject::Get_ID()
 {
-	iD = _iD;
-}
-
-unsigned int const GameObject::Get_ID()
-{
-	return iD;
+	return identifier;
 }
 
 bool const& GameObject::Is_Enabled() const
@@ -191,13 +190,13 @@ void GameObject::Add_Component(std::unique_ptr<Component> _c)
 	components.push_back(std::move(_c));
 }
 
-std::unique_ptr<Component>* GameObject::Get_Component(ComponentType _type)
+Component* GameObject::Get_Component(ComponentType _type)
 {
 	for (auto& c : components)
 	{
 		if (c->Get_Component_Type() == _type)
 		{
-			return &c;
+			return c.get();
 		}
 	}
 	return nullptr;

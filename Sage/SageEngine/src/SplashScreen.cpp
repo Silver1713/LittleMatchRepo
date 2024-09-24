@@ -21,13 +21,14 @@
 
 #include <string>
 #include <iostream>
+#include <memory>
 
 #include "SageCamera.hpp"
 #include "SageViewport.hpp"
 namespace Splash_Screen {
 	static float time_elapsed{};
-	static float const wait_time{ 2.f };
-	static GameObject digipen_splash_screen;
+	static float const wait_time{ 1.f };
+	static GameObject* digipen_splash_screen;
 
 	static SageCamera camera;
 	static SageViewport vp;
@@ -35,10 +36,7 @@ namespace Splash_Screen {
 
 	void Load()
 	{
-		Assets::Textures::Load("DIGIPEN_SPLASH_SCREEN");
-
-		digipen_splash_screen = GameObject(Prefabs::Get_Prefab("DIGIPEN_SPLASH_SCREEN"));
-		Game_Objects::Add_Game_Object(&digipen_splash_screen);
+		digipen_splash_screen = Game_Objects::Instantiate(Prefabs::Get_Prefab("DIGIPEN_SPLASH_SCREEN"),"Digipen_Splash_Screen");
 	}
 
 	void Init()
