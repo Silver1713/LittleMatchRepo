@@ -488,4 +488,10 @@ RENDER_CONFIG::RENDER_CONFIG(unsigned int options, float render_alpha, float bor
 	this->current_texture = current_texture;
 }
 
+void SageRenderer::ClearColor(ToastBox::Vec4 clr)
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(clr.x, clr.y, clr.z, clr.a);
+
+}
 

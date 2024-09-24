@@ -21,6 +21,8 @@
 
 #include <iostream>
 
+#include "SageMain.hpp"
+
 #pragma region Public Functions
 namespace SM {	
 	static bool scene_has_loaded{ false };
@@ -112,9 +114,11 @@ namespace SM {
 
 	void Draw()
 	{
-
+		
+		SageMain::draw();
 		Game_Objects::Draw();
 		SM::fp_draw();
+
 	}
 
 	void Free()

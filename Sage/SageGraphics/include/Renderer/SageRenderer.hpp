@@ -121,6 +121,7 @@ struct SageRenderer
 	static void SetColor(glm::vec4 color);
 	static void SetAlpha(float alpha);
 	static void SetTransformationMatrix(glm::mat3& matrix);
+	static void ClearColor(ToastBox::Vec4 clr);
 
 };
 
