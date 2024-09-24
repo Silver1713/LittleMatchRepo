@@ -7,8 +7,6 @@
 #include <string>
 #include <vector>
 
-#include <GLFW/glfw3.h>
-#include "SOIL.H"
 
 namespace Assets
 {

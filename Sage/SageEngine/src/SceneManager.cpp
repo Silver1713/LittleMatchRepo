@@ -7,7 +7,7 @@
 \date		08 September 2024
 \brief		Contains the definitions of functions relating to scene management
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content ï¿½ 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #include "AssetLoader.hpp"
@@ -20,6 +20,8 @@
 #include "GameObjects.hpp"
 
 #include <iostream>
+
+#include "SageMain.hpp"
 
 #pragma region Public Functions
 namespace SM {	
@@ -116,6 +118,7 @@ namespace SM {
 	{
 		Game_Objects::Draw();
 		SM::fp_draw();
+
 	}
 
 	void Free()

@@ -128,7 +128,7 @@ void SageObject::draw(SageViewport* vp)
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//if (this->obj_mesh->model_ref->)
-		glDrawElements(GL_TRIANGLE_FAN, obj_mesh.idx_cnt, GL_UNSIGNED_SHORT, nullptr);
+		glDrawElements(GL_TRIANGLE_FAN, static_cast<GLsizei>(obj_mesh.idx_cnt), GL_UNSIGNED_SHORT, nullptr);
 		// Check for errors
 		
 
@@ -136,7 +136,7 @@ void SageObject::draw(SageViewport* vp)
 	}
 	else
 	{
-		glDrawArrays(GL_TRIANGLES, 0, obj_mesh.vtx_cnt);
+		glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(obj_mesh.vtx_cnt));
 	}
 
 	glBindVertexArray(0);
@@ -197,14 +197,14 @@ void SageObject::draw(SageCamera* cam)
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//if (this->obj_mesh->model_ref->)
-		glDrawElements(GL_TRIANGLE_FAN, obj_mesh.idx_cnt, GL_UNSIGNED_SHORT, nullptr);
+		glDrawElements(GL_TRIANGLE_FAN, static_cast<GLsizei>(obj_mesh.idx_cnt), GL_UNSIGNED_SHORT, nullptr);
 		// Check for errors
 
 
 	}
 	else
 	{
-		glDrawArrays(GL_TRIANGLES, 0, obj_mesh.vtx_cnt);
+		glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(obj_mesh.vtx_cnt));
 	}
 
 	glBindVertexArray(0);

@@ -20,7 +20,7 @@ struct SageModelManager
 {
 	static std::map<std::string, SageModel> models;
 
-	static SageModel& CreatePrimitiveModel(std::string name, PrimitiveShape shape, RENDER_TYPE type);
+	static SageModel& CreatePrimitiveModel(std::string name, int shape, int type);
 	//static SageModel& CreatePrimitiveMisc(std::string name,std::vector<glm::vec2> vtx, PrimitiveShape shape, RENDER_TYPE type);
 	
 };

@@ -165,6 +165,19 @@ GLuint SageModel::get_vbo_handle() const
 
 
 
+void SageModel::set_render_type(int type)
+{
+	mdl_render_type = static_cast<RENDER_TYPE>(type);
+
+}
+
+void SageModel::set_shape_type(int shape)
+{
+	shape_type = static_cast<PrimitiveShape>(shape);
+
+}
+
+
 void SageModel::set_render_type(RENDER_TYPE type)
 {
 	mdl_render_type = type;

@@ -18,8 +18,6 @@
 #include "Prefabs.hpp"
 #include "Key_Inputs.h"
 
-#include "SceneManager.hpp"
-#include "SplashScreen.hpp"
 
 #include <iostream>
 #include <random>
