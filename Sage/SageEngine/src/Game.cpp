@@ -24,7 +24,7 @@
 
 //FOR TESTING PURPOSES
 #include <cstdlib> // for srand()
-static int const game_objects_to_create{ 100 };
+static int const game_objects_to_create{ 2500 };
 static float const min_pos[3]{ -960.0f,-540.0f,0.0f }, max_pos[3]{ 1920.0f,1080.0f,0.0f };
 static float const min_rot[3]{ 0.0f,0.0f,0.0f }, max_rot[3]{ 360.0f,360.0f,0.0f };
 static float const min_scale[3]{ 1.0f,1.0f,0.0f }, max_scale[3]{ 10.0f,10.0f,0.0f };
@@ -120,18 +120,18 @@ namespace Game {
 			transform_cache["Player"]->Scale({ (float)SageHelper::delta_time * (-100.0f),(float)SageHelper::delta_time * (-100.0f),0.f });
 		}
 
-		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_I))
+		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_I))
 		{
 			SageRenderer::camera->MoveCamera({ 0.f,1.f }, 100.f);
-		} else if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_K))
+		} else if (SAGE_Input_Handler::Get_Key(SAGE_KEY_K))
 		{
 			SageRenderer::camera->MoveCamera({ 0.f,-1.f }, 100.f);
 		}
-		else if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_J))
+		else if (SAGE_Input_Handler::Get_Key(SAGE_KEY_J))
 		{
 			SageRenderer::camera->MoveCamera({ -1.f,0.f }, 100.f);
 		}
-		else if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_L))
+		else if (SAGE_Input_Handler::Get_Key(SAGE_KEY_L))
 		{
 			SageRenderer::camera->MoveCamera({ 1.f,0.f }, 100.f);
 		}

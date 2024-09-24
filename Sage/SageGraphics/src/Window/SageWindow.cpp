@@ -6,6 +6,7 @@
 
 class SageWindow::SageWindowImpl
 {
+	
 	int posx, posy;
 	int width{}, height{};
 	
@@ -108,6 +109,7 @@ public:
 	}
 };
 
+SageWindow* SageWindow::active_window{ nullptr };
 
 SageWindow::SageWindow(int width, int height, const char* title) : posx{}, posy{}, width{ width }, height{ height }, title{ title }
 , should_close{ false }, is_fullscreen{ false }, is_resizable{ false }, enable_maximize{ false }, is_active{ false }
@@ -123,12 +125,14 @@ SageWindow::~SageWindow()
 void SageWindow::Activate_Context()
 {
 	is_active = true;
+	active_window = this;
 	window_internal_impl->Activate_Context();
 }
 
 void SageWindow::Deactivate_Context()
 {
 	is_active = false;
+	active_window = nullptr;
 	window_internal_impl->Deactivate_Context();
 }
 
@@ -251,5 +255,9 @@ void SageWindow::set_framebuffer_callback()
 }
 
 
+SageWindow* SageWindow::Get_Active_Window()
+{
+	return active_window;
+}
 
 

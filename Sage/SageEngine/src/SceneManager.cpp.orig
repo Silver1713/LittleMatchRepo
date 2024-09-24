@@ -13,7 +13,6 @@
 #include "AssetLoader.hpp"
 #include "Prefabs.hpp"
 
-#include "SageRenderer.hpp"
 #include "SageHelper.hpp"
 #include "Key_Inputs.h"
 #include "SplashScreen.hpp"
@@ -117,7 +116,11 @@ namespace SM {
 
 	void Draw()
 	{
-		SageRenderer::ClearColor({ 0,0,0,1 });
+<<<<<<< .merge_file_aEw8fa
+		
+		SageMain::draw();
+=======
+>>>>>>> .merge_file_92ejm2
 		Game_Objects::Draw();
 		SM::fp_draw();
 
