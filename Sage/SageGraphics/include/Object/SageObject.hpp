@@ -3,12 +3,11 @@
 #include <string>
 #include <GL/glew.h>
 
-//#include "SageCameraInternal.hpp"
 #include "SageModel.hpp"
 #include "SageViewport.hpp"
 #include "SageShader.hpp"
 #include "SageTexture.h"
-
+class SageCamera;
 class SageModel;
 class SageObject
 {
@@ -26,6 +25,7 @@ public:
 
 		glm::mat3x3 calculate_model_matrix();
 
+		
 
 
 	};
@@ -70,7 +70,7 @@ public:
 	void init(char const* name, SageModel* model);
 	void update();
 	void draw(SageViewport* vp);
-	//void draw(SageCameraInternal2D* vp);
+	void draw(SageCamera* cam);
 	void attach_texture(SageTexture* texture);
 	//Camera;
 

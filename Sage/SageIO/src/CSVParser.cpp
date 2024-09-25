@@ -1,3 +1,16 @@
+/* Start Header ************************************************************************/
+/*!
+\file		CSVParser.cpp
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
+\par		b.muhammadhafiz@digipen.edu
+\date		08 September 2024
+\brief		A generic parser to read and organise data from a CSV to Parsed_CSV struct
+			that can be read by the AssetLoader.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include <string>
 #include <iostream>
 #include <fstream>

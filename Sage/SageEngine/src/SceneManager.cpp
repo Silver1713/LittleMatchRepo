@@ -1,42 +1,45 @@
 /* Start Header ************************************************************************/
 /*!
 \file		SceneManager.cpp
-\title		
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
 \date		08 September 2024
-\brief		Contains the definitions of functions relating to scene management
+\brief		Contains the definitions of functions that defines the scene management aspect
+			of the engine. Stores the function pointers to determine which scene is being
+			loaded, including the fadescreen used to transition between scenes.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content Â© 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #include "AssetLoader.hpp"
 #include "Prefabs.hpp"
-#include "SageMain.hpp"
+
 #include "SageHelper.hpp"
 #include "Key_Inputs.h"
 #include "SplashScreen.hpp"
 #include "SceneManager.hpp"
-
 #include "GameObjects.hpp"
 
 #include <iostream>
 
-static bool scene_has_loaded{ false };
-static bool scene_has_initialized{ false };
-
-static bool scene_faded_in{ false };
-static bool scene_faded_out{ true };
-
-static bool game_running{ true };
-static bool ignore_safety_bools{ false };
-
-const float fade_time{ 1.f };
-
-static GameObject fade_screen;
+#include "SageMain.hpp"
 
 #pragma region Public Functions
 namespace SM {	
+	static bool scene_has_loaded{ false };
+	static bool scene_has_initialized{ false };
+
+	static bool scene_faded_in{ false };
+	static bool scene_faded_out{ true };
+
+	static bool game_running{ true };
+	static bool ignore_safety_bools{ false };
+
+	const float fade_time{ 1.f };
+
+	static GameObject* fade_screen{ nullptr };
+
 	static Function_Ptr fp_load = Splash_Screen::Load;
 	static Function_Ptr fp_init = Splash_Screen::Init;
 	static Function_Ptr fp_input = Splash_Screen::Input;
@@ -81,17 +84,11 @@ namespace SM {
 	void Load()
 	{
 		SM::fp_load();
-
-		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 1000.f,1000.f, 0.0f });
-		fade_screen.Add_Component(std::make_unique<Transform>(t));
-		Sprite2D s({ "" }, { 0.f,0.f,0.f,1.f });
-		fade_screen.Add_Component(std::make_unique<Sprite2D>(s));
-		Game_Objects::Add_Game_Object(&fade_screen);
+		fade_screen = Game_Objects::Instantiate(Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen");
 	}
 
 	void Init()
 	{
-		SageMain::init();
 		SAGE_Input_Handler::init();
 
 		SM::fp_init();
@@ -101,27 +98,28 @@ namespace SM {
 	void Input()
 	{
 		SAGE_Input_Handler::update();
+		SM::fp_input();
 	}
 
 	void Update()
 	{
 		Fade_In();
 		Fade_Out();
-		SageMain::update();
 		Game_Objects::Update();
 		SM::fp_update();
 	}
 
 	void Draw()
 	{
-		SageMain::draw();
+		Game_Objects::Draw();
 		SM::fp_draw();
+
 	}
 
 	void Free()
 	{
 		SM::fp_free();
-		SageMain::exit();		
+	
 	}
 
 	void Unload()
@@ -174,10 +172,10 @@ namespace SM {
 		float dt = (float)SageHelper::delta_time;
 
 		if (alpha > 0.0f)
-		{			
+		{
 			alpha -= dt * (1.0f / fade_time);
-			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D)->get());
-			s->Set_Transparency(alpha);			
+			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen->Get_Component(SPRITE2D));
+			s->Set_Transparency(alpha);
 			return;
 		}
 		else
@@ -202,7 +200,7 @@ namespace SM {
 		if (alpha < 1.0f)
 		{
 			alpha += dt * (1.0f / fade_time);
-			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D)->get());
+			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen->Get_Component(SPRITE2D));
 			s->Set_Transparency(alpha);
 			return;
 		}

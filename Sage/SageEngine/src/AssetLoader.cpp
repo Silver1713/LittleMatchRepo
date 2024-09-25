@@ -1,3 +1,19 @@
+/* Start Header ************************************************************************/
+/*!
+\file		AssetLoader.cpp
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
+\par		b.muhammadhafiz@digipen.edu
+\date		08 September 2024
+\brief		Contains the data structures and functions for managing game assets,
+			including textures and prefabs. Currently includes the map of textures 
+			and created loaded_textures and loaded prefabs to be used as assets for the engine.
+			Calls the CSV parser to get data from files that is used here.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
+
 #include "AssetLoader.hpp"
 #include "CSVParser.hpp"
 
@@ -7,8 +23,6 @@
 #include <string>
 #include <vector>
 
-#include <GLFW/glfw3.h>
-#include "SOIL.H"
 
 namespace Assets
 {
@@ -49,6 +63,7 @@ namespace Assets
 		{
 			if (!(textures[_ID].is_loaded))
 			{
+				std::cout << _ID << std::endl;
 				loaded_textures[_ID].load_texture(textures[_ID].filepath.c_str(), SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
 				textures[_ID].is_loaded = true;
 

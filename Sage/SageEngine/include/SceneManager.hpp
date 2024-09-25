@@ -1,16 +1,17 @@
 /* Start Header ************************************************************************/
 /*!
-\file		SceneManager.h
-\title		
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
+\file		SceneManager.hpp
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
 \date		08 September 2024
-\brief		Contains the declarations of functions relating to scene management
+\brief		Contains the declarations of functions relating to scene management.
 
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #pragma once
+
 namespace SM {
 	typedef void(*Function_Ptr)();
 

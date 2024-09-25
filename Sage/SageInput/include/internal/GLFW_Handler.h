@@ -13,7 +13,7 @@ public:
 	static double mouse_pos_x;
 	static double mouse_pos_y;
 
-	static std::unordered_map<int, int> key_map;
+	static std::unordered_map<int, std::byte> key_map;
 
 
 
