@@ -85,7 +85,6 @@ namespace Game {
 	void Input()
 	{
 		//tests
-
 		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_W))
 		{
 			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * 100.0f,0.f });
