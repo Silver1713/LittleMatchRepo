@@ -86,7 +86,20 @@ namespace SM {
 	{
 		for (unsigned int i{}; i < current_level.prefabs.size(); i++)
 		{
-			Game_Objects::Instantiate(current_level.prefabs[i], current_level.identifier[i]);
+			GameObject* g;
+			Transform* t;
+			Sprite2D* s;
+			g = Game_Objects::Instantiate(current_level.prefabs[i], current_level.identifier[i]);
+			t = dynamic_cast<Transform*>(g->Get_Component(TRANSFORM));
+			t->Set_Positions({ current_level.positions[i][0],current_level.positions[i][1],current_level.positions[i][2] });
+			t->Set_Rotations({ current_level.rotations[i][0],current_level.rotations[i][1],current_level.rotations[i][2] });
+			t->Set_Scale({ current_level.scale[i][0],current_level.scale[i][1],current_level.scale[i][2] });
+
+			s = dynamic_cast<Sprite2D*>(g->Get_Component(SPRITE2D));
+			if (s)
+			{
+				s->Set_Colour({ current_level.color[i][0],current_level.color[i][1],current_level.color[i][2],current_level.color[i][3] });
+			}
 		}
 
 		SM::fp_load();

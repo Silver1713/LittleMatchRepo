@@ -1,3 +1,3 @@
 Prefab ID,Identifier,Position X,Position Y,Position Z,Rotation X,Rotation Y,Rotation Z,Scale X ,Scale Y,Scale Z,R,G ,B,A
 BLUE_SKY,Background,0,0,0,0,0,0,960,540,0,1,1,1,1
-RED,Player,0,0,0,0,0,0,100,100,0,1,0,0,1
+RED,Player,-500,0,0,0,0,0,100,100,0,1,0,0,1
