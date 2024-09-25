@@ -98,17 +98,12 @@ namespace MFEngine
         return Vector2D(-y, x);
     }
 
-    Vector2D Vector2D::rotate(const float angle) const {
+    Vector2D Vector2D::rotate(float angle) const {
         float rad = angle * (PI / 180.0f); // Converting degrees to radians
         float cosA = std::cos(rad);
         float sinA = std::sin(rad);
         return Vector2D(x * cosA - y * sinA, x * sinA + y * cosA);
     }
-
-    float Vector2D::cross(const Vector2D& v) const {
-        return (x * v.y) - (y * v.x);
-    }
-
 
     std::ostream& operator<<(std::ostream& os, const Vector2D& v) {
         os << '(' << v.x << ", " << v.y << ')';

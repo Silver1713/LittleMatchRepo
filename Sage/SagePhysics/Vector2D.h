@@ -35,9 +35,8 @@ namespace MFEngine
         void normalize();
         Vector2D normalized() const;
         float dot(const Vector2D& rhs) const;
-        float cross(const Vector2D& rhs) const;
         Vector2D normal() const;
-        Vector2D rotate(const float angle) const;
+        Vector2D rotate(float angle) const;
         static Vector2D zero();
 
         // Stream insertion

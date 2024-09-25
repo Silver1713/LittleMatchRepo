@@ -42,7 +42,7 @@ namespace MFEngine {
 		contact.b = b;
 
 		contact.normal = ab;
-		contact.normal.normalized();
+		contact.normal.Normie();
 
 		contact.start = b->bodyPosition - contact.normal * circB->radius;
 		contact.end = a->bodyPosition - contact.normal * circA->radius;
@@ -72,13 +72,13 @@ namespace MFEngine {
 
 		if (abSeparation > baSeparation) {
 			contact.collisionDepth = -abSeparation;
-			contact.normal = axisA.normalized();
+			contact.normal = axisA.Normie();
 			contact.start = pointA;
 			contact.end = pointA + contact.normal * contact.collisionDepth;
 		}
 		else {
 			contact.collisionDepth = -baSeparation;
-			contact.normal = -axisB.normalized();
+			contact.normal = -axisB.Normie();
 			contact.start = pointB - contact.normal * contact.collisionDepth;
 			contact.end = pointB;
 		}
@@ -100,11 +100,11 @@ namespace MFEngine {
 			int currV{ index };
 			int nextV = (static_cast<unsigned long long>(index) + 1) % polygonVertices.size();
 			Vector2D edge = polyShape->Edging(currV);
-			Vector2D normal = edge.normal();
+			Vector2D normal = edge.Normal();
 
 			//compare circle center with retangle vertex
 			Vector2D vertex2CircleCenter = cir->bodyPosition - polygonVertices[currV];
-			float projection = vertex2CircleCenter.dot(normal);
+			float projection = vertex2CircleCenter.Dot(normal);
 
 			//If dot product project is that outside of normal is found
 			if (projection > 0) {
@@ -130,7 +130,7 @@ namespace MFEngine {
 			Vector2D v1 = cir->bodyPosition - minCurrentVertex;
 			//nearest edge from current vertex to next
 			Vector2D v2 = minNextVertex - minCurrentVertex;
-			if (v1.dot(v2) < 0) {
+			if (v1.Dot(v2) < 0) {
 				//if distance from vertex to center of circle is greater than radius (no collision)
 				if (v1.magnitude() > circleShape->radius) {
 					return false;
@@ -140,7 +140,7 @@ namespace MFEngine {
 					contact.a = pol;
 					contact.b = cir;
 					contact.collisionDepth = circleShape->radius - v1.magnitude();
-					contact.normal - v1.normalized();
+					contact.normal - v1.Normie();
 					contact.start = cir->bodyPosition + (contact.normal * -circleShape->radius);
 					contact.end = contact.start + (contact.normal * contact.collisionDepth);
 				}
@@ -151,7 +151,7 @@ namespace MFEngine {
 				v1 = cir->bodyPosition - minNextVertex;
 				//nearest edge
 				v2 = minCurrentVertex - minNextVertex;
-				if (v1.dot(v2) < 0) {
+				if (v1.Dot(v2) < 0) {
 					//if distance from vertex to circle center is greater than radius (no collision)
 					if (v1.magnitude() > circleShape->radius) {
 						return false;
@@ -161,7 +161,7 @@ namespace MFEngine {
 						contact.a = pol;
 						contact.b = cir;
 						contact.collisionDepth = circleShape->radius - v1.magnitude();
-						contact.normal = v1.normalized();
+						contact.normal = v1.Normie();
 						contact.start = cir->bodyPosition + (contact.normal * -circleShape->radius);
 						contact.end = contact.start + (contact.normal * contact.collisionDepth);
 					}
@@ -175,7 +175,7 @@ namespace MFEngine {
 						contact.a = pol;
 						contact.b = cir;
 						contact.collisionDepth = circleShape->radius - distanceCircleEdge;
-						contact.normal = (minNextVertex - minCurrentVertex).normal();
+						contact.normal = (minNextVertex - minCurrentVertex).Normal();
 						contact.start = cir->bodyPosition - (contact.normal * circleShape->radius);
 						contact.end = contact.start + (contact.normal * contact.collisionDepth);
 					}
@@ -187,7 +187,7 @@ namespace MFEngine {
 			contact.a = pol;
 			contact.b = cir;
 			contact.collisionDepth = circleShape->radius - distanceCircleEdge;
-			contact.normal = (minNextVertex - minCurrentVertex).normal();
+			contact.normal = (minNextVertex - minCurrentVertex).Normal();
 			contact.start = cir->bodyPosition - (contact.normal * circleShape->radius);
 			contact.end = contact.start + (contact.normal * contact.collisionDepth);
 		}
