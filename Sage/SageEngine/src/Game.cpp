@@ -25,7 +25,7 @@
 
 //FOR TESTING PURPOSES
 #include <cstdlib> // for srand()
-static int const game_objects_to_create{ 2500 };
+static int const game_objects_to_create{ 0 };
 static float const min_pos[3]{ -960.0f,-540.0f,0.0f }, max_pos[3]{ 1920.0f,1080.0f,0.0f };
 static float const min_rot[3]{ 0.0f,0.0f,0.0f }, max_rot[3]{ 360.0f,360.0f,0.0f };
 static float const min_scale[3]{ 1.0f,1.0f,0.0f }, max_scale[3]{ 10.0f,10.0f,0.0f };
@@ -163,17 +163,29 @@ namespace Game {
 				game_objects[std::to_string(i)]->Disable();
 			}
 		}
-		if (SAGE_Input_Handler::Get_Mouse(SAGE_MOUSE_BUTTON_LEFT))
+		if (SAGE_Input_Handler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
 		{
-			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * 100.0f,0.f });
+			std::cout << "mouse clicked" << std::endl;
+			//GameObject* random;
+			GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("White"), "White_1");
+			transform_cache["White_1"] = dynamic_cast<Transform*>(random->Get_Component(TRANSFORM));
+
+			float pos[3]{ (float)(std::rand() % (int)max_pos[0] + (int)min_pos[0]), (float)(std::rand() % (int)max_pos[1] + (int)min_pos[1]),0.0f };
+			float rot[3]{ (float)(std::rand() % (int)max_rot[0] + (int)min_rot[0]), (float)(std::rand() % (int)max_rot[1] + (int)min_rot[1]),0.0f };
+			float scale[3]{ (float)(std::rand() % (int)max_scale[0] + (int)min_scale[0]), (float)(std::rand() % (int)max_scale[1] + (int)min_scale[1]),0.0f };
+			float col[3]{ (float)(std::rand() % (int)max_col[0] + (int)min_col[0]) / 100.0f, (float)(std::rand() % (int)max_col[1] + (int)min_col[1]) / 100.0f,(float)(std::rand() % (int)max_col[2] + (int)min_col[2]) / 100.0f };
+
+			transform_cache["White_1"]->Set_Positions({ pos[0],pos[1],pos[2] });
+			transform_cache["White_1"]->Set_Rotations({ rot[0],rot[1],rot[2] });
+			transform_cache["White_1"]->Set_Scale({ scale[0],scale[1],scale[2] });
 		}
-		if (SAGE_Input_Handler::Get_Mouse(SAGE_MOUSE_BUTTON_RIGHT))
+		if (SAGE_Input_Handler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_RIGHT))
 		{
-			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * (-100.0f),0.f });
+			transform_cache["Player"]->Translate({ 0.f,-100.0f,0.f });
 		}
-		if (SAGE_Input_Handler::Get_Mouse(SAGE_MOUSE_BUTTON_MIDDLE))
+		if (SAGE_Input_Handler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_MIDDLE))
 		{
-			transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * (-100.0f),0.f,0.f });
+			transform_cache["Player"]->Translate({ -100.0f,0.f,0.f });
 		}
 
 		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_3))

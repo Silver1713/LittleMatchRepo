@@ -13,6 +13,7 @@ bool GLFW_Input_Handler::Get_Key_Pressed(int keycode)
 {
 	if (key_map[keycode] == std::byte{1})
 	{
+		key_map[keycode] = std::byte{0};
 		return true;
 	}
 	else

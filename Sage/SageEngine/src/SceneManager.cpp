@@ -97,8 +97,9 @@ namespace SM {
 
 	void Input()
 	{
-		SAGE_Input_Handler::update();
+		
 		SM::fp_input();
+		SAGE_Input_Handler::update();
 	}
 
 	void Update()
