@@ -3,7 +3,7 @@
 #include "PhysicsBody.h"
 #include "PhysicsContact.h"
 
-namespace MFEngine {
+namespace PogEngine {
 	struct Transform;
 	class GameObject;
 

@@ -1,7 +1,7 @@
 #include "PhysicsBody.h"
-#include "Vector2D.h"
+#include "Vector2.h"
 
-namespace MFEngine {
+namespace PogEngine {
 	PhysicsBody::PhysicsBody(float x, float y, float m) {
 		shape = shape->Clone();
 		bodyPosition = Vector2D(x, y);
