@@ -32,8 +32,8 @@
 #include "Key_Inputs.h"
 
 #include "AssetLoader.hpp"
-#include "SceneManager.hpp"
 #include "Prefabs.hpp"
+#include "SceneManager.hpp"
 #include "SageAudio.hpp"
 #include "SageShaderManager.hpp"
 
@@ -95,19 +95,16 @@ void init()
     int status = SageHelper::init(1920, 1080, "Hello World");
     SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
 	SageRenderer::init();
-    
-
-
 
     if (status)
     {
         std::cerr << "Sage failed to create OpenGL context.";
 
         std::exit(EXIT_FAILURE);
-    }
-    
+    }    
     Assets::Textures::Init();
     Assets::Prefabs::Init();
+    Assets::Levels::Init();
     Prefabs::Init();
     SM::Load();
     SM::Init();

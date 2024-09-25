@@ -14,11 +14,10 @@
 /* End Header **************************************************************************/
 
 #include "AssetLoader.hpp"
+#include "Prefabs.hpp"
 #include "SageRenderer.hpp"
 #include "SageHelper.hpp"
-#include "Prefabs.hpp"
 #include "Key_Inputs.h"
-
 
 #include <iostream>
 #include <random>
@@ -37,8 +36,6 @@ namespace Game {
 
 	static std::unordered_map<std::string, GameObject*> game_objects;
 	static std::unordered_map<std::string, Transform*> transform_cache;
-	static GameObject* background;
-	static GameObject* player;
 
 	static SageCamera camera;
 	static SageViewport vp;
@@ -48,14 +45,12 @@ namespace Game {
 		game_objects.clear();
 		transform_cache.clear();
 
-		background = Game_Objects::Instantiate(Prefabs::Get_Prefab("BLUE_SKY"), "Blue_Sky");
-		player = Game_Objects::Instantiate(Prefabs::Get_Prefab("RED"), "Player");
-		transform_cache["Player"] = dynamic_cast<Transform*>(player->Get_Component(TRANSFORM));
+		transform_cache["Player"] = dynamic_cast<Transform*>(Game_Objects::Get_Game_Object("Player")->Get_Component(TRANSFORM));
 
 		//2.5k objects test
 		for (unsigned int i{}; i < game_objects_to_create; ++i)
 		{
-			game_objects[std::to_string(i)] = Game_Objects::Instantiate(Prefabs::Get_Prefab("WHITE"), "White_" + std::to_string(i));
+			game_objects[std::to_string(i)] = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("WHITE"), "White_" + std::to_string(i));
 			transform_cache[std::to_string(i)] = dynamic_cast<Transform*>(game_objects[std::to_string(i)]->Get_Component(TRANSFORM));
 
 			float pos[3]{ (float)(std::rand() % (int)max_pos[0] + (int)min_pos[0]), (float)(std::rand() % (int)max_pos[1] + (int)min_pos[1]),0.0f };
@@ -175,7 +170,7 @@ namespace Game {
 					float pos[3]{ (float)(std::rand() % (int)max_pos[0] + (int)min_pos[0]), (float)(std::rand() % (int)max_pos[1] + (int)min_pos[1]),0.0f };
 					float rot[3]{ (float)(std::rand() % (int)max_rot[0] + (int)min_rot[0]), (float)(std::rand() % (int)max_rot[1] + (int)min_rot[1]),0.0f };
 
-					game_objects["Green" + std::to_string(i)] = Game_Objects::Instantiate(Prefabs::Get_Prefab("GREEN"), "Green" + std::to_string(i));
+					game_objects["Green" + std::to_string(i)] = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("GREEN"), "Green" + std::to_string(i));
 					transform_cache["Green" + std::to_string(i)] = dynamic_cast<Transform*>(game_objects["Green" + std::to_string(i)]->Get_Component(TRANSFORM));
 
 					transform_cache["Green" + std::to_string(i)]->Set_Positions({ pos[0],pos[1],pos[2] });
