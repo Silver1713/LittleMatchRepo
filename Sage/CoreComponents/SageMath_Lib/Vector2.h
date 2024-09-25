@@ -78,7 +78,7 @@ namespace ToastBox {
 		float productCrossMag(const Vec2& pVec0) const;
 
 		//Rotate
-		Vec2 rotate(const float angle) const;
+		void rotate(float angle);
 
 		void clear();
 

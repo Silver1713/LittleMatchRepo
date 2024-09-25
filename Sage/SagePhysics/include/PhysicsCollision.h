@@ -1,7 +1,9 @@
 #pragma once
 
+#include "Vector2D.h"
 #include "PhysicsBody.h"
 #include "PhysicsContact.h"
+
 
 namespace PogEngine {
 	struct Transform;
