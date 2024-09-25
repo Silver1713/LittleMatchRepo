@@ -81,19 +81,19 @@ void GLFW_Input_Handler::mouse_cb(GLFWwindow* window, int button, int action, in
 	case GLFW_PRESS:
 		key_map[button] = std::byte{ 1 };
 #if _DEBUG
-		std::cout << "Key is Pressed\n";
+		std::cout << "Mouse is Pressed\n";
 #endif
 		break;
 	case GLFW_RELEASE:
 		key_map[button] = std::byte{ 0 };
 #if _DEBUG
-		std::cout << "Key is Released\n";
+		std::cout << "Mouse is Released\n";
 #endif
 		break;
 	case GLFW_REPEAT:
 		key_map[button] = std::byte{ 2 };
 #if _DEBUG
-		std::cout << "Key is Hold\n";
+		std::cout << "Mouse is Hold\n";
 #endif
 		break;
 	default:

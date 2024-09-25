@@ -163,6 +163,19 @@ namespace Game {
 				game_objects[std::to_string(i)]->Disable();
 			}
 		}
+		if (SAGE_Input_Handler::Get_Mouse(SAGE_MOUSE_BUTTON_LEFT))
+		{
+			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * 100.0f,0.f });
+		}
+		if (SAGE_Input_Handler::Get_Mouse(SAGE_MOUSE_BUTTON_RIGHT))
+		{
+			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * (-100.0f),0.f });
+		}
+		if (SAGE_Input_Handler::Get_Mouse(SAGE_MOUSE_BUTTON_MIDDLE))
+		{
+			transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * (-100.0f),0.f,0.f });
+		}
+
 		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_3))
 		{
 			//other tests
