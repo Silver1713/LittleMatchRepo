@@ -86,7 +86,6 @@ int main()
 
 	}
 	exit();
-    std::cout << "End\n";
 	return 0;
 }
 
