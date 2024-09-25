@@ -1,15 +1,3 @@
-/* Start Header ************************************************************************/
-/*!
-\file		Game.cpp
-\title		
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
-\par		b.muhammadhafiz@digipen.edu
-\date		15 September 2024
-\brief		Contains the declarations of functions handling the game scene.
-
-			All content � 2024 DigiPen Institute of Technology Singapore. All rights reserved.						
-*/
-/* End Header **************************************************************************/
 #include "SageAudio.hpp"
 #include <backward.hpp>
 #include <cassert>

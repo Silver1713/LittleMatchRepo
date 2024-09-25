@@ -1,8 +1,8 @@
 /* Start Header ************************************************************************/
 /*!
-\file		Splash_Screen.h
-\title		
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
+\file		SplashScreen.hpp
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
 \date		08 September 2024
 \brief		Contains the declarations of functions handling the splash screen scene.

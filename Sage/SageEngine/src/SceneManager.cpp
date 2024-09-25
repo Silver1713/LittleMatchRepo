@@ -1,13 +1,15 @@
 /* Start Header ************************************************************************/
 /*!
 \file		SceneManager.cpp
-\title		
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
 \date		08 September 2024
-\brief		Contains the definitions of functions relating to scene management
+\brief		Contains the definitions of functions that defines the scene management aspect
+			of the engine. Stores the function pointers to determine which scene is being
+			loaded, including the fadescreen used to transition between scenes.
 
-			All content � 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #include "AssetLoader.hpp"
@@ -82,14 +84,7 @@ namespace SM {
 	void Load()
 	{
 		SM::fp_load();
-
-		//Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 1000.f,1000.f, 0.0f });
-		//fade_screen.Add_Component(std::make_unique<Transform>(t));
-		//Sprite2D s({ "" }, { 0.f,0.f,0.f,1.f });
-		//fade_screen.Add_Component(std::make_unique<Sprite2D>(s));
-		//Game_Objects::Add_Game_Object(&fade_screen);
 		fade_screen = Game_Objects::Instantiate(Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen");
-
 	}
 
 	void Init()

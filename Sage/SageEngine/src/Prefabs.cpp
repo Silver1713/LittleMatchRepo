@@ -1,3 +1,17 @@
+/* Start Header ************************************************************************/
+/*!
+\file		Prefabs.cpp
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
+\par		b.muhammadhafiz@digipen.edu
+\date		10 September 2024
+\brief		Contains the definitions of functions that is used to initialize prefabs via
+			file i/o and to get specific prefabs from the map in order to order the
+			instantiation of copies of specific prefabs.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "GameObjects.hpp"
 #include "Prefabs.hpp"
 #include "AssetLoader.hpp"

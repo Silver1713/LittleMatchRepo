@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file		GameObjects.cpp
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
+\par		b.muhammadhafiz@digipen.edu
+\date		08 September 2024
+\brief		Contains the definitions of functions that handles the individual gameobjects
+			and includes the handler of the map of gameobjects which is pointed to by everywhere
+			that uses gameobjects. Also contains the gameobject constructor which setup itself
+			based on the prefab that is passed into.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "GameObjects.hpp"
 #include "Prefabs.hpp"
 #include "Components/Components.hpp"
@@ -7,7 +22,6 @@
 #include <string>
 #include <memory>
 #include <iostream>
-
 
 namespace Game_Objects
 {

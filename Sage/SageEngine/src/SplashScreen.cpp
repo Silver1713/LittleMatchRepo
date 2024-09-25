@@ -1,13 +1,15 @@
 /* Start Header ************************************************************************/
 /*!
 \file		SplashScreen.cpp
-\title		
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
 \date		08 September 2024
-\brief		Contains the declarations of functions handling the splash screen scene.
+\brief		Contains the definitions of functions that define the splash screen scene.
+			Called by SceneManager as function pointers to determine which scene the game
+			is in currently.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.						
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #include "SageRenderer.hpp"

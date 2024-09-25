@@ -1,7 +1,20 @@
+/* Start Header ************************************************************************/
+/*!
+\file		Prefabs.cpp
+\title		Memory's Flame
+\authors	Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (40%)
+            Halis (20%)
+            Jia Hao (40%)
+\par		b.muhammadhafiz@digipen.edu, halis digipen, jia hao digipen
+\date		10 September 2024
+\brief		This is the main entry point for the engine.
+            It include libraries and manages life cycle of the engine.
+
+            All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
+
 /*
- * This is the main entry point for the engine,
- *	It include libraries and manages life cycle of the engine.
- *
  *	@note: You may test your components here. This is where
  *	all the libs is being compiled and run.
  *
@@ -10,8 +23,6 @@
  *	Private (internal) headers cannot be included.
  *
  */
-
-
 
 #include <iostream>
 #include <numeric>
