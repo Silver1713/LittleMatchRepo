@@ -36,7 +36,7 @@ namespace SM {
 	static bool game_running{ true };
 	static bool ignore_safety_bools{ false };
 
-	const float fade_time{ 1.f };
+	const float fade_time{ 0.5f };
 
 	static GameObject* fade_screen{ nullptr };
 	static Assets::Levels::Level current_level;
