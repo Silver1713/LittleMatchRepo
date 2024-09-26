@@ -29,7 +29,7 @@
 #include "SageViewport.hpp"
 namespace Splash_Screen {
 	static float time_elapsed{};
-	static float const wait_time{ 0.5f };
+	static float const wait_time{ 1.f };
 	static GameObject* digipen_splash_screen;
 
 	static SageCamera camera;
@@ -78,7 +78,7 @@ namespace Splash_Screen {
 			if (SM::Has_Faded_Out())
 			{
 				is_triggered = false;				
-				SM::Go_To_Next_Scene("Level_1");
+				SM::Go_To_Next_Scene();
 				SM::Start_Fade_In();
 			}
 		}

@@ -26,9 +26,8 @@ namespace SM {
 	bool const& Has_Faded_In();
 	bool const& Has_Faded_Out();
 
-	void Set_Current_Level(std::string const& _level_identifier);
 	void Set_Next_Scene(void(*_load)(), void(*_init)(), void (*_input)(), void(*_update)(), void (*_draw)(), void (*_free)(), void (*_unload)());
-	void Go_To_Next_Scene(std::string const& _level_identifier);
+	void Go_To_Next_Scene();
 	void Restart_Scene();
 
 	void Load();
