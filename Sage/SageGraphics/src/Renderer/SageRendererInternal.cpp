@@ -284,7 +284,7 @@ void SageRendererInternal::SetAlpha(float alpha)
 	default_config.render_alpha = alpha;
 }
 
-void SageRendererInternal::SetBorderColor(glm::vec4 color)
+void SageRendererInternal::SetBorderColor(ToastBox::Vec4 color)
 {
 	default_config.border_color = color;
 }
@@ -466,7 +466,7 @@ void SageRendererInternal::DrawPoint(ToastBox::Vec2 position, ToastBox::Vec4 col
 }
 
 
-void SageRendererInternal::SetColor(glm::vec4 color)
+void SageRendererInternal::SetColor(ToastBox::Vec4 color)
 {
 	default_config.color = color;
 }

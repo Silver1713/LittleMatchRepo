@@ -119,6 +119,10 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	}
 	if (!(_p.collision_data == "Nil"))
 	{
+		auto collider = std::make_unique<BoxCollider2D>(_p.collider_width, _p.collider_height);
+		collider->Init(this);  // Ensure to initialize the collider with the GameObject context
+		Add_Component(std::move(collider));
+
 		Add_Component(std::make_unique<BoxCollider2D>());
 	}
 	if (!(_p.audio_data == "Nil"))
@@ -207,7 +211,7 @@ void GameObject::Add_Component(std::unique_ptr<Component> _c)
 
 Component* GameObject::Get_Component(ComponentType _type)
 {
-	for (auto& c : components)
+	for (const auto& c : components)
 	{
 		if (c->Get_Component_Type() == _type)
 		{

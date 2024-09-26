@@ -13,11 +13,40 @@
 /* End Header **************************************************************************/
 #pragma once
 #include "Components/Component.hpp"
+#include "GameObjects.hpp"
+#include "Shapes.h"
 
 class BoxCollider2D : public Component
 {
-	void Init(GameObject* _parent) override;
-	void Update() override;
-	void Exit() override;
-	ComponentType Get_Component_Type() override;
+private:
+	//float x, y;	// position of collider
+	//float width, height; // dimension of collider
+
+    ToastBox::Rectangle rect;
+
+public:
+    BoxCollider2D(); // Default constructor
+    BoxCollider2D(float width, float height); // Parameterized constructor
+
+    // Initialization and lifecycle methods
+    void Init(GameObject* _parent) override;   // Initialization with GameObject
+    void Update() override;                    // Update method for collision detection
+    void Draw() override;                // Draw the collider (for debugging purposes)
+    void Exit() override;                      // Cleanup resources if necessary
+
+    // Getter and Setter methods for position and size
+    float GetX() const;                        // Get the x position of the collider
+    float GetY() const;                        // Get the y position of the collider
+    float GetWidth() const;                    // Get the width of the collider
+    float GetHeight() const;                   // Get the height of the collider
+
+    // Collision detection functions
+    void UpdatePosition();                     // Update the position based on the parent transform
+    void CheckCollisions();                    // Check for collisions with other colliders
+    void CheckBoundaryCollisions();            // Check for collisions with screen boundaries
+    bool IsCollidingWith(const BoxCollider2D* other) const; // Check collision with another collider
+    void HandleCollision(BoxCollider2D* other); // Handle the collision event
+    void ResolveCollision(BoxCollider2D* other); // Specific collision resolution logic
+
+    ComponentType Get_Component_Type() override;  // Return component type
 };

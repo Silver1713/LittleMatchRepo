@@ -16,6 +16,13 @@ struct SageHelper
 	static GLFWwindow* ptr_window;
 	static std::map<int, std::byte> key_map;
 
+	static int GetScreenWidth() { return WINDOW_WIDTH; }
+	static int GetScreenHeight() { return WINDOW_HEIGHT; }
+	static float GetScreenLeft() { return 0.0f; }
+	static float GetScreenRight() { return static_cast<float>(WINDOW_WIDTH); }
+	static float GetScreenTop() { return 0.0f; }
+	static float GetScreenBottom() { return static_cast<float>(WINDOW_HEIGHT); }
+
 	static double delta_time;
 	static double fixed_delta_time;
 	static double FPS;

@@ -1,14 +1,15 @@
-/******************************************************************************
-File name	 : Matrix4x4.h
-Project		 : Memory's Flame
-Author       : Edwin Lee Zirui
-E-mail		 : edwinzirui.lee@digipen.edu
-Data		 : 12/09/2024
-Brief		 : Matrix4x4 class and class operation declaration
-*
-* \copyright	All content 2024 DigiPen Institute of Technology Singapore. All
-				rights reserved.
-******************************************************************************/
+/* Start Header ************************************************************************/
+/*!
+\file		Matrix4x4.h
+\title		Memory's Flame
+\author		Edwin Lee Zirui, edwinzirui.lee, 2301299 (100%)
+\par		edwinzirui.lee@digipen.edu
+\date		12 September 2024
+\brief		Matrix4x4 class and class operation declaration
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 
 #pragma once
 #include "Vector2.h"

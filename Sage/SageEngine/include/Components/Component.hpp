@@ -41,7 +41,7 @@ public:
 	virtual void Exit();
 	virtual ComponentType Get_Component_Type();
 
-	GameObject* Get_Parent();
+	GameObject* Get_Parent() const;
 	void Set_Parent(GameObject* const _parent);
 };
 
