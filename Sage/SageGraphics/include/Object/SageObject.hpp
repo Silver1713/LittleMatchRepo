@@ -37,8 +37,8 @@ public:
 
 	struct SageMaterial
 	{
-		ToastBox::Vec4 color;
-		ToastBox::Vec4 border_color;
+		glm::vec4 color;
+		glm::vec4 border_color;
 
 
 		bool enable_texture;

@@ -92,7 +92,7 @@ void SageRenderer::SetAlpha(float alpha)
 	SageRendererInternal::SetAlpha(alpha);
 }
 
-void SageRenderer::SetBorderColor(ToastBox::Vec4 color)
+void SageRenderer::SetBorderColor(glm::vec4 color)
 {
 	default_config.border_color = color;
 	SageRendererInternal::SetBorderColor(color);
@@ -153,7 +153,7 @@ void SageRenderer::DrawPoint(ToastBox::Vec2 position, ToastBox::Vec4 color, floa
 }
 
 
-void SageRenderer::SetColor(ToastBox::Vec4 color)
+void SageRenderer::SetColor(glm::vec4 color)
 {
 	default_config.color = color;
 	SageRendererInternal::SetColor(color);
@@ -162,7 +162,7 @@ void SageRenderer::SetColor(ToastBox::Vec4 color)
 
 
 
-RENDER_CONFIG::RENDER_CONFIG(unsigned int options, float render_alpha, float border_width, ToastBox::Vec4 color, ToastBox::Vec4 border_color, float border_radius, SageShader* shader, glm::mat3 transformation_matrix, ToastBox::Matrix3x3 matrix, SageTexture* current_texture)
+RENDER_CONFIG::RENDER_CONFIG(unsigned int options, float render_alpha, float border_width, glm::vec4 color, glm::vec4 border_color, float border_radius, SageShader* shader, glm::mat3 transformation_matrix, ToastBox::Matrix3x3 matrix, SageTexture* current_texture)
 {
 	this->options = options;
 	this->render_alpha = render_alpha;
@@ -180,16 +180,5 @@ void SageRenderer::ClearColor(ToastBox::Vec4 clr)
 {
 	SageRendererInternal::ClearColor(clr);
 
-}
-
-// added for BoxCollider2D
-void SageRenderer::DrawDebugRect(float x, float y, float width, float height, ToastBox::Vec4 borderColor, float borderWidth) {
-	RENDER_CONFIG originalConfig = default_config;
-	default_config.border_color = borderColor;
-	default_config.border_width = borderWidth;
-	default_config.color = ToastBox::Vec4(0, 0, 0, 0);
-	default_config.options |= SAGE_ENABLE_BORDER;
-	DrawRect(x, y, width, height, ToastBox::Vec4(0, 0, 0, 0));
-	default_config = originalConfig;
 }
 

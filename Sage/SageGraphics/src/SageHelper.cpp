@@ -250,8 +250,6 @@ bool SageHelper::Get_Key_Pressed(int key)
 
 void SageHelper::framebuffer_size_cb(GLFWwindow* window, int width, int height)
 {
-	WINDOW_WIDTH = width;
-	WINDOW_HEIGHT = height;
 #if _DEBUG
 	std::cout << "Framebuffer Size: width: " << width << ", height: " << height << '\n';
 #endif

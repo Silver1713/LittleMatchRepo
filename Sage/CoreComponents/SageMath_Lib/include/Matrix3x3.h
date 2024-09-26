@@ -1,16 +1,16 @@
-/* Start Header ************************************************************************/
-/*!
-\file		Matrix3x3.h
-\title		Memory's Flame
-\author		Edwin Lee Zirui, edwinzirui.lee, 2301299 (100%)
-\par		edwinzirui.lee@digipen.edu
-\date		11 September 2024
-\brief		Matrix3x3 class and class operation declaration
-
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
-*/
-/* End Header **************************************************************************/
+/******************************************************************************
+File name	 : Matrix3x3.h
+Project		 : Memory's Flame
+Author       : Edwin Lee
+E-mail		 : edwinzirui.lee@digipen.edu
+Data		 : 11/09/2024
+Brief		 : Matrix3x3 class and class operation declaration
+*
+* \copyright	All content 2024 DigiPen Institute of Technology Singapore. All
+				rights reserved.
+******************************************************************************/
 #pragma once
+
 
 namespace ToastBox {
 	class Vec3;

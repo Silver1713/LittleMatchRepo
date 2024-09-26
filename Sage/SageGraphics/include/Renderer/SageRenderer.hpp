@@ -52,13 +52,13 @@ enum SHAPE
 struct RENDER_CONFIG
 {
 	unsigned int options;
-	ToastBox::Vec4 color;
+	glm::vec4 color;
 	float render_alpha;
 
 
 	float border_width;
 	float border_radius;
-	ToastBox::Vec4 border_color;
+	glm::vec4 border_color;
 
 	SageShader* shader;
 
@@ -68,7 +68,7 @@ struct RENDER_CONFIG
 	SageTexture* current_texture;
 
 
-	RENDER_CONFIG(unsigned int options = 0, float render_alpha = 1.f, float border_width = 0, ToastBox::Vec4 color = { 0,0,0,1 }, ToastBox::Vec4 border_color = { 0,0,0,1 }, float border_radius = 0, SageShader* shader = nullptr, glm::mat3 transformation_matrix = glm::mat3(1.f), ToastBox::Matrix3x3 matrix = ToastBox::Matrix3x3(), SageTexture* current_texture = nullptr);
+	RENDER_CONFIG(unsigned int options = 0, float render_alpha = 1.f, float border_width = 0, glm::vec4 color = { 0,0,0,1 }, glm::vec4 border_color = { 0,0,0,1 }, float border_radius = 0, SageShader* shader = nullptr, glm::mat3 transformation_matrix = glm::mat3(1.f), ToastBox::Matrix3x3 matrix = ToastBox::Matrix3x3(), SageTexture* current_texture = nullptr);
 
 	
 
@@ -117,14 +117,11 @@ struct SageRenderer
 
 	static void SetBorderWidth(float width);
 	static void SetBorderRadius(float radius);
-	static void SetBorderColor(ToastBox::Vec4 color);
-	static void SetColor(ToastBox::Vec4 color);
+	static void SetBorderColor(glm::vec4 color);
+	static void SetColor(glm::vec4 color);
 	static void SetAlpha(float alpha);
 	static void SetTransformationMatrix(glm::mat3& matrix);
 	static void ClearColor(ToastBox::Vec4 clr);
-
-	static void DrawDebugRect(float x, float y, float width, float height, ToastBox::Vec4 borderColor, float borderWidth);
-
 
 };
 

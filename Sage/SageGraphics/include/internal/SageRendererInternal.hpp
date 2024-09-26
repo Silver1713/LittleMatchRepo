@@ -24,13 +24,13 @@ class SageCamera;
 struct RENDER_CONFIG_INTERNAL
 {
 	unsigned int options;
-	ToastBox::Vec4 color;
+	glm::vec4 color;
 	float render_alpha;
 
 
 	float border_width;
 	float border_radius;
-	ToastBox::Vec4 border_color;
+	glm::vec4 border_color;
 
 	SageShader* shader;
 
@@ -118,8 +118,8 @@ struct SageRendererInternal
 
 	static void SetBorderWidth(float width);
 	static void SetBorderRadius(float radius);
-	static void SetBorderColor(ToastBox::Vec4 color);
-	static void SetColor(ToastBox::Vec4 color);
+	static void SetBorderColor(glm::vec4 color);
+	static void SetColor(glm::vec4 color);
 	static void SetAlpha(float alpha);
 	static void SetTransformationMatrix(glm::mat3& matrix);
 	static void ClearColor(ToastBox::Vec4 clr);

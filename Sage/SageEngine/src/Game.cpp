@@ -18,7 +18,6 @@
 #include "SageHelper.hpp"
 #include "Prefabs.hpp"
 #include "Key_Inputs.h"
-#include "Components/BoxCollider2D.hpp"
 
 
 #include <iostream>
@@ -51,10 +50,7 @@ namespace Game {
 
 		background = Game_Objects::Instantiate(Prefabs::Get_Prefab("BLUE_SKY"), "Blue_Sky");
 		player = Game_Objects::Instantiate(Prefabs::Get_Prefab("RED"), "Player");
-
-		BoxCollider2D* playerCollider = new BoxCollider2D(100, 100);  // Adjust size as needed
-		player->Add_Component(playerCollider);
-		
+		transform_cache["Player"] = dynamic_cast<Transform*>(player->Get_Component(TRANSFORM));
 
 		//2.5k objects test
 		for (unsigned int i{}; i < game_objects_to_create; ++i)
@@ -216,36 +212,12 @@ namespace Game {
 			transform_cache[std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f,0.0f });
 		}
 
-		// Handle all game logic updates
-		for (auto& [key, obj] : game_objects) {
-			auto collider = dynamic_cast<BoxCollider2D*>(obj->Get_Component(BOXCOLLIDER2D));
-			if (collider) {
-				collider->Update();
-			}
-		}
-
 		camera.update();
 
 	}
 
-	void Draw() 
+	void Draw()
 	{
-		for (const auto& [key, obj] : game_objects) {
-			if (obj->Is_Enabled()) {
-				auto collider = dynamic_cast<BoxCollider2D*>(obj->Get_Component(BOXCOLLIDER2D));
-				if (collider) {
-					collider->Draw();
-				}
-			}
-		}
-
-		// Draw player's collider separately if not in game_objects
-		if (player) {
-			auto playerCollider = dynamic_cast<BoxCollider2D*>(player->Get_Component(BOXCOLLIDER2D));
-			if (playerCollider) {
-				playerCollider->Draw();
-			}
-		}
 	}
 
 	void Free()
