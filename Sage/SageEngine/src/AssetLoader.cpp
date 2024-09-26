@@ -130,6 +130,8 @@ namespace Assets
 					p.colour[3] = std::stof(source.comma_seperated_data[i].associated_data[COLOR_A]);
 					p.sprite_texture_ID = source.comma_seperated_data[i].associated_data[SPRITE_TEXTURE_ID];
 					p.collision_data = source.comma_seperated_data[i].associated_data[COL_D];
+					p.has_physics = source.comma_seperated_data[i].associated_data[HAS_PHYSICS];
+					p.velocity = std::stof(source.comma_seperated_data[i].associated_data[PHYSICS_VELOCITY]);
 					p.audio_data = source.comma_seperated_data[i].associated_data[AUDIO_D];
 
 					generated_prefabs[p.prefab_ID] = p;

@@ -13,36 +13,23 @@
 */
 /* End Header **************************************************************************/
 #pragma once
-#include <string>
-#include <initializer_list>
+#include "Components/Component.hpp"
 
-class GameObject;
-class SageObject;
-
-typedef enum {
-	COMPONENT,
-	TRANSFORM,
-	SPRITE2D,
-	PHYSICS,
-	BOXCOLLIDER2D,
-	AUDIO,
-	NUM_OF_TYPES_OF_COMPONENTS
-} ComponentType;
-
-class Component
+class Physics : public Component
 {
 private:
-	GameObject* parent{ nullptr };
+	float velocity{};
+	float cur_velocity{};
+	//add whatever member properties u want for physics
 
 public:
-	virtual ~Component() = default;
-	virtual void Init(GameObject* _parent);
-	virtual void Update();
-	virtual void Draw();
-	virtual void Exit();
-	virtual ComponentType Get_Component_Type();
+	Physics();
+	Physics(float _velocity);
 
-	GameObject* Get_Parent();
-	void Set_Parent(GameObject* const _parent);
+	void Init(GameObject* _parent) override;
+	void Update() override;
+	void Exit() override;
+	ComponentType Get_Component_Type() override;
+
+	//add whatever declarations of getters/setters u need for physics
 };
-

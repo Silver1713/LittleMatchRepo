@@ -53,12 +53,14 @@ namespace Assets
 		struct Prefab
 		{
 			std::string prefab_ID{};
-			float positions[3] = {};
-			float rotations[3] = {};
-			float scale[3] = {};
-			float colour[4] = {};
+			float positions[3]{};
+			float rotations[3]{};
+			float scale[3]{};
+			float colour[4]{};
 			std::string sprite_texture_ID{};
 			std::string collision_data{};
+			std::string has_physics{};
+			float velocity{};
 			std::string audio_data{};
 		};
 
@@ -80,6 +82,8 @@ namespace Assets
 			COLOR_A,
 			SPRITE_TEXTURE_ID,
 			COL_D,
+			HAS_PHYSICS,
+			PHYSICS_VELOCITY,
 			AUDIO_D,
 			NUM_DATA_TYPES
 		} Data_Type;
