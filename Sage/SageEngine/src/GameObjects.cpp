@@ -14,7 +14,6 @@
 */
 /* End Header **************************************************************************/
 #include "GameObjects.hpp"
-#include "Prefabs.hpp"
 #include "Components/Components.hpp"
 #include "SageObjectManager.hpp"
 
@@ -124,6 +123,10 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 		Add_Component(std::move(collider));
 
 		Add_Component(std::make_unique<BoxCollider2D>());
+	}
+	if (!(_p.has_physics == "Nil"))
+	{
+		Add_Component(std::make_unique<Physics>(_p.velocity));
 	}
 	if (!(_p.audio_data == "Nil"))
 	{

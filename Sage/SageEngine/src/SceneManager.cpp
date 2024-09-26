@@ -36,9 +36,10 @@ namespace SM {
 	static bool game_running{ true };
 	static bool ignore_safety_bools{ false };
 
-	const float fade_time{ 1.f };
+	const float fade_time{ 0.5f };
 
 	static GameObject* fade_screen{ nullptr };
+	static Assets::Levels::Level current_level;
 
 	static Function_Ptr fp_load = Splash_Screen::Load;
 	static Function_Ptr fp_init = Splash_Screen::Init;
@@ -83,8 +84,26 @@ namespace SM {
 
 	void Load()
 	{
+		for (unsigned int i{}; i < current_level.prefabs.size(); i++)
+		{
+			GameObject* g;
+			Transform* t;
+			Sprite2D* s;
+			g = Game_Objects::Instantiate(current_level.prefabs[i], current_level.identifier[i]);
+			t = dynamic_cast<Transform*>(g->Get_Component(TRANSFORM));
+			t->Set_Positions({ current_level.positions[i][0],current_level.positions[i][1],current_level.positions[i][2] });
+			t->Set_Rotations({ current_level.rotations[i][0],current_level.rotations[i][1],current_level.rotations[i][2] });
+			t->Set_Scale({ current_level.scale[i][0],current_level.scale[i][1],current_level.scale[i][2] });
+
+			s = dynamic_cast<Sprite2D*>(g->Get_Component(SPRITE2D));
+			if (s)
+			{
+				s->Set_Colour({ current_level.color[i][0],current_level.color[i][1],current_level.color[i][2],current_level.color[i][3] });
+			}
+		}
+
 		SM::fp_load();
-		fade_screen = Game_Objects::Instantiate(Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen");
+		fade_screen = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen");
 	}
 
 	void Init()
@@ -92,7 +111,7 @@ namespace SM {
 		SAGE_Input_Handler::init();
 
 		SM::fp_init();
-		Game_Objects::Init();		
+		Game_Objects::Init();
 	}
 
 	void Input()
@@ -128,6 +147,11 @@ namespace SM {
 		Game_Objects::Exit();
 	}
 
+	void Set_Current_Level(std::string const& _level_identifier)
+	{
+		current_level = Assets::Levels::Get_Level(_level_identifier);
+	}
+
 	void Set_Next_Scene(void(*_load)(), void(*_init)(), void (*_input)(), void(*_update)(), void (*_draw)(), void (*_free)(), void (*_unload)())
 	{
 		SM::fp_load_tmp = _load;
@@ -139,8 +163,9 @@ namespace SM {
 		SM::fp_unload_tmp = _unload;
 	}
 
-	void Go_To_Next_Scene()
+	void Go_To_Next_Scene(std::string const& _level_identifier)
 	{
+		current_level = Assets::Levels::Get_Level(_level_identifier);
 		SM::Free();
 		SM::Unload();
 		SM::fp_load = fp_load_tmp;
@@ -150,8 +175,8 @@ namespace SM {
 		SM::fp_draw = fp_draw_tmp;
 		SM::fp_free = fp_free_tmp;
 		SM::fp_unload = fp_unload_tmp;
-		Load();
-		Init();
+		SM::Load();
+		SM::Init();
 	}
 
 	void Restart_Scene()
