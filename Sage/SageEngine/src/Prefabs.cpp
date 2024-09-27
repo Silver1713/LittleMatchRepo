@@ -23,10 +23,9 @@
 
 #include <iostream>
 
-static std::unordered_map<std::string, Assets::Prefabs::Prefab> prefabs;
-
 namespace Prefabs
 {	
+	static std::unordered_map<std::string, Assets::Prefabs::Prefab> prefabs;
 	static bool is_initialized{ false };
 
 	void Init()
