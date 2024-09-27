@@ -17,14 +17,6 @@
 *.exp
 *.iobj
 *.ipdb
-*.o
-*.exe
-*.out
-*.a
-*.lib
-*.dll
-*.so
-*.dylib
 bin
 Debug
 Release

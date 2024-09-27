@@ -143,6 +143,7 @@ macro(import_fmod)
     # import LOCAL version of fmod in FMOD/ folder
     set(FMOD_IMPORT_SUCCESS TRUE)
     set(FMOD_API_INSTALL_DIR "${CMAKE_SOURCE_DIR}/FMOD")
+    message(STATUS "${CMAKE_SOURCE_DIR}/FMOD")
     set(FMOD_INCL_DIR "${FMOD_API_INSTALL_DIR}/api/core/inc")
     set(FMOD_LIB_DIR "${FMOD_API_INSTALL_DIR}/api/core/lib/x64")
     set(FMOD_LIB_DIR_RELATIVE "../FMOD/api/core/lib/x64")
