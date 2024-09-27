@@ -1,2 +1,3 @@
 Texture ID,Filepath,Width,Height,No. of Sprites per Row,No. of Sprites per Column,No. of Sprites in Total
 DIGIPEN_SPLASH_SCREEN,../SageEngine/data/assets/textures/digipen_splash_screen.png,1890,1063,1,1,1
+BLUE_SKY,../SageEngine/data/assets/textures/blue_sky.png,320,180,1,1,1

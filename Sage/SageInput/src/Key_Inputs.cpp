@@ -89,3 +89,27 @@ void SAGE_Input_Handler::init()
 
 
 
+double SAGE_Input_Handler::Get_Mouse_X()
+{
+	return SageInput_PIML::Get_Mouse_X();
+}
+
+void SAGE_Input_Handler::Get_Mouse_Position(double& x, double& y)
+{
+	x = SageInput_PIML::Get_Mouse_X();
+	y = SageInput_PIML::Get_Mouse_Y();
+}
+
+
+double SAGE_Input_Handler::Get_Mouse_Y()
+{
+	return SageInput_PIML::Get_Mouse_Y();
+}
+
+
+
+
+
+
+
+

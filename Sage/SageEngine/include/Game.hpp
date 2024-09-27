@@ -1,13 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
-\file		Splash_Screen.h
-\title		
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
+\file		Game.hpp
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
-\date		15 September 2024
-\brief		Contains the declarations of functions handling the game scene.
+\date		12 September 2024
+\brief		Contains the declarations of functions that defines the game scene.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.						
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #pragma once

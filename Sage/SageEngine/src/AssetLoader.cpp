@@ -1,3 +1,19 @@
+/* Start Header ************************************************************************/
+/*!
+\file		AssetLoader.cpp
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
+\par		b.muhammadhafiz@digipen.edu
+\date		08 September 2024
+\brief		Contains the data structures and functions for managing game assets,
+			including textures and prefabs. Currently includes the map of textures 
+			and created loaded_textures and loaded prefabs to be used as assets for the engine.
+			Calls the CSV parser to get data from files that is used here.
+
+			All content � 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
+
 #include "AssetLoader.hpp"
 #include "CSVParser.hpp"
 
@@ -6,9 +22,9 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
+#include <array>
+#include <filesystem>
 
-#include <GLFW/glfw3.h>
-#include "SOIL.H"
 
 #include <filesystem>
 #include "fmod.hpp"
@@ -92,6 +108,7 @@ namespace Assets
 	{
 		Parsed_CSV source;
 		std::unordered_map<std::string, Prefab> generated_prefabs;
+		Prefab sentinel;
 		static bool has_initialized{ false };
 
 		void Init()
@@ -118,6 +135,8 @@ namespace Assets
 					p.colour[3] = std::stof(source.comma_seperated_data[i].associated_data[COLOR_A]);
 					p.sprite_texture_ID = source.comma_seperated_data[i].associated_data[SPRITE_TEXTURE_ID];
 					p.collision_data = source.comma_seperated_data[i].associated_data[COL_D];
+					p.has_physics = source.comma_seperated_data[i].associated_data[HAS_PHYSICS];
+					p.velocity = std::stof(source.comma_seperated_data[i].associated_data[PHYSICS_VELOCITY]);
 					p.audio_data = source.comma_seperated_data[i].associated_data[AUDIO_D];
 
 					generated_prefabs[p.prefab_ID] = p;
@@ -132,6 +151,20 @@ namespace Assets
 				}
 			}
 			has_initialized = true;
+		}
+
+		Prefab const& Get_Prefab( std::string const& _prefab_ID)
+		{
+			if (!has_initialized)
+			{
+				Init();
+			}
+			if (generated_prefabs.find(_prefab_ID) != generated_prefabs.end())
+			{
+				return generated_prefabs[_prefab_ID];
+			}
+			std::cout << "Prefab Does not exist\n";
+			return sentinel;
 		}
 
 		std::unordered_map<std::string, Prefab> const& Get_Prefabs()
@@ -238,6 +271,7 @@ namespace Assets
 					std::cout << "Creating sound from " << full_path << '\n';
 					result = p_system->createSound(full_path.c_str(), FMOD_DEFAULT, nullptr, &p_sound[p_sound_index++]);
 					SageAudio::FMOD_ErrorCheck(result);
+
 				}
 			}
 		}
@@ -260,6 +294,104 @@ namespace Assets
 			SageAudio::FMOD_ErrorCheck(result);
 		}
 	}
+
+	namespace Levels 
+	{
+		std::vector<Parsed_CSV>sources;
+		std::unordered_map<std::string, Level> levels;
+		Level sentinel;
+
+		void Init()
+		{
+			unsigned int num_levels{};
+
+			// Iterate through the levels directory
+			for (const auto& entry : std::filesystem::directory_iterator("../SageEngine/data/levels")) 
+			{
+				if (std::filesystem::is_regular_file(entry.status())) 
+				{
+					++num_levels;
+				}
+			}
+
+			for (unsigned int i{}; i < num_levels; i++)
+			{
+				sources.push_back(Parse_CSV("../SageEngine/data/levels/level_" + std::to_string(i+1) + ".csv"));
+			}
+
+			for (unsigned int i{}; i < num_levels; i++)
+			{
+				try
+				{
+					Level l;
+					for (int j{1}; j < sources[i].num_rows; j++)
+					{
+						l.prefabs.push_back(Prefabs::generated_prefabs[sources[i].comma_seperated_data[j].associated_data[PREFAB_ID]]);
+						l.identifier.push_back(sources[i].comma_seperated_data[j].associated_data[IDENTIFIER]);
+
+						std::array<float, 3> position
+						{
+							std::stof(sources[i].comma_seperated_data[j].associated_data[POS_X]),
+							std::stof(sources[i].comma_seperated_data[j].associated_data[POS_Y]),
+							std::stof(sources[i].comma_seperated_data[j].associated_data[POS_Z])
+						};
+
+						l.positions.push_back(position);
+
+						std::array<float, 3> rotation
+						{
+							std::stof(sources[i].comma_seperated_data[j].associated_data[ROT_X]),
+							std::stof(sources[i].comma_seperated_data[j].associated_data[ROT_Y]),
+							std::stof(sources[i].comma_seperated_data[j].associated_data[ROT_Z])
+						};
+
+						l.rotations.push_back(rotation);
+
+						std::array<float, 3> scale
+						{
+							std::stof(sources[i].comma_seperated_data[j].associated_data[SCALE_X]),
+							std::stof(sources[i].comma_seperated_data[j].associated_data[SCALE_Y]),
+							std::stof(sources[i].comma_seperated_data[j].associated_data[SCALE_Z])
+						};
+
+						l.scale.push_back(scale);
+
+						std::array<float, 4> color
+						{
+							std::stof(sources[i].comma_seperated_data[j].associated_data[COLOR_R]),
+							std::stof(sources[i].comma_seperated_data[j].associated_data[COLOR_G]),
+							std::stof(sources[i].comma_seperated_data[j].associated_data[COLOR_B]),
+							std::stof(sources[i].comma_seperated_data[j].associated_data[COLOR_A])
+						};
+
+						l.color.push_back(color);
+					}
+					levels["Level_" + std::to_string(i+1)] = l;
+				}
+				catch (const std::invalid_argument& e)
+				{
+					std::cerr << "Invalid argument: " << e.what() << " at index " << i << std::endl;
+				}
+				catch (const std::out_of_range& e)
+				{
+					std::cerr << "Out of range: " << e.what() << " at index " << i << std::endl;
+				}
+			}
+		}
+		Level const& Get_Level(std::string const& _level_ID)
+		{
+			if (levels.find(_level_ID) != levels.end())
+			{
+				return levels[_level_ID];
+			}
+			else 
+			{
+				std::cout << "Level Does Not Exist\n";
+				return sentinel;				
+			}
+		}
+	}
+	
 
 	//namespace Font
 	//{

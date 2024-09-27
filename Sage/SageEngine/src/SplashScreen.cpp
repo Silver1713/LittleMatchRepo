@@ -1,15 +1,18 @@
 /* Start Header ************************************************************************/
 /*!
 \file		SplashScreen.cpp
-\title		
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
 \date		08 September 2024
-\brief		Contains the declarations of functions handling the splash screen scene.
+\brief		Contains the definitions of functions that define the splash screen scene.
+			Called by SceneManager as function pointers to determine which scene the game
+			is in currently.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.						
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
+#include "SageRenderer.hpp"
 #include "AssetLoader.hpp"
 #include "Prefabs.hpp"
 #include "Key_Inputs.h"
@@ -20,27 +23,38 @@
 
 #include <string>
 #include <iostream>
+#include <memory>
 
-static float time_elapsed{};
-static float const wait_time{ 2.f };
-static GameObject digipen_splash_screen;
-
+#include "SageCamera.hpp"
+#include "SageViewport.hpp"
 namespace Splash_Screen {
+	static float time_elapsed{};
+	static float const wait_time{ 0.5f };
+	static GameObject* digipen_splash_screen;
+
+	static SageCamera camera;
+	static SageViewport vp;
+
 
 	void Load()
 	{
-		Assets::Textures::Load("DIGIPEN_SPLASH_SCREEN");
-
-		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 960.f,540.f, 0.0f });
-		digipen_splash_screen.Add_Component(std::make_unique<Transform>(t));
-		Sprite2D s({ "DIGIPEN_SPLASH_SCREEN" }, {1.f,1.f,1.f,1.f});
-		digipen_splash_screen.Add_Component(std::make_unique<Sprite2D>(s));
-		Game_Objects::Add_Game_Object(&digipen_splash_screen);
+		digipen_splash_screen = Game_Objects::Instantiate(Prefabs::Get_Prefab("DIGIPEN_SPLASH_SCREEN"),"Digipen_Splash_Screen");
 	}
 
 	void Init()
 	{
 		time_elapsed = 0.f;
+		vp.set_position({ 0,0 });
+		vp.set_dims({ static_cast<float>(SageHelper::WINDOW_WIDTH), static_cast<float>(SageHelper::WINDOW_HEIGHT)});
+		vp.calculate_viewport_xform();
+		vp.setViewport();
+
+		camera.init({ 0,0 }, { SageHelper::WINDOW_WIDTH / 1.f, SageHelper::WINDOW_HEIGHT / 1.f }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
+
+		SageRenderer::SetCurrentView(&camera);
+		SageRenderer::SetCurrentView(vp);
+
+	
 	}
 
 	void Input()
@@ -64,7 +78,7 @@ namespace Splash_Screen {
 			if (SM::Has_Faded_Out())
 			{
 				is_triggered = false;				
-				SM::Go_To_Next_Scene();
+				SM::Go_To_Next_Scene("Level_1");
 				SM::Start_Fade_In();
 			}
 		}

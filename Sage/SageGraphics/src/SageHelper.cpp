@@ -1,5 +1,5 @@
 
-#include <GL/glew.h>
+#include "SageRenderer.hpp"
 #include <iostream>
 
 #include "SageHelper.hpp"
@@ -126,6 +126,7 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 	glDebugMessageCallback(openglErrorCallback, nullptr);*/
 
 	glfwSetKeyCallback(glfwGetCurrentContext(), key_cb);
+	
 	return 0;
 }
 
@@ -174,7 +175,7 @@ void SageHelper::draw()
 
 void SageHelper::exit()
 {
-
+	delete sage_ptr_window;
 	glfwTerminate();
 }
 

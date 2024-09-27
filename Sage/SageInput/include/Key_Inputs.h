@@ -142,6 +142,10 @@ public:
 	static bool Get_Mouse_Clicked(int mouse); // Check if mouse is clicked once
 	static bool Get_Mouse(int mouse); // Check if mouse is held down
 
+	static double Get_Mouse_X();
+	static double Get_Mouse_Y();
+	static void Get_Mouse_Position(double& x, double& y);
+
 	static void init();
 	static void update();
 	static void terminate();

@@ -7,7 +7,7 @@ uniform bool uUseBorderColor;
 uniform float uBorderSize;
 uniform float uCornerRadius;  
 uniform bool uUseTexture;
-uniform float uTransparency;
+uniform float uAlpha;
 uniform vec4 uColor;
 uniform vec4 uBorderColor;
 uniform vec2 uObjectSize;
@@ -59,13 +59,17 @@ void main() {
             }
         }
     }
+    else if (uUseTexture && uUseColor){
+         c_clr = texture(uTex2D, aTextCoords);
+         c_clr *= uColor;
+    }
+	else if (uUseTexture) {
+        c_clr = texture(uTex2D, aTextCoords);
+	}
     else if (uUseColor) {
         
         c_clr = uColor;
 	}
-	else if (uUseTexture) {
-        c_clr = texture(uTex2D, aTextCoords);
-	}
 
-    color = vec4(c_clr.x, c_clr.y, c_clr.z, uTransparency);
+    color = vec4(c_clr.x, c_clr.y, c_clr.z, uAlpha);
 }

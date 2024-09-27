@@ -64,7 +64,7 @@ public:
 	// Shaders Uniforms
 
 	// Get the location of a uniform variable
-	GLint GetUniformLocation(const char* name, bool exit_on_error = false);
+	GLint GetUniformLocation(const char* name, bool exit_on_error = false) const;
 
 	// Setters for uniform variables
 	// Numericals
@@ -88,6 +88,12 @@ public:
 	void SetUniform(const char* name, const glm::mat2& val);
 	void SetUniform(const char* name, const glm::mat3& val);
 	void SetUniform(const char* name, const glm::mat4& val);
+
+
+	void SetUniform3fm(const char* name, float* data);
+	void SetUniform3fm(const char* name, const float* data) const;
+	void SetUniform4fm(const char* name, float* data);
+	void SetUniform4fm(const char* name, const float* data) const;
 
 
 

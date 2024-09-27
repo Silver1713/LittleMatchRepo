@@ -126,6 +126,19 @@ macro(import_backward_stacktrace)
     endif()
 endmacro()
 
+macro(import_json)
+    if(NOT TARGET json)
+        FetchContent_Declare(
+            json
+            GIT_REPOSITORY https://github.com/nlohmann/json
+            GIT_TAG b36f4c477c40356a0ae1204b567cca3c2a57d201
+            SOURCE_DIR ${DEP_DIR}/json
+        )
+        FetchContent_MakeAvailable(json)
+        include_directories(${json_SOURCE_DIR})
+    endif()
+endmacro()
+
 macro(import_fmod)
     # import LOCAL version of fmod in FMOD/ folder
     set(FMOD_IMPORT_SUCCESS TRUE)
@@ -182,6 +195,49 @@ macro(import_fmod)
     ENDIF()
 endmacro()
 
+macro(import_freetype)
+
+if (NOT TARGET freetype)
+    FetchContent_Declare(
+        freetype
+        GIT_REPOSITORY https://github.com/freetype/freetype/
+        GIT_TAG master
+        SOURCE_DIR ${DEP_DIR}/freetype
+    )
+    FetchContent_MakeAvailable(freetype)
+    include_directories(${freetype_SOURCE_DIR}/include)
+    add_deps_all_targets(PUBLIC freetype)
+endif()
+endmacro()
+
+macro (import_imgui)
+    if (NOT TARGET imgui)
+        FetchContent_Declare(
+            imgui
+            GIT_REPOSITORY https://github.com/ocornut/imgui
+            GIT_TAG master
+            SOURCE_DIR ${DEP_DIR}/imgui
+        )
+        FetchContent_MakeAvailable(imgui)
+        add_library(
+            imgui
+            ${imgui_SOURCE_DIR}/imgui.cpp
+            ${imgui_SOURCE_DIR}/imgui_demo.cpp
+            ${imgui_SOURCE_DIR}/imgui_draw.cpp
+            ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+            
+        )
+        add_library(
+            imgui_backends
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+        )
+        include_directories(${imgui_SOURCE_DIR})
+        include_directories(${imgui_SOURCE_DIR}/backends)
+        add_deps_all_targets(PUBLIC imgui imgui_backends)
+    endif()
+endmacro()
+
 macro(add_deps_all_targets ...)
     list(APPEND ALL_LIBS ${ARGN})
 endmacro()
@@ -197,4 +253,7 @@ macro(importDependencies)
     import_stb()
     import_backward_stacktrace()
     import_fmod()
+    import_freetype()
+    import_json()
+    import_imgui()
 endmacro()

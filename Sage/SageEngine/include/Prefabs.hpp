@@ -1,3 +1,16 @@
+/* Start Header ************************************************************************/
+/*!
+\file		Prefabs.hpp
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
+\par		b.muhammadhafiz@digipen.edu
+\date		08 September 2024
+\brief		Contains the declarations of functions that is going to be shared to facilitate
+			the use of prefabs to create copies of gameobjects.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #pragma once
 #include "AssetLoader.hpp"
 #include "GameObjects.hpp"
@@ -5,33 +18,5 @@
 namespace Prefabs
 {
 	void Init();
-	GameObject Create_Copy(Assets::Prefabs::Prefab& _p);
+	Assets::Prefabs::Prefab const& Get_Prefab(std::string _ID);
 }
-
-
-class Red : public GameObject
-{
-public:
-	Red();
-	void Init() override;
-	void Update() override;
-	void Exit() override;
-};
-
-class Green : public GameObject
-{
-public:
-	Green();
-	void Init() override;
-	void Update() override;
-	void Exit() override;
-};
-
-class Blue : public GameObject
-{
-public:
-	Blue();
-	void Init() override;
-	void Update() override;
-	void Exit() override;
-};

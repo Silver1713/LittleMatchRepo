@@ -1,16 +1,6 @@
-/* Start Header ************************************************************************/
-/*!
-\file		Game.cpp
-\title		
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
-\par		b.muhammadhafiz@digipen.edu
-\date		15 September 2024
-\brief		Contains the declarations of functions handling the game scene.
-
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.						
-*/
-/* End Header **************************************************************************/
 #include "SageAudio.hpp"
+#include <backward.hpp>
+#include <cassert>
 
 //FMOD_RESULT result;
 //FMOD::System* p_system;
@@ -21,6 +11,8 @@
 //size_t p_sound_index{ 0 };
 bool paused{ false };
 
+backward::SignalHandling sh;
+
 namespace SageAudio
 {
 #pragma region Helper Functions
@@ -28,7 +20,9 @@ namespace SageAudio
 	{
 		if (_result != FMOD_OK)
 		{
+			
 			std::cerr << "FMOD ERROR! " << FMOD_ErrorString(_result);
+			assert(false);
 			exit(-1);
 		}
 	}
@@ -228,22 +222,21 @@ namespace SageAudio
 		FMOD_ErrorCheck(result);
 	}
 
-	//void Exit()
-	//{
-	//	std::cout << "Exiting" << std::endl;
-
-	//	for (size_t i{ 0 }; i < p_sound.size(); i++)
-	//	{
-	//		result = p_sound[i]->release();
-	//		FMOD_ErrorCheck(result);
-	//	}
-	//	for (size_t i{ 0 }; i < audio_files.size(); i++)
-	//	{
-	//		result = channel_group[i]->release();
-	//		FMOD_ErrorCheck(result);
-	//	}
-	//	result = p_system->release();
-	//	FMOD_ErrorCheck(result);
-	//}
+	void Exit()
+	{
+		std::cout << "Exiting" << std::endl;
+		for (size_t i{ 0 }; i < p_sound.size(); i++)
+		{
+			result = p_sound[i]->release();
+			FMOD_ErrorCheck(result);
+		}
+		for (size_t i{ 0 }; i < audio_files.size(); i++)
+		{
+			result = channel_group[i]->release();
+			FMOD_ErrorCheck(result);
+		}
+		result = p_system->release();
+		FMOD_ErrorCheck(result);
+	}
 #pragma endregion
 }

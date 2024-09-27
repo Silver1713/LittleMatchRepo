@@ -12,6 +12,8 @@ class SageViewport
 	float default_world_bounds{ 10000.f };
 	glm::mat3 vp_xform; // world to ndc
 
+	
+
 
 public:
 	// Constructor
