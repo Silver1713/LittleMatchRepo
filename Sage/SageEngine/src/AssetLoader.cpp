@@ -10,6 +10,11 @@
 #include <GLFW/glfw3.h>
 #include "SOIL.H"
 
+#include <filesystem>
+#include "fmod.hpp"
+#include "fmod_errors.h"
+#include "SageAudio.hpp"
+
 namespace Assets
 {
 	namespace Textures
@@ -138,4 +143,139 @@ namespace Assets
 			return generated_prefabs;
 		}
 	}
+
+	namespace Audio
+	{
+		FMOD_RESULT result;
+		FMOD::System* p_system;
+		FMOD::ChannelGroup* audio_bgm_group, * audio_sfx_group, * audio_ui_group, * audio_ambient_group, * master_audio_group;
+		std::vector<FMOD::ChannelGroup*> channel_group = { audio_bgm_group, audio_sfx_group, audio_ui_group, audio_ambient_group, master_audio_group };
+		std::unordered_map<std::string, std::vector<std::string>> audio_files;
+		std::vector<FMOD::Sound*> p_sound;
+		size_t p_sound_index{ 0 };
+		bool paused{ false };
+
+		void Init()
+		{
+			std::cout << "Creating audio system\n";
+			result = FMOD::System_Create(&p_system);
+			SageAudio::FMOD_ErrorCheck(result);
+
+			std::cout << "Initializing FMOD\n";
+			result = p_system->init(512, FMOD_INIT_NORMAL, 0);
+			SageAudio::FMOD_ErrorCheck(result);
+
+			result = p_system->createChannelGroup("bgm", &channel_group[0]);
+			SageAudio::FMOD_ErrorCheck(result);
+			result = p_system->createChannelGroup("sfx", &channel_group[1]);
+			SageAudio::FMOD_ErrorCheck(result);
+			result = p_system->createChannelGroup("ui", &channel_group[2]);
+			SageAudio::FMOD_ErrorCheck(result);
+			result = p_system->createChannelGroup("ambient", &channel_group[3]);
+			SageAudio::FMOD_ErrorCheck(result);
+
+			result = p_system->getMasterChannelGroup(&channel_group.back());
+			SageAudio::FMOD_ErrorCheck(result);
+			for (size_t i{ 0 }; i < audio_files.size(); i++)
+			{
+				result = channel_group.back()->addGroup(channel_group[i]);
+				SageAudio::FMOD_ErrorCheck(result);
+			}
+
+			result = channel_group[4]->setVolume(1.f);
+			SageAudio::FMOD_ErrorCheck(result);
+			result = channel_group[0]->setVolume(.7f);
+			SageAudio::FMOD_ErrorCheck(result);
+			result = channel_group[1]->setVolume(.15f);
+			SageAudio::FMOD_ErrorCheck(result);
+			result = channel_group[2]->setVolume(.1f);
+			SageAudio::FMOD_ErrorCheck(result);
+			result = channel_group[3]->setVolume(.4f);
+			SageAudio::FMOD_ErrorCheck(result);
+
+			audio_files.clear();
+			for (const auto& entry : std::filesystem::directory_iterator(PATH))
+			{
+				if (entry.is_regular_file() && entry.path().extension() == AUDIO_EXTENSION)
+				{
+					std::string filename = entry.path().stem().string();
+					if (filename.rfind("bgm_", 0) == 0)
+					{
+						audio_files["bgm"].push_back(filename);
+					}
+					else if (filename.rfind("sfx_", 0) == 0)
+					{
+						audio_files["sfx"].push_back(filename);
+					}
+					else if (filename.rfind("ui_", 0) == 0)
+					{
+						audio_files["ui"].push_back(filename);
+					}
+					else if (filename.rfind("ambient_", 0) == 0)
+					{
+						audio_files["ambient"].push_back(filename);
+					}
+					else
+					{
+						std::cerr << "Unrecognized channel group for " << filename << std::endl;
+						exit(-1);
+					}
+					++p_sound_index;
+				}
+				else
+				{
+					std::cerr << "WARNING: File extension for " << entry.path().filename().string() << " is not " << AUDIO_EXTENSION << "!" << std::endl;
+				}
+			}
+			p_sound.resize(p_sound_index);
+			p_sound_index = 0;
+
+			for (const auto& [channel, files] : audio_files)
+			{
+				for (const auto& file : files)
+				{
+					std::string full_path = PATH + file + AUDIO_EXTENSION;
+					std::cout << "Creating sound from " << full_path << '\n';
+					result = p_system->createSound(full_path.c_str(), FMOD_DEFAULT, nullptr, &p_sound[p_sound_index++]);
+					SageAudio::FMOD_ErrorCheck(result);
+				}
+			}
+		}
+
+		void Unload()
+		{
+			std::cout << "Exiting" << std::endl;
+
+			for (size_t i{ 0 }; i < p_sound.size(); i++)
+			{
+				result = p_sound[i]->release();
+				SageAudio::FMOD_ErrorCheck(result);
+			}
+			for (size_t i{ 0 }; i < audio_files.size(); i++)
+			{
+				result = channel_group[i]->release();
+				SageAudio::FMOD_ErrorCheck(result);
+			}
+			result = p_system->release();
+			SageAudio::FMOD_ErrorCheck(result);
+		}
+	}
+
+	//namespace Font
+	//{
+	//	void Init()
+	//	{
+
+	//	}
+
+	//	void Load()
+	//	{
+
+	//	}
+
+	//	void Unload()
+	//	{
+
+	//	}
+	//}
 }

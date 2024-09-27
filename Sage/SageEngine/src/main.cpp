@@ -43,9 +43,8 @@ extern "C"
 int main()
 {
 	init();
-    SageAudio::Play_Sound("HALO_2");
-    SageAudio::Play_Sound("MAIN_MENU");
-    SageAudio::Play_Sound("RAIN");
+    SageAudio::Play_Sound("bgm_main_menu", LOOP);
+    SageAudio::Play_Sound("ambient_rain", LOOP);
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{
@@ -76,10 +75,11 @@ void init()
     
     Assets::Textures::Init();
     Assets::Prefabs::Init();
+    Assets::Audio::Init();
     Prefabs::Init();
     SM::Load();
     SM::Init();
-    SageAudio::Init();
+    //SageAudio::Init();
 
 }
 

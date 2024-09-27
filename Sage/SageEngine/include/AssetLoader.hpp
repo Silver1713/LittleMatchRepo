@@ -4,6 +4,9 @@
 
 class SageTexture;
 
+#define PATH "../SageEngine/data/assets/audio/"
+#define AUDIO_EXTENSION ".ogg"
+
 namespace Assets
 {
 	namespace Textures 
@@ -73,4 +76,17 @@ namespace Assets
 		void Init();
 		std::unordered_map<std::string, Prefab>const& Get_Prefabs();
 	}
+	
+	namespace Audio
+	{
+		void Init();
+		void Unload();
+	}
+
+	//namespace Font
+	//{
+	//	void Init();
+	//	void Load();
+	//	void Unload();
+	//}
 }
