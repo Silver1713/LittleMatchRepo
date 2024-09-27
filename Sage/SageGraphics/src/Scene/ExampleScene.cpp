@@ -41,10 +41,15 @@ void ExampleScene::init()
 
 
 
-
-	SageObjectManager::CreatePrimitiveObject("Rect3", PRIMITIVE_OBJECT_RECT, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,1,1,1 },
+	SageObjectManager::CreatePrimitiveObject("Rect3", PRIMITIVE_OBJECT_RECT, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,0,1,1 },
+		{ 0,0,0,1 }, 0.5f);
+	SageObjectManager::CreatePrimitiveObject("Circle3", PRIMITIVE_OBJECT_CIRCLE, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,0,1,1 },
 		{ 0,0,0,1 }, 0.5f);
 
+
+
+
+	
 
 
 	/*SageObjectManager::CreatePrimitiveObject("Rect1", PRIMITIVE_OBJECT_CIRCLE, { 0,0 }, { 50,50 }, { 0,0 }, { 1,0,1,1 },
@@ -68,11 +73,15 @@ void ExampleScene::init()
 		 // 3rd object
 
 		 // Random transform
-		SageObjectManager::objects["Rect3"].transform.position = {0.f,0 };
-		SageObjectManager::objects["Rect3"].transform.scale = { 50.f,50.f };
-		SageObjectManager::objects["Rect3"].transform.orientation = { 0,0 };
+		SageObjectManager::objects["Circle3"].transform.position = {0.f,0 };
+		SageObjectManager::objects["Circle3"].transform.scale = { 50.f,50.f };
+		SageObjectManager::objects["Circle3"].transform.orientation = { 0,0 };
 
-		SageObject* obj = &SageObjectManager::objects["Rect3"];
+		SageObjectManager::objects["Rect3"].transform.position = { 30.f,180.f };
+		SageObjectManager::objects["Rect3"].transform.scale = { 150.f,50.f };
+		SageObjectManager::objects["Rect3"].transform.orientation = { 0,0 };
+		SageObjectManager::objects["Rect3"].GetMaterial().color = { 1,0,1,1 };
+		SageObject* obj = &SageObjectManager::objects["Circle3"];
 		
 
 		//obj->GetMaterial().enable_texture = true;
@@ -139,7 +148,7 @@ void ExampleScene::draw()
 
 
 
-	glClearColor(1, 1, 1, 1);
+	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 	std::ostringstream ss{ "Scene 1" };
 
@@ -149,16 +158,31 @@ void ExampleScene::draw()
 
 
 
+
 	SageRenderer::SetOptionOn(SageRenderer::SAGE_ENABLE_CAMERA);
 	SageRenderer::SetOptionOff(SageRenderer::SAGE_ENABLE_BORDER);
 	for (auto& obj : SageObjectManager::objects)
 	{
-		obj.second.GetMaterial().color = { 0,1,0,1 };
+		//obj.second.GetMaterial().color = { 0,1,0,1 };
 		SageRenderer::SetAlpha(1.f);
 		//SageRenderer::SetOptionOn();/
 		
 		SageRenderer::DrawFilled(obj.second);
+
+		ToastBox::Vec2 start = { obj.second.transform.position.x - obj.second.transform.scale.x , obj.second.transform.position.y - obj.second.transform.scale.y  };
+		ToastBox::Vec2 start2 = { obj.second.transform.position.x + obj.second.transform.scale.x , obj.second.transform.position.y - obj.second.transform.scale.y  };
+		ToastBox::Vec2 end = { obj.second.transform.position.x + obj.second.transform.scale.x , obj.second.transform.position.y + obj.second.transform.scale.y  };
+		ToastBox::Vec2 end2 = { obj.second.transform.position.x - obj.second.transform.scale.x , obj.second.transform.position.y + obj.second.transform.scale.y  };
+
+		SageRenderer::DrawLine(start, start2, { 0,1,0,1 });
+		SageRenderer::DrawLine(start2, end, { 0,1,0,1 });
+		SageRenderer::DrawLine(end, end2, { 0,1,0,1 });
+		SageRenderer::DrawLine(end2, start, { 0,1,0,1 });
+		
+		
 	}
+
+
 	ToastBox::Vec2 start = { 0,0 };
 	ToastBox::Vec2 end = { 100,0 };
 	SageRenderer::DrawLine(start, end, ToastBox::Vec4{ 0,0,1,1 });

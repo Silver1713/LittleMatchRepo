@@ -20,7 +20,7 @@ if(IS_LIB_COMPILED_CORE_GEN)
         IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(SageEngine_Core PRIVATE -Wall ${DisableWarnings})
         elseif(MSVC)
-            target_compile_options(SageEngine_Core PRIVATE /W3 /WX-)
+            target_compile_options(SageEngine_Core PRIVATE /W4 /WX-)
         endif()
 
         add_dependencies(SageEngine_Core
@@ -141,7 +141,7 @@ set_property(TARGET SageEngine PROPERTY CXX_STANDARD 20)
 IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(SageEngine PRIVATE -Wall ${DisableWarnings})
 elseif(MSVC)
-    target_compile_options(SageEngine PRIVATE /W3 /WX-)
+    target_compile_options(SageEngine PRIVATE /W4 /WX-)
 endif()
 
 if(WIN32 AND FMOD_IMPORT_SUCCESS)

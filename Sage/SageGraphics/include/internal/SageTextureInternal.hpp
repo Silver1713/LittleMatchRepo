@@ -1,4 +1,4 @@
-// Internal class for SageTexture
+	// Internal class for SageTexture
 #ifndef SAGE_TEXTURE_INTERNAL_HPP
 #define SAGE_TEXTURE_INTERNAL_HPP
 #define SOIL_ENABLE 1

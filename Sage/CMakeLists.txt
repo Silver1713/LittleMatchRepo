@@ -100,15 +100,13 @@ foreach(dir ${PROJECT_DIRECTORIES})
 
         if(WIN32 AND FMOD_IMPORT_SUCCESS)
             add_custom_command(TARGET ${DIR_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "$<$<CONFIG:Debug>:${FMOD_LIB_DIR}/fmodL.dll>$<$<NOT:$<CONFIG:Debug>>:${FMOD_LIB_DIR}/fmod.dll>"
-                $<TARGET_FILE_DIR:${DIR_NAME}>)
+                COMMAND cmd /c xcopy /Y "$<$<CONFIG:Debug>:${FMOD_LIB_DIR}/fmodL.dll>$<$<NOT:$<CONFIG:Debug>>:${FMOD_LIB_DIR}/fmod.dll>" "$<TARGET_FILE_DIR:${DIR_NAME}>")
         endif()
 
         IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(${DIR_NAME} PRIVATE -Wall ${DisableWarnings})
         elseif(MSVC)
-            target_compile_options(${DIR_NAME} PRIVATE /W3 /WX-)
+            target_compile_options(${DIR_NAME} PRIVATE /W4 /WX-)
         endif()
 
         target_include_directories(${DIR_NAME} PRIVATE
@@ -154,7 +152,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
         IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(${DIR_NAME}_lib PRIVATE -Wall ${DisableWarnings})
         elseif(MSVC)
-            target_compile_options(${DIR_NAME}_lib PRIVATE /W3 /WX-)
+            target_compile_options(${DIR_NAME}_lib PRIVATE /W4 /WX-)
         endif()
 
         file(GLOB PROJECT_LIB_SUBDIRECTORIES_HEADER ${dir}/include/*/)
