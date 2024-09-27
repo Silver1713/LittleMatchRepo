@@ -16,7 +16,7 @@
 #include "Prefabs.hpp"
 
 #include "SageHelper.hpp"
-#include "Key_Inputs.h"
+#include "KeyInputs.h"
 #include "SplashScreen.hpp"
 #include "SceneManager.hpp"
 #include "GameObjects.hpp"
@@ -108,7 +108,7 @@ namespace SM {
 
 	void Init()
 	{
-		SAGE_Input_Handler::init();
+		SAGEInputHandler::init();
 
 		SM::fp_init();
 		Game_Objects::Init();
@@ -118,7 +118,7 @@ namespace SM {
 	{
 		
 		SM::fp_input();
-		SAGE_Input_Handler::update();
+		SAGEInputHandler::update();
 	}
 
 	void Update()
@@ -131,6 +131,7 @@ namespace SM {
 
 	void Draw()
 	{
+		
 		Game_Objects::Draw();
 		SM::fp_draw();
 

@@ -1,5 +1,5 @@
 #include <iostream>
-#include <Key_Inputs.h>
+#include <KeyInputs.h>
 #include <backward.hpp>
 
 // Welcome to your main file.
@@ -15,7 +15,7 @@ backward::SignalHandling sh;
 int main(){
 
 
-	std::cout << SAGE_Input_Handler::Get_Key_Pressed(0);
+	std::cout << SAGEInputHandler::Get_Key_Pressed(0);
 	return 0;
 }
 

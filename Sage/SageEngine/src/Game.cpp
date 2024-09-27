@@ -17,7 +17,7 @@
 #include "Prefabs.hpp"
 #include "SageRenderer.hpp"
 #include "SageHelper.hpp"
-#include "Key_Inputs.h"
+#include "KeyInputs.h"
 
 #include <iostream>
 #include <random>
@@ -85,58 +85,58 @@ namespace Game {
 	void Input()
 	{
 		//tests
-		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_W))
+		if (SAGEInputHandler::Get_Key(SAGE_KEY_W))
 		{
 			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * 100.0f,0.f });
 		}
-		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_A))
+		if (SAGEInputHandler::Get_Key(SAGE_KEY_A))
 		{
 			transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * (-100.0f),0.f,0.f });
 		}
-		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_S))
+		if (SAGEInputHandler::Get_Key(SAGE_KEY_S))
 		{
 			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * (-100.0f),0.f });
 		}
-		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_D))
+		if (SAGEInputHandler::Get_Key(SAGE_KEY_D))
 		{
 			transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * 100.0f,0.f,0.f });
 		}
-		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_Q))
+		if (SAGEInputHandler::Get_Key(SAGE_KEY_Q))
 		{
 			transform_cache["Player"]->Rotate({ (float)SageHelper::delta_time * 10.0f,0.0f,0.f });
 		}
-		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_E))
+		if (SAGEInputHandler::Get_Key(SAGE_KEY_E))
 		{
 			transform_cache["Player"]->Rotate({ (float)SageHelper::delta_time * (-10.0f),0.0f,0.f });
 		}
-		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_Z))
+		if (SAGEInputHandler::Get_Key(SAGE_KEY_Z))
 		{
 			transform_cache["Player"]->Scale({ (float)SageHelper::delta_time * 100.0f,(float)SageHelper::delta_time * 100.0f,0.f });
 		}
-		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_X))
+		if (SAGEInputHandler::Get_Key(SAGE_KEY_X))
 		{
 			transform_cache["Player"]->Scale({ (float)SageHelper::delta_time * (-100.0f),(float)SageHelper::delta_time * (-100.0f),0.f });
 		}
 
-		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_I))
+		if (SAGEInputHandler::Get_Key(SAGE_KEY_I))
 		{
 			SageRenderer::camera->MoveCamera({ 0.f,1.f }, 100.f);
-		} else if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_K))
+		} else if (SAGEInputHandler::Get_Key(SAGE_KEY_K))
 		{
 			SageRenderer::camera->MoveCamera({ 0.f,-1.f }, 100.f);
 		}
-		else if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_J))
+		else if (SAGEInputHandler::Get_Key(SAGE_KEY_J))
 		{
 			SageRenderer::camera->MoveCamera({ -1.f,0.f }, 100.f);
 		}
-		else if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_L))
+		else if (SAGEInputHandler::Get_Key(SAGE_KEY_L))
 		{
 			SageRenderer::camera->MoveCamera({ 1.f,0.f }, 100.f);
 		}
 
 		
 
-		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_1))
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_1))
 		{
 			if (game_objects["0"]->Is_Enabled())
 			{
@@ -148,7 +148,7 @@ namespace Game {
 				game_objects[std::to_string(i)]->Enable();
 			}
 		}
-		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_2))
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_2))
 		{
 			if (!game_objects["0"]->Is_Enabled())
 			{
@@ -160,7 +160,7 @@ namespace Game {
 				game_objects[std::to_string(i)]->Disable();
 			}
 		}
-		if (SAGE_Input_Handler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
+		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
 		{
 			std::cout << "mouse clicked" << std::endl;
 			//GameObject* random;
@@ -176,16 +176,16 @@ namespace Game {
 			transform_cache["White_1"]->Set_Rotations({ rot[0],rot[1],rot[2] });
 			transform_cache["White_1"]->Set_Scale({ scale[0],scale[1],scale[2] });
 		}
-		if (SAGE_Input_Handler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_RIGHT))
+		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_RIGHT))
 		{
 			transform_cache["Player"]->Translate({ 0.f,-100.0f,0.f });
 		}
-		if (SAGE_Input_Handler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_MIDDLE))
+		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_MIDDLE))
 		{
 			transform_cache["Player"]->Translate({ -100.0f,0.f,0.f });
 		}
 
-		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_3))
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_3))
 		{
 			if (!game_objects["Green0"])
 			{
@@ -203,7 +203,7 @@ namespace Game {
 			}
 		}
 
-		if (SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_4))
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_4))
 		{
 			if (game_objects["Green0"])
 			{

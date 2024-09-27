@@ -50,6 +50,7 @@ namespace Game_Objects
 
 	void Draw()
 	{
+		SageRenderer::ClearColor({ 1,1,1,1 });
 		for (auto& _g : g_game_objects)
 		{
 			if (_g.second)

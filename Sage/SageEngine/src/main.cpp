@@ -29,7 +29,7 @@
 #include <backward.hpp>
 #include "SageRenderer.hpp"
 #include "SageHelper.hpp"
-#include "Key_Inputs.h"
+#include "KeyInputs.h"
 
 #include "AssetLoader.hpp"
 #include "Prefabs.hpp"
@@ -137,6 +137,8 @@ void PhysicsUpdate()
 void draw()
 {
     SageHelper::draw();
+    std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS);
+    SageHelper::sage_ptr_window->set_title(s.c_str());
     SM::Draw();
 	
 }

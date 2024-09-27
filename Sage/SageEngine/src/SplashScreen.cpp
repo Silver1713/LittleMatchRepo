@@ -15,7 +15,7 @@
 #include "SageRenderer.hpp"
 #include "AssetLoader.hpp"
 #include "Prefabs.hpp"
-#include "Key_Inputs.h"
+#include "KeyInputs.h"
 #include "SageHelper.hpp"
 
 #include "SceneManager.hpp"
