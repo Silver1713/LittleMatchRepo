@@ -99,15 +99,8 @@ namespace Assets
 	namespace Audio
 	{
 		void Init();
-		void Unload();
+		std::unordered_map<std::string, std::vector<std::string>> const & Get_Audio();
 	}
-
-	//namespace Font
-	//{
-	//	void Init();
-	//	void Load();
-	//	void Unload();
-	//}
 
 	namespace Levels 
 	{

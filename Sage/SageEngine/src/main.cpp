@@ -103,12 +103,12 @@ void init()
     }    
     Assets::Textures::Init();
     Assets::Prefabs::Init();
-    //Assets::Audio::Init();
+    Assets::Audio::Init();
     Assets::Levels::Init();
     Prefabs::Init();
     SM::Load();
     SM::Init();
-    //SageAudio::Init();
+    SageAudio::Init();
 
 }
 
