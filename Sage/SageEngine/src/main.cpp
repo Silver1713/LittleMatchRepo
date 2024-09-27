@@ -70,9 +70,9 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	init();
-    SageAudio::Play_Sound("HALO_2");
+    //SageAudio::Play_Sound("HALO_2");
     SageAudio::Play_Sound("MAIN_MENU");
-    SageAudio::Play_Sound("RAIN");
+    //SageAudio::Play_Sound("RAIN");
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{
