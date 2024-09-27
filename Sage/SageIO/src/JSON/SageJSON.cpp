@@ -36,7 +36,7 @@ namespace SageJSON::AST
 
 	Node::JSONType StringNode::getKey()
 	{
-		return value;
+		return std::reference_wrapper(value);
 	}
 
 	Node::AST_Type StringNode::getType()
@@ -74,7 +74,7 @@ namespace SageJSON::AST
 
 	Node::JSONType BooleanValueNode::getKey()
 	{
-		return value;
+		return std::reference_wrapper(value);
 	}
 
 	Node::JSONType const BooleanValueNode::getKey() const
@@ -117,7 +117,7 @@ namespace SageJSON::AST
 
 	Node::JSONType NumberValueNode::getKey()
 	{
-		return value;
+		return std::reference_wrapper(value);
 	}
 
 	std::string NumberValueNode::getName()
@@ -361,7 +361,7 @@ namespace SageJSON::AST
 		{
 			Node* n = node;
 			ArrayNode* root_arr = dynamic_cast<ArrayNode*>(parent);
-			root_arr->appendList(node);
+			root_arr->appendList(n);
 
 		}
 	}
@@ -387,12 +387,12 @@ namespace SageJSON::AST
 
 
 
-	bool AST::cleanup(Node* root)
+	bool AST::cleanup(Node* rt)
 	{
 
-		if (root->getType() == Node::AST_Type::OBJECT)
+		if (rt->getType() == Node::AST_Type::OBJECT)
 		{
-			ObjectNode* obj = dynamic_cast<ObjectNode*>(root);
+			ObjectNode* obj = dynamic_cast<ObjectNode*>(rt);
 			Node::JSONType val = obj->getKey();
 			if (std::holds_alternative<std::vector<Node*>>(val))
 			{
@@ -402,12 +402,12 @@ namespace SageJSON::AST
 					cleanup(i);
 				}
 
-				delete root;
+				delete rt;
 			}
 		}
-		else if (root->getType() == Node::AST_Type::ARRAY)
+		else if (rt->getType() == Node::AST_Type::ARRAY)
 		{
-			ArrayNode* arr = dynamic_cast<ArrayNode*>(root);
+			ArrayNode* arr = dynamic_cast<ArrayNode*>(rt);
 			Node::JSONType val = arr->getKey();
 			if (std::holds_alternative<std::vector<Node*>>(val))
 			{
@@ -416,11 +416,11 @@ namespace SageJSON::AST
 				{
 					cleanup(i);
 				}
-				delete root;
+				delete rt;
 			}
 		}
 		else {
-			delete root;
+			delete rt;
 		}
 		return true;
 
@@ -484,7 +484,11 @@ namespace SageJSON
 			char const& symbol = *begin;
 
 
-
+			if (*begin > 255  || *begin <= -1)
+			{
+				begin++;
+				continue;
+			}
 
 			if (symbol == '\"') {
 
@@ -687,5 +691,72 @@ namespace SageJSON
 	{
 		cleanup();
 	}
+
+	SageJSON& SageJSON::operator[](std::string key)
+	{
+		
+		try
+		{
+			if (current_node == nullptr)
+			{
+				current_node = ast.getRoot();
+			}
+
+
+			AST::ObjectNode* obj = dynamic_cast<AST::ObjectNode*>(current_node);
+			if (obj)
+			{
+				auto key_value = obj->getKey();
+				auto values = std::get_if<std::vector<AST::Node*>>(&key_value);
+				if (values)
+				{
+
+					for (auto i : *values)
+					{
+						
+
+						if (i->getName() == key)
+						{
+							
+							current_node = i;
+							return *this;
+						}
+					}
+				}
+			}
+
+			// If not an object node, check if it's an array node
+			AST::ArrayNode* arr = dynamic_cast<AST::ArrayNode*>(current_node);
+			if (arr)
+			{
+				auto key_value = arr->getKey();
+				auto* values = std::get_if<std::vector<AST::Node*>>(&key_value);
+				if (values)
+				{
+
+					for (auto& i : *values)
+					{
+						if (i->getName() == key)
+						{
+							current_node = i;
+							return *this;
+						}
+					}
+				}
+			}
+
+
+			throw std::out_of_range("Key '" + key + "' not found in JSON object or array");
+		} catch (std::out_of_range err)
+		{
+			SageJSONCerr << "Warning: Key is not found.An nullptr is returned.\n";
+			current_node = nullptr;
+			return *this;
+			
+		} 
+	}
+
+	
+
 
 }

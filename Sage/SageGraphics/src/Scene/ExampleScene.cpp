@@ -168,18 +168,29 @@ void ExampleScene::draw()
 		//SageRenderer::SetOptionOn();/
 		
 		SageRenderer::DrawFilled(obj.second);
+		float scale = obj.second.transform.scale.x;
+		if (obj.second.obj_mesh.model_ref->get_shape_type() == PrimitiveShape::PRIMITIVE_CIRCLE)
+		{
+			scale *= 2;
+		}
+		std::vector<ToastBox::Vec2> aabb = SageHelper::AABBVertices({ obj.second.transform.position.x,obj.second.transform.position.y }, scale);
+		for (ToastBox::Vec2& v : aabb)
+		{
+			
+			SageRenderer::DrawPoint(v, { 1,0,0,1 }, 5.f);
 
-		ToastBox::Vec2 start = { obj.second.transform.position.x - obj.second.transform.scale.x , obj.second.transform.position.y - obj.second.transform.scale.y  };
-		ToastBox::Vec2 start2 = { obj.second.transform.position.x + obj.second.transform.scale.x , obj.second.transform.position.y - obj.second.transform.scale.y  };
-		ToastBox::Vec2 end = { obj.second.transform.position.x + obj.second.transform.scale.x , obj.second.transform.position.y + obj.second.transform.scale.y  };
-		ToastBox::Vec2 end2 = { obj.second.transform.position.x - obj.second.transform.scale.x , obj.second.transform.position.y + obj.second.transform.scale.y  };
-
-		SageRenderer::DrawLine(start, start2, { 0,1,0,1 });
-		SageRenderer::DrawLine(start2, end, { 0,1,0,1 });
-		SageRenderer::DrawLine(end, end2, { 0,1,0,1 });
-		SageRenderer::DrawLine(end2, start, { 0,1,0,1 });
-		
-		
+		}
+		for (int i =0; i < aabb.size(); i++)
+		{
+			if (i < aabb.size() - 1)
+			{
+				SageRenderer::DrawLine(aabb[i], aabb[i + 1], { 1,0,0,1 });
+			}
+			else
+			{
+				SageRenderer::DrawLine(aabb[i], aabb[0], { 1,0,0,1 });
+			}
+		}
 	}
 
 

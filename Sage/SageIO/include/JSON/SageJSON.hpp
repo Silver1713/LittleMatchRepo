@@ -24,10 +24,10 @@ namespace SageJSON
 	{
 	public:
 		template <typename T>
-		SageJSONCerr& operator<<(const T& t)
+		std::ostream& operator<<(const T& t)
 		{
 			std::cerr << "SageJSON: " << t;
-			return *this;
+			return std::cerr;
 		}
 	};
 
@@ -110,7 +110,7 @@ namespace SageJSON
 			Node* parent;
 		public:
 			using JSONType = std::variant<double, std::reference_wrapper<double>, nullptr_t, std::string,std::reference_wrapper<std::string>,
-			char, std::vector<Node>, std::reference_wrapper<std::vector<Node>>, std::vector<Node*>, bool>;
+			char, std::vector<Node>, std::reference_wrapper<std::vector<Node>>, std::reference_wrapper<std::vector<Node*>>, std::vector<Node*>, bool, std::reference_wrapper<bool>>;
 			enum class AST_Type
 			{
 				STRING,
@@ -228,7 +228,7 @@ namespace SageJSON
 			Node* root;
 
 		public:
-
+			using JSONIterator = Node*;
 			using JSONValue = std::variant<double, std::string, nullptr_t, std::vector<Node*>,Node*, bool>;
 			AST() : root(nullptr) {}
 			AST(Node* root) : root(root) {}
@@ -253,25 +253,94 @@ namespace SageJSON
 
 	class SageJSON
 	{
-
+		using JSONReturnValue = std::variant<AST::Node*, std::reference_wrapper<int>, std::reference_wrapper<double>, std::reference_wrapper<float>, std::reference_wrapper<std::string>, std::vector<AST::Node*>,
+			int, double, float, std::string, bool, nullptr_t, std::reference_wrapper<SageJSON>
+		>;
 		std::vector<Lexer::Token> tokens;
 		Lexer::LEXER_STATE lexer_state;
 		std::string file_path;
 		AST::AST ast;
+		AST::AST::JSONIterator current_node{};
+		
 
 		int lex(std::string& JSONLine);
 		int construct_ast();
 		void cleanup();
+
+
+
+
 	public:
 		SageJSON(std::string filepath);
+
+		SageJSON(AST::AST ast, std::string output);
+
+		void read(std::string json);
 		void print();
 		void close();
 
+		SageJSON& operator[](std::string key);
 
+		SageJSON& operator[](std::string key) const;
+
+
+		template <typename T>
+		T as();
+
+		template <typename T>
+		SageJSON& operator=(T const& value);
+		template <>
+		SageJSON& operator=(SageJSON const& value);
 	};
 
+	template <typename T>
+	T SageJSON::as()
+	{
+		
+		try {
+			if (!current_node)
+			{
+				throw std::invalid_argument("No JSON object found, are you sure the key is correct?");
+			}
+			if (std::holds_alternative<T>(current_node->getKey()))
+			{
+				return std::get<T>(current_node->getKey());
+				current_node = nullptr;
+			}
+			else if (std::holds_alternative<std::reference_wrapper<T>>(current_node->getKey()))
+			{
+				return std::get<std::reference_wrapper<T>>(current_node->getKey()).get();
+				current_node = nullptr;
+			}
+			else
+			{
+				throw std::runtime_error("Type mismatch");
+			}
+		}
+		catch (std::runtime_error& e)
+		{
+			SageJSONCerr <<"Warning: " << e.what() <<" Variable is not converted to primitive data." << std::endl;
+			current_node = nullptr;
+			return {};
+		}
+		catch (std::invalid_argument& e)
+		{
+			SageJSONCerr << "Warning: " << e.what() << '\n' << " Variable is not converted to primitive data." << std::endl;
+			current_node = nullptr;
+			return {};
+		}
+		catch (...)
+		{
+			SageJSONCerr << "Warning: " << "Unknown error" << " Variable is not converted to primitive data." << std::endl;
+			current_node = nullptr;
+			return {};
+		}
+	}
 
+	
+	
 }
+
 
 
 
