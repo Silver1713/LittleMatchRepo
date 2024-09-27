@@ -53,8 +53,6 @@ namespace Splash_Screen {
 
 		SageRenderer::SetCurrentView(&camera);
 		SageRenderer::SetCurrentView(vp);
-
-	
 	}
 
 	void Input()
