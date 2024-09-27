@@ -1,13 +1,15 @@
 /* Start Header ************************************************************************/
 /*!
 \file		SceneManager.cpp
-\title		
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
 \date		08 September 2024
-\brief		Contains the definitions of functions relating to scene management
+\brief		Contains the definitions of functions that defines the scene management aspect
+			of the engine. Stores the function pointers to determine which scene is being
+			loaded, including the fadescreen used to transition between scenes.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content Â© 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #include "AssetLoader.hpp"
@@ -15,7 +17,7 @@
 
 #include "SageRenderer.hpp"
 #include "SageHelper.hpp"
-#include "Key_Inputs.h"
+#include "KeyInputs.h"
 #include "SplashScreen.hpp"
 #include "SceneManager.hpp"
 #include "GameObjects.hpp"
@@ -35,9 +37,10 @@ namespace SM {
 	static bool game_running{ true };
 	static bool ignore_safety_bools{ false };
 
-	const float fade_time{ 1.f };
+	const float fade_time{ 0.5f };
 
 	static GameObject* fade_screen{ nullptr };
+	static Assets::Levels::Level current_level;
 
 	static Function_Ptr fp_load = Splash_Screen::Load;
 	static Function_Ptr fp_init = Splash_Screen::Init;
@@ -82,29 +85,41 @@ namespace SM {
 
 	void Load()
 	{
+		for (unsigned int i{}; i < current_level.prefabs.size(); i++)
+		{
+			GameObject* g;
+			Transform* t;
+			Sprite2D* s;
+			g = Game_Objects::Instantiate(current_level.prefabs[i], current_level.identifier[i]);
+			t = dynamic_cast<Transform*>(g->Get_Component(TRANSFORM));
+			t->Set_Positions({ current_level.positions[i][0],current_level.positions[i][1],current_level.positions[i][2] });
+			t->Set_Rotations({ current_level.rotations[i][0],current_level.rotations[i][1],current_level.rotations[i][2] });
+			t->Set_Scale({ current_level.scale[i][0],current_level.scale[i][1],current_level.scale[i][2] });
+
+			s = dynamic_cast<Sprite2D*>(g->Get_Component(SPRITE2D));
+			if (s)
+			{
+				s->Set_Colour({ current_level.color[i][0],current_level.color[i][1],current_level.color[i][2],current_level.color[i][3] });
+			}
+		}
+
 		SM::fp_load();
-
-		//Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 1000.f,1000.f, 0.0f });
-		//fade_screen.Add_Component(std::make_unique<Transform>(t));
-		//Sprite2D s({ "" }, { 0.f,0.f,0.f,1.f });
-		//fade_screen.Add_Component(std::make_unique<Sprite2D>(s));
-		//Game_Objects::Add_Game_Object(&fade_screen);
-		fade_screen = Game_Objects::Instantiate(Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen");
-
+		fade_screen = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen");
 	}
 
 	void Init()
 	{
-		SAGE_Input_Handler::init();
+		SAGEInputHandler::init();
 
 		SM::fp_init();
-		Game_Objects::Init();		
+		Game_Objects::Init();
 	}
 
 	void Input()
 	{
-		SAGE_Input_Handler::update();
+		
 		SM::fp_input();
+		SAGEInputHandler::update();
 	}
 
 	void Update()
@@ -117,7 +132,7 @@ namespace SM {
 
 	void Draw()
 	{
-		SageRenderer::ClearColor({ 0,0,0,1 });
+		
 		Game_Objects::Draw();
 		SM::fp_draw();
 
@@ -135,6 +150,11 @@ namespace SM {
 		Game_Objects::Exit();
 	}
 
+	void Set_Current_Level(std::string const& _level_identifier)
+	{
+		current_level = Assets::Levels::Get_Level(_level_identifier);
+	}
+
 	void Set_Next_Scene(void(*_load)(), void(*_init)(), void (*_input)(), void(*_update)(), void (*_draw)(), void (*_free)(), void (*_unload)())
 	{
 		SM::fp_load_tmp = _load;
@@ -146,8 +166,9 @@ namespace SM {
 		SM::fp_unload_tmp = _unload;
 	}
 
-	void Go_To_Next_Scene()
+	void Go_To_Next_Scene(std::string const& _level_identifier)
 	{
+		current_level = Assets::Levels::Get_Level(_level_identifier);
 		SM::Free();
 		SM::Unload();
 		SM::fp_load = fp_load_tmp;
@@ -157,8 +178,8 @@ namespace SM {
 		SM::fp_draw = fp_draw_tmp;
 		SM::fp_free = fp_free_tmp;
 		SM::fp_unload = fp_unload_tmp;
-		Load();
-		Init();
+		SM::Load();
+		SM::Init();
 	}
 
 	void Restart_Scene()

@@ -170,7 +170,7 @@ void SageHelper::update_time(double update_fps_interval)
 void SageHelper::draw()
 {
 #if _DEBUG
-
+	
 #endif
 }
 

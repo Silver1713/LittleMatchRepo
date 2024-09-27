@@ -1,7 +1,20 @@
+/* Start Header ************************************************************************/
+/*!
+\file		Prefabs.cpp
+\title		Memory's Flame
+\authors	Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (40%)
+            Halis (20%)
+            Jia Hao (40%)
+\par		b.muhammadhafiz@digipen.edu, halis digipen, jia hao digipen
+\date		10 September 2024
+\brief		This is the main entry point for the engine.
+            It include libraries and manages life cycle of the engine.
+
+            All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
+
 /*
- * This is the main entry point for the engine,
- *	It include libraries and manages life cycle of the engine.
- *
  *	@note: You may test your components here. This is where
  *	all the libs is being compiled and run.
  *
@@ -11,18 +24,16 @@
  *
  */
 
-
-
 #include <iostream>
 #include <numeric>
 #include <backward.hpp>
 #include "SageRenderer.hpp"
 #include "SageHelper.hpp"
-#include "Key_Inputs.h"
+#include "KeyInputs.h"
 
 #include "AssetLoader.hpp"
-#include "SceneManager.hpp"
 #include "Prefabs.hpp"
+#include "SceneManager.hpp"
 #include "SageAudio.hpp"
 #include "SageShaderManager.hpp"
 
@@ -59,9 +70,9 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	init();
-    SageAudio::Play_Sound("HALO_2");
+    //SageAudio::Play_Sound("HALO_2");
     SageAudio::Play_Sound("MAIN_MENU");
-    SageAudio::Play_Sound("RAIN");
+    //SageAudio::Play_Sound("RAIN");
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{
@@ -75,7 +86,6 @@ int main()
 
 	}
 	exit();
-    std::cout << "End\n";
 	return 0;
 }
 
@@ -85,19 +95,16 @@ void init()
     int status = SageHelper::init(1920, 1080, "Hello World");
     SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
 	SageRenderer::init();
-    
-
-
 
     if (status)
     {
         std::cerr << "Sage failed to create OpenGL context.";
 
         std::exit(EXIT_FAILURE);
-    }
-    
+    }    
     Assets::Textures::Init();
     Assets::Prefabs::Init();
+    Assets::Levels::Init();
     Prefabs::Init();
     SM::Load();
     SM::Init();
@@ -130,6 +137,8 @@ void PhysicsUpdate()
 void draw()
 {
     SageHelper::draw();
+    std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS);
+    SageHelper::sage_ptr_window->set_title(s.c_str());
     SM::Draw();
 	
 }

@@ -1,12 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
-\file		BoxCollider2D.hpp
+\file		Component.hpp
 \title		Little Match
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
 \par		b.muhammadhafiz@digipen.edu
 \date		10 September 2024
-\brief		Contains the derived class BoxCollider2D that overrides the virtual functions of the
-			base class Component to do Collision specific tasks
+\brief		Contains the class Component that declares the base class that is to be polymorphed
+			into the various types of components as defined by ComponentType depending on the
+			need of a gameobject.
 
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
@@ -14,10 +15,21 @@
 #pragma once
 #include "Components/Component.hpp"
 
-class BoxCollider2D : public Component
+class Physics : public Component
 {
+private:
+	float velocity{};
+	float cur_velocity{};
+	//add whatever member properties u want for physics
+
+public:
+	Physics();
+	Physics(float _velocity);
+
 	void Init(GameObject* _parent) override;
 	void Update() override;
 	void Exit() override;
 	ComponentType Get_Component_Type() override;
+
+	//add whatever declarations of getters/setters u need for physics
 };

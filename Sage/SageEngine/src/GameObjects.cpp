@@ -1,5 +1,19 @@
+/* Start Header ************************************************************************/
+/*!
+\file		GameObjects.cpp
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
+\par		b.muhammadhafiz@digipen.edu
+\date		08 September 2024
+\brief		Contains the definitions of functions that handles the individual gameobjects
+			and includes the handler of the map of gameobjects which is pointed to by everywhere
+			that uses gameobjects. Also contains the gameobject constructor which setup itself
+			based on the prefab that is passed into.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "GameObjects.hpp"
-#include "Prefabs.hpp"
 #include "Components/Components.hpp"
 #include "SageObjectManager.hpp"
 
@@ -8,10 +22,10 @@
 #include <memory>
 #include <iostream>
 
-std::unordered_map<std::string, std::unique_ptr<GameObject>> g_game_objects;
-
 namespace Game_Objects
 {
+	static std::unordered_map<std::string, std::unique_ptr<GameObject>> g_game_objects;
+
 	void Init()
 	{
 		for (auto& _g : g_game_objects)
@@ -36,6 +50,7 @@ namespace Game_Objects
 
 	void Draw()
 	{
+		SageRenderer::ClearColor({ 1,1,1,1 });
 		for (auto& _g : g_game_objects)
 		{
 			if (_g.second)
@@ -105,6 +120,10 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	if (!(_p.collision_data == "Nil"))
 	{
 		Add_Component(std::make_unique<BoxCollider2D>());
+	}
+	if (!(_p.has_physics == "Nil"))
+	{
+		Add_Component(std::make_unique<Physics>(_p.velocity));
 	}
 	if (!(_p.audio_data == "Nil"))
 	{

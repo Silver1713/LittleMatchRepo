@@ -1,19 +1,21 @@
 /* Start Header ************************************************************************/
 /*!
 \file		SplashScreen.cpp
-\title		
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
 \date		08 September 2024
-\brief		Contains the declarations of functions handling the splash screen scene.
+\brief		Contains the definitions of functions that define the splash screen scene.
+			Called by SceneManager as function pointers to determine which scene the game
+			is in currently.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.						
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #include "SageRenderer.hpp"
 #include "AssetLoader.hpp"
 #include "Prefabs.hpp"
-#include "Key_Inputs.h"
+#include "KeyInputs.h"
 #include "SageHelper.hpp"
 
 #include "SceneManager.hpp"
@@ -27,7 +29,7 @@
 #include "SageViewport.hpp"
 namespace Splash_Screen {
 	static float time_elapsed{};
-	static float const wait_time{ 1.f };
+	static float const wait_time{ 0.5f };
 	static GameObject* digipen_splash_screen;
 
 	static SageCamera camera;
@@ -76,7 +78,7 @@ namespace Splash_Screen {
 			if (SM::Has_Faded_Out())
 			{
 				is_triggered = false;				
-				SM::Go_To_Next_Scene();
+				SM::Go_To_Next_Scene("Level_1");
 				SM::Start_Fade_In();
 			}
 		}
