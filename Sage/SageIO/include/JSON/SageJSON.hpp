@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <stack>
 #include <variant>
 #ifndef SAGE_JSON_HPP
 
@@ -261,16 +262,24 @@ namespace SageJSON
 		std::string file_path;
 		AST::AST ast;
 		AST::AST::JSONIterator current_node{};
-		
+		std::stack<AST::Node*> node_stack;
 
 		int lex(std::string& JSONLine);
 		int construct_ast();
 		void cleanup();
 
-
+		size_t read_size;
 
 
 	public:
+
+		size_t size;
+		using NumberValue = double;
+		using StringValue = std::string;
+		using BoolValue = bool;
+		using NullValue = nullptr_t;
+
+		SageJSON();
 		SageJSON(std::string filepath);
 
 		SageJSON(AST::AST ast, std::string output);
@@ -280,9 +289,16 @@ namespace SageJSON
 		void close();
 
 		SageJSON& operator[](std::string key);
+		SageJSON& operator[](int key);
 
 		SageJSON& operator[](std::string key) const;
 
+		SageJSON& operator<<(std::string line);
+
+
+
+		friend std::istream& operator>>(std::istream& is, SageJSON& json);
+		friend std::ostream& operator<<(std::ostream& os, SageJSON& json);
 
 		template <typename T>
 		T as();
@@ -291,6 +307,9 @@ namespace SageJSON
 		SageJSON& operator=(T const& value);
 		template <>
 		SageJSON& operator=(SageJSON const& value);
+
+		AST::AST& getAST();
+		AST::AST const& getAST() const;
 	};
 
 	template <typename T>

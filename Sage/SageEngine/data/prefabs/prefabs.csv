@@ -1,7 +1,7 @@
 Prefab ID,Position X,Position Y,Position Z,Rotation X,Rotation Y,Rotation Z,Scale X ,Scale Y,Scale Z,R,G ,B,A,Sprite Texture ID,Collision Data,Has Physics,Velocity,Audio Data
-DIGIPEN_SPLASH_SCREEN,0,0,0,0,0,0,960,540,0,1,1,1,1,DIGIPEN_SPLASH_SCREEN,Nil,Nil,0,Nil
+DIGIPEN_SPLASH_SCREEN,0,0,0,0,0,0,1920,1080,0,1,1,1,1,DIGIPEN_SPLASH_SCREEN,Nil,Nil,0,Nil
 BLUE_SKY,0,0,0,0,0,0,960,540,0,1,1,1,1,BLUE_SKY,Nil,Nil,0,Nil
-FADE_SCREEN,0,0,0,0,0,0,1000,1000,0,0,0,0,1,Nil,Nil,Nil,0,Nil
+FADE_SCREEN,0,0,0,0,0,0,1920,1080,0,0,0,0,1,Nil,Nil,Nil,0,Nil
 BLACK,0,0,0,0,0,0,100,100,0,0,0,0,1,Nil,Nil,Nil,0,Nil
 WHITE,0,0,0,0,0,0,100,100,0,1,1,1,1,Nil,Nil,Nil,0,Nil
 RED,0,0,0,0,0,0,100,100,0,1,0,0,1,Nil,Nil,Yes,20,Nil

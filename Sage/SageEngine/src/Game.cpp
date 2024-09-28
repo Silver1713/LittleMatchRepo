@@ -178,6 +178,7 @@ namespace Game {
 		}
 		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_RIGHT))
 		{
+			
 			transform_cache["Player"]->Translate({ 0.f,-100.0f,0.f });
 		}
 		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_MIDDLE))
