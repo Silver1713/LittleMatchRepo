@@ -58,31 +58,63 @@ namespace SM {
 	static Function_Ptr fp_free_tmp;
 	static Function_Ptr fp_unload_tmp;
 
+	/*!*****************************************************************************
+	  \brief
+		This function specifies if the scene should ignore safety checks just in case
+		some systems havent fully loaded before accepting inputs
+
+	  \param _is_ignoring
+		Whether the scene manager should accept inputs
+	*******************************************************************************/
 	void Ignore_Safety_Bools(bool _is_ignoring)
 	{
 		ignore_safety_bools = _is_ignoring;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Begins the fading in animation
+	*******************************************************************************/
 	void Start_Fade_In()
 	{
 		scene_faded_in = false;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Begins the fading out animation
+	*******************************************************************************/
 	void Start_Fade_Out()
 	{
 		scene_faded_out = false;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Gets the state of the faded_in flag
+	  \return
+		the faded_in flag
+	*******************************************************************************/
 	bool const& Has_Faded_In()
 	{
 		return scene_faded_in;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Gets the state of the faded_out flag
+	  \return
+		the faded_out flag
+	*******************************************************************************/
 	bool const& Has_Faded_Out()
 	{
 		return scene_faded_out;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Loads the Scene Manager
+	*******************************************************************************/
 	void Load()
 	{
 		for (unsigned int i{}; i < current_level.prefabs.size(); i++)
@@ -107,6 +139,10 @@ namespace SM {
 		fade_screen = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen");
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Initializes the Scene Manager
+	*******************************************************************************/
 	void Init()
 	{
 		SAGEInputHandler::init();
@@ -115,6 +151,10 @@ namespace SM {
 		Game_Objects::Init();
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Input Checks for the Scene Manager
+	*******************************************************************************/
 	void Input()
 	{
 		
@@ -122,6 +162,10 @@ namespace SM {
 		SAGEInputHandler::update();
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Updates the Scene Manager
+	*******************************************************************************/
 	void Update()
 	{
 		Fade_In();
@@ -130,6 +174,10 @@ namespace SM {
 		SM::fp_update();
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Draws the current scene
+	*******************************************************************************/
 	void Draw()
 	{
 		
@@ -138,23 +186,64 @@ namespace SM {
 
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Frees the current scene
+	*******************************************************************************/
 	void Free()
 	{
 		SM::fp_free();
 	
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Unloads the current scene
+	*******************************************************************************/
 	void Unload()
 	{
 		SM::fp_unload();
 		Game_Objects::Exit();
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Set which level the game scene should load
+
+	  \param _level_identifier
+		The string key to set the current level to
+	*******************************************************************************/
 	void Set_Current_Level(std::string const& _level_identifier)
 	{
 		current_level = Assets::Levels::Get_Level(_level_identifier);
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Sets what function pointers to turn the current scene's one into when
+		Go_To_Next_Scene is called
+
+	  \param _load
+		the load function that the scene manager will use
+
+	  \param _init
+		the init function that the scene manager will use
+
+	  \param _input
+		the input function that the scene manager will use
+
+	  \param _update
+		the update function that the scene manager will use
+
+	  \param _draw
+		the draw function that the scene manager will use
+
+	  \param _free
+		the free function that the scene manager will use
+
+	  \param _unload
+		the unload function that the scene manager will use
+	*******************************************************************************/
 	void Set_Next_Scene(void(*_load)(), void(*_init)(), void (*_input)(), void(*_update)(), void (*_draw)(), void (*_free)(), void (*_unload)())
 	{
 		SM::fp_load_tmp = _load;
@@ -166,6 +255,13 @@ namespace SM {
 		SM::fp_unload_tmp = _unload;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Goes to the next scene as specified by Set_Next_Scene
+
+	  \param _level_identifier
+		The string key for what level should be next scene
+	*******************************************************************************/
 	void Go_To_Next_Scene(std::string const& _level_identifier)
 	{
 		current_level = Assets::Levels::Get_Level(_level_identifier);
@@ -182,12 +278,21 @@ namespace SM {
 		SM::Init();
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Restarts the scene
+	*******************************************************************************/
 	void Restart_Scene()
 	{
 		SM::fp_free();
 		scene_has_initialized = false;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Calculates the current alpha for the transition screen depending on time that
+		has passed
+	*******************************************************************************/
 	void Fade_In()
 	{
 		static float alpha{ 1.f };
@@ -214,6 +319,11 @@ namespace SM {
 		}
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Calculates the current alpha for the transition screen depending on time that
+		has passed
+	*******************************************************************************/
 	void Fade_Out()
 	{
 		static float alpha{ 0.f };
@@ -240,12 +350,19 @@ namespace SM {
 		}
 	}
 
-
+	/*!*****************************************************************************
+	  \brief
+		Exits the loop
+	*******************************************************************************/
 	void Exit_Game()
 	{
 		game_running = false;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Gets the game running flag
+	*******************************************************************************/
 	bool* Get_Game_Running()
 	{
 		return &game_running;

@@ -18,6 +18,7 @@
 #include "SageRenderer.hpp"
 #include "SageHelper.hpp"
 #include "KeyInputs.h"
+#include "Game.hpp"
 
 #include <iostream>
 #include <random>
@@ -40,19 +41,25 @@ namespace Game {
 	static SageCamera camera;
 	static SageViewport vp;
 
+	/*!*****************************************************************************
+	  \brief
+		Loads data the scene may need
+	*******************************************************************************/
 	void Load()
 	{
 		game_objects.clear();
 		transform_cache.clear();
 
+		//caches the player's transforms
 		transform_cache["Player"] = dynamic_cast<Transform*>(Game_Objects::Get_Game_Object("Player")->Get_Component(TRANSFORM));
 
-		//2.5k objects test
+		//Creates 2.5k instantiated "WHITE" prefab to test
 		for (unsigned int i{}; i < game_objects_to_create; ++i)
 		{
 			game_objects[std::to_string(i)] = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("WHITE"), "White_" + std::to_string(i));
 			transform_cache[std::to_string(i)] = dynamic_cast<Transform*>(game_objects[std::to_string(i)]->Get_Component(TRANSFORM));
 
+			//randomize properties
 			float pos[3]{ (float)(std::rand() % (int)max_pos[0] + (int)min_pos[0]), (float)(std::rand() % (int)max_pos[1] + (int)min_pos[1]),0.0f };
 			float rot[3]{ (float)(std::rand() % (int)max_rot[0] + (int)min_rot[0]), (float)(std::rand() % (int)max_rot[1] + (int)min_rot[1]),0.0f };
 			float scale[3]{ (float)(std::rand() % (int)max_scale[0] + (int)min_scale[0]), (float)(std::rand() % (int)max_scale[1] + (int)min_scale[1]),0.0f };
@@ -69,6 +76,10 @@ namespace Game {
 		}
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Initializes the scene
+	*******************************************************************************/
 	void Init()
 	{
 		camera.init({ 0,0 }, { static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
@@ -82,6 +93,10 @@ namespace Game {
 		vp.setViewport();
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Handles input checks in the scene
+	*******************************************************************************/
 	void Input()
 	{
 		//tests
@@ -216,8 +231,13 @@ namespace Game {
 		}
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Updates the game scene
+	*******************************************************************************/
 	void Update()
 	{
+		//rotates greens
 		if (game_objects["Green0"])
 		{
 			for (unsigned int i{}; i < 3; ++i)
@@ -226,6 +246,7 @@ namespace Game {
 			}
 		}
 
+		//rotates the 2.5k objects
 		for (unsigned int i{}; i < game_objects_to_create; ++i)
 		{
 			transform_cache[std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f,0.0f });
@@ -235,14 +256,26 @@ namespace Game {
 
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Draws the game scene
+	*******************************************************************************/
 	void Draw()
 	{
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Frees the game scene
+	*******************************************************************************/
 	void Free()
 	{
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Unloads the game scene
+	*******************************************************************************/
 	void Unload()
 	{		
 	}

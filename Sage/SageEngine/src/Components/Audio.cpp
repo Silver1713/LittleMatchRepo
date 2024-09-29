@@ -13,16 +13,43 @@
 /* End Header **************************************************************************/
 #include "Components/Audio.hpp"
 
+/*!*****************************************************************************
+  \brief
+	Initializes the component and assigns the parent to the gameobject that
+	created this component. Provides a space if any audio components need to
+	be initialized per gameobject
+
+  \param _parent
+	the gameobject creating this component
+*******************************************************************************/
 void Audio::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
 }
+
+/*!*****************************************************************************
+  \brief
+	Updates any audio this component uses
+*******************************************************************************/
 void Audio::Update()
 {
 
 }
+/*!*****************************************************************************
+  \brief
+	Provides a space if there is any unloading or freeing may be required
+	per component
+*******************************************************************************/
 void Audio::Exit()
 {
 
 }
+
+/*!*****************************************************************************
+  \brief
+	Gets overriden based on what component this is
+
+  \return
+	the enum representating what component this is
+*******************************************************************************/
 ComponentType Audio::Get_Component_Type() { return AUDIO; }

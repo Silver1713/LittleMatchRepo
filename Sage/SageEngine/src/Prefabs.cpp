@@ -27,7 +27,10 @@ namespace Prefabs
 {	
 	static std::unordered_map<std::string, Assets::Prefabs::Prefab> prefabs;
 	static bool is_initialized{ false };
-
+	/*!*****************************************************************************
+	  \brief
+		Initializes all components of all gameobjects
+	*******************************************************************************/
 	void Init()
 	{
 		if (is_initialized)
@@ -37,7 +40,16 @@ namespace Prefabs
 		prefabs = Assets::Prefabs::Get_Prefabs();
 		is_initialized = true;
 	}
+	/*!*****************************************************************************
+	  \brief
+		Gets the Prefab with the provided ID
 
+	  \param _ID
+		The key to look for
+
+	  \return
+		The Prefab in the map with the _ID key
+	*******************************************************************************/
 	Assets::Prefabs::Prefab const& Get_Prefab(std::string _ID)
 	{
 		if (!is_initialized)

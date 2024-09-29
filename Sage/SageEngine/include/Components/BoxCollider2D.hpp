@@ -16,8 +16,34 @@
 
 class BoxCollider2D : public Component
 {
+	/*!*****************************************************************************
+	  \brief
+		This function initializes the component along with any BoxCollider specific
+		members that need initializing
+
+	  \param _parent
+		the gameobject that created this component
+	*******************************************************************************/
 	void Init(GameObject* _parent) override;
+
+	/*!*****************************************************************************
+	  \brief
+		Space for calls to collision implementation
+	*******************************************************************************/
 	void Update() override;
+
+	/*!*****************************************************************************
+	  \brief
+		Frees and unload any members that needs it
+	*******************************************************************************/
 	void Exit() override;
+
+	/*!*****************************************************************************
+	  \brief
+		Gets overriden based on what component this is
+
+	  \return
+		the enum representating what component this is
+	*******************************************************************************/
 	ComponentType Get_Component_Type() override;
 };
