@@ -25,6 +25,8 @@
 //FOR TESTING PURPOSES
 #include <cstdlib> // for srand()
 
+#include "BehaviourComponent/Player.hpp"
+
 
 namespace Game {
 	//TESTS
@@ -39,6 +41,8 @@ namespace Game {
 
 	static SageCamera camera;
 	static SageViewport vp;
+
+	
 
 	void Load()
 	{
@@ -86,6 +90,8 @@ namespace Game {
 
 		Physics* plrphy = Game_Objects::Get_Game_Object("Player")->Get_Component<Physics>();
 		plrphy->set_static(false);
+
+		Game_Objects::Get_Game_Object("Player")->Add_Component(std::make_unique<Player>());
 	}
 
 	void Input()

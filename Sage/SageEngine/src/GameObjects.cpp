@@ -155,7 +155,7 @@ void GameObject::Update()
 
 	for (const auto& _c : components)
 	{
-		_c->Update();
+		_c->Update(); 
 	}
 }
 
