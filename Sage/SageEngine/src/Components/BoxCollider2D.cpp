@@ -13,10 +13,27 @@
 /* End Header **************************************************************************/
 #include "Components/BoxCollider2D.hpp"
 
+#include <iostream>
+#include <ostream>
+
+#include "GameObjects.hpp"
+
 void BoxCollider2D::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
+	Transform* transform = dynamic_cast<Transform*>(_parent->Get_Component(ComponentType::TRANSFORM));
+	float const* scale = transform->Get_Scale();
+	aabb.min_x = -scale[0] / 2;
+	aabb.max_x = scale[0] / 2;
+	aabb.min_y = -scale[1] / 2;
+	aabb.max_y = scale[1] / 2;
+
+
+
 }
-void BoxCollider2D::Update() {}
+void BoxCollider2D::Update()
+{
+	
+}
 void BoxCollider2D::Exit() {}
 ComponentType BoxCollider2D::Get_Component_Type() { return BOXCOLLIDER2D; }

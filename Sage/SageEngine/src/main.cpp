@@ -36,6 +36,7 @@
 #include "SceneManager.hpp"
 #include "SageAudio.hpp"
 #include "SageShaderManager.hpp"
+#include "SageTimer.hpp"
 
 
 // Forward declaration
@@ -95,6 +96,7 @@ void init()
     int status = SageHelper::init(1920, 1080, "Hello World");
     SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
 	SageRenderer::init();
+    SageTimer::init();
 
     if (status)
     {
@@ -115,8 +117,9 @@ void init()
 
 void update()
 {
+    SageTimer::Update();
     SageHelper::update();
-	accumulator += SageHelper::delta_time;
+	accumulator += SageTimer::delta_time;
 	if (accumulator >= physics_update_target)
 	{
         PhysicsUpdate();
@@ -131,7 +134,7 @@ void update()
 
 void PhysicsUpdate()
 {
-	SageHelper::fixed_delta_time = SageHelper::delta_time;
+	// Do you want a fixed physics update? - JH
 }
 
 void draw()

@@ -111,8 +111,8 @@ namespace SM {
 	{
 		SAGEInputHandler::init();
 
-		SM::fp_init();
 		Game_Objects::Init();
+		SM::fp_init();
 	}
 
 	void Input()

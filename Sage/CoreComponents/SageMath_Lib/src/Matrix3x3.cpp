@@ -569,6 +569,46 @@ namespace ToastBox {
 
 		return result;
 	}
+	Matrix3x3 Matrix3Scaling(Matrix3x3& data, float x, float y)
+	{
+		Matrix3x3 result{data};
+		result.Matrix3Scale(x, y);
+		return result;
+	}
+
+
+	Matrix3x3 Matrix3Rotation(Matrix3x3&, float angle)
+	{
+		Matrix3x3 result{};
+		result.Matrix3RotRad(angle);
+		return result;
+	}
+
+	Matrix3x3 Matrix3Concat(Matrix3x3 const& lhs, Matrix3x3 const& rhs)
+	{
+		Matrix3x3 result{lhs * rhs};
+		
+		return result;
+	}
+
+	Matrix3x3 Matrix3Translation(Matrix3x3&, float x, float y)
+	{
+		Matrix3x3 result{};
+		result.Matrix3Translate(x, y);
+		return result;
+	}
+
+	
+	Matrix3x3 Matrix3x3::operator~()
+	{
+		Matrix3x3 result{};
+		result.Matrix3Transpose(*this);
+		return result;
+	}
+
+
+
+
 
 }
 

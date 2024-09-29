@@ -45,6 +45,7 @@ namespace ToastBox {
 			matrixArray{ AA,BB,CC,DD,EE,GG,HH,II,JJ,KK,LL,MM,NN,OO,PP }
 		{}
 
+		Matrix4 operator~();
 		Matrix4 operator=(const Matrix4& rhs);
 
 		void Matrix4Identity(Matrix4& result);
@@ -74,6 +75,9 @@ namespace ToastBox {
 
 		void Matrix4Mul(const float scale);
 		Matrix4 Matrix4Mul2(const Matrix4& rhs, const float scale);
+
+
+
 
 		void Matrix4Div(const float scale);
 		Matrix4 Matrix4Div2(const Matrix4& rhs, const float scale);
