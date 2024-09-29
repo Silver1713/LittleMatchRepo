@@ -117,6 +117,7 @@ namespace SM {
 	*******************************************************************************/
 	void Load()
 	{
+		//Creates all prefabs that are supposed to exist in current level scene
 		for (unsigned int i{}; i < current_level.prefabs.size(); i++)
 		{
 			GameObject* g;
