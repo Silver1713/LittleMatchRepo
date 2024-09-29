@@ -81,8 +81,8 @@ foreach(CORE_LIB_SUBDIR ${CORE_LIB_DIR})
         target_compile_options(${CORE_LIB_NAME} PRIVATE -Wall ${DisableWarnings})
         target_compile_options(${CORE_LIB_NAME}_lib PRIVATE -Wall ${DisableWarnings})
     elseif(MSVC)
-        target_compile_options(${CORE_LIB_NAME} PRIVATE /W3 /WX-)
-        target_compile_options(${CORE_LIB_NAME}_lib PRIVATE /W3 /WX-)
+        target_compile_options(${CORE_LIB_NAME} PRIVATE /W4 /WX-)
+        target_compile_options(${CORE_LIB_NAME}_lib PRIVATE /W4 /WX-)
     endif()
 
     target_link_libraries(

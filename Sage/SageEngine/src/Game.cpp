@@ -65,7 +65,7 @@ namespace Game {
 			Sprite2D* s = dynamic_cast<Sprite2D*>(game_objects[std::to_string(i)]->Get_Component(SPRITE2D));
 			s->Set_Colour({col[0],col[1],col[2]});
 
-			game_objects[std::to_string(i)]->Disable();
+			game_objects[std::to_string(i)]->Disable();	
 		}
 	}
 
@@ -178,6 +178,7 @@ namespace Game {
 		}
 		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_RIGHT))
 		{
+			
 			transform_cache["Player"]->Translate({ 0.f,-100.0f,0.f });
 		}
 		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_MIDDLE))

@@ -6,7 +6,8 @@
 #include "SageMain.hpp"
 #include "SageShader.hpp"
 
-
+#include <vector>
+#include "Vector2.h"
 
 
 int SageHelper::WINDOW_WIDTH{};
@@ -302,5 +303,26 @@ SageShader SageHelper::CompileShadersFromFile(const char* vertex_shader, const c
 	shader.GetProgramHandle();
 	return shader;
 }
+
+std::vector<ToastBox::Vec2> SageHelper::AABBVertices(ToastBox::Vec2 _center, float _sidelength)
+{
+	std::vector<ToastBox::Vec2> vertices;
+	float halfside = _sidelength / 2.0f;
+	ToastBox::Vec2 bottom_left;
+	bottom_left = { _center.x - halfside,_center.y - halfside };
+	vertices.push_back(bottom_left);
+	ToastBox::Vec2 bottom_right;
+	bottom_right = { _center.x + halfside, _center.y - halfside };
+	vertices.push_back(bottom_right);
+	ToastBox::Vec2 top_right;
+	top_right = { _center.x + halfside, _center.y + halfside };
+	vertices.push_back(top_right);
+	ToastBox::Vec2 top_left;
+	top_left = { _center.x - halfside, _center.y + halfside };
+	vertices.push_back(top_left);
+
+	return vertices;
+}
+
 
 

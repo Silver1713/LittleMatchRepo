@@ -15,6 +15,7 @@
 #include "AssetLoader.hpp"
 #include "Prefabs.hpp"
 
+#include "SageRenderer.hpp"
 #include "SageHelper.hpp"
 #include "KeyInputs.h"
 #include "SplashScreen.hpp"

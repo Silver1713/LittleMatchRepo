@@ -90,6 +90,7 @@ public:
 	SageShader* get_shader_program() const;
 
 	void set_shape_type(PrimitiveShape shape);
+
 	void set_render_type(RENDER_TYPE type);
 	void set_render_type(int type);
 	void set_shape_type(int shape);
@@ -101,6 +102,7 @@ public:
 
 	static int model_count;
 
+	int get_shape_type();
 
 
 };

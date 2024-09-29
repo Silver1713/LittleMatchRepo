@@ -44,7 +44,7 @@ GLFWwindow* createWindow()
 
 	//Set callbacks to the  internal input handler
 	glfwSetKeyCallback(window, GLFWInputHandler::Key_Cb);
-	glfwSetMouseButtonCallback(window, GLFWInputHandler::mouse_cb);
+	glfwSetMouseButtonCallback(window, GLFWInputHandler::Mouse_Cb);
 	return window;
 }
 
