@@ -14,10 +14,39 @@
 #pragma once
 #include "Component.hpp"
 
+//Derived component class audio
 class Audio : public Component
 {
+	/*!*****************************************************************************
+	  \brief
+		Initializes the component and assigns the parent to the gameobject that
+		created this component. Provides a space if any audio components need to
+		be initialized per gameobject
+
+	  \param _parent
+		the gameobject creating this component
+	*******************************************************************************/
 	void Init(GameObject* _parent) override;
+
+	/*!*****************************************************************************
+	  \brief
+		Updates any audio this component uses
+	*******************************************************************************/
 	void Update() override;
+
+	/*!*****************************************************************************
+	  \brief
+		Provides a space if there is any unloading or freeing may be required
+		per component
+	*******************************************************************************/
 	void Exit() override;
+
+	/*!*****************************************************************************
+	  \brief
+		Gets overriden based on what component this is
+
+	  \return
+		the enum representating what component this is
+	*******************************************************************************/
 	ComponentType Get_Component_Type() override;
 };
