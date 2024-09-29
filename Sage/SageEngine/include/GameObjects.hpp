@@ -23,7 +23,7 @@ class GameObject
 protected:
 	std::vector<std::unique_ptr<Component>> components;
 	std::string identifier{};
-	bool is_enabled{true};
+	bool is_enabled{ true };
 
 public:
 	GameObject();
@@ -42,7 +42,15 @@ public:
 
 	void Add_Component(std::unique_ptr<Component> _c);
 	Component* Get_Component(ComponentType _component);
+
+	template <typename T, typename = std::enable_if_t<std::is_base_of_v<Component, T>>>
+	T* Get_Component();
+	
+
 };
+
+
+
 
 namespace Game_Objects
 {
@@ -55,4 +63,19 @@ namespace Game_Objects
 	GameObject* Get_Game_Object(std::string const& _identifier);
 	GameObject* Instantiate(Assets::Prefabs::Prefab const& _p, std::string const& _identifer);
 	void Clear_Game_Objects();
+}
+
+
+template <typename T, typename>
+T* GameObject::Get_Component()
+{
+	for (auto& _c : components)
+	{
+		T* t = dynamic_cast<T*>(_c.get());
+		if (t)
+		{
+			return t;
+		}
+	}
+	return nullptr;
 }

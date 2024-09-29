@@ -28,7 +28,7 @@
 
 namespace Game {
 	//TESTS
-	static unsigned int const game_objects_to_create{ 0 };
+	static unsigned int const game_objects_to_create{ 2500 };
 	static float const min_pos[3]{ -960.0f,-540.0f,0.0f }, max_pos[3]{ 1920.0f,1080.0f,0.0f };
 	static float const min_rot[3]{ 0.0f,0.0f,0.0f }, max_rot[3]{ 360.0f,360.0f,0.0f };
 	static float const min_scale[3]{ 1.0f,1.0f,0.0f }, max_scale[3]{ 10.0f,10.0f,0.0f };
@@ -84,7 +84,7 @@ namespace Game {
 		vp.setViewport();
 
 
-		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
+		Physics* plrphy = Game_Objects::Get_Game_Object("Player")->Get_Component<Physics>();
 		plrphy->set_static(false);
 	}
 

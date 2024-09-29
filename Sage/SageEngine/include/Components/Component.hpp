@@ -19,6 +19,9 @@
 class GameObject;
 class SageObject;
 
+
+
+
 typedef enum {
 	COMPONENT,
 	TRANSFORM,

@@ -13,6 +13,7 @@
 /* End Header **************************************************************************/
 #pragma once
 #include "Components/Component.hpp"
+#include "Vector3.h"
 
 class Transform : public Component
 {
@@ -23,6 +24,10 @@ private:
 	bool is_UI_Element{ false };
 
 public:
+	ToastBox::Vec3 position{};
+	ToastBox::Vec3 rotation{};
+	ToastBox::Vec3 scaling{};
+
 	Transform();
 	Transform(float const* _pos, float const* _rot, float const* _scale, bool _is_UI_element = false);
 	Transform(std::initializer_list<float> const& _pos, std::initializer_list<float> const& _rot, std::initializer_list<float> const& _scale);
