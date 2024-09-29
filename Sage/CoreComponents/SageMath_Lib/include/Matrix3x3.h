@@ -21,7 +21,7 @@ namespace ToastBox {
 				float m00, m01, m02;
 				float m10, m11, m12;
 				float m20, m21, m22;
-			};
+			} ;
 			float m[9];
 		};
 
@@ -36,6 +36,7 @@ namespace ToastBox {
 			:m00{ _00 }, m01{ _01 }, m02{ _02 }, m10{ _10 }, m11{ _11 }, m12{ _12 }, m20{ _20 }, m21{ _21 }, m22{ _22 }{}
 
 		Matrix3x3 operator=(const Matrix3x3& rhs);
+		Matrix3x3 operator~();
 
 		//Identity matrix
 		void Matrix3Identity(Matrix3x3& pResult);
@@ -91,5 +92,13 @@ namespace ToastBox {
 		friend Vec3 operator*(const Matrix3x3& pMtx0, const Vec3& pVec0);
 
 		friend Matrix3x3 operator*(const Matrix3x3& lhs, const Matrix3x3& rhs);
+
+
 	};
+
+	Matrix3x3 Matrix3Scaling(Matrix3x3&, float x, float y);
+	Matrix3x3 Matrix3Rotation(Matrix3x3&, float angle);
+	Matrix3x3 Matrix3Translation(Matrix3x3&, float x, float y);
+
+	Matrix3x3 Matrix3Concat(Matrix3x3 const& lhs, Matrix3x3 const& rhs);
 }

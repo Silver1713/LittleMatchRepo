@@ -36,8 +36,8 @@ int main()
 	}
 	lol << json;
 
-	//json.getAST().getRoot()->print();
-
+	
+	
 
 
 	auto v = json[10]["name"];

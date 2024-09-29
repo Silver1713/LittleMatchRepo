@@ -123,7 +123,7 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	}
 	if (!(_p.has_physics == "Nil"))
 	{
-		Add_Component(std::make_unique<Physics>(_p.velocity));
+		Add_Component(std::make_unique<Physics>(ToastBox::Vec2{ _p.velocity ,_p.velocity }));
 	}
 	if (!(_p.audio_data == "Nil"))
 	{

@@ -14,6 +14,10 @@
 #include "Components/Component.hpp"
 #include "Components/Transform.hpp"
 
+#include "GameObjects.hpp"
+#include "SageTimer.hpp"
+#include "Components/Physics.hpp"
+
 Transform::Transform() {}
 Transform::Transform(float const* _pos, float const* _rot, float const* _scale, bool _is_UI_element) : positions{ *_pos,*(_pos + 1),*(_pos + 2) }, rotations{ *_rot, *(_rot + 1), *(_rot + 2) }, scale{ *_scale, *(_scale + 1), *(_scale + 2) } {}
 Transform::Transform(std::initializer_list<float> const& _pos, std::initializer_list<float> const& _rot, std::initializer_list<float> const& _scale) : Transform(_pos.begin(), _rot.begin(), _scale.begin()) {}
@@ -24,7 +28,17 @@ void Transform::Init(GameObject* _parent)
 }
 void Transform::Update()
 {
+	GameObject* parent = Get_Parent();
+	Physics* phy =dynamic_cast<Physics*>(Get_Parent()->Get_Component(PHYSICS));
 
+	// apply transformation
+
+	if (phy)
+	{
+		
+		Set_Positions({ Get_Positions()[0],Get_Positions()[1] + phy->Get_Velocity().y, Get_Positions()[2] });
+
+	}
 }
 void Transform::Exit()
 {

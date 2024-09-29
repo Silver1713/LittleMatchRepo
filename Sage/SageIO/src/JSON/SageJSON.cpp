@@ -841,15 +841,18 @@ namespace SageJSON
 				json.lex(line);
 				json.construct_ast();
 			}
-		}
-		
-		
-		line.resize(json.read_size);
-		if (is.read(&line[0], json.read_size))
+		} else
 		{
-			json.lex(line);
-			json.construct_ast();
+			line.resize(json.read_size);
+			if (is.read(&line[0], json.read_size))
+			{
+				json.lex(line);
+				json.construct_ast();
+			}
 		}
+		
+		
+		
 
 		
 		

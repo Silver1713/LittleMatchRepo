@@ -415,11 +415,9 @@ void SageRendererInternal::DrawPoint(SagePoint const& point)
 	{
 		ToastBox::Matrix3x3 mtx = { glm::value_ptr(point.transformation_matrix) };
 
-		ToastBox::Matrix3x3 m1, m2, m3;
+		ToastBox::Matrix3x3 m3;
 
-		m1.Matrix3Transpose(mtx);
-		m2.Matrix3Transpose(camera->get_projection_view_matrix());
-		m3.Matrix3Transpose(m2 * m1);
+		m3.Matrix3Transpose(~camera->get_projection_view_matrix() * ~mtx);
 		shader->SetUniform("uModel_xform", m3);
 	}
 	else
