@@ -13,10 +13,10 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, int shape, i
 	{
 		//Use ndc [-1,1] for square
 		std::vector<glm::vec2> pos_vtx{
-			glm::vec2(1.f,-1.f),
-			glm::vec2(1.f,1.f),
-			glm::vec2(-1.f,1.f),
-			glm::vec2(-1.f,-1.f)
+			glm::vec2(.5f,-.5f),
+			glm::vec2(.5f,.5f),
+			glm::vec2(-.5f,.5f),
+			glm::vec2(-.5f,-.5f)
 		};
 
 		std::vector<glm::vec2> tex_vtx{
@@ -55,7 +55,7 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, int shape, i
 		
 		// default radius
 		float radius = 8.f;
-		int slices = static_cast<int>(10.0f * sqrt(radius));
+		int slices = 255;
 		float angle_step = 2.0f * pi / static_cast<float>(slices);
 
 		// Vertex arrays
@@ -74,8 +74,8 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, int shape, i
 			float x = std::cos(angle);
 			float y = std::sin(angle);
 			pos_vtx.push_back(glm::vec2(x, y));
-			tex_vtx.push_back(glm::vec2(0.5f + 0.5f * cos(angle), 0.5f + 0.5f * sin(angle)));
-			clr_vtx.push_back(glm::vec4(0.5f + 0.5f * cos(angle), 0.5f + 0.5f * sin(angle), 1.0f, 1.0f));
+			tex_vtx.push_back(glm::vec2(  0.5f * cos(angle),  0.5f * sin(angle)));
+			clr_vtx.push_back(glm::vec4(0.5f * cos(angle),  0.5f * sin(angle), 1.0f, 1.0f));
 		}
 
 		for (int j = 1; j <= slices; ++j)

@@ -57,7 +57,6 @@ private:
 	GLuint object_id;
 	std::string object_name;
 
-	SageMesh obj_mesh;
 
 	bool is_enabled;
 
@@ -77,6 +76,7 @@ public:
 
 	SageTransform2D transform;
 	SageMaterial material;
+	SageMesh obj_mesh;
 	static long int object_count;
 	static long int current_object_count;
 

@@ -10,6 +10,7 @@
 
 class SageWindow
 {
+	static SageWindow* active_window;
 public:
 	SageWindow(int width, int height, const char* title);
 	~SageWindow();
@@ -68,6 +69,9 @@ public:
 	int get_size_x() const;
 	int get_size_y() const;
 	std::string get_title() const;
+
+
+	static SageWindow* Get_Active_Window();
 
 
 };

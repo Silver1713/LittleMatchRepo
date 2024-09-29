@@ -762,5 +762,15 @@ namespace ToastBox {
 	}
 
 
+	Matrix4 Matrix4::operator~()
+	{
+		Matrix4 copy{ };
+		copy.Matrix4Transpose(*this);
+
+		return copy;
+	}
+
+
+
 
 }

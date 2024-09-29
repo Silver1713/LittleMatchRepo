@@ -1,6 +1,6 @@
 #include <Windows.h>
 #include <gtest/gtest.h>
-#include "Key_Inputs.h"
+#include "KeyInputs.h"
 void SimulateKeyPress00(int key, int action)
 {
 	INPUT ip;
@@ -15,8 +15,8 @@ void SimulateKeyPress00(int key, int action)
 
 TEST(InputTestPIMPL, KEY_RELEASE_A)
 {
-	SAGE_Input_Handler::update();
-	bool result = SAGE_Input_Handler::Get_Key(SAGE_KEY_A);
+	SAGEInputHandler::update();
+	bool result = SAGEInputHandler::Get_Key(SAGE_KEY_A);
 	EXPECT_FALSE(result);
 }
 
@@ -25,9 +25,9 @@ TEST(InputTestPIMPL , KEY_TAP_K)
 	WORD key = 'K';
 
 	SimulateKeyPress00(key, 0);
-	SAGE_Input_Handler::update();
+	SAGEInputHandler::update();
 	
-	bool result = SAGE_Input_Handler::Get_Key(SAGE_KEY_K);
+	bool result = SAGEInputHandler::Get_Key(SAGE_KEY_K);
 	EXPECT_TRUE(result);
 }
 
@@ -36,8 +36,8 @@ TEST(InputTestPIMPL, KEY_RELEASE_K)
 	WORD key = 'K';
 
 	SimulateKeyPress00(key, KEYEVENTF_KEYUP);
-	SAGE_Input_Handler::update();
-	bool res = SAGE_Input_Handler::Get_Key(SAGE_KEY_K);
+	SAGEInputHandler::update();
+	bool res = SAGEInputHandler::Get_Key(SAGE_KEY_K);
 	EXPECT_FALSE(res);
 
 }

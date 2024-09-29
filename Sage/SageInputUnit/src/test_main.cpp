@@ -5,8 +5,8 @@
 #include  <Windows.h>
 #include <gtest/gtest.h>
 #include <GLFW/glfw3.h>
-#include "Key_Inputs.h"
-#include "GLFW_Handler.h"
+#include "KeyInputs.h"
+#include "GLFWHandler.h"
 #include <GLFW/glfw3native.h>
 
 
@@ -43,8 +43,8 @@ GLFWwindow* createWindow()
 	glfwMakeContextCurrent(window);
 
 	//Set callbacks to the  internal input handler
-	glfwSetKeyCallback(window, GLFW_Input_Handler::key_cb);
-	glfwSetMouseButtonCallback(window, GLFW_Input_Handler::mouse_cb);
+	glfwSetKeyCallback(window, GLFWInputHandler::Key_Cb);
+	glfwSetMouseButtonCallback(window, GLFWInputHandler::Mouse_Cb);
 	return window;
 }
 
@@ -79,34 +79,34 @@ TEST(InputTestSuite, GLFWMAPPING)
 
 TEST(inputTestSuite, TapKeyFromClient)
 {
-	GLFW_Input_Handler::key_cb(window, GLFW_KEY_G, 0, GLFW_PRESS, 0);
+	GLFWInputHandler::Key_Cb(window, GLFW_KEY_G, 0, GLFW_PRESS, 0);
 
-	EXPECT_EQ(SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_G), true);
+	EXPECT_EQ(SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_G), true);
 }
 
 TEST(inputTestSuite, HoldKeyFromClient)
 {
-	GLFW_Input_Handler::key_cb(window, GLFW_KEY_G, 0, GLFW_REPEAT, 0);
-	GLFW_Input_Handler::key_cb(window, GLFW_KEY_I, 0, GLFW_PRESS, 0);
+	GLFWInputHandler::Key_Cb(window, GLFW_KEY_G, 0, GLFW_REPEAT, 0);
+	GLFWInputHandler::Key_Cb(window, GLFW_KEY_I, 0, GLFW_PRESS, 0);
 
-	EXPECT_EQ(SAGE_Input_Handler::Get_Key(SAGE_KEY_G) && SAGE_Input_Handler::Get_Key(SAGE_KEY_I), true);
+	EXPECT_EQ(SAGEInputHandler::Get_Key(SAGE_KEY_G) && SAGEInputHandler::Get_Key(SAGE_KEY_I), true);
 }
 
 TEST(inputTestSuite, ReleaseKeyFromClient)
 {
-	GLFW_Input_Handler::key_cb(window, GLFW_KEY_E, 0, GLFW_PRESS, 0);
-	EXPECT_EQ(SAGE_Input_Handler::Get_Key(SAGE_KEY_E), true);
-	GLFW_Input_Handler::key_cb(window, GLFW_KEY_E, 0, GLFW_RELEASE, 0);
+	GLFWInputHandler::Key_Cb(window, GLFW_KEY_E, 0, GLFW_PRESS, 0);
+	EXPECT_EQ(SAGEInputHandler::Get_Key(SAGE_KEY_E), true);
+	GLFWInputHandler::Key_Cb(window, GLFW_KEY_E, 0, GLFW_RELEASE, 0);
 
-	EXPECT_EQ(SAGE_Input_Handler::Get_Key(SAGE_KEY_E), false);
+	EXPECT_EQ(SAGEInputHandler::Get_Key(SAGE_KEY_E), false);
 }
 
 TEST(inputTestSuite, Windows_InputKeyAOnce)
 {
 	WORD key = 'A'; // A
 	SimulateKeyPress(key, 0); // Interact with microsoft windows.
-	GLFW_Input_Handler::Poll_Events();
-	ASSERT_EQ(SAGE_Input_Handler::Get_Key_Pressed(SAGE_KEY_A), true);
+	GLFWInputHandler::Poll_Events();
+	ASSERT_EQ(SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_A), true);
 }
 
 TEST(inputTestSuite, Windows_InputKeyARepeat)
@@ -115,10 +115,10 @@ TEST(inputTestSuite, Windows_InputKeyARepeat)
 	
 	SimulateKeyPress(key, KEYEVENTF_KEYUP); // Interact with microsoft windows.
 	
-	GLFW_Input_Handler::Poll_Events();
+	GLFWInputHandler::Poll_Events();
 
 	
-	ASSERT_EQ(SAGE_Input_Handler::Get_Key(SAGE_KEY_A), false);
+	ASSERT_EQ(SAGEInputHandler::Get_Key(SAGE_KEY_A), false);
 }
 
 
@@ -141,9 +141,9 @@ TEST(GLFWTest, LOOP)
 {
 	while (!glfwWindowShouldClose(window))
 	{
-		SAGE_Input_Handler::update();
+		SAGEInputHandler::update();
 
-		if (SAGE_Input_Handler::Get_Key(SAGE_KEY_W))
+		if (SAGEInputHandler::Get_Key(SAGE_KEY_W))
 		{
 			EXPECT_TRUE(true);
 			break;

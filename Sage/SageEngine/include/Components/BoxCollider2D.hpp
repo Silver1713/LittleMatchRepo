@@ -16,6 +16,16 @@
 
 class BoxCollider2D : public Component
 {
+	struct AABB
+	{
+		float pos_x, pos_y; // Center position of the collider in the object's local space
+		float min_x, min_y; // Minimum extents of the collider in the object's local space
+		float max_x, max_y; // Maximum extents of the collider in the object's local space
+	};
+
+public:
+	AABB aabb;
+
 	void Init(GameObject* _parent) override;
 	void Update() override;
 	void Exit() override;

@@ -66,6 +66,11 @@ struct SageHelper
 	static void update_time(double update_interval);
 
 
+
+
+	static std::vector<ToastBox::Vec2> AABBVertices(ToastBox::Vec2 _center, float _sidelength);
+
+
 };
 
 

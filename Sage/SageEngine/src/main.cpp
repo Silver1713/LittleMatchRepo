@@ -29,13 +29,14 @@
 #include <backward.hpp>
 #include "SageRenderer.hpp"
 #include "SageHelper.hpp"
-#include "Key_Inputs.h"
+#include "KeyInputs.h"
 
 #include "AssetLoader.hpp"
-#include "SceneManager.hpp"
 #include "Prefabs.hpp"
+#include "SceneManager.hpp"
 #include "SageAudio.hpp"
 #include "SageShaderManager.hpp"
+#include "SageTimer.hpp"
 
 
 // Forward declaration
@@ -70,9 +71,9 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	init();
-    SageAudio::Play_Sound("HALO_2");
+    //SageAudio::Play_Sound("HALO_2");
     SageAudio::Play_Sound("MAIN_MENU");
-    SageAudio::Play_Sound("RAIN");
+    //SageAudio::Play_Sound("RAIN");
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{
@@ -86,7 +87,6 @@ int main()
 
 	}
 	exit();
-    std::cout << "End\n";
 	return 0;
 }
 
@@ -96,19 +96,17 @@ void init()
     int status = SageHelper::init(1920, 1080, "Hello World");
     SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
 	SageRenderer::init();
-    
-
-
+    SageTimer::init();
 
     if (status)
     {
         std::cerr << "Sage failed to create OpenGL context.";
 
         std::exit(EXIT_FAILURE);
-    }
-    
+    }    
     Assets::Textures::Init();
     Assets::Prefabs::Init();
+    Assets::Levels::Init();
     Prefabs::Init();
     SM::Load();
     SM::Init();
@@ -119,8 +117,9 @@ void init()
 
 void update()
 {
+    SageTimer::Update();
     SageHelper::update();
-	accumulator += SageHelper::delta_time;
+	accumulator += SageTimer::delta_time;
 	if (accumulator >= physics_update_target)
 	{
         PhysicsUpdate();
@@ -135,12 +134,14 @@ void update()
 
 void PhysicsUpdate()
 {
-	SageHelper::fixed_delta_time = SageHelper::delta_time;
+	// Do you want a fixed physics update? - JH
 }
 
 void draw()
 {
     SageHelper::draw();
+    std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS);
+    SageHelper::sage_ptr_window->set_title(s.c_str());
     SM::Draw();
 	
 }

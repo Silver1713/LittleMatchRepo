@@ -162,6 +162,11 @@ GLuint SageModel::get_vbo_handle() const
 	return vbo_hdl;
 }
 
+int SageModel::get_shape_type()
+{
+	return shape_type;
+}
+
 
 
 

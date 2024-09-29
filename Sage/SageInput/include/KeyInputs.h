@@ -131,9 +131,9 @@
 #define SAGE_MOUSE_BUTTON_RIGHT         1
 #define SAGE_MOUSE_BUTTON_MIDDLE         2
 #include <memory>
-class SageInput_PIML;
+class SageInputPIML;
 
-class SAGE_Input_Handler
+class SAGEInputHandler
 {
 public:
 	static bool Get_Key_Pressed(int keycode); // Check if specific key is pressed once
@@ -152,7 +152,7 @@ public:
 
 
 private:
-	static void customSageInputPIMPLDelete(void*& p);
-	static std::unique_ptr<void, decltype(&customSageInputPIMPLDelete)> impl_pointer;
+	static void Custom_Sage_Input_PIMPL_Delete(void*& p);
+	static std::unique_ptr<void, decltype(&Custom_Sage_Input_PIMPL_Delete)> impl_pointer;
 };
 
