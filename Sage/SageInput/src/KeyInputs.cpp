@@ -19,6 +19,10 @@
 #include "GLFWHandler.h"
 #include "SageInputPIML.h"
 
+/*!*****************************************************************************
+\brief
+	Function to delete the pointer to implementation for sage input
+*******************************************************************************/
 void SAGEInputHandler::Custom_Sage_Input_PIMPL_Delete(void*& p)
 {
 	delete static_cast<SageInputPIML*>(p);
@@ -29,58 +33,88 @@ void SAGEInputHandler::Custom_Sage_Input_PIMPL_Delete(void*& p)
 
 std::unique_ptr<void, decltype(&SAGEInputHandler::Custom_Sage_Input_PIMPL_Delete)> SAGEInputHandler::impl_pointer{std::make_unique<SageInputPIML>().release()	, Custom_Sage_Input_PIMPL_Delete };
 
+/*!*****************************************************************************
+\brief
+	Function to access SageInput pointer to implementation to check if a specific
+	key is pressed once
+*******************************************************************************/
 bool SAGEInputHandler::Get_Key_Pressed(int keycode)
 {
-	
 	return SageInputPIML::Get_Key_Pressed(keycode);
 }
 
+/*!*****************************************************************************
+\brief
+	Function to access SageInput pointer to implementation to check if a specific
+	key is held down
+*******************************************************************************/
 bool SAGEInputHandler::Get_Key(int keycode)
 {
 	return SageInputPIML::Get_Key(keycode);
 }
 
+/*!*****************************************************************************
+\brief
+	Function to access SageInput pointer to implementation to check if the mouse
+	input is clicked once
+*******************************************************************************/
 bool SAGEInputHandler::Get_Mouse_Clicked(int mouse)
 {
 	return SageInputPIML::Get_Mouse_Clicked(mouse);
 }
 
+/*!*****************************************************************************
+\brief
+	Function to access SageInput pointer to implementation to check if the mouse
+	input is held down
+*******************************************************************************/
 bool SAGEInputHandler::Get_Mouse(int mouse)
 {
 	return SageInputPIML::Get_Mouse(mouse);
 }
 
+/*!*****************************************************************************
+\brief
+	To update the poll event function of glfw handler
+*******************************************************************************/
 void SAGEInputHandler::update()
 {
 	GLFWInputHandler::Poll_Events();
 }
 
+/*!*****************************************************************************
+\brief
+	To initialize the call back of SageInput pointer to implementation
+*******************************************************************************/
 void SAGEInputHandler::init()
 {
 	SageInputPIML::Set_Callback();
 }
 
+/*!*****************************************************************************
+\brief
+	Function to get the mouse x position using SageInput pointer to implementation
+*******************************************************************************/
 double SAGEInputHandler::Get_Mouse_X()
 {
 	return SageInputPIML::Get_Mouse_X();
 }
 
-void SAGEInputHandler::Get_Mouse_Position(double& x, double& y)
-{
-	x = SageInputPIML::Get_Mouse_X();
-	y = SageInputPIML::Get_Mouse_Y();
-}
-
-
+/*!*****************************************************************************
+\brief
+	Function to get the mouse y position using SageInput pointer to implementation
+*******************************************************************************/
 double SAGEInputHandler::Get_Mouse_Y()
 {
 	return SageInputPIML::Get_Mouse_Y();
 }
 
-
-
-
-
-
-
-
+/*!*****************************************************************************
+\brief
+	Function to get the mouse coordinates using SageInput pointer to implementation
+*******************************************************************************/
+void SAGEInputHandler::Get_Mouse_Position(double& x, double& y)
+{
+	x = SageInputPIML::Get_Mouse_X();
+	y = SageInputPIML::Get_Mouse_Y();
+}

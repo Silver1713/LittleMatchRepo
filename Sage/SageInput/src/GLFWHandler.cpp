@@ -22,6 +22,10 @@ double GLFWInputHandler::g_mouse_pos_y = 0;
 // Base Layer of glfw handler
 static GLFWInputHandler* instance = nullptr;
 
+/*!*****************************************************************************
+\brief
+	Check if a specific key/mouse is pressed once
+*******************************************************************************/
 bool GLFWInputHandler::Get_Key_Pressed(int keycode)
 {
 	if (key_map[keycode] == std::byte{1})
@@ -35,6 +39,10 @@ bool GLFWInputHandler::Get_Key_Pressed(int keycode)
 	}
 }
 
+/*!*****************************************************************************
+\brief
+	Check if a specific key/mouse is held down
+*******************************************************************************/
 bool GLFWInputHandler::Get_Key(int keycode)
 {
 	if (key_map[keycode] == std::byte{ 1 } || key_map[keycode] == std::byte{2})
@@ -48,6 +56,11 @@ bool GLFWInputHandler::Get_Key(int keycode)
 	}
 }
 
+/*!*****************************************************************************
+\brief
+	A key callback function that is called whenever a key is pressed, released
+	or held down. It register the key event using glfw call back mechanism.
+*******************************************************************************/
 void GLFWInputHandler::Key_Cb(GLFWwindow* window, int keycode, int scancode, int action, int mods)
 {
 	if (keycode == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -81,9 +94,13 @@ void GLFWInputHandler::Key_Cb(GLFWwindow* window, int keycode, int scancode, int
 
 }
 
+/*!*****************************************************************************
+\brief
+	A mouse callback function that is called whenever a mouse is pressed, released
+	or held down. It register the mouse event using glfw call back mechanism.
+*******************************************************************************/
 void GLFWInputHandler::Mouse_Cb(GLFWwindow* window, int button, int action, int mods)
 {
-
 
 	switch (action)
 	{
@@ -110,11 +127,19 @@ void GLFWInputHandler::Mouse_Cb(GLFWwindow* window, int button, int action, int 
 	}
 }
 
+/*!*****************************************************************************
+\brief
+	A polling function to process and handle the input events
+*******************************************************************************/
 void GLFWInputHandler::Poll_Events()
 {
 	glfwPollEvents();
 }
 
+/*!*****************************************************************************
+\brief
+	To get the mouse position
+*******************************************************************************/
 void GLFWInputHandler::Mouse_Pos_Cb(GLFWwindow* window, double xpos, double ypos)
 {
 	g_mouse_pos_x = xpos;

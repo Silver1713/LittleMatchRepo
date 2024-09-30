@@ -17,27 +17,52 @@
 class SageInputPIML
 {
 public:
-	// Check if specific key is pressed once
+	/*!*****************************************************************************
+	\brief
+		Function to access glfw handler to check if a specific key is pressed once
+	*******************************************************************************/
 	static bool Get_Key_Pressed(int keycode);
 
-	// Check if specific key is held down
+	/*!*****************************************************************************
+	\brief
+		Function to access glfw handler to check if a specific key is held down
+	*******************************************************************************/
 	static bool Get_Key(int keycode);
 
-	// Check if mouse is clicked once
+	/*!*****************************************************************************
+	\brief
+		Function to access glfw handler to check if a mouse input is clicked once
+	*******************************************************************************/
 	static bool Get_Mouse_Clicked(int mouse);
 
-	// Check if mouse is held down
+	/*!*****************************************************************************
+	\brief
+		Function to access glfw handler to check if a mouse input is held down
+	*******************************************************************************/
 	static bool Get_Mouse(int mouse);
 
-	// Start input polling - process inputs
+	/*!*****************************************************************************
+	\brief
+		A polling function to process and handle the input events
+	*******************************************************************************/
 	static void poll();
 
-	// Link Callback
+	/*!*****************************************************************************
+	\brief
+		A call back function to link the custom mouse, mouse position and key
+		call back functions with the glfw call back functions
+	*******************************************************************************/
 	static void Set_Callback();
 
-	// Get mouse x position
+	/*!*****************************************************************************
+	\brief
+		Function to get the mouse x position
+	*******************************************************************************/
 	static double Get_Mouse_X();
 
-	// Get mouse y position
+	/*!*****************************************************************************
+	\brief
+		Function to get the mouse y position
+	*******************************************************************************/
 	static double Get_Mouse_Y();
 };

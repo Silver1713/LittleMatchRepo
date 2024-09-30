@@ -1,5 +1,17 @@
 #pragma once
-// SECOND LAYER HEADER FILE
+/* Start Header ************************************************************************/
+/*!
+\file		KeyInputs.h
+\title		Memory's Flame
+\author		Neo Hui Zong, neo.h, 2301357 (100%)
+\par		neo.h@digipen.edu
+\date		27 September 2024
+\brief		Contains the declaration of functions for the public interface for the input system.
+			Also contain the definition of key and mouse supported by sage input system.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 
 /* Printable keys */
 #define SAGE_KEY_SPACE              32
@@ -136,23 +148,76 @@ class SageInputPIML;
 class SAGEInputHandler
 {
 public:
-	static bool Get_Key_Pressed(int keycode); // Check if specific key is pressed once
-	static bool Get_Key(int keycode); // Check if specific key is held down
 
-	static bool Get_Mouse_Clicked(int mouse); // Check if mouse is clicked once
-	static bool Get_Mouse(int mouse); // Check if mouse is held down
+	/*!*****************************************************************************
+	\brief
+		Function to access glfw handler to check if a specific key is pressed once
+	*******************************************************************************/
+	static bool Get_Key_Pressed(int keycode);
 
+	/*!*****************************************************************************
+	\brief
+		Function to access glfw handler to check if a specific key is held down
+	*******************************************************************************/
+	static bool Get_Key(int keycode);
+
+	/*!*****************************************************************************
+	\brief
+		Function to access glfw handler to check if a mouse input is clicked once
+	*******************************************************************************/
+	static bool Get_Mouse_Clicked(int mouse);
+
+	/*!*****************************************************************************
+	\brief
+		Function to access glfw handler to check if a mouse input is held down
+	*******************************************************************************/
+	static bool Get_Mouse(int mouse);
+
+	/*!*****************************************************************************
+	\brief
+		Function to get the mouse x position
+	*******************************************************************************/
 	static double Get_Mouse_X();
+
+	/*!*****************************************************************************
+	\brief
+		Function to get the mouse y position
+	*******************************************************************************/
 	static double Get_Mouse_Y();
+
+	/*!*****************************************************************************
+	\brief
+		Function to get mouse coordinates
+	*******************************************************************************/
 	static void Get_Mouse_Position(double& x, double& y);
 
+	/*!*****************************************************************************
+	\brief
+		Function to initialize the sage input system
+	*******************************************************************************/
 	static void init();
+
+	/*!*****************************************************************************
+	\brief
+		Function to update the sage input system
+	*******************************************************************************/
 	static void update();
+
+	/*!*****************************************************************************
+	\brief
+		Function to terminate the sage input system
+	*******************************************************************************/
 	static void terminate();
 
 
 private:
+
+	/*!*****************************************************************************
+	\brief
+		Function to delete the pointer to implementation for sage input
+	*******************************************************************************/
 	static void Custom_Sage_Input_PIMPL_Delete(void*& p);
+
 	static std::unique_ptr<void, decltype(&Custom_Sage_Input_PIMPL_Delete)> impl_pointer;
 };
 
