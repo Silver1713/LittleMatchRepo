@@ -6,43 +6,200 @@
 \par		b.muhammadhafiz@digipen.edu
 \date		10 September 2024
 \brief		Contains the derived class BoxCollider2D that overrides the virtual functions of the
-			base class Component to do Collision specific tasks
+            base class Component to perform collision-specific tasks.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+            All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
+
 #include "Components/BoxCollider2D.hpp"
+#include "Components/Component.hpp"
+#include "Components/Transform.hpp"
+#include "Components/Physics.hpp"
+#include "GameObjects.hpp"
+
+#include <iostream>
+
+// Initialization and Cleanup Functions
 
 /*!*****************************************************************************
   \brief
-	This function initializes the component along with any BoxCollider specific
-	members that need initializing
+    This function initializes the component along with any BoxCollider specific
+    members that need initializing.
 
   \param _parent
-	the gameobject that created this component
+    the gameobject that created this component
 *******************************************************************************/
 void BoxCollider2D::Init(GameObject* _parent)
 {
-	Component::Init(_parent);
+    Component::Init(_parent);
+}
+
+// Update Function
+
+/*!*****************************************************************************
+  \brief
+    Updates the BoxCollider2D component.
+  \param deltaTime
+    Time step for the update.
+*******************************************************************************/
+void BoxCollider2D::Update(float deltaTime)
+{
+    Transform* transform = static_cast<Transform*>(Get_Parent()->Get_Component(TRANSFORM));
+    if (!transform) return;
+
+    // Transform the AABB
+    TransformAABB();
+
+    // Check for collisions with other objects
+    CheckCollisions(deltaTime);
 }
 
 /*!*****************************************************************************
   \brief
-	Space for calls to collision implementation
-*******************************************************************************/
-void BoxCollider2D::Update() {}
-
-/*!*****************************************************************************
-  \brief
-	Frees and unload any members that needs it
+    Frees and unloads any members that need it.
 *******************************************************************************/
 void BoxCollider2D::Exit() {}
 
+
 /*!*****************************************************************************
   \brief
-	Gets overriden based on what component this is
+    Gets overridden based on what component this is.
 
   \return
-	the enum representating what component this is
+    The enum representing what component this is.
 *******************************************************************************/
-ComponentType BoxCollider2D::Get_Component_Type() { return BOXCOLLIDER2D; }
+ComponentType BoxCollider2D::Get_Component_Type()
+{
+    return BOXCOLLIDER2D;
+}
+
+
+// Collision Handling Functions
+
+/*!****************************************************************************
+  \brief
+    Checks for collisions with other BoxCollider2D instances using Swept AABB.
+  \param deltaTime
+    Time step for collision detection.
+*******************************************************************************/
+void BoxCollider2D::CheckCollisions(float deltaTime)
+{
+    Transform* transform = static_cast<Transform*>(Get_Parent()->Get_Component(TRANSFORM));
+    Physics* physics = static_cast<Physics*>(parent->Get_Component(PHYSICS));
+
+    if (!transform || !physics) return;
+
+    ToastBox::Vec2 velocity = physics->Get_Velocity();
+    AABB sweptAABB = {
+        aabb.min + velocity * deltaTime,
+        aabb.max + velocity * deltaTime
+    };
+
+    for (const auto& pair : Game_Objects::Get_Game_Objects())
+    {
+        GameObject* other = pair.second.get();
+        if (other == parent) continue;
+
+        BoxCollider2D* otherCollider = static_cast<BoxCollider2D*>(other->Get_Component(BOXCOLLIDER2D));
+        if (!otherCollider) continue;
+
+        // Check for collision with the swept AABB
+        if (CheckSweptCollision(sweptAABB, *otherCollider))
+        {
+            HandleCollision(other);
+        }
+    }
+}
+
+/*!*****************************************************************************
+  \brief
+    Handles the response when a collision is detected.
+  \param other
+    The other GameObject involved in the collision.
+*******************************************************************************/
+void BoxCollider2D::HandleCollision(GameObject* other)
+{
+    // Option 1: Use a type identifier if available
+    std::cout << "Collision detected between objects of type "
+        << typeid(*parent).name() << " and "
+        << typeid(*other).name() << std::endl;
+
+    // Stop movement if there's a physics component
+    Physics* physics = static_cast<Physics*>(parent->Get_Component(PHYSICS));
+    if (physics)
+    {
+        physics->Get_Velocity().x = 0;
+        physics->Get_Velocity().y = 0;
+    }
+}
+
+/*!****************************************************************************
+  \brief
+    Checks if the swept AABB intersects with another BoxCollider2D.
+  \param sweptAABB
+    The swept AABB to check against.
+  \param other
+    The other BoxCollider2D to check against.
+  \return
+    True if a collision is detected, false otherwise.
+*******************************************************************************/
+bool BoxCollider2D::CheckSweptCollision(const BoxCollider2D::AABB& sweptAABB, const BoxCollider2D& other) const
+{
+    const AABB& otherAABB = other.GetAABB();
+
+    // Check for overlap
+    return (sweptAABB.max.x > otherAABB.min.x &&
+        sweptAABB.min.x < otherAABB.max.x &&
+        sweptAABB.max.y > otherAABB.min.y &&
+        sweptAABB.min.y < otherAABB.max.y);
+}
+
+// AABB Transformation Functions
+
+/*!****************************************************************************
+  \brief
+    Transforms the AABB based on the object's position and size.
+*******************************************************************************/
+void BoxCollider2D::TransformAABB()
+{
+    Transform* transform = static_cast<Transform*>(Get_Parent()->Get_Component(TRANSFORM));
+
+    const float* pos = transform->Get_Positions();
+    const float* scale = transform->Get_Scale();
+
+    // Calculate min and max based on position and scale
+    ToastBox::Vec2 min = { pos[0] - scale[0] / 2.0f, pos[1] - scale[1] / 2.0f };
+    ToastBox::Vec2 max = { pos[0] + scale[0] / 2.0f, pos[1] + scale[1] / 2.0f };
+
+    // Set the AABB with the calculated min and max
+    SetAABB(min, max);
+}
+
+
+// AABB Getter and Setter Functions
+
+/*!****************************************************************************
+  \brief
+    Sets the AABB for this collider.
+  \param min
+    The minimum bounds of the AABB.
+  \param max
+    The maximum bounds of the AABB.
+*******************************************************************************/
+void BoxCollider2D::SetAABB(const ToastBox::Vec2& min, const ToastBox::Vec2& max)
+{
+    aabb.min = min;
+    aabb.max = max;
+}
+
+/*!****************************************************************************
+  \brief
+    Gets the current AABB.
+  \return
+    A const reference to the AABB representing the min and max corners of the AABB.
+*******************************************************************************/
+const BoxCollider2D::AABB& BoxCollider2D::GetAABB() const
+{
+    return aabb;
+}

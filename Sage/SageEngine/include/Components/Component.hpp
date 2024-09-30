@@ -26,6 +26,7 @@ typedef enum {
 	SPRITE2D,
 	BOXCOLLIDER2D,
 	RIGIDBODY2D,
+	PHYSICS,
 	AUDIO,
 	NUM_OF_TYPES_OF_COMPONENTS
 } ComponentType;
@@ -33,7 +34,7 @@ typedef enum {
 //base class that gives the basic definition of a component to be polymorphed into more specialized components
 class Component
 {
-private:
+protected:
 	GameObject* parent{ nullptr };
 public:
 	/*!*****************************************************************************

@@ -19,6 +19,8 @@
 #include "SageHelper.hpp"
 #include "KeyInputs.h"
 #include "Game.hpp"
+#include "Components/Physics.hpp"
+
 
 #include <iostream>
 #include <random>
