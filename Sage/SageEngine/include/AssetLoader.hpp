@@ -166,6 +166,7 @@ namespace Assets
 			std::vector<std::array<float, 3>> rotations;
 			std::vector<std::array<float, 3>> scale;
 			std::vector<std::array<float, 4>> color;
+			std::vector<unsigned int> z_orders;
 		};
 		//the label for each type of information in a deserialized Level
 		typedef enum
@@ -185,6 +186,7 @@ namespace Assets
 			COLOR_G,
 			COLOR_B,
 			COLOR_A,
+			Z_ORDER,
 			NUM_DATA_TYPES
 		} Data_Type;
 

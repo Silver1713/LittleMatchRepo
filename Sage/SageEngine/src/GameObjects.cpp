@@ -26,6 +26,7 @@
 
 namespace Game_Objects
 {
+	const unsigned int max_z_orders{3};
 	static std::unordered_map<std::string, std::unique_ptr<GameObject>> g_game_objects;
 
 	/*!*****************************************************************************
@@ -63,13 +64,19 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Draw()
 	{
-		SageRenderer::ClearColor({ 0,0,0,1 });
-		// sort the gameobjects based on their z value
-		for (auto& _g : g_game_objects)
+		SageRenderer::ClearColor({ 1,1,1,1 });
+
+		for (unsigned int current_z{}; current_z <= max_z_orders; ++current_z)
 		{
-			if (_g.second)
+			for (auto& _g : g_game_objects)
 			{
-				_g.second->Draw();
+				if (_g.second)
+				{
+					if (_g.second->Get_Z_Order() == current_z)
+					{
+						_g.second->Draw();
+					}
+				}
 			}
 		}
 	}
@@ -146,12 +153,14 @@ namespace Game_Objects
 		The prefab to copy from
 	  \param _identifier
 		The identifier of the newly create gameobject
+	  \param _z_order
+		The _z_order of the newly create gameobject
 	  \return
 		A pointer to the created gameobject
 	*******************************************************************************/
-	GameObject* Instantiate(Assets::Prefabs::Prefab const& _p, std::string const& _identifier)
+	GameObject* Instantiate(Assets::Prefabs::Prefab const& _p, std::string const& _identifier, unsigned int _z_order)
 	{
-		return (Add_Game_Object(std::make_unique<GameObject>(_p,_identifier), _identifier))->get();
+		return (Add_Game_Object(std::make_unique<GameObject>(_p,_identifier,_z_order), _identifier))->get();
 	}
 
 	/*!*****************************************************************************
@@ -180,8 +189,11 @@ GameObject::GameObject(){}
 
   \param _identifier
 	What this instance should be called
+
+  \param _z_order
+	The z-order of the object
 *******************************************************************************/
-GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _identifier) : identifier{_identifier}
+GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _identifier, unsigned int _z_order) : identifier{_identifier}, z_order{_z_order}
 {
 	Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
 	if (!(_p.sprite_texture_ID == "Nil"))
@@ -287,6 +299,17 @@ void GameObject::Exit()
 std::string const& GameObject::Get_ID()
 {
 	return identifier;
+}
+
+/*!*****************************************************************************
+  \brief
+	Gets the z_order of this instance of a gameobject
+  \return
+	Returns the z_order
+*******************************************************************************/
+unsigned int const& GameObject::Get_Z_Order() const
+{
+	return z_order;
 }
 
 /*!*****************************************************************************
