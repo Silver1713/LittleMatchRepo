@@ -12,12 +12,18 @@
 */
 /* End Header **************************************************************************/
 #include "Components/BoxCollider2D.hpp"
-
-#include <iostream>
-#include <ostream>
-
+#include "Components/Transform.hpp"
 #include "GameObjects.hpp"
+#include "Vector2.h"
 
+/*!*****************************************************************************
+  \brief
+	This function initializes the component along with any BoxCollider specific
+	members that need initializing
+
+  \param _parent
+	the gameobject that created this component
+*******************************************************************************/
 void BoxCollider2D::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
@@ -28,10 +34,12 @@ void BoxCollider2D::Init(GameObject* _parent)
 	aabb.max_x = scale[0] / 2;
 	aabb.min_y = -scale[1] / 2;
 	aabb.max_y = scale[1] / 2;
-
-
-
 }
+
+/*!*****************************************************************************
+  \brief
+	Space for calls to collision implementation
+*******************************************************************************/
 void BoxCollider2D::Update()
 {
 	GameObject* p = Get_Parent();
@@ -50,7 +58,15 @@ void BoxCollider2D::Update()
 	
 
 }
+
+
+/*!*****************************************************************************
+  \brief
+	Frees and unload any members that needs it
+*******************************************************************************/
 void BoxCollider2D::Exit() {}
+
+
 ComponentType BoxCollider2D::Get_Component_Type() { return BOXCOLLIDER2D; }
 
 

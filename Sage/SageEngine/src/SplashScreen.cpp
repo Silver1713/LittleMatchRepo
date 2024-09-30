@@ -29,18 +29,25 @@
 #include "SageViewport.hpp"
 namespace Splash_Screen {
 	static float time_elapsed{};
-	static float const wait_time{ 0.5f };
+	static float const wait_time{ 1.f };
 	static GameObject* digipen_splash_screen;
 
 	static SageCamera camera;
 	static SageViewport vp;
 
-
+	/*!*****************************************************************************
+	  \brief
+		Loads the Splash Screen
+	*******************************************************************************/
 	void Load()
 	{
 		digipen_splash_screen = Game_Objects::Instantiate(Prefabs::Get_Prefab("DIGIPEN_SPLASH_SCREEN"),"Digipen_Splash_Screen");
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Initializes the Splash Screen
+	*******************************************************************************/
 	void Init()
 	{
 		time_elapsed = 0.f;
@@ -55,10 +62,18 @@ namespace Splash_Screen {
 		SageRenderer::SetCurrentView(vp);
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Input functions required by the Splash Screen
+	*******************************************************************************/
 	void Input()
 	{	
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Updates the Splash Screen
+	*******************************************************************************/
 	void Update()
 	{
 		time_elapsed += (float)SageHelper::delta_time;
@@ -76,22 +91,34 @@ namespace Splash_Screen {
 			if (SM::Has_Faded_Out())
 			{
 				is_triggered = false;				
-				SM::Go_To_Next_Scene("Level_1");
+				SM::Go_To_Next_Scene();
 				SM::Start_Fade_In();
 			}
 		}
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Draws the Splash Screen
+	*******************************************************************************/
 	void Draw()
 	{
 
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Frees the Splash Screen
+	*******************************************************************************/
 	void Free()
 	{
 
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Unloads the Splash Screen
+	*******************************************************************************/
 	void Unload()
 	{
 	}

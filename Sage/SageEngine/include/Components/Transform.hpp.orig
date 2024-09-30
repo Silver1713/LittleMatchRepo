@@ -28,14 +28,17 @@ private:
 	ToastBox::Matrix3x3 model_matrix{};
 
 public:
+<<<<<<< HEAD
 	ToastBox::Vec3 position{};
 	ToastBox::Vec3 rotation{};
 	ToastBox::Vec3 scaling{};
 
+=======
 	/*!*****************************************************************************
 	  \brief
 		Default constructor for Transform
 	*******************************************************************************/
+>>>>>>> Edwin
 	Transform();
 
 	/*!*****************************************************************************

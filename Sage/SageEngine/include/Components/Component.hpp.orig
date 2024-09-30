@@ -19,7 +19,13 @@
 class GameObject;
 class SageObject;
 
+<<<<<<< HEAD
+
+
+
+=======
 //label for the different types of component that currently exist
+>>>>>>> Edwin
 typedef enum {
 	COMPONENT,
 	TRANSFORM,

@@ -35,13 +35,36 @@ class BoxCollider2D : public Component
 
 public:
 	AABB aabb;
+	/*!*****************************************************************************
+	  \brief
+		This function initializes the component along with any BoxCollider specific
+		members that need initializing
+
+	  \param _parent
+		the gameobject that created this component
+	*******************************************************************************/
 	void Init(GameObject* _parent) override;
+
+
 	void Update() override;
+
 	void onCollide();
 	void Register_Collision_Callback(std::function<void(GameObject*)> _callback);
+	/*!*****************************************************************************
+	  \brief
+		Frees and unload any members that needs it
+	*******************************************************************************/
 	void Exit() override;
 
 	void Set_Debug(bool _debug);
 	bool Get_Debug();
+
+	/*!*****************************************************************************
+	  \brief
+		Gets overriden based on what component this is
+
+	  \return
+		the enum representating what component this is
+	*******************************************************************************/
 	ComponentType Get_Component_Type() override;
 };

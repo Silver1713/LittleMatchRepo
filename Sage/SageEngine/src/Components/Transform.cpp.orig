@@ -73,6 +73,7 @@ void Transform::Init(GameObject* _parent)
 void Transform::Update()
 {
 
+<<<<<<< HEAD
 	// apply transformation
 
 	if (phy)
@@ -97,7 +98,15 @@ void Transform::Update()
 
 
 	
+=======
+>>>>>>> Edwin
 }
+
+/*!*****************************************************************************
+  \brief
+	Provides a space for any free or unloading functions that may be required
+	by subsequent interation of this component
+*******************************************************************************/
 void Transform::Exit()
 {
 

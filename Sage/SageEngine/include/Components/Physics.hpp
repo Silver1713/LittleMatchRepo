@@ -1,13 +1,12 @@
 /* Start Header ************************************************************************/
 /*!
-\file		Component.hpp
+\file		Physics.hpp
 \title		Little Match
 \author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
 \par		b.muhammadhafiz@digipen.edu
-\date		10 September 2024
-\brief		Contains the class Component that declares the base class that is to be polymorphed
-			into the various types of components as defined by ComponentType depending on the
-			need of a gameobject.
+\date		20 September 2024
+\brief		Contains the derived class Physics that overrides the virtual functions of the
+			base class Component to do functions specific to physics specific tasks.
 
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */

@@ -95,14 +95,17 @@ namespace Game {
 		vp.setViewport();
 
 
+<<<<<<< HEAD
 		Physics* plrphy = Game_Objects::Get_Game_Object("Player")->Get_Component<Physics>();
 
 		plrphy->set_static(true);
 		// Add collider to player
 
+		
+=======
 		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
 		plrphy->set_static(true);
-		
+>>>>>>> Edwin
 	}
 
 	/*!*****************************************************************************
@@ -187,7 +190,7 @@ namespace Game {
 				game_objects[std::to_string(i)]->Disable();
 			}
 		}
-		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
+		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT) && 0)
 		{
 			std::cout << "mouse clicked" << std::endl;
 			//GameObject* random;

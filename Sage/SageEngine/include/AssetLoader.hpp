@@ -16,12 +16,16 @@
 #include <array>
 #include <string>
 
+//forward declaration
 class SageTexture;
 
+//Every file is an asset, which is broken down into categories
 namespace Assets
 {
+	//Texture category
 	namespace Textures 
 	{
+		//what defines a parsed texture
 		struct Texture
 		{
 			std::string filepath{};
@@ -29,7 +33,7 @@ namespace Assets
 			unsigned int sprites_per_row{}, sprites_per_col{}, sprites_num{};
 			bool is_loaded{ false };
 		};
-
+		//labels for the type of information in the parsed texture
 		typedef enum
 		{
 			ID,
@@ -42,14 +46,46 @@ namespace Assets
 			NUM_DATA_TYPES
 		} Data_Type;
 
+		/*!*****************************************************************************
+		  \brief
+			Parses textures.csv into a map of Textures to be called upon when Get_Texture
+			calls a texture with that key
+		*******************************************************************************/
 		void Init();
+
+		/*!*****************************************************************************
+		  \brief
+			Loads a texture with the specified ID
+
+		  \param _ID
+			The ID of the texture as specified by texture.csv
+		*******************************************************************************/
 		void Load(std::string const& _ID);
+
+		/*!*****************************************************************************
+		  \brief
+			Gets the texture with the provided ID
+
+		  \param _ID
+			The key to look for
+
+		  \return
+			The reference to the loaded texture
+		*******************************************************************************/
 		SageTexture& Get_Texture(std::string const& _ID);
+
+		/*!*****************************************************************************
+		  \brief
+			Provides a space for any free or unloading functions that may be required
+			by subsequent interation of this component
+		*******************************************************************************/
 		void Unload();
 	}
 
+	//Prefabs category
 	namespace Prefabs
 	{
+		//What defines a parsed prefab
 		struct Prefab
 		{
 			std::string prefab_ID{};
@@ -63,7 +99,8 @@ namespace Assets
 			float velocity{};
 			std::string audio_data{};
 		};
-
+		
+		//label for each type of information a parsed prefab will have
 		typedef enum
 		{
 			PREFAB_ID,
@@ -88,13 +125,39 @@ namespace Assets
 			NUM_DATA_TYPES
 		} Data_Type;
 
+		/*!*****************************************************************************
+		  \brief
+			Parses prefabs.csv into a map of Prefabs to be called upon when Get_Prefab
+			calls a texture with that key
+		*******************************************************************************/
 		void Init();
+
+		/*!*****************************************************************************
+		  \brief
+			Gets the Prefab with the provided ID
+
+		  \param _prefab_ID
+			The key to look for
+
+		  \return
+			The Prefab in the map with the _prefab_ID key
+		*******************************************************************************/
 		Prefab const& Get_Prefab(std::string const& _prefab_ID);
+
+		/*!*****************************************************************************
+		  \brief
+			Gets the map of prefabs
+
+		  \return
+			The reference to the map of prefabs
+		*******************************************************************************/
 		std::unordered_map<std::string, Prefab>const& Get_Prefabs();
 	}
 
+	//Levels category
 	namespace Levels 
 	{
+		//what defines a deserialized Level
 		struct Level
 		{
 			std::vector<Prefabs::Prefab> prefabs;
@@ -104,6 +167,7 @@ namespace Assets
 			std::vector<std::array<float, 3>> scale;
 			std::vector<std::array<float, 4>> color;
 		};
+		//the label for each type of information in a deserialized Level
 		typedef enum
 		{
 			PREFAB_ID,
@@ -124,7 +188,23 @@ namespace Assets
 			NUM_DATA_TYPES
 		} Data_Type;
 
+		/*!*****************************************************************************
+		  \brief
+			Parses all level_x.csv into a map of levels to be called upon when Get_Level
+			calls a level with that key
+		*******************************************************************************/
 		void Init();
+
+		/*!*****************************************************************************
+		  \brief
+			Gets the Level with the provided ID
+
+		  \param _level_ID
+			The key to look for
+
+		  \return
+			The Prefab in the map with the _level_ID key
+		*******************************************************************************/
 		Level const& Get_Level(std::string const& _level_ID);
 	}
 }

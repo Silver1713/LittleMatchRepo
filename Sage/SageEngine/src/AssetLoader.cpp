@@ -25,17 +25,24 @@
 #include <array>
 #include <filesystem>
 
-
+//Every file is an asset, which is broken down into categories
 namespace Assets
 {
+	//Texture category
 	namespace Textures
-	{
+	{		
 		Parsed_CSV source;
 		std::unordered_map<std::string, Texture> textures;
 		std::unordered_map<std::string, SageTexture> loaded_textures;
 
+		/*!*****************************************************************************
+		  \brief
+			Parses textures.csv into a map of Textures to be called upon when Get_Texture
+			calls a texture with that key
+		*******************************************************************************/
 		void Init()
 		{
+			//data from the csv is stored into the textures map
 			source = Parse_CSV("../SageEngine/data/assets/textures.csv");
 			for (int i{1}; i < source.num_rows; i++)
 			{
@@ -61,6 +68,13 @@ namespace Assets
 			}
 		}
 
+		/*!*****************************************************************************
+		  \brief
+			Loads a texture with the specified ID
+
+		  \param _ID
+			The ID of the texture as specified by texture.csv
+		*******************************************************************************/
 		void Load(std::string const& _ID)
 		{
 			if (!(textures[_ID].is_loaded))
@@ -68,6 +82,7 @@ namespace Assets
 				loaded_textures[_ID].load_texture(textures[_ID].filepath.c_str(), SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
 				textures[_ID].is_loaded = true;
 
+				//reserved for sprite sheet support
 				if (textures[_ID].sprites_num > 1)
 				{
 					//Renderer::Sprite_Sheet_Mesh_Init(textures[ID].sprites_per_row,textures[ID].sprites_per_col,textures[ID].sprites_num,ID);
@@ -75,6 +90,16 @@ namespace Assets
 			}
 		}
 
+		/*!*****************************************************************************
+		  \brief
+			Gets the texture with the provided ID
+
+		  \param _ID
+			The key to look for
+
+		  \return
+			The reference to the loaded texture
+		*******************************************************************************/
 		SageTexture& Get_Texture(std::string const& _ID)
 		{
 			if (textures[_ID].is_loaded)
@@ -88,6 +113,11 @@ namespace Assets
 			}
 		}
 
+		/*!*****************************************************************************
+		  \brief
+			Provides a space for any free or unloading functions that may be required
+			by subsequent interation of this component
+		*******************************************************************************/
 		void Unload()
 		{
 			for (auto& t : textures)
@@ -106,6 +136,11 @@ namespace Assets
 		Prefab sentinel;
 		static bool has_initialized{ false };
 
+		/*!*****************************************************************************
+		  \brief
+			Parses prefabs.csv into a map of Prefabs to be called upon when Get_Prefab
+			calls a texture with that key
+		*******************************************************************************/
 		void Init()
 		{
 			source = Parse_CSV("../SageEngine/data/prefabs/prefabs.csv");
@@ -148,6 +183,16 @@ namespace Assets
 			has_initialized = true;
 		}
 
+		/*!*****************************************************************************
+		  \brief
+			Gets the Prefab with the provided ID
+
+		  \param _prefab_ID
+			The key to look for
+
+		  \return
+			The Prefab in the map with the _prefab_ID key
+		*******************************************************************************/
 		Prefab const& Get_Prefab( std::string const& _prefab_ID)
 		{
 			if (!has_initialized)
@@ -162,6 +207,13 @@ namespace Assets
 			return sentinel;
 		}
 
+		/*!*****************************************************************************
+		  \brief
+			Gets the map of prefabs
+
+		  \return
+			The reference to the map of prefabs
+		*******************************************************************************/
 		std::unordered_map<std::string, Prefab> const& Get_Prefabs()
 		{
 			if (!has_initialized)
@@ -179,6 +231,11 @@ namespace Assets
 		std::unordered_map<std::string, Level> levels;
 		Level sentinel;
 
+		/*!*****************************************************************************
+		  \brief
+			Parses all level_x.csv into a map of levels to be called upon when Get_Level
+			calls a level with that key
+		*******************************************************************************/
 		void Init()
 		{
 			unsigned int num_levels{};
@@ -197,6 +254,7 @@ namespace Assets
 				sources.push_back(Parse_CSV("../SageEngine/data/levels/level_" + std::to_string(i+1) + ".csv"));
 			}
 
+			//for each level_x.csv, maps the level's details to a Level and adds it to the levels map
 			for (unsigned int i{}; i < num_levels; i++)
 			{
 				try
@@ -257,6 +315,16 @@ namespace Assets
 			}
 		}
 
+		/*!*****************************************************************************
+		  \brief
+			Gets the Level with the provided ID
+
+		  \param _level_ID
+			The key to look for
+
+		  \return
+			The Prefab in the map with the _level_ID key
+		*******************************************************************************/
 		Level const& Get_Level(std::string const& _level_ID)
 		{
 			if (levels.find(_level_ID) != levels.end())
