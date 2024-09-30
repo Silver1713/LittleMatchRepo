@@ -67,7 +67,7 @@ namespace Game {
 
 			game_objects[std::to_string(i)]->Disable();	
 		}
-
+		Game_Objects::Get_Game_Object("Player")->Add_Component(std::make_unique<BoxCollider2D>());
 		
 	}
 
@@ -85,7 +85,11 @@ namespace Game {
 
 
 		Physics* plrphy = Game_Objects::Get_Game_Object("Player")->Get_Component<Physics>();
-		plrphy->set_static(false);
+
+		plrphy->set_static(true);
+		// Add collider to player
+
+		
 	}
 
 	void Input()
@@ -166,7 +170,7 @@ namespace Game {
 				game_objects[std::to_string(i)]->Disable();
 			}
 		}
-		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
+		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT) && 0)
 		{
 			std::cout << "mouse clicked" << std::endl;
 			//GameObject* random;

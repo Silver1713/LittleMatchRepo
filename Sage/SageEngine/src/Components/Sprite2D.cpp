@@ -59,6 +59,20 @@ void Sprite2D::Draw()
 		SageRenderer::DrawFilled(*obj, {
 		SageRenderer::SAGE_ENABLE_ALPHA | SageRenderer::SAGE_ENABLE_TEXTURE | SageRenderer::SAGE_ENABLE_CAMERA });
 	}
+
+	BoxCollider2D* collider = dynamic_cast<BoxCollider2D*>(Get_Parent()->Get_Component(BOXCOLLIDER2D));
+	if (collider)
+	{
+		SageRenderer::SetOptionOn(SageRenderer::SAGE_ENABLE_CAMERA);
+		collider->aabb.calculate_model_matrix(Get_Parent());
+		ToastBox::Vec2 min = { collider->aabb.pos_x + collider->aabb.min_x, collider->aabb.pos_y + collider->aabb.min_y };
+		ToastBox::Vec2 max = { collider->aabb.pos_x + collider->aabb.max_x, collider->aabb.pos_y + collider->aabb.max_y };
+		SageRenderer::DrawLine(min, min + ToastBox::Vec2{ (collider->aabb.max_x) - (collider->aabb.min_x) ,0 }, { 0,1,0,1 });
+		SageRenderer::DrawLine(min, min + ToastBox::Vec2{ 0,(collider->aabb.max_y) - (collider->aabb.min_y) }, { 0,1,0,1 });
+		SageRenderer::DrawLine(max, max - ToastBox::Vec2{ (collider->aabb.max_x) - (collider->aabb.min_x) ,0 }, { 0,1,0,1 });
+		SageRenderer::DrawLine(max, max - ToastBox::Vec2{ 0,(collider->aabb.max_y) - (collider->aabb.min_y) }, { 0,1,0,1 });
+		SageRenderer::SetOptionOff(SageRenderer::SAGE_ENABLE_CAMERA);
+	}
 }
 void Sprite2D::Exit() 
 {

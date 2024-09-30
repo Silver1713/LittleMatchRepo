@@ -14,6 +14,7 @@
 #pragma once
 #include "Components/Component.hpp"
 #include "Vector3.h"
+#include "Matrix3x3.h"
 
 class Transform : public Component
 {
@@ -22,6 +23,8 @@ private:
 	float rotations[3]{};
 	float scale[3]{};
 	bool is_UI_Element{ false };
+
+	ToastBox::Matrix3x3 model_matrix{};
 
 public:
 	ToastBox::Vec3 position{};
@@ -55,4 +58,7 @@ public:
 	void Scale(std::initializer_list<float> const& _delta_scale);
 
 	bool& Is_UI_Element();
+
+
+	ToastBox::Matrix3x3& Get_Model_Matrix();
 };

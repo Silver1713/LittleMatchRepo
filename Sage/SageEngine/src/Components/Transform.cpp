@@ -39,6 +39,22 @@ void Transform::Update()
 		Set_Positions({ Get_Positions()[0],Get_Positions()[1] + phy->Get_Velocity().y, Get_Positions()[2] });
 
 	}
+
+	// update model matrix
+
+	ToastBox::Matrix3x3 translation_matrix{};
+	translation_matrix.Matrix3Translate(positions[0], positions[1]);
+	ToastBox::Matrix3x3 rotation_matrix{};
+	ToastBox::Matrix3x3 scale_matrix{};
+
+	rotation_matrix.Matrix3RotDeg(rotations[0]);
+	scale_matrix.Matrix3Scale(scale[0], scale[1]);
+
+	model_matrix = ~translation_matrix * ~rotation_matrix * ~scale_matrix;
+
+
+
+	
 }
 void Transform::Exit()
 {
@@ -130,4 +146,9 @@ void Transform::Scale(std::initializer_list<float> const& _delta_scale)
 bool& Transform::Is_UI_Element()
 {
 	return is_UI_Element;
+}
+
+ToastBox::Matrix3x3& Transform::Get_Model_Matrix()
+{
+	return model_matrix;
 }
