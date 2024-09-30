@@ -1,3 +1,16 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageTextureInternal.cpp
+\title		Memory's Flame
+\author		Neo Hui Zong, neo.h, 2301357 (100%)
+\par		neo.h@digipen.edu
+\date		27 September 2024
+\brief		Contains the SageTextureInternal class and definition of the functions that will
+			interact with SOIL and openGL and create an openGL texture object.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "SageTextureInternal.hpp"
 
 #include <GL/glew.h>
@@ -6,19 +19,28 @@
 #include <ostream>
 #include <SOIL.h>
 
-
-
-
+/*!*****************************************************************************
+\brief
+	A constructor for SageTextureInternal class
+*******************************************************************************/
 SageTextureInternal::SageTextureInternal() : texture_hdl(0), texture_unit(0), erro_no(0)
 {
 }
 
+/*!*****************************************************************************
+\brief
+	An overloaded constructor for SageTextureInternal class
+*******************************************************************************/
 SageTextureInternal::SageTextureInternal(const SageTextureInternal& other) : texture_hdl(other.texture_hdl),
 texture_unit(other.texture_unit), erro_no()
 {
 
 }
 
+/*!*****************************************************************************
+\brief
+	A copy assignment operator of SageTextureInternal class
+*******************************************************************************/
 SageTextureInternal& SageTextureInternal::operator=(const SageTextureInternal& other)
 {
 	if (this != &other)
@@ -30,7 +52,10 @@ SageTextureInternal& SageTextureInternal::operator=(const SageTextureInternal& o
 
 }
 
-
+/*!*****************************************************************************
+\brief
+	A copy constructor of SageTextureInternal class
+*******************************************************************************/
 SageTextureInternal::SageTextureInternal(std::string const& path, int internal_type) : texture_path(path), texture_hdl(), texture_unit()
 {
 	switch (internal_type % 4)
@@ -73,37 +98,50 @@ SageTextureInternal::SageTextureInternal(std::string const& path, int internal_t
 	set_texture_repeat();
 }
 
-
-void SageTextureInternal::set_texture_clamp() const
-{
-	glTextureParameteri(texture_hdl, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTextureParameteri(texture_hdl, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-}
-
+/*!*****************************************************************************
+\brief
+	Function to set the texture mode to repeat
+*******************************************************************************/
 void SageTextureInternal::set_texture_repeat() const
 {
 	glTextureParameteri(texture_hdl, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTextureParameteri(texture_hdl, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 
+/*!*****************************************************************************
+\brief
+	Function to set the texture mode to clamp
+*******************************************************************************/
+void SageTextureInternal::set_texture_clamp() const
+{
+	glTextureParameteri(texture_hdl, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTextureParameteri(texture_hdl, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+}
 
+/*!*****************************************************************************
+\brief
+	Function to set the texture mode to mirror repeat
+*******************************************************************************/
 void SageTextureInternal::set_texture_mirror_repeat() const
 {
 	glTextureParameteri(texture_hdl, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 	glTextureParameteri(texture_hdl, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 }
 
+/*!*****************************************************************************
+\brief
+	Function to bind the texture
+*******************************************************************************/
 bool SageTextureInternal::bind_texture() const
 {
 	glBindTextureUnit(texture_unit - GL_TEXTURE0, texture_hdl);
 	return (glGetError() == GL_NO_ERROR);
 }
 
-unsigned int SageTextureInternal::get_texture_handle() const
-{
-	return texture_hdl;
-}
-
+/*!*****************************************************************************
+\brief
+	Function to load the texture
+*******************************************************************************/
 int SageTextureInternal::load(const char* name ,int type)
 {
 	if (texture_hdl != 0)
@@ -151,11 +189,28 @@ int SageTextureInternal::load(const char* name ,int type)
 	return texture_unit;
 }
 
+/*!*****************************************************************************
+\brief
+	Function to get the texture handle
+*******************************************************************************/
+unsigned int SageTextureInternal::get_texture_handle() const
+{
+	return texture_hdl;
+}
+
+/*!*****************************************************************************
+\brief
+	Function to get the texture unit
+*******************************************************************************/
 int SageTextureInternal::get_texture_unit() const
 {
 	return texture_unit;
 }
 
+/*!*****************************************************************************
+\brief
+	Function to unload the texture
+*******************************************************************************/
 void SageTextureInternal::unload()
 {
 	glDeleteTextures(1, &texture_hdl);

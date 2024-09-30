@@ -28,6 +28,7 @@ static GLFWInputHandler* instance = nullptr;
 *******************************************************************************/
 bool GLFWInputHandler::Get_Key_Pressed(int keycode)
 {
+	// If is 1, set it back to 0 to reset
 	if (key_map[keycode] == std::byte{1})
 	{
 		key_map[keycode] = std::byte{0};
@@ -45,6 +46,7 @@ bool GLFWInputHandler::Get_Key_Pressed(int keycode)
 *******************************************************************************/
 bool GLFWInputHandler::Get_Key(int keycode)
 {
+	// If it is pressed down once or held down, return true
 	if (key_map[keycode] == std::byte{ 1 } || key_map[keycode] == std::byte{2})
 	{
 		return true;
