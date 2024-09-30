@@ -34,7 +34,7 @@ typedef enum {
 //base class that gives the basic definition of a component to be polymorphed into more specialized components
 class Component
 {
-private:
+protected:
 	GameObject* parent{ nullptr };
 public:
 	/*!*****************************************************************************

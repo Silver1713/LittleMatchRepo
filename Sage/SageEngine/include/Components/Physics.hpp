@@ -40,5 +40,12 @@ public:
 
 	//add whatever declarations of getters/setters u need for physics
 
+	// getters/setters for physics
 	void set_static(bool _is_static);
+
+	// ApplyGravity
+	void ApplyGravity(float delta_time);
+
+	// UpdateVelocity (future use)
+	void UpdateVelocity(float delta_time);
 };

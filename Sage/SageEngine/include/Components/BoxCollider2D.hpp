@@ -6,14 +6,17 @@
 \par		b.muhammadhafiz@digipen.edu
 \date		10 September 2024
 \brief		Contains the derived class BoxCollider2D that overrides the virtual functions of the
-			base class Component to do Collision specific tasks
+			base class Component to perform collision-specific tasks.
 
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
+
 #pragma once
+
 #include "Components/Component.hpp"
 #include <functional>
+#include "Vector2.h"
 
 #include "Matrix3x3.h"
 
@@ -28,6 +31,11 @@ class BoxCollider2D : public Component
 		float min_x, min_y; // Minimum extents of the collider in the object's local space
 		float max_x, max_y; // Maximum extents of the collider in the object's local space
 
+
+
+		ToastBox::Vec2 min; // Minimum corner
+		ToastBox::Vec2 max; // Maximum corner
+
 		ToastBox::Matrix3x3 model_matrix{};
 
 		void calculate_model_matrix(GameObject* _parent);
@@ -40,14 +48,32 @@ public:
 		This function initializes the component along with any BoxCollider specific
 		members that need initializing
 
+
+	/*!*****************************************************************************
+	  \brief
+		This function initializes the component along with any BoxCollider specific
+		members that need initializing.
+
 	  \param _parent
 		the gameobject that created this component
 	*******************************************************************************/
 	void Init(GameObject* _parent) override;
 
 
+	/*!*****************************************************************************
+	  \brief
+		Updates the BoxCollider2D component.
+	*******************************************************************************/
+	void Update(float deltaTime);
+
 	void Update() override;
 
+
+	/*!*****************************************************************************
+	  \brief
+		Frees and unloads any members that need it.
+	*******************************************************************************/
+	void Exit() override;
 	void onCollide();
 	void onCollide(BoxCollider2D* collide);
 	void Register_Collision_Callback(std::function<void(GameObject*)> _callback);
@@ -65,10 +91,68 @@ public:
 		Gets overriden based on what component this is
 
 	  \return
-		the enum representating what component this is
+		The enum representing what component this is.
 	*******************************************************************************/
 	ComponentType Get_Component_Type() override;
 
+	void CheckCollisions(float deltaTime);
 
-	bool Calculate_AABB_Collision(BoxCollider2D* _other);
+	void HandleCollision(GameObject* other);
+
+	/*!*****************************************************************************
+	  \brief
+		Checks if there is a collision with another BoxCollider2D using the AABB method.
+
+	  \param other
+		The other BoxCollider2D to check collision with.
+
+	  \return
+		True if there is a collision, false otherwise.
+	*******************************************************************************/
+	bool CheckSweptCollision(const BoxCollider2D::AABB& sweptAABB, const BoxCollider2D& other) const;
+
+
+
+	/*!****************************************************************************
+	  \brief
+		Transforms the AABB based on the object's position and scale.
+
+	  \return
+		A pair of Vec2 representing the transformed AABB's min and max corners.
+	*******************************************************************************/
+	void TransformAABB();
+
+
+	/*!****************************************************************************
+	  \brief
+		Sets the AABB with new min and max values.
+
+	  \param min
+		The minimum corner of the AABB.
+
+	  \param max
+		The maximum corner of the AABB.
+	*******************************************************************************/
+	void SetAABB(const ToastBox::Vec2& min, const ToastBox::Vec2& max);
+
+
+	/*!****************************************************************************
+	  \brief
+		Gets the current AABB.
+
+	  \return
+		A const reference to the AABB representing the min and max corners of the AABB.
+	*******************************************************************************/
+	const AABB& GetAABB() const;
+
+private:
+	AABB aabb; // The axis-aligned bounding box for this collider
+};
+\return
+the enum representating what component this is
+* ******************************************************************************/
+ComponentType Get_Component_Type() override;
+
+
+bool Calculate_AABB_Collision(BoxCollider2D * _other);
 };
