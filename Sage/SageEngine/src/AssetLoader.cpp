@@ -301,6 +301,7 @@ namespace Assets
 						};
 
 						l.color.push_back(color);
+						l.z_orders.push_back(std::stoul(sources[i].comma_seperated_data[j].associated_data[Z_ORDER]));
 					}
 					levels["Level_" + std::to_string(i+1)] = l;
 				}

@@ -25,7 +25,7 @@ protected:
 	std::vector<std::unique_ptr<Component>> components;
 	std::string identifier{};
 	bool is_enabled{true};
-
+	unsigned int z_order{};
 public:
 	/*!*****************************************************************************
 	  \brief
@@ -43,8 +43,11 @@ public:
 
 	  \param _identifier
 		What this instance should be called
+
+	  \param _z_order
+		The z-order of the object
 	*******************************************************************************/
-	GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _identifier);
+	GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _identifier, unsigned int _z_order = 0);
 
 	/*!*****************************************************************************
 	  \brief
@@ -74,6 +77,14 @@ public:
 		Returns the string that is the identifier
 	*******************************************************************************/
 	std::string const& Get_ID();
+
+	/*!*****************************************************************************
+	  \brief
+		Gets the z_order of this instance of a gameobject
+	  \return
+		Returns the z_order
+	*******************************************************************************/
+	unsigned int const& Get_Z_Order() const;
 
 	/*!*****************************************************************************
 	  \brief
@@ -160,10 +171,12 @@ namespace Game_Objects
 		The prefab to copy from
 	  \param _identifier
 		The identifier of the newly create gameobject
+	  \param _z_order
+		The _z_order of the newly create gameobject
 	  \return
 		A pointer to the created gameobject
 	*******************************************************************************/
-	GameObject* Instantiate(Assets::Prefabs::Prefab const& _p, std::string const& _identifer);
+	GameObject* Instantiate(Assets::Prefabs::Prefab const& _p, std::string const& _identifer, unsigned int _z_order = 0);
 
 	/*!*****************************************************************************
 	  \brief
