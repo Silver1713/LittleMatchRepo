@@ -1,3 +1,4 @@
-Prefab ID,Identifier,Position X,Position Y,Position Z,Rotation X,Rotation Y,Rotation Z,Scale X ,Scale Y,Scale Z,R,G ,B,A
-BLUE_SKY,Background,0,0,0,0,0,0,3840,2160,0,1,1,1,1
-RED,Player,-500,0,0,0,0,0,100,100,0,1,0,0,1
+Prefab ID,Identifier,Position X,Position Y,Position Z,Rotation X,Rotation Y,Rotation Z,Scale X ,Scale Y,Scale Z,R,G ,B,A,Z Order
+BLUE_SKY,Background,0,0,0,0,0,0,3840,2160,0,1,1,1,1,0
+RED,Player,-500,0,0,0,0,0,100,100,0,1,0,0,1,1
+RED,Wall,0,0,0,0,0,0,100,1000,0,0,0,1,1,1
