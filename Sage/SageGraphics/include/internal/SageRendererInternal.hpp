@@ -103,8 +103,8 @@ struct SageRendererInternal
 	static void DrawFilled(SageModel& model, glm::mat3& matrix, RENDER_CONFIG_INTERNAL config = { (I_SAGE_ENABLE_ALPHA | I_SAGE_ENABLE_BORDER) });
 	static void DrawFilled(SageModel& model);
 
-	static void DrawLine(SageLine const& line);
-	static void DrawLine(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color);
+	static void DrawLine(SageLine const& line, float size=15.f);
+	static void DrawLine(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color, float size=15.f);
 
 	static void DrawPoint(SagePoint const& point);
 	static void DrawPoint(ToastBox::Vec2 position, ToastBox::Vec4 color, float size = 15.f);

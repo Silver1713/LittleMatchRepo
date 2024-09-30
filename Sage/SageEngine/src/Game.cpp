@@ -41,6 +41,7 @@ namespace Game {
 
 	static std::unordered_map<std::string, GameObject*> game_objects;
 	static std::unordered_map<std::string, Transform*> transform_cache;
+	static std::unordered_map<std::string, BoxCollider2D*> collider_cache;
 
 	static SageCamera camera;
 	static SageViewport vp;
@@ -56,7 +57,8 @@ namespace Game {
 		GameObject* obj = Game_Objects::Get_Game_Object("Player");
 		//caches the player's transforms
 		transform_cache["Player"] = dynamic_cast<Transform*>(Game_Objects::Get_Game_Object("Player")->Get_Component(TRANSFORM));
-
+		collider_cache["Player"] = dynamic_cast<BoxCollider2D*>(Game_Objects::Get_Game_Object("Player")->Get_Component(BOXCOLLIDER2D));
+		collider_cache["Wall"] = dynamic_cast<BoxCollider2D*>(Game_Objects::Get_Game_Object("Wall")->Get_Component(BOXCOLLIDER2D));
 		//Creates 2.5k instantiated "WHITE" prefab to test
 		for (unsigned int i{}; i < game_objects_to_create; ++i)
 		{
@@ -160,6 +162,12 @@ namespace Game {
 		else if (SAGEInputHandler::Get_Key(SAGE_KEY_L))
 		{
 			SageRenderer::camera->MoveCamera({ 1.f,0.f }, 100.f);
+		} else if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_G))
+		{
+			for (auto& collider : collider_cache)
+			{
+				collider.second->Set_Debug(!collider.second->Get_Debug());
+			}
 		}
 
 		
@@ -282,7 +290,7 @@ namespace Game {
 			if (collider)
 			{
 				collider->Register_Collision_Callback([collider](GameObject* _obj) {
-					std::cout << collider->Get_Parent()->Get_ID() << "Collided with " << _obj->Get_ID() << std::endl;
+					std::cout << collider->Get_Parent()->Get_ID() << " Collided with " << _obj->Get_ID() << std::endl;
 				});
 				colliders.push_back(collider);
 			}
@@ -298,7 +306,7 @@ namespace Game {
 				{
 					continue;
 				}
-				bool collide_cond = collider->Calculate_AABB_Collision(other);
+				bool collide_cond = collider->CheckSweptCollision(collider->GetAABB(), *other);
 				if (collide_cond)
 				{
 					collider->onCollide(other);
@@ -308,7 +316,7 @@ namespace Game {
 						Physics* phy = dynamic_cast<Physics*>(parent->Get_Component(PHYSICS));
 						if (phy)
 						{
-							collider->onCollide();
+							collider->onCollide(other);
 						}
 					}
 				}

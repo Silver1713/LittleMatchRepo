@@ -13,17 +13,20 @@
 /* End Header **************************************************************************/
 
 #include "Components/BoxCollider2D.hpp"
+<<<<<<< HEAD
+#include "Components/Transform.hpp"
+#include "GameObjects.hpp"
+#include "Vector2.h"
+=======
 #include "Components/Component.hpp"
 #include "Components/Transform.hpp"
 #include "Components/Physics.hpp"
 #include "GameObjects.hpp"
 
-#include "Vector2.h"
-
-
 #include <iostream>
 
 // Initialization and Cleanup Functions
+>>>>>>> Edwin
 
 /*!*****************************************************************************
   \brief
@@ -35,14 +38,17 @@
 *******************************************************************************/
 void BoxCollider2D::Init(GameObject* _parent)
 {
+<<<<<<< HEAD
 	Component::Init(_parent);
 	Transform* transform = dynamic_cast<Transform*>(_parent->Get_Component(ComponentType::TRANSFORM));
 
 	float const* scale = transform->Get_Scale();
-	aabb.min.x = -scale[0] / 2;
-	aabb.max.x = scale[0] / 2;
-	aabb.min.y = -scale[1] / 2;
-	aabb.max.y = scale[1] / 2;
+	aabb.min_x = -scale[0] / 2;
+	aabb.max_x = scale[0] / 2;
+	aabb.min_y = -scale[1] / 2;
+	aabb.max_y = scale[1] / 2;
+=======
+    Component::Init(_parent);
 }
 
 // Update Function
@@ -63,12 +69,25 @@ void BoxCollider2D::Update(float deltaTime)
 
     // Check for collisions with other objects
     CheckCollisions(deltaTime);
+>>>>>>> Edwin
 }
+
+/*!*****************************************************************************
+  \brief
+<<<<<<< HEAD
+	Space for calls to collision implementation
+*******************************************************************************/
 void BoxCollider2D::Update()
 {
 	GameObject* p = Get_Parent();
-
-    TransformAABB();
+	Transform* transform = dynamic_cast<Transform*>(Get_Parent()->Get_Component(ComponentType::TRANSFORM));
+	aabb.pos_x = transform->Get_Positions()[0];
+	aabb.pos_y = transform->Get_Positions()[1];
+	float const* scale = transform->Get_Scale();
+	aabb.min_x = -scale[0] / 2;
+	aabb.max_x = scale[0] / 2;
+	aabb.min_y = -scale[1] / 2;
+	aabb.max_y = scale[1] / 2;
 
 	aabb.calculate_model_matrix(Get_Parent());
 
@@ -81,6 +100,92 @@ void BoxCollider2D::Update()
 
 /*!*****************************************************************************
   \brief
+	Frees and unload any members that needs it
+*******************************************************************************/
+void BoxCollider2D::Exit() {}
+
+
+ComponentType BoxCollider2D::Get_Component_Type() { return BOXCOLLIDER2D; }
+
+
+void BoxCollider2D::Register_Collision_Callback(std::function<void(GameObject*)> _callback)
+{
+	collision_callback = _callback;
+}
+
+void BoxCollider2D::onCollide()
+{
+	if (collision_callback)
+	{
+		collision_callback(Get_Parent());
+		
+	}
+}
+
+
+void BoxCollider2D::onCollide(BoxCollider2D* collide)
+{
+	if (collision_callback)
+	{
+		collision_callback(collide->Get_Parent());
+	}
+
+}
+
+
+
+
+
+void BoxCollider2D::AABB::calculate_model_matrix(GameObject* _parent)
+{
+	ToastBox::Vec2 pos = { pos_x, pos_y };
+	ToastBox::Vec2 scale = { max_x - min_x, max_y - min_y };
+
+	ToastBox::Matrix3x3 scale_matrix;
+	scale_matrix.Matrix3Scale(scale.x, scale.y);
+
+	ToastBox::Matrix3x3 translation_matrix;
+	translation_matrix.Matrix3Translate(pos.x, pos.y);
+
+
+	
+
+	ToastBox::Matrix3x3 model = ~translation_matrix * ~scale_matrix;
+	Transform* transform = dynamic_cast<Transform*>(_parent->Get_Component(ComponentType::TRANSFORM));
+	
+	if (transform)
+	{
+		model = ~transform->Get_Model_Matrix() * ~model;
+
+	}
+	model_matrix = model;
+}
+
+
+bool BoxCollider2D::Get_Debug()
+{
+	return Debug_Mode;
+}
+
+
+void BoxCollider2D::Set_Debug(bool _debug)
+{
+	Debug_Mode = _debug;
+}
+
+bool BoxCollider2D::Calculate_AABB_Collision(BoxCollider2D* _other)
+{
+	if (aabb.pos_x + aabb.max_x < _other->aabb.pos_x + _other->aabb.min_x ||
+		aabb.pos_x + aabb.min_x > _other->aabb.pos_x + _other->aabb.max_x ||
+		aabb.pos_y + aabb.max_y < _other->aabb.pos_y + _other->aabb.min_y ||
+		aabb.pos_y + aabb.min_y > _other->aabb.pos_y + _other->aabb.max_y)
+	{
+		return false;
+	}
+	return true;
+}
+
+=======
     Frees and unloads any members that need it.
 *******************************************************************************/
 void BoxCollider2D::Exit() {}
@@ -115,10 +220,10 @@ void BoxCollider2D::CheckCollisions(float deltaTime)
     if (!transform || !physics) return;
 
     ToastBox::Vec2 velocity = physics->Get_Velocity();
-    AABB sweptAABB;
-
-	sweptAABB.min = aabb.min + velocity * deltaTime;
-	sweptAABB.max = aabb.max + velocity * deltaTime;
+    AABB sweptAABB = {
+        aabb.min + velocity * deltaTime,
+        aabb.max + velocity * deltaTime
+    };
 
     for (const auto& pair : Game_Objects::Get_Game_Objects())
     {
@@ -192,15 +297,9 @@ void BoxCollider2D::TransformAABB()
     const float* pos = transform->Get_Positions();
     const float* scale = transform->Get_Scale();
 
-	aabb.center.x = pos[0];
-	aabb.center.y = pos[1];
-
-    
     // Calculate min and max based on position and scale
     ToastBox::Vec2 min = { pos[0] - scale[0] / 2.0f, pos[1] - scale[1] / 2.0f };
     ToastBox::Vec2 max = { pos[0] + scale[0] / 2.0f, pos[1] + scale[1] / 2.0f };
-
-    aabb.scale = max - min;
 
     // Set the AABB with the calculated min and max
     SetAABB(min, max);
@@ -223,74 +322,6 @@ void BoxCollider2D::SetAABB(const ToastBox::Vec2& min, const ToastBox::Vec2& max
     aabb.max = max;
 }
 
-
-
-void BoxCollider2D::Register_Collision_Callback(std::function<void(GameObject*)> _callback)
-{
-	collision_callback = _callback;
-}
-
-void BoxCollider2D::onCollide()
-{
-	if (collision_callback)
-	{
-		collision_callback(Get_Parent());
-		
-	}
-}
-
-
-void BoxCollider2D::onCollide(BoxCollider2D* collide)
-{
-	if (collision_callback)
-	{
-		collision_callback(collide->Get_Parent());
-	}
-
-}
-
-
-
-
-
-void BoxCollider2D::AABB::calculate_model_matrix(GameObject* _parent)
-{
-	
-
-	ToastBox::Matrix3x3 scale_matrix;
-	scale_matrix.Matrix3Scale(scale.x, scale.y);
-
-	ToastBox::Matrix3x3 translation_matrix;
-	translation_matrix.Matrix3Translate(center.x, center.y);
-
-
-	
-
-	ToastBox::Matrix3x3 model = ~translation_matrix * ~scale_matrix;
-	Transform* transform = dynamic_cast<Transform*>(_parent->Get_Component(ComponentType::TRANSFORM));
-	
-	if (transform)
-	{
-		model = ~transform->Get_Model_Matrix() * ~model;
-
-	}
-	model_matrix = model;
-}
-
-
-bool BoxCollider2D::Get_Debug()
-{
-	return Debug_Mode;
-}
-
-
-void BoxCollider2D::Set_Debug(bool _debug)
-{
-	Debug_Mode = _debug;
-}
-
-
-
 /*!****************************************************************************
   \brief
     Gets the current AABB.
@@ -301,3 +332,4 @@ const BoxCollider2D::AABB& BoxCollider2D::GetAABB() const
 {
     return aabb;
 }
+>>>>>>> Edwin

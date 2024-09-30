@@ -310,7 +310,7 @@ void SageRendererInternal::Set_Default_Shader(SageShader* shader)
 }
 
 
-void SageRendererInternal::DrawLine(SageLine const& line)
+void SageRendererInternal::DrawLine(SageLine const& line, float size)
 {
 	SageShader* shader = default_shader;
 	glBindVertexArray(line.line->get_vao_handle());
@@ -325,6 +325,10 @@ void SageRendererInternal::DrawLine(SageLine const& line)
 
 	shader->SetUniform("uBorderSize", default_config.border_width);
 	shader->SetUniform("uCornerRadius", default_config.border_radius);
+
+	glLineWidth(size);
+
+
 
 
 	if (default_config.options & I_SAGE_ENABLE_CAMERA)
@@ -369,14 +373,14 @@ void SageRendererInternal::DrawLine(SageLine const& line)
 }
 
 
-void SageRendererInternal::DrawLine(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color)
+void SageRendererInternal::DrawLine(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color, float size)
 {
-	SageLine line({ start.getX(), start.getY() }, { end.getX(), end.getY() }, { color.x,color.y,color.z,color.a }, 15.f);
+	SageLine line({ start.getX(), start.getY() }, { end.getX(), end.getY() }, { color.x,color.y,color.z,color.a }, size);
 	line.line = &SageModelManager::models["PRIMITIVE_LINE"];
 
 	line.update_dist(line.start, line.end);
 
-	DrawLine(line);
+	DrawLine(line, line.width);
 
 
 }

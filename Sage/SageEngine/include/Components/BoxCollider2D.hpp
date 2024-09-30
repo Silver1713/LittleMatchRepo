@@ -27,16 +27,19 @@ class BoxCollider2D : public Component
 	bool Debug_Mode{ false };
 	struct AABB
 	{
-		float pos_x, pos_y; // Center position of the collider in the object's local space
-		float min_x, min_y; // Minimum extents of the collider in the object's local space
-		float max_x, max_y; // Maximum extents of the collider in the object's local space
+		
 
-
+		ToastBox::Vec2 center; // Center of the AABB
 
 		ToastBox::Vec2 min; // Minimum corner
 		ToastBox::Vec2 max; // Maximum corner
 
 		ToastBox::Matrix3x3 model_matrix{};
+		ToastBox::Vec2 scale;
+		/*AABB();
+		AABB(const ToastBox::Vec2& min, const ToastBox::Vec2& max);
+		AABB(const ToastBox::Vec2& pos, const ToastBox::Vec2& scale);*/
+
 
 		void calculate_model_matrix(GameObject* _parent);
 	};
@@ -77,13 +80,10 @@ public:
 	void onCollide();
 	void onCollide(BoxCollider2D* collide);
 	void Register_Collision_Callback(std::function<void(GameObject*)> _callback);
-	/*!*****************************************************************************
-	  \brief
-		Frees and unload any members that needs it
-	*******************************************************************************/
-	void Exit() override;
+
 
 	void Set_Debug(bool _debug);
+	bool Calculate_AABB_Collision(BoxCollider2D* _other);
 	bool Get_Debug();
 
 	/*!*****************************************************************************
@@ -144,15 +144,7 @@ public:
 		A const reference to the AABB representing the min and max corners of the AABB.
 	*******************************************************************************/
 	const AABB& GetAABB() const;
-
-private:
-	AABB aabb; // The axis-aligned bounding box for this collider
 };
-\return
-the enum representating what component this is
-* ******************************************************************************/
-ComponentType Get_Component_Type() override;
 
 
 bool Calculate_AABB_Collision(BoxCollider2D * _other);
-};

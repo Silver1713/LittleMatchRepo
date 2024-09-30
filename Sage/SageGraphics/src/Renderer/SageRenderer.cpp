@@ -129,9 +129,9 @@ void SageRenderer::DrawLine(SageLine const& line)
 }
 
 
-void SageRenderer::DrawLine(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color)
+void SageRenderer::DrawLine(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color, float size)
 {
-	SageRendererInternal::DrawLine(start, end, color);
+	SageRendererInternal::DrawLine(start, end, color, size);
 
 
 }

@@ -111,16 +111,16 @@ void Sprite2D::Draw()
 	}
 
 	BoxCollider2D* collider = dynamic_cast<BoxCollider2D*>(Get_Parent()->Get_Component(BOXCOLLIDER2D));
-	if (collider)
+	if (collider && collider->Get_Debug())
 	{
 		SageRenderer::SetOptionOn(SageRenderer::SAGE_ENABLE_CAMERA);
 		collider->aabb.calculate_model_matrix(Get_Parent());
-		ToastBox::Vec2 min = { collider->aabb.pos_x + collider->aabb.min_x, collider->aabb.pos_y + collider->aabb.min_y };
-		ToastBox::Vec2 max = { collider->aabb.pos_x + collider->aabb.max_x, collider->aabb.pos_y + collider->aabb.max_y };
-		SageRenderer::DrawLine(min, min + ToastBox::Vec2{ (collider->aabb.max_x) - (collider->aabb.min_x) ,0 }, { 0,1,0,1 });
-		SageRenderer::DrawLine(min, min + ToastBox::Vec2{ 0,(collider->aabb.max_y) - (collider->aabb.min_y) }, { 0,1,0,1 });
-		SageRenderer::DrawLine(max, max - ToastBox::Vec2{ (collider->aabb.max_x) - (collider->aabb.min_x) ,0 }, { 0,1,0,1 });
-		SageRenderer::DrawLine(max, max - ToastBox::Vec2{ 0,(collider->aabb.max_y) - (collider->aabb.min_y) }, { 0,1,0,1 });
+		auto& aabb = collider->aabb;
+		SageRenderer::DrawLine(aabb.min, aabb.min + ToastBox::Vec2{ aabb.scale.x ,0 }, { 0,1,0,1 }, 1.f);
+		SageRenderer::DrawLine(aabb.min, aabb.min + ToastBox::Vec2{ 0,aabb.scale.y }, { 0,1,0,1 }, 1.f);
+		SageRenderer::DrawLine(aabb.max, aabb.max - ToastBox::Vec2{ aabb.scale.x ,0 }, { 0,1,0,1 }, 1.f);
+		SageRenderer::DrawLine(aabb.max, aabb.max - ToastBox::Vec2{ 0,aabb.scale.y }, { 0,1,0,1 }, 1.f);
+
 		SageRenderer::SetOptionOff(SageRenderer::SAGE_ENABLE_CAMERA);
 	}
 }
