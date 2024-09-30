@@ -8,7 +8,6 @@ namespace SageAudio
 	FMOD::System* p_system;
 	FMOD::ChannelGroup* audio_bgm_group, * audio_sfx_group, * audio_ui_group, * audio_ambient_group, * master_audio_group;
 	std::vector<FMOD::ChannelGroup*> channel_group = { audio_bgm_group, audio_sfx_group, audio_ui_group, audio_ambient_group, master_audio_group };
-	std::unordered_map<std::string, std::vector<std::string>> audio_files;
 	std::vector<FMOD::Sound*> p_sound;
 	size_t p_sound_index{};
 	bool paused{ false };
@@ -40,11 +39,11 @@ namespace SageAudio
 	void Play_Sound(const std::string& _filename, Sound_Mode _mode)
 	{
 		size_t i{ 0 };
-		for (const auto& [category, files] : audio_files)
+		for (const auto& [category, filenames] : Assets::Audio::Get_Audio())
 		{
-			for (const auto& file : files)
+			for (const auto& filename : filenames)
 			{
-				if (file == _filename)
+				if (filename == _filename)
 				{
 					result = p_sound[i]->setMode(Mode_Selector(_mode));
 					FMOD_ErrorCheck(result);
@@ -93,7 +92,7 @@ namespace SageAudio
 	FMOD::ChannelGroup* Get_Channel(std::string _channel)
 	{
 		char name[4];
-		for (size_t i{ 0 }; i < audio_files.size(); ++i)
+		for (size_t i{ 0 }; i < Assets::Audio::Get_Audio().size(); ++i)
 		{
 			result = channel_group[i]->getName(name, sizeof(name));
 			FMOD_ErrorCheck(result);
@@ -147,7 +146,7 @@ namespace SageAudio
 
 		result = p_system->getMasterChannelGroup(&channel_group.back());
 		FMOD_ErrorCheck(result);
-		for (size_t i{ 0 }; i < audio_files.size(); i++)
+		for (size_t i{ 0 }; i < Assets::Audio::Get_Audio().size(); i++)
 		{
 			result = channel_group.back()->addGroup(channel_group[i]);
 			FMOD_ErrorCheck(result);
@@ -198,7 +197,7 @@ namespace SageAudio
 			result = p_sound[i]->release();
 			FMOD_ErrorCheck(result);
 		}
-		for (size_t i{ 0 }; i < audio_files.size(); i++)
+		for (size_t i{ 0 }; i < Assets::Audio::Get_Audio().size(); i++)
 		{
 			result = channel_group[i]->release();
 			FMOD_ErrorCheck(result);
