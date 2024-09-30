@@ -49,6 +49,7 @@ public:
 	void Update() override;
 
 	void onCollide();
+	void onCollide(BoxCollider2D* collide);
 	void Register_Collision_Callback(std::function<void(GameObject*)> _callback);
 	/*!*****************************************************************************
 	  \brief
@@ -67,4 +68,7 @@ public:
 		the enum representating what component this is
 	*******************************************************************************/
 	ComponentType Get_Component_Type() override;
+
+
+	bool Calculate_AABB_Collision(BoxCollider2D* _other);
 };

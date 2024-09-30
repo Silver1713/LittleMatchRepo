@@ -25,6 +25,8 @@
 
 //FOR TESTING PURPOSES
 #include <cstdlib> // for srand()
+#include <memory>
+#include "Components/Physics.hpp"
 
 
 namespace Game {
@@ -49,7 +51,7 @@ namespace Game {
 	{
 		game_objects.clear();
 		transform_cache.clear();
-
+		GameObject* obj = Game_Objects::Get_Game_Object("Player");
 		//caches the player's transforms
 		transform_cache["Player"] = dynamic_cast<Transform*>(Game_Objects::Get_Game_Object("Player")->Get_Component(TRANSFORM));
 
@@ -74,7 +76,7 @@ namespace Game {
 
 			game_objects[std::to_string(i)]->Disable();	
 		}
-		Game_Objects::Get_Game_Object("Player")->Add_Component(std::make_unique<BoxCollider2D>());
+		//Game_Objects::Get_Game_Object("Player")->Add_Component(std::make_unique<BoxCollider2D>());
 		
 	}
 
@@ -95,13 +97,10 @@ namespace Game {
 		vp.setViewport();
 
 
-		Physics* plrphy = Game_Objects::Get_Game_Object("Player")->Get_Component<Physics>();
-
-		plrphy->set_static(true);
-		// Add collider to player
+		
 
 		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
-		plrphy->set_static(true);
+		plrphy->set_static(false);
 		
 	}
 
@@ -267,6 +266,52 @@ namespace Game {
 
 		camera.update();
 
+
+		// AABB checks here
+		std::unordered_map<std::string,std::unique_ptr<GameObject>>& objects = Game_Objects::Get_Game_Objects();
+
+		std::vector<BoxCollider2D*> colliders{};
+		
+		for (auto& obj : objects)
+		{
+			if (!obj.second)
+				continue;
+			BoxCollider2D* collider = dynamic_cast<BoxCollider2D*>(obj.second->Get_Component(BOXCOLLIDER2D));
+			if (collider)
+			{
+				collider->Register_Collision_Callback([collider](GameObject* _obj) {
+					std::cout << collider->Get_Parent()->Get_ID() << "Collided with " << _obj->Get_ID() << std::endl;
+				});
+				colliders.push_back(collider);
+			}
+		}
+
+
+		// AABB Here
+		for (auto& collider : colliders)
+		{
+			for (auto& other : colliders)
+			{
+				if (collider == other)
+				{
+					continue;
+				}
+				bool collide_cond = collider->Calculate_AABB_Collision(other);
+				if (collide_cond)
+				{
+					collider->onCollide(other);
+					GameObject* parent = collider->Get_Parent();
+					if (parent)
+					{
+						Physics* phy = dynamic_cast<Physics*>(parent->Get_Component(PHYSICS));
+						if (phy)
+						{
+							phy->set_static(true);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/*!*****************************************************************************

@@ -22,6 +22,8 @@
 #include <memory>
 #include <iostream>
 
+#include "Components/Physics.hpp"
+
 namespace Game_Objects
 {
 	static std::unordered_map<std::string, std::unique_ptr<GameObject>> g_game_objects;
@@ -61,7 +63,8 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Draw()
 	{
-		SageRenderer::ClearColor({ 1,1,1,1 });
+		SageRenderer::ClearColor({ 0,0,0,1 });
+		// sort the gameobjects based on their z value
 		for (auto& _g : g_game_objects)
 		{
 			if (_g.second)

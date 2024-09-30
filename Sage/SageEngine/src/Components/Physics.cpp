@@ -40,6 +40,7 @@ void Physics::Exit() {}
 ComponentType Physics::Get_Component_Type() { return PHYSICS; }
 void Physics::set_static(bool _is_static)
 {
+	if (is_static) curr_velocity  = {};
 	is_static = _is_static;
 }
 

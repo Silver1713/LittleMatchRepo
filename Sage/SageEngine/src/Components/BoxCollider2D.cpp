@@ -54,6 +54,7 @@ void BoxCollider2D::Update()
 
 	aabb.calculate_model_matrix(Get_Parent());
 
+	
 
 	
 
@@ -83,6 +84,18 @@ void BoxCollider2D::onCollide()
 		
 	}
 }
+
+
+void BoxCollider2D::onCollide(BoxCollider2D* collide)
+{
+	if (collision_callback)
+	{
+		collision_callback(collide->Get_Parent());
+	}
+
+}
+
+
 
 
 
@@ -122,3 +135,16 @@ void BoxCollider2D::Set_Debug(bool _debug)
 {
 	Debug_Mode = _debug;
 }
+
+bool BoxCollider2D::Calculate_AABB_Collision(BoxCollider2D* _other)
+{
+	if (aabb.pos_x + aabb.max_x < _other->aabb.pos_x + _other->aabb.min_x ||
+		aabb.pos_x + aabb.min_x > _other->aabb.pos_x + _other->aabb.max_x ||
+		aabb.pos_y + aabb.max_y < _other->aabb.pos_y + _other->aabb.min_y ||
+		aabb.pos_y + aabb.min_y > _other->aabb.pos_y + _other->aabb.max_y)
+	{
+		return false;
+	}
+	return true;
+}
+

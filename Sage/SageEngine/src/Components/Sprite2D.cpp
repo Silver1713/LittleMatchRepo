@@ -106,7 +106,8 @@ void Sprite2D::Draw()
 	if (obj)
 	{
 		SageRenderer::DrawFilled(*obj, {
-		SageRenderer::SAGE_ENABLE_ALPHA | SageRenderer::SAGE_ENABLE_TEXTURE | SageRenderer::SAGE_ENABLE_CAMERA });
+		SageRenderer::SAGE_ENABLE_ALPHA | SageRenderer::SAGE_ENABLE_TEXTURE | SageRenderer::SAGE_ENABLE_CAMERA
+		});
 	}
 
 	BoxCollider2D* collider = dynamic_cast<BoxCollider2D*>(Get_Parent()->Get_Component(BOXCOLLIDER2D));

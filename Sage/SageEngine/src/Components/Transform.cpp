@@ -14,6 +14,9 @@
 #include "Components/Component.hpp"
 #include "Components/Transform.hpp"
 
+#include "Components/Physics.hpp"
+#include "GameObjects.hpp"
+
 /*!*****************************************************************************
   \brief
 	Default constructor for Transform
@@ -74,7 +77,8 @@ void Transform::Update()
 {
 
 	// apply transformation
-
+	Physics* phy = dynamic_cast<Physics*>(Get_Parent()->Get_Component(PHYSICS));
+	
 	if (phy)
 	{
 		
