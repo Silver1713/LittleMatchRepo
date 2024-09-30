@@ -90,7 +90,7 @@ namespace Game {
 	*******************************************************************************/
 	void Init()
 	{
-		camera.init({ 0,0 }, { static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
+		camera.init({ 50,0 }, { static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
 		vp.set_dims({ static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) });
 		vp.calculate_viewport_xform();
 
@@ -198,12 +198,24 @@ namespace Game {
 		}
 		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
 		{
-			std::cout << "mouse clicked" << std::endl;
+			
 			//GameObject* random;
+			double x, y;
+			SAGEInputHandler::Get_Mouse_Position(x, y);
+			ToastBox::Vec2 mouse_pos{static_cast<float>(x), static_cast<float>(y)};
+
+			ToastBox::Vec2 world = SageRenderer::camera->Screen_To_World({960.f, 540.f});;
+
+			std::cout << "Mouse Pos: " << world.x << " " << world.y << std::endl;
+			
+			
 			GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("White"), "White_1");
 			transform_cache["White_1"] = dynamic_cast<Transform*>(random->Get_Component(TRANSFORM));
 
-			float pos[3]{ (float)(std::rand() % (int)max_pos[0] + (int)min_pos[0]), (float)(std::rand() % (int)max_pos[1] + (int)min_pos[1]),0.0f };
+			float min_scale[3] = { 10.0f,10.0f,0.0f }, max_scale[3] = { 100.0f,100.0f,0.0f };
+
+
+			float pos[3]{ world.x,world.y,0.f };
 			float rot[3]{ (float)(std::rand() % (int)max_rot[0] + (int)min_rot[0]), (float)(std::rand() % (int)max_rot[1] + (int)min_rot[1]),0.0f };
 			float scale[3]{ (float)(std::rand() % (int)max_scale[0] + (int)min_scale[0]), (float)(std::rand() % (int)max_scale[1] + (int)min_scale[1]),0.0f };
 			float col[3]{ (float)(std::rand() % (int)max_col[0] + (int)min_col[0]) / 100.0f, (float)(std::rand() % (int)max_col[1] + (int)min_col[1]) / 100.0f,(float)(std::rand() % (int)max_col[2] + (int)min_col[2]) / 100.0f };
