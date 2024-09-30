@@ -100,7 +100,7 @@ namespace Game {
 		
 
 		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
-		plrphy->set_static(false);
+		plrphy->set_static(true);
 		
 	}
 
@@ -306,7 +306,7 @@ namespace Game {
 						Physics* phy = dynamic_cast<Physics*>(parent->Get_Component(PHYSICS));
 						if (phy)
 						{
-							phy->set_static(true);
+							collider->onCollide();
 						}
 					}
 				}
