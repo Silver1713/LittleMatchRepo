@@ -15,8 +15,23 @@
 #include "AssetLoader.hpp"
 #include "GameObjects.hpp"
 
+//Prefabs category serving as middleman between assets and gameobjects
 namespace Prefabs
 {
+	/*!*****************************************************************************
+	  \brief
+		Initializes all components of all gameobjects
+	*******************************************************************************/
 	void Init();
+	/*!*****************************************************************************
+	  \brief
+		Gets the Prefab with the provided ID
+
+	  \param _ID
+		The key to look for
+
+	  \return
+		The Prefab in the map with the _ID key
+	*******************************************************************************/
 	Assets::Prefabs::Prefab const& Get_Prefab(std::string _ID);
 }

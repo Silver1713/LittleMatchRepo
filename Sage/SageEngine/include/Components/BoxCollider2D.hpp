@@ -16,18 +16,34 @@
 
 class BoxCollider2D : public Component
 {
-	struct AABB
-	{
-		float pos_x, pos_y; // Center position of the collider in the object's local space
-		float min_x, min_y; // Minimum extents of the collider in the object's local space
-		float max_x, max_y; // Maximum extents of the collider in the object's local space
-	};
+	/*!*****************************************************************************
+	  \brief
+		This function initializes the component along with any BoxCollider specific
+		members that need initializing
 
-public:
-	AABB aabb;
-
+	  \param _parent
+		the gameobject that created this component
+	*******************************************************************************/
 	void Init(GameObject* _parent) override;
+
+	/*!*****************************************************************************
+	  \brief
+		Space for calls to collision implementation
+	*******************************************************************************/
 	void Update() override;
+
+	/*!*****************************************************************************
+	  \brief
+		Frees and unload any members that needs it
+	*******************************************************************************/
 	void Exit() override;
+
+	/*!*****************************************************************************
+	  \brief
+		Gets overriden based on what component this is
+
+	  \return
+		the enum representating what component this is
+	*******************************************************************************/
 	ComponentType Get_Component_Type() override;
 };
