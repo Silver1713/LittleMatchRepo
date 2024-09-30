@@ -24,8 +24,13 @@
 
 namespace Game_Objects
 {
+	const unsigned int max_z_orders{3};
 	static std::unordered_map<std::string, std::unique_ptr<GameObject>> g_game_objects;
 
+	/*!*****************************************************************************
+	  \brief
+		Initializes all components of all gameobjects
+	*******************************************************************************/
 	void Init()
 	{
 		for (auto& _g : g_game_objects)
@@ -36,7 +41,10 @@ namespace Game_Objects
 			}
 		}
 	}
-
+	/*!*****************************************************************************
+	  \brief
+		Updates all components of all gameobjects
+	*******************************************************************************/
 	void Update()
 	{
 		for (auto& _g : g_game_objects)
@@ -48,18 +56,33 @@ namespace Game_Objects
 		}
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Draws all components of all gameobjects
+	*******************************************************************************/
 	void Draw()
 	{
 		SageRenderer::ClearColor({ 1,1,1,1 });
-		for (auto& _g : g_game_objects)
+
+		for (unsigned int current_z{}; current_z <= max_z_orders; ++current_z)
 		{
-			if (_g.second)
+			for (auto& _g : g_game_objects)
 			{
-				_g.second->Draw();
+				if (_g.second)
+				{
+					if (_g.second->Get_Z_Order() == current_z)
+					{
+						_g.second->Draw();
+					}
+				}
 			}
 		}
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Clears all gameobjects
+	*******************************************************************************/
 	void Exit()
 	{
 		for (auto& _g : g_game_objects)
@@ -72,6 +95,19 @@ namespace Game_Objects
 		Clear_Game_Objects();
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Adds the gameobject the map of gameobjects
+
+	  \param _g
+		the gameobject to add
+
+	  \param _identifier
+		the name of the gameobject
+
+	  \return
+		the pointer to the gameobject after it is added to the map
+	*******************************************************************************/
 	std::unique_ptr<GameObject>* Add_Game_Object(std::unique_ptr<GameObject> _g, std::string const& _identifier)
 	{
 		if (!_g)
@@ -83,21 +119,52 @@ namespace Game_Objects
 		return &g_game_objects[_identifier];
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Gets a reference to the map of all gameobjects
+	  \return
+		A reference to the map of all gameobjects
+	*******************************************************************************/
 	std::unordered_map<std::string, std::unique_ptr<GameObject>>& Get_Game_Objects()
 	{
 		return g_game_objects;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Gets the pointer to the specific gameobject
+	  \param _identifier
+		The identifier to look for
+	  \return
+		A reference to the map of all gameobjects
+	*******************************************************************************/
 	GameObject* Get_Game_Object(std::string const& _identifier)
 	{
 		return g_game_objects[_identifier].get();
 	}
 
-	GameObject* Instantiate(Assets::Prefabs::Prefab const& _p, std::string const& _identifier)
+	/*!*****************************************************************************
+	  \brief
+		Instantiates a new gameobject based on a specified prefab and given a
+		specific identifier
+	  \param _p
+		The prefab to copy from
+	  \param _identifier
+		The identifier of the newly create gameobject
+	  \param _z_order
+		The _z_order of the newly create gameobject
+	  \return
+		A pointer to the created gameobject
+	*******************************************************************************/
+	GameObject* Instantiate(Assets::Prefabs::Prefab const& _p, std::string const& _identifier, unsigned int _z_order)
 	{
-		return (Add_Game_Object(std::make_unique<GameObject>(_p,_identifier), _identifier))->get();
+		return (Add_Game_Object(std::make_unique<GameObject>(_p,_identifier,_z_order), _identifier))->get();
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Clears the map of gameobjects
+	*******************************************************************************/
 	void Clear_Game_Objects()
 	{
 		SageObjectManager::DestroyAllObjects();
@@ -105,8 +172,26 @@ namespace Game_Objects
 	}
 }
 
+/*!*****************************************************************************
+  \brief
+	Default constructor for GameObject
+*******************************************************************************/
 GameObject::GameObject(){}
-GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _identifier) : identifier{_identifier}
+/*!*****************************************************************************
+  \brief
+	Constructor for GameObject that takes in a prefab to copy from along with
+	what it should be named via its identifier
+
+  \param _p
+	The prefab to copy from
+
+  \param _identifier
+	What this instance should be called
+
+  \param _z_order
+	The z-order of the object
+*******************************************************************************/
+GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _identifier, unsigned int _z_order) : identifier{_identifier}, z_order{_z_order}
 {
 	Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
 	if (!(_p.sprite_texture_ID == "Nil"))
@@ -133,6 +218,11 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	Init();
 }
 
+
+/*!*****************************************************************************
+  \brief
+	Initializes the gameobject
+*******************************************************************************/
 void GameObject::Init()
 {
 	if (components.empty())
@@ -146,6 +236,10 @@ void GameObject::Init()
 	}
 }
 
+/*!*****************************************************************************
+  \brief
+	Updates the gameobject
+*******************************************************************************/
 void GameObject::Update()
 {
 	if (components.empty() || (!is_enabled))
@@ -159,6 +253,10 @@ void GameObject::Update()
 	}
 }
 
+/*!*****************************************************************************
+  \brief
+	Draws the gameobject
+*******************************************************************************/
 void GameObject::Draw()
 {
 	if (components.empty() || (!is_enabled))
@@ -173,6 +271,10 @@ void GameObject::Draw()
 	
 }
 
+/*!*****************************************************************************
+  \brief
+	Frees and Unloads members of the gameobject if necessary
+*******************************************************************************/
 void GameObject::Exit()
 {
 	if (components.empty())
@@ -186,29 +288,74 @@ void GameObject::Exit()
 	}
 }
 
+/*!*****************************************************************************
+  \brief
+	Gets the identifier of this instance of a gameobject
+  \return
+	Returns the string that is the identifier
+*******************************************************************************/
 std::string const& GameObject::Get_ID()
 {
 	return identifier;
 }
 
+/*!*****************************************************************************
+  \brief
+	Gets the z_order of this instance of a gameobject
+  \return
+	Returns the z_order
+*******************************************************************************/
+unsigned int const& GameObject::Get_Z_Order() const
+{
+	return z_order;
+}
+
+/*!*****************************************************************************
+  \brief
+	Returns whether the object is enabled
+  \return
+	Whether the object is enabled
+*******************************************************************************/
 bool const& GameObject::Is_Enabled() const
 {
 	return is_enabled;
 }
+/*!*****************************************************************************
+  \brief
+	Enables the gameobject
+*******************************************************************************/
 void GameObject::Enable()
 {
 	is_enabled = true;
 }
+/*!*****************************************************************************
+  \brief
+	Disables the gameobject
+*******************************************************************************/
 void GameObject::Disable()
 {
 	is_enabled = false;
 }
 
+/*!*****************************************************************************
+  \brief
+	Adds component to the gameobject
+  \param _c
+	Component to be added
+*******************************************************************************/
 void GameObject::Add_Component(std::unique_ptr<Component> _c)
 {
 	components.push_back(std::move(_c));
 }
 
+/*!*****************************************************************************
+  \brief
+	Adds component to the gameobject
+  \param _component
+	Component to be added
+  \return
+	pointer to the component
+*******************************************************************************/
 Component* GameObject::Get_Component(ComponentType _type)
 {
 	for (auto& c : components)
