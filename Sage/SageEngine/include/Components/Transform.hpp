@@ -28,6 +28,7 @@ private:
 	ToastBox::Matrix3x3 model_matrix{};
 
 public:
+	ToastBox::Vec3 previous_position{};
 	ToastBox::Vec3 position{};
 	ToastBox::Vec3 rotation{};
 	ToastBox::Vec3 scaling{};

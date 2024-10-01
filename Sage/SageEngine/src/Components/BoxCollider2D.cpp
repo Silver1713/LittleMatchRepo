@@ -20,6 +20,8 @@
 
 #include "Vector2.h"
 
+#include "SageTimer.hpp"
+
 
 #include <iostream>
 
@@ -136,6 +138,136 @@ void BoxCollider2D::CheckCollisions(float deltaTime)
     }
 }
 
+bool BoxCollider2D::CollisionIntersection_RectRect(const AABB& aabb1,          //Input
+    const ToastBox::Vec2& vel1,         //Input 
+    const AABB& aabb2,          //Input 
+    const ToastBox::Vec2& vel2,         //Input
+    float& firstTimeOfCollision) //Output: the calculated value of tFirst, below, must be returned here
+{
+    
+
+    ToastBox::Vec2 vel_rel;
+
+    vel_rel.x = vel2.x - vel1.x;
+    vel_rel.y = vel2.y - vel1.y;
+    //collision for one side
+    // Check if it not colliding with static object
+    if (aabb1.max.x < aabb2.min.x) {
+        return 0;
+    }
+    if (aabb1.max.y < aabb2.min.y) {
+        return 0;
+    }
+    //collision for the other side
+    if (aabb1.min.x > aabb2.max.x) {
+        return 0;
+    }
+    if (aabb1.min.y > aabb2.max.y) {
+        return 0;
+    }
+    //collided
+
+
+    //check if it not colliding with dynamic object
+    float t_first = 0;
+    float t_last = SageTimer::delta_time;
+
+    // for x axis
+    //case for vel < 0;
+    if (vel_rel.x < 0) {
+        //case1
+        if (aabb1.min.x > aabb2.max.x) {
+            return 0;
+        }
+        //case4
+        if (aabb1.max.x < aabb2.min.x) {
+            t_first = std::max<float>(((aabb1.max.x - aabb2.min.x) / vel_rel.x), t_first);
+        }
+        if (aabb1.min.x < aabb2.max.x) {
+            t_last = std::min<float>(((aabb1.min.x - aabb2.max.x) / vel_rel.x), t_last);
+
+        }
+
+        //case for velocity more than 0
+    }
+    if (vel_rel.x > 0) {
+        //case2
+        if (aabb1.min.x > aabb2.max.x) {
+            t_first = std::max<float>(((aabb1.min.x - aabb2.max.x) / vel_rel.x), t_first);
+        }
+        if (aabb1.max.x > aabb2.min.x) {
+            t_last = std::min<float>(((aabb1.max.x - aabb2.min.x) / vel_rel.x), t_last);
+        }
+        //case3
+        if (aabb1.max.x < aabb2.min.x) {
+            return 0;
+        }
+
+    }
+    //case 5 parallel towards the opposite coordinates
+    if (vel_rel.x == 0) {
+        if (aabb1.max.x < aabb2.min.x) {
+            return 0;
+        }
+        else if (aabb1.min.x > aabb2.max.x) {
+            return 0;
+        }
+    }
+    //case 6
+    if (t_first > t_last) {
+        return 0;
+    }
+
+
+
+
+    // for y axis
+    if (vel_rel.y < 0) {
+        //case1
+        if (aabb1.min.y > aabb2.max.y) {
+            return 0;
+        }
+        //case4
+        if (aabb1.max.y < aabb2.min.y) {
+            t_first = std::max<float>(((aabb1.max.y - aabb2.min.y) / vel_rel.y), t_first);
+        }
+        if (aabb1.min.y < aabb2.max.y) {
+            t_last = std::min<float>(((aabb1.min.y - aabb2.max.y) / vel_rel.y), t_last);
+        }
+    }
+    //for velocity more than 0
+    if (vel_rel.y > 0) {
+        //case2
+        if (aabb1.min.y > aabb2.max.y) {
+            t_first = std::max<float>(((aabb1.min.y - aabb2.max.y) / vel_rel.y), t_first);
+        }
+        if (aabb1.max.y > aabb2.min.y) {
+            t_last = std::min<float>(((aabb1.max.y - aabb2.min.y) / vel_rel.y), t_last);
+        }
+        //case3
+        if (aabb1.max.y < aabb2.min.y) {
+            return 0;
+        }
+    }
+    //case 5
+    if (vel_rel.y == 0) {
+        if (aabb1.max.y < aabb2.min.y) {
+            return 0;
+        }
+        else if (aabb1.min.y > aabb2.max.y) {
+            return 0;
+        }
+    }
+    //case 6
+    if (t_first > t_last) {
+        return 0;
+    }
+
+
+
+    return true;
+}
+
 /*!*****************************************************************************
   \brief
     Handles the response when a collision is detected.
@@ -177,7 +309,15 @@ bool BoxCollider2D::CheckSweptCollision(const BoxCollider2D::AABB& sweptAABB, co
         sweptAABB.min.x < otherAABB.max.x &&
         sweptAABB.max.y > otherAABB.min.y &&
         sweptAABB.min.y < otherAABB.max.y);
+    /*if (sweptAABB.max.x > otherAABB.min.x &&
+        sweptAABB.min.x < otherAABB.max.x &&
+        sweptAABB.max.y > otherAABB.min.y &&
+        sweptAABB.min.y < otherAABB.max.y){
+        if(sweptAABB.max.x == swea)*/
 }
+}
+
+
 
 // AABB Transformation Functions
 
@@ -197,8 +337,8 @@ void BoxCollider2D::TransformAABB()
 
     
     // Calculate min and max based on position and scale
-    ToastBox::Vec2 min = { pos[0] - scale[0] / 2.0f, pos[1] - scale[1] / 2.0f };
-    ToastBox::Vec2 max = { pos[0] + scale[0] / 2.0f, pos[1] + scale[1] / 2.0f };
+    ToastBox::Vec2 min = { pos[0] - scale[0] / 2.0f, pos[1] - scale[1] / 2.0f};
+    ToastBox::Vec2 max = { pos[0] + scale[0] / 2.0f, pos[1] + scale[1] / 2.0f};
 
     aabb.scale = max - min;
 
