@@ -37,31 +37,31 @@ public:
 	\brief
 		Check if a specific key/mouse is pressed once
 	*******************************************************************************/
-	static bool Get_Key_Pressed(int keycode); // Check if specific key/mouse is pressed once
+	static bool Get_Key_Pressed(int _keycode); // Check if specific key/mouse is pressed once
 
 	/*!*****************************************************************************
 	\brief
 		Check if a specific key/mouse is held down
 	*******************************************************************************/
-	static bool Get_Key(int keycode); // Check if specific key/mouse is held down
+	static bool Get_Key(int _keycode); // Check if specific key/mouse is held down
 
 	/*!*****************************************************************************
 	\brief
 		A key callback function that is called whenever a key is pressed, released
 		or held down. It register the key event using glfw call back mechanism.
 	*******************************************************************************/
-	static void Key_Cb(GLFWwindow* window, int keycode, int scancode, int action, int mods);
+	static void Key_Cb(GLFWwindow* _window, int _keycode, int _scancode, int _action, int _mods);
 
 	/*!*****************************************************************************
 	\brief
 		A mouse callback function that is called whenever a mouse is pressed, released
 		or held down. It register the mouse event using glfw call back mechanism.
 	*******************************************************************************/
-	static void Mouse_Cb(GLFWwindow* window, int button, int action, int mods);
+	static void Mouse_Cb(GLFWwindow* _window, int _button, int _action, int _mods);
 
 	/*!*****************************************************************************
 	\brief
 		To get the mouse position
 	*******************************************************************************/
-	static void Mouse_Pos_Cb(GLFWwindow* window, double xpos, double ypos);
+	static void Mouse_Pos_Cb(GLFWwindow* _window, double _xpos, double _ypos);
 };

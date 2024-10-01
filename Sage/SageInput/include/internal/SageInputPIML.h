@@ -21,25 +21,25 @@ public:
 	\brief
 		Function to access glfw handler to check if a specific key is pressed once
 	*******************************************************************************/
-	static bool Get_Key_Pressed(int keycode);
+	static bool Get_Key_Pressed(int _keycode);
 
 	/*!*****************************************************************************
 	\brief
 		Function to access glfw handler to check if a specific key is held down
 	*******************************************************************************/
-	static bool Get_Key(int keycode);
+	static bool Get_Key(int _keycode);
 
 	/*!*****************************************************************************
 	\brief
 		Function to access glfw handler to check if a mouse input is clicked once
 	*******************************************************************************/
-	static bool Get_Mouse_Clicked(int mouse);
+	static bool Get_Mouse_Clicked(int _mouse);
 
 	/*!*****************************************************************************
 	\brief
 		Function to access glfw handler to check if a mouse input is held down
 	*******************************************************************************/
-	static bool Get_Mouse(int mouse);
+	static bool Get_Mouse(int _mouse);
 
 	/*!*****************************************************************************
 	\brief
