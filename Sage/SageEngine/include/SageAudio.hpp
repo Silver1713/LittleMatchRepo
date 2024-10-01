@@ -1,3 +1,16 @@
+﻿/* Start Header ************************************************************************/
+/*!
+\file		SageAudio.hpp
+\title		Memory's Flame
+\author		Halis Ilyasa Bin Amat Sarijan, halisilyasa.b, 2301333 (100%)
+\par		halisilyasa.b@digipen.edu
+\date		08 September 2024
+\brief		Contains the functions for creating, managing and playing audio.
+
+			All content � 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
+
 #pragma once
 #include <iostream>
 #include <string>

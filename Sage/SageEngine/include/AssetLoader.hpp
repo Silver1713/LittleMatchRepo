@@ -2,8 +2,9 @@
 /*!
 \file		AssetLoader.hpp
 \title		Memory's Flame
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
-\par		b.muhammadhafiz@digipen.edu
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (95%)
+\author		Halis Ilyasa Bin Amat Sarijan, halisilyasa.b, 2301333 (5%)
+\par		b.muhammadhafiz@digipen.edu, halisilyasa.b@digipen.edu
 \date		08 September 2024
 \brief		Contains the data structures and functions for managing game assets, 
 			including textures and prefabs.
@@ -100,6 +101,12 @@ namespace Assets
 	{
 		void Init();
 		std::unordered_map<std::string, std::vector<std::string>> const & Get_Audio();
+	}
+
+	namespace Font
+	{
+		void Init();
+		//return_type const& Get_Font();
 	}
 
 	namespace Levels 
