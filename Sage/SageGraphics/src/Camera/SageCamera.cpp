@@ -138,20 +138,23 @@ ToastBox::Vec2 SageCamera::Screen_To_World(ToastBox::Vec2 screen_pos)
 	ToastBox::Vec2 world_pos;
 
 	world_pos.x = screen_pos.x * (1.f / (rect_size.x/2.f)) -1.f;
-	world_pos.y = screen_pos.y * (1.f / (rect_size.y/2.f)) -1.f;
+	world_pos.y = -(screen_pos.y * (1.f / (rect_size.y/2.f)) -1.f);
 
+	
 	ToastBox::Matrix3x3 vpm = get_projection_view_matrix();
 
 	ToastBox::Vec3 pos{ world_pos.x, world_pos.y, 1.0f };
-	ToastBox::Matrix3x3 inv = vpm.inverse();
+	ToastBox::Matrix3x3 inv = ~vpm.inverse();
 
-	ToastBox::Vec3 result = inv * pos;
+	ToastBox::Vec3 result = ~inv * pos;
+
 
 	world_pos.x = result.x;
 	world_pos.y = result.y;
 
 	return world_pos;
 
+	
 	
 }
 

@@ -6,7 +6,7 @@
 #define _CRTDBG_MAP_ALLOC
 //#define STB_IMAGE_IMPLEMENTATION
 const char* image = "../SageIO/image/image_asset.png";
-const char* data = "../SageIO/data/test_data.json";
+const char* data = "../SageIO/data/test_json_files.json";
 const char* output = "../SageIO/data/output.json";
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 using JSON = SageJSON::SageJSON;
@@ -40,9 +40,9 @@ int main()
 	
 
 
-	auto v = json[10]["name"];
+	auto v = json["header"]["files_per_second"];
 
-	std::cout << v.as<JSON::StringValue>() << std::endl;
+	std::cout << v.as<JSON::NumberValue>() << std::endl;
 	json.close();
 
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();

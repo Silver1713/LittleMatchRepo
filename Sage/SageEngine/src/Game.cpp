@@ -204,9 +204,11 @@ namespace Game {
 			SAGEInputHandler::Get_Mouse_Position(x, y);
 			ToastBox::Vec2 mouse_pos{static_cast<float>(x), static_cast<float>(y)};
 
-			ToastBox::Vec2 world = SageRenderer::camera->Screen_To_World({960.f, 540.f});;
+			ToastBox::Vec2 world = SageRenderer::camera->Screen_To_World(mouse_pos);
 
-			std::cout << "Mouse Pos: " << world.x << " " << world.y << std::endl;
+
+			std::cout << "World: " << world.x << " " << world.y << std::endl;
+	
 			
 			
 			GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("White"), "White_1");
