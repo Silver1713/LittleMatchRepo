@@ -119,6 +119,7 @@ namespace SageAudio
 				exit(-1);
 			}
 		}
+		return nullptr;
 	}
 
 	void Set_Volume(FMOD::ChannelGroup* _channel, float _volume)

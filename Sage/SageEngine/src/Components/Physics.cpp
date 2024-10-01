@@ -24,7 +24,7 @@ Physics::Physics(ToastBox::Vec2 _velocity) : velocity{ _velocity }, curr_velocit
 void Physics::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
-	curr_velocity = velocity * SageTimer::delta_time;
+	curr_velocity = velocity * (float)SageTimer::delta_time;
 }
 
 void Physics::Update()
@@ -32,7 +32,7 @@ void Physics::Update()
 
 	if (enable_gravity)
 	{
-		ApplyGravity(SageTimer::delta_time);
+		ApplyGravity((float)SageTimer::delta_time);
 	}
 	
 }
@@ -52,13 +52,17 @@ ToastBox::Vec2& Physics::Get_Velocity()
 	return curr_velocity;
 }
 
-void Physics::ApplyGravity(float delta_time)
+void Physics::ApplyGravity(float _delta_time)
 {
 	// Adjust the current velocity by gravity over time
-	curr_velocity.y -= gravity * SageTimer::delta_time; // Apply gravity to the vertical velocity
+	curr_velocity.y -= gravity * (float)SageTimer::delta_time; // Apply gravity to the vertical velocity
+
+	(void)_delta_time;
 }
 
-void Physics::UpdateVelocity(float delta_time) 
+void Physics::UpdateVelocity(float _delta_time) 
 {
 	std::cout << "HI";
+
+	(void)_delta_time;
 }

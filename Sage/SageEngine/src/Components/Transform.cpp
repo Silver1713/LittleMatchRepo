@@ -39,7 +39,7 @@ Transform::Transform() {}
   \param _is_UI_element
 	whether this gameobject is a UI element.
 *******************************************************************************/
-Transform::Transform(float const* _pos, float const* _rot, float const* _scale, bool _is_UI_element) : positions{ *_pos,*(_pos + 1),*(_pos + 2) }, rotations{ *_rot, *(_rot + 1), *(_rot + 2) }, scale{ *_scale, *(_scale + 1), *(_scale + 2) } {}
+Transform::Transform(float const* _pos, float const* _rot, float const* _scale, bool _is_UI_element) : positions{ *_pos,*(_pos + 1),*(_pos + 2) }, rotations{ *_rot, *(_rot + 1), *(_rot + 2) }, scale{ *_scale, *(_scale + 1), *(_scale + 2) }, is_UI_Element{ _is_UI_element } {}
 
 /*!*****************************************************************************
   \brief

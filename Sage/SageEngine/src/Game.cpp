@@ -54,7 +54,6 @@ namespace Game {
 	{
 		game_objects.clear();
 		transform_cache.clear();
-		GameObject* obj = Game_Objects::Get_Game_Object("Player");
 		//caches the player's transforms
 		transform_cache["Player"] = dynamic_cast<Transform*>(Game_Objects::Get_Game_Object("Player")->Get_Component(TRANSFORM));
 		collider_cache["Player"] = dynamic_cast<BoxCollider2D*>(Game_Objects::Get_Game_Object("Player")->Get_Component(BOXCOLLIDER2D));
@@ -226,12 +225,12 @@ namespace Game {
 			GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("White"), "White_1");
 			transform_cache["White_1"] = dynamic_cast<Transform*>(random->Get_Component(TRANSFORM));
 
-			float min_scale[3] = { 10.0f,10.0f,0.0f }, max_scale[3] = { 100.0f,100.0f,0.0f };
+			float m_min_scale[3] = { 10.0f,10.0f,0.0f }, m_max_scale[3] = { 100.0f,100.0f,0.0f };
 
 
 			float pos[3]{ world.x,world.y,0.f };
 			float rot[3]{ (float)(std::rand() % (int)max_rot[0] + (int)min_rot[0]), (float)(std::rand() % (int)max_rot[1] + (int)min_rot[1]),0.0f };
-			float scale[3]{ (float)(std::rand() % (int)max_scale[0] + (int)min_scale[0]), (float)(std::rand() % (int)max_scale[1] + (int)min_scale[1]),0.0f };
+			float scale[3]{ (float)(std::rand() % (int)m_max_scale[0] + (int)m_min_scale[0]), (float)(std::rand() % (int)m_max_scale[1] + (int)m_min_scale[1]),0.0f };
 			float col[3]{ (float)(std::rand() % (int)max_col[0] + (int)min_col[0]) / 100.0f, (float)(std::rand() % (int)max_col[1] + (int)min_col[1]) / 100.0f,(float)(std::rand() % (int)max_col[2] + (int)min_col[2]) / 100.0f };
 
 			transform_cache["White_1"]->Set_Positions({ pos[0],pos[1],pos[2] });
@@ -278,7 +277,7 @@ namespace Game {
 			}
 		}
 
-		float deccel = 100.f;
+		//float deccel = 100.f;
 
 		plrphy->Get_Velocity() *= 0.99f;
 

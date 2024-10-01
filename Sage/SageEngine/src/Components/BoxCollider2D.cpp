@@ -69,7 +69,7 @@ void BoxCollider2D::Update(float deltaTime)
 void BoxCollider2D::Update()
 {
 	GameObject* p = Get_Parent();
-
+    (void)p;
     TransformAABB();
 
 	aabb.calculate_model_matrix(Get_Parent());
@@ -145,7 +145,7 @@ bool BoxCollider2D::CollisionIntersection_RectRect(const AABB& aabb1,          /
     float& firstTimeOfCollision) //Output: the calculated value of tFirst, below, must be returned here
 {
     
-
+    (void)firstTimeOfCollision;
     ToastBox::Vec2 vel_rel;
 
     vel_rel.x = vel2.x - vel1.x;
@@ -170,7 +170,7 @@ bool BoxCollider2D::CollisionIntersection_RectRect(const AABB& aabb1,          /
 
     //check if it not colliding with dynamic object
     float t_first = 0;
-    float t_last = SageTimer::delta_time;
+    float t_last = (float)SageTimer::delta_time;
 
     // for x axis
     //case for vel < 0;
