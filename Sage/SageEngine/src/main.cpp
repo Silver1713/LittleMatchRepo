@@ -10,7 +10,7 @@
 \brief		This is the main entry point for the engine.
             It include libraries and manages life cycle of the engine.
 
-            All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+            All content ï¿½ 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 
@@ -74,9 +74,8 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	init();
-    //SageAudio::Play_Sound("HALO_2");
-    SageAudio::Play_Sound("MAIN_MENU");
-    //SageAudio::Play_Sound("RAIN");
+    SageAudio::Play_Sound("bgm_main_menu", LOOP);
+    SageAudio::Play_Sound("ambient_rain", LOOP);
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{
@@ -112,6 +111,7 @@ void init()
     }    
     Assets::Textures::Init();
     Assets::Prefabs::Init();
+    Assets::Audio::Init();
     Assets::Levels::Init();
     Prefabs::Init();
     SM::Load();
