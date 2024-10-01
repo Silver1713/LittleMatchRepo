@@ -12,38 +12,57 @@
 */
 /* End Header **************************************************************************/
 #include "Components/Physics.hpp"
+#include "Components/Transform.hpp"
 
 #include <iostream>
 
 #include "SageTimer.hpp"
 
-Physics::Physics(): velocity(), curr_velocity(), gravity(), mass() {}
-Physics::Physics(ToastBox::Vec2 _velocity) : velocity{ _velocity } ,gravity() {}
+Physics::Physics() : velocity(), curr_velocity(), gravity(9.8f), mass(1.0f), enable_gravity(true) {}
+Physics::Physics(ToastBox::Vec2 _velocity) : velocity{ _velocity }, curr_velocity(), gravity(9.8f), mass(1.0f), enable_gravity(true) {}
 
 void Physics::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
-	is_static = true;
-	gravity = 9.8f;
+	curr_velocity = velocity * (float)SageTimer::delta_time;
 }
+
 void Physics::Update()
 {
 
-	if (!is_static)
+	if (enable_gravity)
 	{
-		// Simulate gravity
-		curr_velocity.y -= gravity * SageTimer::delta_time;
+		ApplyGravity((float)SageTimer::delta_time);
 	}
 	
 }
-void Physics::Exit() {}
-ComponentType Physics::Get_Component_Type() { return PHYSICS; }
-void Physics::set_static(bool _is_static)
-{
-	is_static = _is_static;
-}
 
+void Physics::Exit() {}
+
+ComponentType Physics::Get_Component_Type() { return PHYSICS; }
+
+void Physics::set_gravity_disable(bool _is_static)
+{
+	if (!enable_gravity) curr_velocity  = {velocity.x,velocity.y};
+	enable_gravity = !_is_static;
+}
+	
 ToastBox::Vec2& Physics::Get_Velocity()
 {
 	return curr_velocity;
+}
+
+void Physics::ApplyGravity(float _delta_time)
+{
+	// Adjust the current velocity by gravity over time
+	curr_velocity.y -= gravity * (float)SageTimer::delta_time; // Apply gravity to the vertical velocity
+
+	(void)_delta_time;
+}
+
+void Physics::UpdateVelocity(float _delta_time) 
+{
+	std::cout << "HI";
+
+	(void)_delta_time;
 }

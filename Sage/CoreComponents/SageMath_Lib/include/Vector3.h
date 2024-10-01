@@ -44,6 +44,7 @@ namespace ToastBox {
 
 		void operator-=(const Vec3& pVec0);
 		Vec3 operator-(const Vec3& pVec0) const;
+		
 		Vec3 subtraction(const Vec3& vec1, const Vec3& vec2);
 
 		void scaledVectorAdding(const Vec3& pVec0, float k);
@@ -65,6 +66,8 @@ namespace ToastBox {
 
 
 	};
+
+	bool operator==(Vec3 const& lhs, Vec3 const& rhs);
 
 
 

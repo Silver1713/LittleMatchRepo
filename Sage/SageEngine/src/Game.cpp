@@ -19,17 +19,21 @@
 #include "SageHelper.hpp"
 #include "KeyInputs.h"
 #include "Game.hpp"
+#include "Components/Physics.hpp"
+
 
 #include <iostream>
 #include <random>
 
 //FOR TESTING PURPOSES
 #include <cstdlib> // for srand()
+#include <memory>
+#include "Components/Physics.hpp"
 
 
 namespace Game {
 	//TESTS
-	static unsigned int const game_objects_to_create{ 0 };
+	static unsigned int const game_objects_to_create{ 2500 };
 	static float const min_pos[3]{ -960.0f,-540.0f,0.0f }, max_pos[3]{ 1920.0f,1080.0f,0.0f };
 	static float const min_rot[3]{ 0.0f,0.0f,0.0f }, max_rot[3]{ 360.0f,360.0f,0.0f };
 	static float const min_scale[3]{ 1.0f,1.0f,0.0f }, max_scale[3]{ 10.0f,10.0f,0.0f };
@@ -37,6 +41,7 @@ namespace Game {
 
 	static std::unordered_map<std::string, GameObject*> game_objects;
 	static std::unordered_map<std::string, Transform*> transform_cache;
+	static std::unordered_map<std::string, BoxCollider2D*> collider_cache;
 
 	static SageCamera camera;
 	static SageViewport vp;
@@ -49,10 +54,10 @@ namespace Game {
 	{
 		game_objects.clear();
 		transform_cache.clear();
-
 		//caches the player's transforms
 		transform_cache["Player"] = dynamic_cast<Transform*>(Game_Objects::Get_Game_Object("Player")->Get_Component(TRANSFORM));
-
+		collider_cache["Player"] = dynamic_cast<BoxCollider2D*>(Game_Objects::Get_Game_Object("Player")->Get_Component(BOXCOLLIDER2D));
+		collider_cache["Wall"] = dynamic_cast<BoxCollider2D*>(Game_Objects::Get_Game_Object("Wall")->Get_Component(BOXCOLLIDER2D));
 		//Creates 2.5k instantiated "WHITE" prefab to test
 		for (unsigned int i{}; i < game_objects_to_create; ++i)
 		{
@@ -74,7 +79,7 @@ namespace Game {
 
 			game_objects[std::to_string(i)]->Disable();	
 		}
-
+		//Game_Objects::Get_Game_Object("Player")->Add_Component(std::make_unique<BoxCollider2D>());
 		
 	}
 
@@ -84,7 +89,7 @@ namespace Game {
 	*******************************************************************************/
 	void Init()
 	{
-		camera.init({ 0,0 }, { static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
+		camera.init({ 50,0 }, { static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
 		vp.set_dims({ static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) });
 		vp.calculate_viewport_xform();
 
@@ -95,8 +100,11 @@ namespace Game {
 		vp.setViewport();
 
 
+		
+
 		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
-		plrphy->set_static(false);
+		plrphy->set_gravity_disable(false);
+		
 	}
 
 	/*!*****************************************************************************
@@ -105,22 +113,28 @@ namespace Game {
 	*******************************************************************************/
 	void Input()
 	{
+		bool movement = false;
+		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
 		//tests
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_W))
 		{
-			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * 100.0f,0.f });
+			plrphy->Get_Velocity().y = (float)SageHelper::delta_time * (100.0f);
+			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_A))
 		{
-			transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * (-100.0f),0.f,0.f });
+			plrphy->Get_Velocity().x = (float)SageHelper::delta_time * (-100.0f);
+			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_S))
 		{
-			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * (-100.0f),0.f });
+			plrphy->Get_Velocity().y = (float)SageHelper::delta_time * (-100.0f);
+			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_D))
 		{
-			transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * 100.0f,0.f,0.f });
+			plrphy->Get_Velocity().x = (float)SageHelper::delta_time * (100.0f);
+			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_Q))
 		{
@@ -153,6 +167,18 @@ namespace Game {
 		else if (SAGEInputHandler::Get_Key(SAGE_KEY_L))
 		{
 			SageRenderer::camera->MoveCamera({ 1.f,0.f }, 100.f);
+		} else if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_V))
+		{
+			for (auto& collider : collider_cache)
+			{
+				collider.second->Set_Debug(!collider.second->Get_Debug());
+			}
+		}
+		else if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_G))
+		{
+			static bool g = true;
+			g = !g;
+			plrphy->set_gravity_disable(g);
 		}
 
 		
@@ -183,14 +209,28 @@ namespace Game {
 		}
 		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
 		{
-			std::cout << "mouse clicked" << std::endl;
+			
 			//GameObject* random;
+			double x, y;
+			SAGEInputHandler::Get_Mouse_Position(x, y);
+			ToastBox::Vec2 mouse_pos{static_cast<float>(x), static_cast<float>(y)};
+
+			ToastBox::Vec2 world = SageRenderer::camera->Screen_To_World(mouse_pos);
+
+
+			std::cout << "World: " << world.x << " " << world.y << std::endl;
+	
+			
+			
 			GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("White"), "White_1");
 			transform_cache["White_1"] = dynamic_cast<Transform*>(random->Get_Component(TRANSFORM));
 
-			float pos[3]{ (float)(std::rand() % (int)max_pos[0] + (int)min_pos[0]), (float)(std::rand() % (int)max_pos[1] + (int)min_pos[1]),0.0f };
+			float m_min_scale[3] = { 10.0f,10.0f,0.0f }, m_max_scale[3] = { 100.0f,100.0f,0.0f };
+
+
+			float pos[3]{ world.x,world.y,0.f };
 			float rot[3]{ (float)(std::rand() % (int)max_rot[0] + (int)min_rot[0]), (float)(std::rand() % (int)max_rot[1] + (int)min_rot[1]),0.0f };
-			float scale[3]{ (float)(std::rand() % (int)max_scale[0] + (int)min_scale[0]), (float)(std::rand() % (int)max_scale[1] + (int)min_scale[1]),0.0f };
+			float scale[3]{ (float)(std::rand() % (int)m_max_scale[0] + (int)m_min_scale[0]), (float)(std::rand() % (int)m_max_scale[1] + (int)m_min_scale[1]),0.0f };
 			float col[3]{ (float)(std::rand() % (int)max_col[0] + (int)min_col[0]) / 100.0f, (float)(std::rand() % (int)max_col[1] + (int)min_col[1]) / 100.0f,(float)(std::rand() % (int)max_col[2] + (int)min_col[2]) / 100.0f };
 
 			transform_cache["White_1"]->Set_Positions({ pos[0],pos[1],pos[2] });
@@ -236,6 +276,11 @@ namespace Game {
 				}
 			}
 		}
+
+		//float deccel = 100.f;
+
+		plrphy->Get_Velocity() *= 0.99f;
+
 	}
 
 	/*!*****************************************************************************
@@ -244,6 +289,73 @@ namespace Game {
 	*******************************************************************************/
 	void Update()
 	{
+		// AABB checks here
+		std::unordered_map<std::string, std::unique_ptr<GameObject>>& objects = Game_Objects::Get_Game_Objects();
+
+		std::vector<BoxCollider2D*> colliders{};
+		for (auto& obj : objects)
+		{
+			if (!obj.second)
+				continue;
+			BoxCollider2D* collider = dynamic_cast<BoxCollider2D*>(obj.second->Get_Component(BOXCOLLIDER2D));
+			if (collider)
+			{
+				collider->Register_Collision_Callback([collider](GameObject* _obj) {
+					if (!_obj) {
+						return;
+					}
+					Physics* phy = dynamic_cast<Physics*>(collider->Get_Parent()->Get_Component(PHYSICS));
+					if (phy) {
+						phy->Get_Velocity() = { 0,0 };
+						std::cout << _obj->Get_ID() << "collided with " << collider->Get_Parent()->Get_ID() << '\n';
+					}
+					});
+				colliders.push_back(collider);
+			}
+		}
+
+
+		// AABB Here
+		for (auto& collider : colliders)
+		{
+			Physics* phys = dynamic_cast<Physics*>(collider->Get_Parent()->Get_Component(PHYSICS));
+			if (!phys)
+				continue;
+			for (auto& other : colliders)
+			{
+				if (collider == other)
+				{
+					continue;
+				}
+				float time = 0.f;
+				//
+				bool collide_cond = collider->CollisionIntersection_RectRect(collider->GetAABB(), phys->Get_Velocity(), other->GetAABB(), {}, time);
+				if (collide_cond)
+				{
+
+
+					GameObject* parent = collider->Get_Parent();
+
+					Transform* transform = parent->Get_Component<Transform>();
+					ToastBox::Vec3 prevPos = transform->previous_position;
+
+					ToastBox::Vec2 curr_vel = phys->Get_Velocity();
+
+					transform->Set_Positions({ curr_vel.x * time + prevPos.x,curr_vel.y * time + prevPos.y, 1.f });
+					//collider->aabb.center = { prevPos.x + (time * curr_vel.x),prevPos.y + (time * curr_vel.y) };
+					phys->Get_Velocity() = {curr_vel.x, 0.f};
+					/*if (parent)
+					{
+						Physics* phy = dynamic_cast<Physics*>(parent->Get_Component(PHYSICS));
+						if (phy)
+						{
+
+							collider->onCollide(other);
+						}
+					}*/
+				}
+			}
+		}
 		//rotates greens
 		if (game_objects["Green0"])
 		{
@@ -261,6 +373,9 @@ namespace Game {
 
 		camera.update();
 
+
+		
+		
 	}
 
 	/*!*****************************************************************************

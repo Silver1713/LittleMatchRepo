@@ -13,6 +13,8 @@
 /* End Header **************************************************************************/
 #pragma once
 #include "Components/Component.hpp"
+#include "Vector3.h"
+#include "Matrix3x3.h"
 
 //derived component class Transform that handles object transforms including positions, rotations and scales
 class Transform : public Component
@@ -23,7 +25,14 @@ private:
 	float scale[3]{};
 	bool is_UI_Element{ false };
 
+	ToastBox::Matrix3x3 model_matrix{};
+
 public:
+	ToastBox::Vec3 previous_position{};
+	ToastBox::Vec3 position{};
+	ToastBox::Vec3 rotation{};
+	ToastBox::Vec3 scaling{};
+
 	/*!*****************************************************************************
 	  \brief
 		Default constructor for Transform
@@ -228,4 +237,7 @@ public:
 		whether this component is for a UI element
 	*******************************************************************************/
 	bool& Is_UI_Element();
+
+
+	ToastBox::Matrix3x3& Get_Model_Matrix();
 };

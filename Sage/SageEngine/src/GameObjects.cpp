@@ -22,6 +22,8 @@
 #include <memory>
 #include <iostream>
 
+#include "Components/Physics.hpp"
+
 namespace Game_Objects
 {
 	const unsigned int max_z_orders{3};

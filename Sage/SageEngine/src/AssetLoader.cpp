@@ -1,16 +1,15 @@
 /* Start Header ************************************************************************/
 /*!
-\file		AssetLoader.cpp
+\file		AssetLoader.hpp
 \title		Memory's Flame
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
-\par		b.muhammadhafiz@digipen.edu
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (75%)
+\author		Halis Ilyasa Bin Amat Sarijan, halisilyasa.b, 2301333 (25%)
+\par		b.muhammadhafiz@digipen.edu, halisilyasa.b@digipen.edu
 \date		08 September 2024
 \brief		Contains the data structures and functions for managing game assets,
-			including textures and prefabs. Currently includes the map of textures 
-			and created loaded_textures and loaded prefabs to be used as assets for the engine.
-			Calls the CSV parser to get data from files that is used here.
+			including textures and prefabs.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content ï¿½ 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 
@@ -24,6 +23,14 @@
 #include <vector>
 #include <array>
 #include <filesystem>
+
+
+#include "fmod.hpp"
+#include "fmod_errors.h"
+#include "SageAudio.hpp"
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 //Every file is an asset, which is broken down into categories
 namespace Assets
@@ -224,6 +231,77 @@ namespace Assets
 		}
 	}
 
+	namespace Audio
+	{
+		std::unordered_map<std::string, std::vector<std::string>> audio_files;
+		void Init()
+		{
+			audio_files.clear();
+			for (const auto& entry : std::filesystem::directory_iterator(PATH))
+			{
+				if (entry.is_regular_file() && entry.path().extension() == AUDIO_EXTENSION)
+				{
+					std::string filename = entry.path().stem().string();
+					if (filename.rfind("bgm_", 0) == 0)
+					{
+						audio_files["bgm"].push_back(filename);
+					}
+					else if (filename.rfind("sfx_", 0) == 0)
+					{
+						audio_files["sfx"].push_back(filename);
+					}
+					else if (filename.rfind("ui_", 0) == 0)
+					{
+						audio_files["ui"].push_back(filename);
+					}
+					else if (filename.rfind("ambient_", 0) == 0)
+					{
+						audio_files["ambient"].push_back(filename);
+					}
+					else
+					{
+						std::cerr << "Unrecognized channel group for " << filename << std::endl;
+						exit(-1);
+					}
+				}
+				else
+				{
+					std::cerr << "WARNING: File extension for " << entry.path().filename().string() << " is not " << AUDIO_EXTENSION << "!" << std::endl;
+				}
+			}
+		}
+		std::unordered_map<std::string, std::vector<std::string>> const& Get_Audio()
+		{
+			return audio_files;
+		}
+	}
+
+	namespace Font 
+	{
+		FT_Library library;
+		FT_Error error;
+		FT_Face face;
+		FT_UInt glyph_index;
+		FT_Int32 load_flags;
+		FT_ULong charcode;
+		FT_CharMap charmap;
+		FT_Render_Mode render_mode;
+
+		void Init()
+		{
+			error = FT_Init_FreeType(&library);
+			error = FT_New_Face(library, "../SageEngine/data/assets/fonts/swapgoats.ttf", 0, &face);
+			if (error == FT_Err_Unknown_File_Format)
+			{
+				std::cerr << "ERROR: Wrong file format!" << std::endl;
+			}
+
+			error = FT_Set_Pixel_Sizes(face, 16, 16);
+			glyph_index = FT_Get_Char_Index(face, charcode);
+			error = FT_Load_Glyph(face, glyph_index, load_flags);
+			error = FT_Render_Glyph(face->glyph, render_mode);
+		}
+	}
 
 	namespace Levels 
 	{

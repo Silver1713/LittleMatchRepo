@@ -22,7 +22,7 @@ private:
 	ToastBox::Vec2 curr_velocity;
 
 	//add whatever member properties u want for physics
-	bool is_static; // disable physics
+	bool enable_gravity; // disable physics
 	float mass;
 	float gravity;
 
@@ -40,5 +40,14 @@ public:
 
 	//add whatever declarations of getters/setters u need for physics
 
-	void set_static(bool _is_static);
+	// getters/setters for physics
+	void set_gravity_disable(bool _is_static);
+
+	// ApplyGravity
+	void ApplyGravity(float delta_time);
+
+	// UpdateVelocity (future use)
+	void UpdateVelocity(float delta_time);
+
+	
 };

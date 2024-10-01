@@ -171,8 +171,8 @@ namespace SM {
 	{
 		Fade_In();
 		Fade_Out();
-		Game_Objects::Update();
 		SM::fp_update();
+		Game_Objects::Update();
 	}
 
 	/*!*****************************************************************************

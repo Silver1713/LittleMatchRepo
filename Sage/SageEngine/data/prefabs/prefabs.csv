@@ -4,6 +4,6 @@ BLUE_SKY,0,0,0,0,0,0,1920,1080,0,1,1,1,1,BLUE_SKY,Nil,Nil,0,Nil
 FADE_SCREEN,0,0,0,0,0,0,1920,1080,0,0,0,0,1,Nil,Nil,Nil,0,Nil
 BLACK,0,0,0,0,0,0,100,100,0,0,0,0,1,Nil,Nil,Nil,0,Nil
 WHITE,0,0,0,0,0,0,100,100,0,1,1,1,1,Nil,Nil,Nil,0,Nil
-RED,0,0,0,0,0,0,100,100,0,1,0,0,1,Nil,Nil,Yes,20,Nil
+RED,0,0,0,0,0,0,100,100,0,1,1,0,1,Nil,Yes,Yes,0,Nil
 GREEN,0,0,0,0,0,0,100,100,0,0,1,0,1,Nil,Nil,Nil,0,Nil
-BLUE,0,0,0,0,0,0,100,100,0,0,0,1,1,Nil,Nil,Nil,0,Nil
+BLUE,0,0,0,0,0,0,100,100,0,0,0,1,1,Nil,Yes,Nil,0,Nil

@@ -14,6 +14,9 @@
 #include "Components/Component.hpp"
 #include "Components/Transform.hpp"
 
+#include "Components/Physics.hpp"
+#include "GameObjects.hpp"
+
 /*!*****************************************************************************
   \brief
 	Default constructor for Transform
@@ -36,7 +39,7 @@ Transform::Transform() {}
   \param _is_UI_element
 	whether this gameobject is a UI element.
 *******************************************************************************/
-Transform::Transform(float const* _pos, float const* _rot, float const* _scale, bool _is_UI_element) : positions{ *_pos,*(_pos + 1),*(_pos + 2) }, rotations{ *_rot, *(_rot + 1), *(_rot + 2) }, scale{ *_scale, *(_scale + 1), *(_scale + 2) } {}
+Transform::Transform(float const* _pos, float const* _rot, float const* _scale, bool _is_UI_element) : positions{ *_pos,*(_pos + 1),*(_pos + 2) }, rotations{ *_rot, *(_rot + 1), *(_rot + 2) }, scale{ *_scale, *(_scale + 1), *(_scale + 2) }, is_UI_Element{ _is_UI_element } {}
 
 /*!*****************************************************************************
   \brief
@@ -64,6 +67,7 @@ Transform::Transform(std::initializer_list<float> const& _pos, std::initializer_
 void Transform::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
+	previous_position = position = ToastBox::Vec3{ positions[0],positions[1], positions[2] };
 }
 
 /*!*****************************************************************************
@@ -73,13 +77,38 @@ void Transform::Init(GameObject* _parent)
 void Transform::Update()
 {
 
-}
+	// apply transformation
+	
+	position = ToastBox::Vec3{ positions[0],positions[1], positions[2] };
 
-/*!*****************************************************************************
-  \brief
-	Provides a space for any free or unloading functions that may be required
-	by subsequent interation of this component
-*******************************************************************************/
+	Physics* phy = dynamic_cast<Physics*>(Get_Parent()->Get_Component(PHYSICS));
+	
+	if (phy)
+	{
+		
+		Set_Positions({ Get_Positions()[0] +phy->Get_Velocity().x,Get_Positions()[1] + phy->Get_Velocity().y, Get_Positions()[2]});
+	
+
+	}
+
+	// update model matrix
+
+	ToastBox::Matrix3x3 translation_matrix{};
+	translation_matrix.Matrix3Translate(positions[0], positions[1]);
+	ToastBox::Matrix3x3 rotation_matrix{};
+	ToastBox::Matrix3x3 scale_matrix{};
+
+	rotation_matrix.Matrix3RotDeg(rotations[0]);
+	scale_matrix.Matrix3Scale(scale[0], scale[1]);
+
+	model_matrix = ~translation_matrix * ~rotation_matrix * ~scale_matrix;
+
+
+	if (!(position == previous_position)) {
+		previous_position = position;
+	}
+	
+}
 void Transform::Exit()
 {
 
@@ -302,4 +331,9 @@ void Transform::Scale(std::initializer_list<float> const& _delta_scale)
 bool& Transform::Is_UI_Element()
 {
 	return is_UI_Element;
+}
+
+ToastBox::Matrix3x3& Transform::Get_Model_Matrix()
+{
+	return model_matrix;
 }

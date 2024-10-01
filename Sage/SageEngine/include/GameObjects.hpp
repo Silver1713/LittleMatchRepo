@@ -121,6 +121,11 @@ public:
 	    pointer to the component
 	*******************************************************************************/
 	Component* Get_Component(ComponentType _component);
+
+	template <typename T, typename = std::enable_if_t<std::is_base_of_v<Component, T>>>
+	T* Get_Component();
+	
+
 };
 
 // The central gameobject manager that iterates through all active gameobjects
@@ -183,4 +188,19 @@ namespace Game_Objects
 		Clears the map of gameobjects
 	*******************************************************************************/
 	void Clear_Game_Objects();
+}
+
+
+template <typename T, typename>
+T* GameObject::Get_Component()
+{
+	for (auto& _c : components)
+	{
+		T* t = dynamic_cast<T*>(_c.get());
+		if (t)
+		{
+			return t;
+		}
+	}
+	return nullptr;
 }
