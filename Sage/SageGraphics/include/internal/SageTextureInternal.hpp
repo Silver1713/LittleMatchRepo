@@ -71,19 +71,19 @@ public:
 	\brief
 		An overloaded constructor for SageTextureInternal class
 	*******************************************************************************/
-	SageTextureInternal(std::string const& path, int type=0);
+	SageTextureInternal(std::string const& _path, int _type=0);
 
 	/*!*****************************************************************************
 	\brief
 		A copy constructor of SageTextureInternal class
 	*******************************************************************************/
-	SageTextureInternal(const SageTextureInternal& other);
+	SageTextureInternal(const SageTextureInternal& _other);
 
 	/*!*****************************************************************************
 	\brief
 		A copy assignment operator of SageTextureInternal class
 	*******************************************************************************/
-	SageTextureInternal& operator=(const SageTextureInternal& other);
+	SageTextureInternal& operator=(const SageTextureInternal& _other);
 	
 	//Getters
 	/*!*****************************************************************************
@@ -120,7 +120,7 @@ public:
 	\brief
 		Function to load the texture
 	*******************************************************************************/
-	int load(const char * name, int type=0);
+	int load(const char * _name, int _type=0);
 
 	/*!*****************************************************************************
 	\brief

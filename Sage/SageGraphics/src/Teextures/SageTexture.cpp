@@ -20,7 +20,7 @@ class SageTexture::SageTextureInternalImpl
 	std::string texture_path{};
 	unsigned int texture_handle;
 	int texture_unit;
-	int _type;
+	int texture_type;
 
 	bool is_loaded = false;
 
@@ -34,18 +34,18 @@ public:
 	*******************************************************************************/
 	SageTextureInternalImpl()
 	{
-		texture_handle = -1;
+		texture_handle = static_cast<unsigned int>(-1);
 		texture_unit = -1;
-		_type = -1;
+		texture_type = -1;
 	}
 
 	/*!*****************************************************************************
 	\brief
 		An overloaded constructor for SageTextureInternalImpl
 	*******************************************************************************/
-	SageTextureInternalImpl(std::string const& path, int type) : texture_path(path), texture_handle(0), texture_unit(0), _type(type), texture_internal(path, type)
+	SageTextureInternalImpl(std::string const& _path, int _type) : texture_path(_path), texture_handle(0), texture_unit(0), texture_type(_type), texture_internal(_path, _type)
 	{
-		texture_internal = SageTextureInternal(texture_path, type);
+		texture_internal = SageTextureInternal(texture_path, _type);
 		texture_unit = texture_internal.get_texture_unit();
 		texture_handle = texture_internal.get_texture_handle();
 		is_loaded = true;
@@ -67,13 +67,13 @@ public:
 	\brief
 		Load function of SageTextureInternalImpl
 	*******************************************************************************/
-	int load(const char* src, TEXTURE_UNIT_TYPE const& type)
+	int load(const char* src, TEXTURE_UNIT_TYPE const& _type)
 	{
-		texture_unit = texture_internal.load(src, static_cast<int>(type));
+		texture_unit = texture_internal.load(src, static_cast<int>(_type));
 		texture_path = src;
 
 		texture_handle = texture_internal.get_texture_handle();
-		_type = static_cast<int>(type);
+		texture_type = static_cast<int>(_type);
 
 		if (texture_unit == -1)
 		{
@@ -167,7 +167,7 @@ public:
 \brief
 	A constructor for SageTexture
 *******************************************************************************/
-SageTexture::SageTexture() : sage_internal_impl(std::make_unique<SageTextureInternalImpl>()),texture_unit(-1),texture_id(-1) {
+SageTexture::SageTexture() : sage_internal_impl(std::make_unique<SageTextureInternalImpl>()),texture_unit(static_cast<unsigned int>(-1)), texture_id(static_cast<unsigned int>(-1)) {
 
 }
 
@@ -175,8 +175,8 @@ SageTexture::SageTexture() : sage_internal_impl(std::make_unique<SageTextureInte
 \brief
 	An overloaded constructor for SageTexture class
 *******************************************************************************/
-SageTexture::SageTexture(const char* source, TEXTURE_UNIT_TYPE type) : texture_path(source), sage_internal_impl(std::make_unique<SageTextureInternalImpl>(source, static_cast
-	<int>(type))) {
+SageTexture::SageTexture(const char* _source, TEXTURE_UNIT_TYPE _type) : texture_path(_source), sage_internal_impl(std::make_unique<SageTextureInternalImpl>(_source, static_cast
+	<int>(_type))) {
 	texture_id = sage_internal_impl->get_handle();
 	texture_unit = sage_internal_impl->get_unit();
 
@@ -186,12 +186,12 @@ SageTexture::SageTexture(const char* source, TEXTURE_UNIT_TYPE type) : texture_p
 \brief
 	A copy constructor of SageTexture class
 *******************************************************************************/
-SageTexture::SageTexture(const SageTexture& other) : texture_path(other.texture_path) {
-	if (this != &other)
+SageTexture::SageTexture(const SageTexture& _other) : texture_path(_other.texture_path) {
+	if (this != &_other)
 	{
 		//To load or not to load
-		texture_id = other.get_texture_handle();
-		texture_unit = other.texture_unit;
+		texture_id = _other.get_texture_handle();
+		texture_unit = _other.texture_unit;
 
 	}
 }
@@ -200,9 +200,9 @@ SageTexture::SageTexture(const SageTexture& other) : texture_path(other.texture_
 \brief
 	A copy assignment operator of SageTexture class
 *******************************************************************************/
-SageTexture& SageTexture::operator=(const SageTexture& other) {
-	if (this != &other) {
-		texture_path = other.texture_path;
+SageTexture& SageTexture::operator=(const SageTexture& _other) {
+	if (this != &_other) {
+		texture_path = _other.texture_path;
 	}
 	return *this;
 }
@@ -263,14 +263,14 @@ SageTexture::~SageTexture()
 \brief
 	Function of SageTexture to load the texture
 *******************************************************************************/
-void SageTexture::load_texture(const char* filepath, TEXTURE_UNIT_TYPE type)
+void SageTexture::load_texture(const char* _filepath, TEXTURE_UNIT_TYPE _type)
 {
-	int status = sage_internal_impl->load(filepath, type);
+	int status = sage_internal_impl->load(_filepath, _type);
 	if (status == -1)
 	{
 		std::cout << "Error loading texture" << std::endl;
 	}
-	texture_path = filepath;
+	texture_path = _filepath;
 	texture_id = sage_internal_impl->get_handle();
 	texture_unit = sage_internal_impl->get_unit();
 }

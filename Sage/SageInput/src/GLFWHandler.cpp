@@ -16,6 +16,7 @@
 
 #include <unordered_map>
 
+
 std::unordered_map<int, std::byte> GLFWInputHandler::key_map{};
 double GLFWInputHandler::g_mouse_pos_x = 0;
 double GLFWInputHandler::g_mouse_pos_y = 0;

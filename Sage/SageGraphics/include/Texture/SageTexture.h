@@ -65,19 +65,19 @@ public:
 	\brief
 		An overloaded constructor for SageTexture class
 	*******************************************************************************/
-	SageTexture(const char* name, TEXTURE_UNIT_TYPE type);
+	SageTexture(const char* name, TEXTURE_UNIT_TYPE _type);
 
 	/*!*****************************************************************************
 	\brief
 		A copy constructor of SageTexture class
 	*******************************************************************************/
-	SageTexture(const SageTexture& other);
+	SageTexture(const SageTexture& _other);
 
 	/*!*****************************************************************************
 	\brief
 		A copy assignment operator of SageTexture class
 	*******************************************************************************/
-	SageTexture& operator=(const SageTexture& other);
+	SageTexture& operator=(const SageTexture& _other);
 
 	/*!*****************************************************************************
 	\brief
@@ -122,7 +122,7 @@ public:
 	\brief
 		Function to load the texture
 	*******************************************************************************/
-	void load_texture(const char* filepath, TEXTURE_UNIT_TYPE type);
+	void load_texture(const char* _filepath, TEXTURE_UNIT_TYPE _type);
 
 	/*!*****************************************************************************
 	\brief
