@@ -144,6 +144,13 @@ public:
 		A const reference to the AABB representing the min and max corners of the AABB.
 	*******************************************************************************/
 	const AABB& GetAABB() const;
+
+	bool CollisionIntersection_RectRect(const AABB& aabb1,          //Input
+		const ToastBox::Vec2& vel1,         //Input 
+		const AABB& aabb2,          //Input 
+		const ToastBox::Vec2& vel2,         //Input
+		float& firstTimeOfCollision);
+	
 };
 
 

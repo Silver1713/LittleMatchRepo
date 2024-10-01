@@ -67,6 +67,7 @@ Transform::Transform(std::initializer_list<float> const& _pos, std::initializer_
 void Transform::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
+	previous_position = position = ToastBox::Vec3{ positions[0],positions[1], positions[2] };
 }
 
 /*!*****************************************************************************
@@ -77,12 +78,16 @@ void Transform::Update()
 {
 
 	// apply transformation
+	
+	position = ToastBox::Vec3{ positions[0],positions[1], positions[2] };
+
 	Physics* phy = dynamic_cast<Physics*>(Get_Parent()->Get_Component(PHYSICS));
 	
 	if (phy)
 	{
 		
-		Set_Positions({ Get_Positions()[0],Get_Positions()[1] + phy->Get_Velocity().y, Get_Positions()[2] });
+		Set_Positions({ Get_Positions()[0] +phy->Get_Velocity().x,Get_Positions()[1] + phy->Get_Velocity().y, Get_Positions()[2]});
+	
 
 	}
 
@@ -99,7 +104,9 @@ void Transform::Update()
 	model_matrix = ~translation_matrix * ~rotation_matrix * ~scale_matrix;
 
 
-
+	if (!(position == previous_position)) {
+		previous_position = position;
+	}
 	
 }
 void Transform::Exit()

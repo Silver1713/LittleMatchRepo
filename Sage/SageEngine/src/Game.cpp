@@ -104,7 +104,7 @@ namespace Game {
 		
 
 		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
-		plrphy->set_static(true);
+		plrphy->set_gravity_disable(false);
 		
 	}
 
@@ -114,22 +114,28 @@ namespace Game {
 	*******************************************************************************/
 	void Input()
 	{
+		bool movement = false;
+		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
 		//tests
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_W))
 		{
-			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * 100.0f,0.f });
+			plrphy->Get_Velocity().y = (float)SageHelper::delta_time * (100.0f);
+			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_A))
 		{
-			transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * (-100.0f),0.f,0.f });
+			plrphy->Get_Velocity().x = (float)SageHelper::delta_time * (-100.0f);
+			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_S))
 		{
-			transform_cache["Player"]->Translate({ 0.f,(float)SageHelper::delta_time * (-100.0f),0.f });
+			plrphy->Get_Velocity().y = (float)SageHelper::delta_time * (-100.0f);
+			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_D))
 		{
-			transform_cache["Player"]->Translate({ (float)SageHelper::delta_time * 100.0f,0.f,0.f });
+			plrphy->Get_Velocity().x = (float)SageHelper::delta_time * (100.0f);
+			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_Q))
 		{
@@ -162,12 +168,18 @@ namespace Game {
 		else if (SAGEInputHandler::Get_Key(SAGE_KEY_L))
 		{
 			SageRenderer::camera->MoveCamera({ 1.f,0.f }, 100.f);
-		} else if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_G))
+		} else if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_V))
 		{
 			for (auto& collider : collider_cache)
 			{
 				collider.second->Set_Debug(!collider.second->Get_Debug());
 			}
+		}
+		else if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_G))
+		{
+			static bool g = true;
+			g = !g;
+			plrphy->set_gravity_disable(g);
 		}
 
 		
@@ -251,6 +263,11 @@ namespace Game {
 				}
 			}
 		}
+
+		float deccel = 100.f;
+
+		plrphy->Get_Velocity() *= 0.99f;
+
 	}
 
 	/*!*****************************************************************************
@@ -259,6 +276,73 @@ namespace Game {
 	*******************************************************************************/
 	void Update()
 	{
+		// AABB checks here
+		std::unordered_map<std::string, std::unique_ptr<GameObject>>& objects = Game_Objects::Get_Game_Objects();
+
+		std::vector<BoxCollider2D*> colliders{};
+		for (auto& obj : objects)
+		{
+			if (!obj.second)
+				continue;
+			BoxCollider2D* collider = dynamic_cast<BoxCollider2D*>(obj.second->Get_Component(BOXCOLLIDER2D));
+			if (collider)
+			{
+				collider->Register_Collision_Callback([collider](GameObject* _obj) {
+					if (!_obj) {
+						return;
+					}
+					Physics* phy = dynamic_cast<Physics*>(collider->Get_Parent()->Get_Component(PHYSICS));
+					if (phy) {
+						phy->Get_Velocity() = { 0,0 };
+						std::cout << _obj->Get_ID() << "collided with " << collider->Get_Parent()->Get_ID() << '\n';
+					}
+					});
+				colliders.push_back(collider);
+			}
+		}
+
+
+		// AABB Here
+		for (auto& collider : colliders)
+		{
+			Physics* phys = dynamic_cast<Physics*>(collider->Get_Parent()->Get_Component(PHYSICS));
+			if (!phys)
+				continue;
+			for (auto& other : colliders)
+			{
+				if (collider == other)
+				{
+					continue;
+				}
+				float time = 0.f;
+				//
+				bool collide_cond = collider->CollisionIntersection_RectRect(collider->GetAABB(), phys->Get_Velocity(), other->GetAABB(), {}, time);
+				if (collide_cond)
+				{
+
+
+					GameObject* parent = collider->Get_Parent();
+
+					Transform* transform = parent->Get_Component<Transform>();
+					ToastBox::Vec3 prevPos = transform->previous_position;
+
+					ToastBox::Vec2 curr_vel = phys->Get_Velocity();
+
+					transform->Set_Positions({ curr_vel.x * time + prevPos.x,curr_vel.y * time + prevPos.y, 1.f });
+					//collider->aabb.center = { prevPos.x + (time * curr_vel.x),prevPos.y + (time * curr_vel.y) };
+					phys->Get_Velocity() = {curr_vel.x, 0.f};
+					/*if (parent)
+					{
+						Physics* phy = dynamic_cast<Physics*>(parent->Get_Component(PHYSICS));
+						if (phy)
+						{
+
+							collider->onCollide(other);
+						}
+					}*/
+				}
+			}
+		}
 		//rotates greens
 		if (game_objects["Green0"])
 		{
@@ -277,51 +361,8 @@ namespace Game {
 		camera.update();
 
 
-		// AABB checks here
-		std::unordered_map<std::string,std::unique_ptr<GameObject>>& objects = Game_Objects::Get_Game_Objects();
-
-		std::vector<BoxCollider2D*> colliders{};
 		
-		for (auto& obj : objects)
-		{
-			if (!obj.second)
-				continue;
-			BoxCollider2D* collider = dynamic_cast<BoxCollider2D*>(obj.second->Get_Component(BOXCOLLIDER2D));
-			if (collider)
-			{
-				collider->Register_Collision_Callback([collider](GameObject* _obj) {
-					std::cout << collider->Get_Parent()->Get_ID() << " Collided with " << _obj->Get_ID() << std::endl;
-				});
-				colliders.push_back(collider);
-			}
-		}
-
-
-		// AABB Here
-		for (auto& collider : colliders)
-		{
-			for (auto& other : colliders)
-			{
-				if (collider == other)
-				{
-					continue;
-				}
-				bool collide_cond = collider->CheckSweptCollision(collider->GetAABB(), *other);
-				if (collide_cond)
-				{
-					collider->onCollide(other);
-					GameObject* parent = collider->Get_Parent();
-					if (parent)
-					{
-						Physics* phy = dynamic_cast<Physics*>(parent->Get_Component(PHYSICS));
-						if (phy)
-						{
-							collider->onCollide(other);
-						}
-					}
-				}
-			}
-		}
+		
 	}
 
 	/*!*****************************************************************************
