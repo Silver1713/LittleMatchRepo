@@ -175,7 +175,7 @@ namespace Assets
 					p.has_physics = source.comma_seperated_data[i].associated_data[HAS_PHYSICS];
 					p.velocity = std::stof(source.comma_seperated_data[i].associated_data[PHYSICS_VELOCITY]);
 					p.audio_data = source.comma_seperated_data[i].associated_data[AUDIO_D];
-
+					p.object_shape = source.comma_seperated_data[i].associated_data[OBJ_SHAPE];
 					generated_prefabs[p.prefab_ID] = p;
 				}
 				catch (const std::invalid_argument& e)
