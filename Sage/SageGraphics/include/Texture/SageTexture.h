@@ -64,18 +64,30 @@ public:
 	/*!*****************************************************************************
 	\brief
 		An overloaded constructor for SageTexture class
+
+	\param _source
+		The sage texture source
+
+	\param _type
+		Sage texture unit type
 	*******************************************************************************/
 	SageTexture(const char* name, TEXTURE_UNIT_TYPE _type);
 
 	/*!*****************************************************************************
 	\brief
 		A copy constructor of SageTexture class
+
+	\param _other
+		Another sage texture object
 	*******************************************************************************/
 	SageTexture(const SageTexture& _other);
 
 	/*!*****************************************************************************
 	\brief
 		A copy assignment operator of SageTexture class
+
+	\param _other
+		Another sage texture object
 	*******************************************************************************/
 	SageTexture& operator=(const SageTexture& _other);
 
@@ -88,13 +100,19 @@ public:
 	// Getters
 	/*!*****************************************************************************
 	\brief
-		Function to get the texture handle
+		Function of SageTexture to get the texture handle
+
+	\return
+		An int object
 	*******************************************************************************/
 	int get_texture_handle() const;
 
 	/*!*****************************************************************************
 	\brief
-		Function to get the texture unit
+		Function of SageTexture to get the texture unit
+
+	\return
+		Return an int value object
 	*******************************************************************************/
 	int get_texture_unit() const;
 
@@ -120,13 +138,22 @@ public:
 
 	/*!*****************************************************************************
 	\brief
-		Function to load the texture
+		Function of SageTexture to load the texture
+
+	\param _filepath
+		The file path of loading the texture
+
+	\param _type
+		The type of the texture unit
 	*******************************************************************************/
 	void load_texture(const char* _filepath, TEXTURE_UNIT_TYPE _type);
 
 	/*!*****************************************************************************
 	\brief
-		Function to bind the texture
+		Function of SageTexture to bind the texture
+
+	\return
+		Return a boolean object
 	*******************************************************************************/
 	bool bind_texture();
 };

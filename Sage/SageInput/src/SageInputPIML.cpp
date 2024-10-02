@@ -14,32 +14,56 @@
 #include "SageInputPIML.h"
 
 /*!*****************************************************************************
-\brief
+  \brief
 	Function to access glfw handler to check if a specific key is pressed once
+
+  \param _keycode
+	The key that is pressed
+
+  \return
+	A boolean value
 *******************************************************************************/
 bool SageInputPIML::Get_Key_Pressed(int _keycode) {
 	return GLFWInputHandler::Get_Key_Pressed(_keycode);
 }
 
 /*!*****************************************************************************
-\brief
+  \brief
 	Function to access glfw handler to check if a specific key is held down
+
+  \param _keycode
+	The key that is pressed/held down
+
+  \return
+	A boolean value
 *******************************************************************************/
 bool SageInputPIML::Get_Key(int _keycode) {
 	return GLFWInputHandler::Get_Key(_keycode);
 }
 
 /*!*****************************************************************************
-\brief
+  \brief
 	Function to access glfw handler to check if a mouse input is clicked once
+
+  \param _mouse
+	The mouse that is pressed
+
+  \return
+	A boolean value
 *******************************************************************************/
 bool SageInputPIML::Get_Mouse_Clicked(int _mouse) {
 	return GLFWInputHandler::Get_Key_Pressed(_mouse);
 }
 
 /*!*****************************************************************************
-\brief
+  \brief
 	Function to access glfw handler to check if a mouse input is held down
+
+  \param _mouse
+	The key that is pressed/held down
+
+  \return
+	A boolean value
 *******************************************************************************/
 bool SageInputPIML::Get_Mouse(int _mouse) {
 	return GLFWInputHandler::Get_Key(_mouse);
@@ -70,6 +94,9 @@ void SageInputPIML::Set_Callback()
 /*!*****************************************************************************
 \brief
 	Function to get the mouse x position
+
+\return
+	Return a double
 *******************************************************************************/
 double SageInputPIML::Get_Mouse_X()
 {
@@ -79,6 +106,9 @@ double SageInputPIML::Get_Mouse_X()
 /*!*****************************************************************************
 \brief
 	Function to get the mouse y position
+
+\return
+	Return a double
 *******************************************************************************/
 double SageInputPIML::Get_Mouse_Y()
 {

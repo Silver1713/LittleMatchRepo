@@ -22,6 +22,9 @@
 /*!*****************************************************************************
 \brief
 	Function to delete the pointer to implementation for sage input
+
+\param _p
+	A pointer to PIML implementation of the SageInput class
 *******************************************************************************/
 void SAGEInputHandler::Custom_Sage_Input_PIMPL_Delete(void*& _p)
 {
@@ -37,6 +40,12 @@ std::unique_ptr<void, decltype(&SAGEInputHandler::Custom_Sage_Input_PIMPL_Delete
 \brief
 	Function to access SageInput pointer to implementation to check if a specific
 	key is pressed once
+
+\param _keycode
+	The key that is pressed
+
+\return
+	Return a boolean
 *******************************************************************************/
 bool SAGEInputHandler::Get_Key_Pressed(int _keycode)
 {
@@ -47,6 +56,12 @@ bool SAGEInputHandler::Get_Key_Pressed(int _keycode)
 \brief
 	Function to access SageInput pointer to implementation to check if a specific
 	key is held down
+
+\param _keycode
+	The key that is pressed
+
+\return
+	Return a boolean
 *******************************************************************************/
 bool SAGEInputHandler::Get_Key(int keycode)
 {
@@ -57,6 +72,12 @@ bool SAGEInputHandler::Get_Key(int keycode)
 \brief
 	Function to access SageInput pointer to implementation to check if the mouse
 	input is clicked once
+
+\param _mouse
+	The mouse that is pressed
+
+\return
+	Return a boolean
 *******************************************************************************/
 bool SAGEInputHandler::Get_Mouse_Clicked(int _mouse)
 {
@@ -67,6 +88,12 @@ bool SAGEInputHandler::Get_Mouse_Clicked(int _mouse)
 \brief
 	Function to access SageInput pointer to implementation to check if the mouse
 	input is held down
+
+\param _mouse
+	The mouse that is pressed
+
+\return
+	Return a boolean
 *******************************************************************************/
 bool SAGEInputHandler::Get_Mouse(int _mouse)
 {
@@ -94,6 +121,9 @@ void SAGEInputHandler::init()
 /*!*****************************************************************************
 \brief
 	Function to get the mouse x position using SageInput pointer to implementation
+
+\param
+	Return a double
 *******************************************************************************/
 double SAGEInputHandler::Get_Mouse_X()
 {
@@ -103,6 +133,9 @@ double SAGEInputHandler::Get_Mouse_X()
 /*!*****************************************************************************
 \brief
 	Function to get the mouse y position using SageInput pointer to implementation
+
+\param
+	Return a double
 *******************************************************************************/
 double SAGEInputHandler::Get_Mouse_Y()
 {
@@ -112,6 +145,12 @@ double SAGEInputHandler::Get_Mouse_Y()
 /*!*****************************************************************************
 \brief
 	Function to get the mouse coordinates using SageInput pointer to implementation
+
+\param _x
+	The x coordinate of mouse
+
+\param _y
+	The y coordinate of mouse
 *******************************************************************************/
 void SAGEInputHandler::Get_Mouse_Position(double& _x, double& _y)
 {

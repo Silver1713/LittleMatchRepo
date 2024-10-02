@@ -70,18 +70,30 @@ public:
 	/*!*****************************************************************************
 	\brief
 		An overloaded constructor for SageTextureInternal class
+
+	\param _path
+		A path for the texture
+
+	\param _type
+		A texture tpye
 	*******************************************************************************/
 	SageTextureInternal(std::string const& _path, int _type=0);
 
 	/*!*****************************************************************************
 	\brief
-		A copy constructor of SageTextureInternal class
+		An overloaded constructor for SageTextureInternal class
+
+	\param _other
+		Another texture object
 	*******************************************************************************/
 	SageTextureInternal(const SageTextureInternal& _other);
 
 	/*!*****************************************************************************
 	\brief
 		A copy assignment operator of SageTextureInternal class
+
+	\param _other
+		Another texture object
 	*******************************************************************************/
 	SageTextureInternal& operator=(const SageTextureInternal& _other);
 	
@@ -89,12 +101,18 @@ public:
 	/*!*****************************************************************************
 	\brief
 		Function to get the texture handle
+
+	\return
+		Return an unsigned int value
 	*******************************************************************************/
 	unsigned int get_texture_handle() const;
 
 	/*!*****************************************************************************
 	\brief
 		Function to get the texture unit
+
+	\return
+		Return an int value
 	*******************************************************************************/
 	int get_texture_unit() const;
 
@@ -119,12 +137,24 @@ public:
 	/*!*****************************************************************************
 	\brief
 		Function to load the texture
+
+	\param _name
+		Name of texture
+
+	\param _type
+		Type of texture
+
+	\return
+		An int value
 	*******************************************************************************/
 	int load(const char * _name, int _type=0);
 
 	/*!*****************************************************************************
 	\brief
 		Function to bind the texture
+
+	\return
+		A bool value
 	*******************************************************************************/
 	bool bind_texture() const;
 

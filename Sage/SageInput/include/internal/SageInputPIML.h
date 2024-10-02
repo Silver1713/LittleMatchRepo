@@ -18,26 +18,50 @@ class SageInputPIML
 {
 public:
 	/*!*****************************************************************************
-	\brief
+	  \brief
 		Function to access glfw handler to check if a specific key is pressed once
+
+	  \param _keycode
+		The key that is pressed
+
+	  \return
+		A boolean value
 	*******************************************************************************/
 	static bool Get_Key_Pressed(int _keycode);
 
 	/*!*****************************************************************************
-	\brief
+	  \brief
 		Function to access glfw handler to check if a specific key is held down
+
+	  \param _keycode
+		The key that is pressed/held down
+
+	  \return
+		A boolean value
 	*******************************************************************************/
 	static bool Get_Key(int _keycode);
 
 	/*!*****************************************************************************
-	\brief
+	  \brief
 		Function to access glfw handler to check if a mouse input is clicked once
+
+	  \param _mouse
+		The mouse that is pressed
+
+	  \return
+		A boolean value
 	*******************************************************************************/
 	static bool Get_Mouse_Clicked(int _mouse);
 
 	/*!*****************************************************************************
-	\brief
+	  \brief
 		Function to access glfw handler to check if a mouse input is held down
+
+	  \param _mouse
+		The key that is pressed/held down
+
+	  \return
+		A boolean value
 	*******************************************************************************/
 	static bool Get_Mouse(int _mouse);
 
@@ -57,12 +81,18 @@ public:
 	/*!*****************************************************************************
 	\brief
 		Function to get the mouse x position
+
+	\return
+		Return a double
 	*******************************************************************************/
 	static double Get_Mouse_X();
 
 	/*!*****************************************************************************
 	\brief
 		Function to get the mouse y position
+
+	\return
+		Return a double
 	*******************************************************************************/
 	static double Get_Mouse_Y();
 };
