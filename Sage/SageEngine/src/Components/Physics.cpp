@@ -8,7 +8,7 @@
 \brief		Contains the derived class BoxCollider2D that overrides the virtual functions of the
 			base class Component to call physics functions.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content ï¿½ 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #include "Components/Physics.hpp"
@@ -60,5 +60,5 @@ void Physics::ApplyGravity(float delta_time)
 
 void Physics::UpdateVelocity(float delta_time) 
 {
-	std::cout << "HI";
+
 }
