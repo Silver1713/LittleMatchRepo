@@ -67,10 +67,3 @@ void SageViewport::setViewport()
 	int x{ static_cast<int>(size.x) }, y{ static_cast<int>(size.y) };
 	glViewport(static_cast<int>(position.x), static_cast<int>(position.y), x, y);
 }
-
-
-
-
-
-
-

@@ -115,7 +115,7 @@ namespace Game {
 
 
 		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
-		plrphy->set_gravity_disable(false);
+		plrphy->Set_Gravity_Disable(false);
 		
 		SageAudio::Play_Sound("bgm_main_menu", LOOP);
 		SageAudio::Play_Sound("ambient_rain", LOOP);
