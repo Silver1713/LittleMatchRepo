@@ -8,7 +8,7 @@
 \brief		Contains the declaration for the public interface that will access
 			SageTextureInternal functions which will interact with SOIL and openGL
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content ï¿½ 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 

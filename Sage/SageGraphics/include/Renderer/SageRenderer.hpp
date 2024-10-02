@@ -1,12 +1,28 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageRenderer.hpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		The public interface that implement the renderer class that handles rendering of
+			objects and models to the screen. This class make calls to the private interface
+			implemented in the internal class.
+
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
+
+
+
 #ifndef SAGERENDERER_HPP
 #define SAGERENDERER_HPP
-#include <map>
 
 #include "SageCamera.hpp"
-#include "SageObject.hpp"
-#include "SagePoint.hpp"
 #include "SageViewport.hpp"
-
+#include "SagePoint.hpp"
+#include "Vector4.h"
 
 
 class SageModel;
@@ -18,7 +34,7 @@ class SageShader;
 
 class SageCamera;
 
-enum RENDER_TYPE
+enum class RENDER_TYPE
 {
 	TYPE_TRIANGLE,
 	TYPE_TRIANGLE_STRIP,
@@ -95,33 +111,33 @@ struct SageRenderer
 	static void init();
 	static SageCamera* camera;
 	static void Set_Default_Shader(SageShader* shader);
-	static void SetCurrentView(SageViewport& view);
-	static void SetCurrentView(SageCamera* view);
-	static void DrawFilled(SageObject& object, RENDER_CONFIG config);
-	static void DrawFilled(SageObject& object);
-	static void DrawFilled(SageModel& model, glm::mat3& matrix, RENDER_CONFIG config = { (SAGE_ENABLE_ALPHA | SAGE_ENABLE_BORDER) });
-	static void DrawFilled(SageModel& model);
+	static void Set_Current_View(SageViewport& view);
+	static void Set_Current_View(SageCamera* view);
+	static void Draw_Filled(SageObject& object, RENDER_CONFIG config);
+	static void Draw_Filled(SageObject& object);
+	static void Draw_Filled(SageModel& model, glm::mat3& matrix, RENDER_CONFIG config = { (SAGE_ENABLE_ALPHA | SAGE_ENABLE_BORDER) });
+	static void Draw_Filled(SageModel& model);
 
-	static void DrawLine(SageLine const& line);
-	static void DrawLine(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color, float size=15.f);
+	static void Draw_Line(SageLine const& line);
+	static void Draw_Line(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color, float size=15.f);
 
-	static void DrawPoint(SagePoint const& point);
-	static void DrawPoint(ToastBox::Vec2 position, ToastBox::Vec4 color , float size=15.f);
-
-
-	static void DrawRect(float x, float y, float width, float height, ToastBox::Vec4 color);
+	static void Draw_Point(SagePoint const& point);
+	static void Draw_Point(ToastBox::Vec2 position, ToastBox::Vec4 color , float size=15.f);
 
 
-	static void SetOptionOn(int options);
-	static void SetOptionOff(int options);
+	static void Draw_Rect(float x, float y, float width, float height, ToastBox::Vec4 color);
 
-	static void SetBorderWidth(float width);
-	static void SetBorderRadius(float radius);
-	static void SetBorderColor(glm::vec4 color);
-	static void SetColor(glm::vec4 color);
-	static void SetAlpha(float alpha);
-	static void SetTransformationMatrix(glm::mat3& matrix);
-	static void ClearColor(ToastBox::Vec4 clr);
+
+	static void Set_Option_On(int options);
+	static void Set_Option_Off(int options);
+
+	static void Set_Border_Width(float width);
+	static void Set_Border_Radius(float radius);
+	static void Set_Border_Color(glm::vec4 color);
+	static void Set_Color(glm::vec4 color);
+	static void Set_Alpha(float alpha);
+	static void Set_Transformation_Matrix(glm::mat3& matrix);
+	static void Clear_Color(ToastBox::Vec4 clr);
 
 };
 

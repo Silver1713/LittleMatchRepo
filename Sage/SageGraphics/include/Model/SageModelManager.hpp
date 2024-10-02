@@ -6,7 +6,7 @@
 #include "SageModel.hpp"
 #include "SageRenderer.hpp"
 
-enum PrimitiveShape {
+enum class PrimitiveShape {
 	PRIMITIVE_SQUARE,
 	PRIMITIVE_CIRCLE,
 	PRIMITIVE_TRIANGLE,

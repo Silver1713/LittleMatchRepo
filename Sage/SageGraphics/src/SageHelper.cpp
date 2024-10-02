@@ -1,4 +1,4 @@
-
+#include "GL/glew.h"
 #include "SageRenderer.hpp"
 #include <iostream>
 
@@ -23,20 +23,22 @@ SageWindow* SageHelper::sage_ptr_window{};
 GLFWwindow* SageHelper::ptr_window{};
 std::map<int, std::byte> SageHelper::key_map;
 
-void GLAPIENTRY openglErrorCallback(GLenum source, GLenum type, GLuint id,
-	GLenum severity, GLsizei length,
-	const GLchar* message, const void* userParam)
+void GLAPIENTRY openglErrorCallback(GLenum _source, GLenum _type, GLuint _id,
+	GLenum severity, GLsizei length,const GLchar* message, const void* userParam)
 {
+	(length);
+	(userParam);
 	std::cerr << "OpenGL Error:\n";
-	std::cerr << "Source: " << source << "\n";
-	std::cerr << "Type: " << type << "\n";
-	std::cerr << "ID: " << id << "\n";
+	std::cerr << "Source: " << _source << "\n";
+	std::cerr << "Type: " << _type << "\n";
+	std::cerr << "ID: " << _id << "\n";
 	std::cerr << "Severity: " << severity << "\n";
 	std::cerr << "Message: " << message << "\n";
-}
+}	
 
 int SageHelper::init(int width, int height, const char* title, int UPS)
 {
+	
 	fixed_delta_time = 1.0 / UPS;
 	WINDOW_WIDTH = width;
 	WINDOW_HEIGHT = height;
@@ -66,7 +68,7 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 
 	sage_ptr_window->Activate_Context();
 	
-	sage_ptr_window->set_framebuffer_callback();
+	sage_ptr_window->Set_Framebuffer_Callback();
 
 
 	if (!ptr_window && !sage_ptr_window->check_active())
@@ -183,6 +185,8 @@ void SageHelper::exit()
 
 void SageHelper::key_cb(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+	mods;
+	scancode;
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, GLFW_TRUE);
@@ -213,11 +217,12 @@ void SageHelper::key_cb(GLFWwindow* window, int key, int scancode, int action, i
 	}
 
 
-
+	window;
 }
 
 void SageHelper::mouse_button_cb(GLFWwindow* window, int button, int action, int mods)
 {
+	window;
 #if _DEBUG
 	std::cout << "Mouse Button: " << button << " Action: " << action << " Mods: " << mods << '\n';
 #endif
@@ -225,6 +230,7 @@ void SageHelper::mouse_button_cb(GLFWwindow* window, int button, int action, int
 
 void SageHelper::mouse_pos_cb(GLFWwindow* window, double xpos, double ypos)
 {
+	window;
 #if _DEBUG
 	std::cout << "Mouse Position: x:" << xpos << ", y:" << ypos << '\n';
 #endif
@@ -232,6 +238,7 @@ void SageHelper::mouse_pos_cb(GLFWwindow* window, double xpos, double ypos)
 
 void SageHelper::mouse_scroll_cb(GLFWwindow* window, double xoffset, double yoffset)
 {
+	window;
 #if _DEBUG
 	std::cout << "Mouse Scroll: x:" << xoffset << ", y:" << yoffset << '\n';
 #endif
@@ -246,7 +253,9 @@ bool SageHelper::Get_Key(int key)
 
 bool SageHelper::Get_Key_Pressed(int key)
 {
+
 	return key_map[key] == std::byte{ 2 } || key_map[key] == std::byte{ 1 };
+
 }
 
 void SageHelper::framebuffer_size_cb(GLFWwindow* window, int width, int height)

@@ -300,12 +300,6 @@ void SageShader::SetUniform(const char* name,  ToastBox::Vec4 const& val)
 
 // Uniform setter - Matrices - glm
 
-void SageShader::SetUniform(const char* name, const glm::mat2& val)
-{
-	return;
-
-}
-
 void SageShader::SetUniform(const char* name, const glm::mat3& val)
 {
 	GLint loc = GetUniformLocation(name);

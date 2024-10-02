@@ -24,7 +24,7 @@ Physics::Physics(ToastBox::Vec2 _velocity) : velocity{ _velocity }, curr_velocit
 void Physics::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
-	curr_velocity = velocity * (float)SageTimer::delta_time;
+	curr_velocity = velocity * SageTimer::delta_time;
 }
 
 void Physics::Update()
@@ -32,7 +32,7 @@ void Physics::Update()
 
 	if (enable_gravity)
 	{
-		ApplyGravity((float)SageTimer::delta_time);
+		ApplyGravity(SageTimer::delta_time);
 	}
 	
 }
@@ -41,10 +41,15 @@ void Physics::Exit() {}
 
 ComponentType Physics::Get_Component_Type() { return PHYSICS; }
 
-void Physics::Set_Gravity_Disable(bool _is_static)
+void Physics::set_gravity_disable(bool _is_static)
 {
+<<<<<<< HEAD
+	if (is_static) curr_velocity  = {};
+		is_static = _is_static;
+=======
 	if (!enable_gravity) curr_velocity  = {velocity.x,velocity.y};
 	enable_gravity = !_is_static;
+>>>>>>> 3e0e1a4d6a1dcdc86b4724fbba59dd7f0526581e
 }
 	
 ToastBox::Vec2& Physics::Get_Velocity()
@@ -52,17 +57,13 @@ ToastBox::Vec2& Physics::Get_Velocity()
 	return curr_velocity;
 }
 
-void Physics::ApplyGravity(float _delta_time)
+void Physics::ApplyGravity(float delta_time)
 {
 	// Adjust the current velocity by gravity over time
-	curr_velocity.y -= gravity * (float)SageTimer::delta_time; // Apply gravity to the vertical velocity
-
-	(void)_delta_time;
+	curr_velocity.y -= gravity * SageTimer::delta_time; // Apply gravity to the vertical velocity
 }
 
-void Physics::UpdateVelocity(float _delta_time) 
+void Physics::UpdateVelocity(float delta_time) 
 {
 	std::cout << "HI";
-
-	(void)_delta_time;
 }

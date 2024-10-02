@@ -64,7 +64,7 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Draw()
 	{
-		SageRenderer::ClearColor({ 1,1,1,1 });
+		SageRenderer::Clear_Color({ 1,1,1,1 });
 
 		for (unsigned int current_z{}; current_z <= max_z_orders; ++current_z)
 		{

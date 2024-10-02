@@ -1,7 +1,7 @@
-#pragma once
 #ifndef SAGE_HELPER_HPP
 #define  SAGE_HELPER_HPP
 #include "GLFW/glfw3.h"
+
 #include <map>
 #include "SageWindow.hpp"
 #include "SageShader.hpp"
@@ -9,7 +9,7 @@
 
 struct SageHelper
 {
-	// Window Params
+
 	static int WINDOW_WIDTH, WINDOW_HEIGHT;
 	static char* WINDOW_TITLE;
 	static SageWindow* sage_ptr_window;
@@ -61,7 +61,7 @@ struct SageHelper
 	static bool Get_Key_Pressed(int key);
 
 
-	static SageShader CompileShadersFromFile(const char* vertex_shader, const char* fragment_shader);
+	static SageShader CompileShadersFromFile(const char* _vertex_shader, const char* _fragment_shader);
 	
 	static void update_time(double update_interval);
 

@@ -7,7 +7,7 @@
 \date		27 September 2024
 \brief		Contain the definition of GLFW functions to hide it from the public.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content ï¿½ 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 
@@ -96,7 +96,10 @@ bool GLFWInputHandler::Get_Key(int _keycode)
 *******************************************************************************/
 void GLFWInputHandler::Key_Cb(GLFWwindow* _window, int _keycode, int _scancode, int _action, int _mods)
 {
-	if (_keycode == GLFW_KEY_ESCAPE && _action == GLFW_PRESS)
+	UNREFERENCED_PARAMETER(mods);
+	UNREFERENCED_PARAMETER(scancode);
+	
+	if (keycode == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(_window, GLFW_TRUE);
 	}
