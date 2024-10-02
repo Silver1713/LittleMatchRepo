@@ -13,9 +13,7 @@
 
 #include <iostream>
 #include "GLFWHandler.h"
-
 #include <unordered_map>
-
 
 std::unordered_map<int, std::byte> GLFWInputHandler::key_map{};
 double GLFWInputHandler::g_mouse_pos_x = 0;
@@ -96,10 +94,10 @@ bool GLFWInputHandler::Get_Key(int _keycode)
 *******************************************************************************/
 void GLFWInputHandler::Key_Cb(GLFWwindow* _window, int _keycode, int _scancode, int _action, int _mods)
 {
-	UNREFERENCED_PARAMETER(mods);
-	UNREFERENCED_PARAMETER(scancode);
-	
-	if (keycode == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	(_mods);
+	(_scancode);
+
+	if (_keycode == GLFW_KEY_ESCAPE && _action == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(_window, GLFW_TRUE);
 	}
@@ -127,7 +125,6 @@ void GLFWInputHandler::Key_Cb(GLFWwindow* _window, int _keycode, int _scancode, 
 	default:
 		break;
 	}
-
 }
 
 /*!*****************************************************************************
