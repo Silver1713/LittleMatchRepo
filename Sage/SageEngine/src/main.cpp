@@ -74,8 +74,6 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	init();
-    SageAudio::Play_Sound("bgm_main_menu", LOOP);
-    SageAudio::Play_Sound("ambient_rain", LOOP);
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{

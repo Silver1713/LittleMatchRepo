@@ -17,6 +17,7 @@
 #include "Prefabs.hpp"
 #include "SageRenderer.hpp"
 #include "SageHelper.hpp"
+#include "SageAudio.hpp"
 #include "KeyInputs.h"
 #include "Game.hpp"
 #include "Components/Physics.hpp"
@@ -105,6 +106,9 @@ namespace Game {
 		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
 		plrphy->set_gravity_disable(false);
 		
+		SageAudio::Play_Sound("bgm_main_menu", LOOP);
+		SageAudio::Play_Sound("ambient_rain", LOOP);
+
 	}
 
 	/*!*****************************************************************************
@@ -275,6 +279,21 @@ namespace Game {
 					game_objects.erase("Green" + std::to_string(i));
 				}
 			}
+		}
+
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_7))
+		{
+			SageAudio::Play_Sound("sfx_sword",NO_LOOP);
+		}
+
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_8))
+		{
+			SageAudio::Play_Sound("sfx_spear", NO_LOOP);
+		}
+
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_9))
+		{
+			SageAudio::Play_Sound("sfx_crossbow", NO_LOOP);
 		}
 
 		//float deccel = 100.f;
