@@ -9,7 +9,7 @@ float pi = static_cast<float>(std::atan(1) * 4);
 SageModel& SageModelManager::CreatePrimitiveModel(std::string name, int shape, int type)
 {
 
-	if (shape == PrimitiveShape::PRIMITIVE_SQUARE)
+	if (shape == static_cast<int>(PrimitiveShape::PRIMITIVE_SQUARE))
 	{
 		//Use ndc [-1,1] for square
 		std::vector<glm::vec2> pos_vtx{
@@ -50,11 +50,11 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, int shape, i
 		return models[name];
 
 	}
-	else if (shape == PrimitiveShape::PRIMITIVE_CIRCLE)
+	else if (shape ==static_cast<int>(PrimitiveShape::PRIMITIVE_CIRCLE))
 	{
 		
 		// default radius
-		float radius = 8.f;
+		/*float radius = 8.f;*/
 		int slices = 255;
 		float angle_step = 2.0f * pi / static_cast<float>(slices);
 
@@ -81,8 +81,8 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, int shape, i
 		for (int j = 1; j <= slices; ++j)
 		{
 			idx_vtx.push_back(0); // Center vertex index
-			idx_vtx.push_back(j); // Current vertex on perimeter
-			idx_vtx.push_back(j + 1); // Next vertex on perimeter
+			idx_vtx.push_back(static_cast<short>(j)); // Current vertex on perimeter
+			idx_vtx.push_back(static_cast<short>(j+1)); // Next vertex on perimeter
 		}
 
 		// Last triangle 
@@ -97,7 +97,7 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, int shape, i
 		models[name] = mdl_circle;
 		return models[name];
 
-	} else if (shape == PRIMITIVE_LINE)
+	} else if (shape == static_cast<int>(PrimitiveShape::PRIMITIVE_LINE))
 	{
 		std::vector<glm::vec2> pos_vtx{
 			glm::vec2(-1.f,0.f),
@@ -124,7 +124,7 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, int shape, i
 
 		models[name] = mdl_line;
 		return models[name];
-	} else if (shape  == PRIMITIVE_POINTS)
+	} else if (shape  == static_cast<int>(PrimitiveShape::PRIMITIVE_POINTS))
 	{
 		std::vector<glm::vec2> pos_vtx{
 			glm::vec2{0.f,0.f}

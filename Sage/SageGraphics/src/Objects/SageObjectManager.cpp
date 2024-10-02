@@ -15,7 +15,7 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 	{
 		if (SageModelManager::models.find("PRIMITIVE_RECT") == SageModelManager::models.end())
 		{
-			SageModelManager::CreatePrimitiveModel("PRIMITIVE_RECT", PRIMITIVE_SQUARE, RENDER_TYPE::TYPE_TRIANGLE);
+			SageModelManager::CreatePrimitiveModel("PRIMITIVE_RECT", static_cast<int>(PrimitiveShape::PRIMITIVE_SQUARE), static_cast<int>(RENDER_TYPE::TYPE_TRIANGLE));
 		}
 
 		SageModel& mdl = SageModelManager::models["PRIMITIVE_RECT"];
@@ -44,7 +44,7 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 	{
 		if (SageModelManager::models.find("PRIMITIVE_CIRCLE") == SageModelManager::models.end())
 		{
-			SageModelManager::CreatePrimitiveModel("PRIMITIVE_CIRCLE", PRIMITIVE_CIRCLE, TYPE_TRIANGLE_FAN);
+			SageModelManager::CreatePrimitiveModel("PRIMITIVE_CIRCLE", static_cast<int>(PrimitiveShape::PRIMITIVE_CIRCLE), static_cast<int>(RENDER_TYPE::TYPE_TRIANGLE_FAN));
 		}
 
 		SageModel& mdl = SageModelManager::models["PRIMITIVE_CIRCLE"];
@@ -82,7 +82,7 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 	{
 		if (SageModelManager::models.find("PRIMITIVE_RECT") == SageModelManager::models.end())
 		{
-			SageModelManager::CreatePrimitiveModel("PRIMITIVE_RECT", PRIMITIVE_SQUARE, RENDER_TYPE::TYPE_TRIANGLE);
+			SageModelManager::CreatePrimitiveModel("PRIMITIVE_RECT", static_cast<int>(PrimitiveShape::PRIMITIVE_SQUARE),static_cast<int>(RENDER_TYPE::TYPE_TRIANGLE));
 		}
 
 		SageModel& mdl = SageModelManager::models["PRIMITIVE_RECT"];
@@ -118,7 +118,7 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 	{
 		if (SageModelManager::models.find("PRIMITIVE_CIRCLE") == SageModelManager::models.end())
 		{
-			SageModelManager::CreatePrimitiveModel("PRIMITIVE_CIRCLE", PRIMITIVE_CIRCLE, TYPE_TRIANGLE_FAN);
+			SageModelManager::CreatePrimitiveModel("PRIMITIVE_CIRCLE", static_cast<int>(PrimitiveShape::PRIMITIVE_CIRCLE), static_cast<int>(RENDER_TYPE::TYPE_TRIANGLE_FAN));
 		}
 
 		SageModel& mdl = SageModelManager::models["PRIMITIVE_CIRCLE"];
@@ -166,9 +166,10 @@ void SageObjectManager::DestroyAllObjects()
 
 SageLine SageObjectManager::CreateLineObject(char const* name, glm::vec2 start, glm::vec2 end, glm::vec4 color, float width)
 {
+	(name);
 	if (SageModelManager::models.find("PRIMITIVE_LINE") == SageModelManager::models.end())
 	{
-		SageModelManager::CreatePrimitiveModel("PRIMITIVE_LINE", PRIMITIVE_LINE, TYPE_LINES);
+		SageModelManager::CreatePrimitiveModel("PRIMITIVE_LINE", static_cast<int>(PrimitiveShape::PRIMITIVE_LINE), static_cast<int>(RENDER_TYPE::TYPE_LINES));
 		SageModelManager::models["PRIMITIVE_LINE"].setup_gpu_buffer();
 	}
 

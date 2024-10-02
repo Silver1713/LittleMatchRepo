@@ -1,6 +1,6 @@
 #ifndef Sage_Window_INTERNAL_HPP
 #define Sage_Window_INTERNAL_HPP
-
+#pragma once
 #include <string>
 #include "GLFW/glfw3.h"
 
@@ -45,7 +45,7 @@ public:
 	void Deactivate_Context();
 	void set_dims(int width, int height);
 	void set_title(const char* title);
-	void toggle_fullscreen();
+	void Toggle_Fullscreen();
 	void set_resizable(bool resizable);
 	void set_maximize(bool maximize);
 	void set_should_close(bool should_close);

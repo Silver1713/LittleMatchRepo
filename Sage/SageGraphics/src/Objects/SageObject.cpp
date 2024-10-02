@@ -169,10 +169,10 @@ void SageObject::draw(SageCamera* cam)
 	shader->SetUniform("uObjectSize", transform.scale.x, transform.scale.y);
 	ToastBox::Matrix3x3 mtx = glm::value_ptr( transform.model_matrix);
 	
-	//glm::mat3 ca = static_cast<SageCameraInternal2D*>(c->GetCamera())->GetViewProjectionMatrix() * transform.model_matrix;
+	//glm::mat3 ca = static_cast<SageCameraInternal2D*>(c->Get_Camera())->Get_View_Projection_Matrix() * transform.model_matrix;
 	ToastBox::Matrix3x3 m1, m2, m3;
 	
-	m3.Matrix3Transpose(~c->get_projection_view_matrix() * ~mtx);
+	m3.Matrix3Transpose(~c->Get_Projection_View_Matrix() * ~mtx);
 	glm::vec3 r2 = transform.model_matrix * glm::vec3(1, 1, 1);
 	shader->SetUniform("uModel_xform", m3);
 	shader->SetUniform("uUseTexture", material.enable_texture);

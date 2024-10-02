@@ -7,12 +7,15 @@
 #include "SageRendererInternal.hpp"
 #include "SageCamera.hpp"
 #include "glm/gtc/type_ptr.inl"
+
+
+
 class SageCameraInternal2D;
 SageViewport SageRendererInternal::viewport;
 RENDER_CONFIG_INTERNAL SageRendererInternal::default_config{ SageRendererInternal::I_SAGE_ENABLE_TEXTURE | SageRendererInternal::I_SAGE_ENABLE_ALPHA };
 SageCamera* SageRendererInternal::camera;
 SageShader* SageRendererInternal::default_shader;
-void SageRendererInternal::DrawFilled(SageObject& object, RENDER_CONFIG_INTERNAL config)
+void SageRendererInternal::Draw_Filled(SageObject& object, RENDER_CONFIG_INTERNAL config)
 {
 	SageObject::SageMaterial& mat = object.GetMaterial();
 	if (config.options & I_SAGE_ENABLE_BORDER)
@@ -47,18 +50,18 @@ void SageRendererInternal::DrawFilled(SageObject& object, RENDER_CONFIG_INTERNAL
 	//object.draw(&viewport);
 }
 
-void SageRendererInternal::SetCurrentView(SageViewport& view)
+void SageRendererInternal::Set_Current_View(SageViewport& view)
 {
 	viewport = view;
 }
 
-void SageRendererInternal::SetCurrentView(SageCamera* view)
+void SageRendererInternal::Set_Current_View(SageCamera* view)
 {
 	camera = view;
 }
 
 
-void SageRendererInternal::DrawFilled(SageObject& object)
+void SageRendererInternal::Draw_Filled(SageObject& object)
 {
 	SageObject::SageMaterial& mat = object.GetMaterial();
 	if (default_config.options & I_SAGE_ENABLE_BORDER)
@@ -107,7 +110,7 @@ void SageRendererInternal::SetOptionOff(int options)
 	default_config.options &= ~options;
 }
 
-void SageRendererInternal::DrawFilled(SageModel& model)
+void SageRendererInternal::Draw_Filled(SageModel& model)
 {
 	SageShader* shader = default_shader;
 
@@ -167,7 +170,7 @@ void SageRendererInternal::DrawFilled(SageModel& model)
 
 }
 
-void SageRendererInternal::DrawFilled(SageModel& model, glm::mat3& matrix, RENDER_CONFIG_INTERNAL config)
+void SageRendererInternal::Draw_Filled(SageModel& model, glm::mat3& matrix, RENDER_CONFIG_INTERNAL config)
 {
 
 	SageShader* shader = default_shader;
@@ -253,10 +256,10 @@ void SageRendererInternal::init()
 
 	// Initialize Primitives
 
-	SageModelManager::CreatePrimitiveModel("PRIMITIVE_RECT", PRIMITIVE_SQUARE, RENDER_TYPE::TYPE_TRIANGLE);
-	SageModelManager::CreatePrimitiveModel("PRIMITIVE_CIRCLE", PRIMITIVE_CIRCLE, RENDER_TYPE::TYPE_TRIANGLE_FAN);
-	SageModelManager::CreatePrimitiveModel("PRIMITIVE_LINE", PRIMITIVE_LINE, RENDER_TYPE::TYPE_LINES);
-	SageModelManager::CreatePrimitiveModel("PRIMITIVE_POINT", PRIMITIVE_POINTS, RENDER_TYPE::TYPE_POINTS);
+	SageModelManager::CreatePrimitiveModel("PRIMITIVE_RECT", static_cast<int>(PrimitiveShape::PRIMITIVE_SQUARE), RENDER_TYPE::TYPE_TRIANGLE);
+	SageModelManager::CreatePrimitiveModel("PRIMITIVE_CIRCLE", static_cast<int>(PrimitiveShape::PRIMITIVE_CIRCLE), RENDER_TYPE::TYPE_TRIANGLE_FAN);
+	SageModelManager::CreatePrimitiveModel("PRIMITIVE_LINE", static_cast<int>(PrimitiveShape::PRIMITIVE_LINE), RENDER_TYPE::TYPE_LINES);
+	SageModelManager::CreatePrimitiveModel("PRIMITIVE_POINT", static_cast<int>(PrimitiveShape::PRIMITIVE_POINTS), RENDER_TYPE::TYPE_POINTS);
 
 	// initialize VAO
 	SageModelManager::models["PRIMITIVE_RECT"].setup_gpu_buffer();
@@ -279,27 +282,27 @@ void SageRendererInternal::init()
 
 
 
-void SageRendererInternal::SetAlpha(float alpha)
+void SageRendererInternal::Set_Alpha(float alpha)
 {
 	default_config.render_alpha = alpha;
 }
 
-void SageRendererInternal::SetBorderColor(glm::vec4 color)
+void SageRendererInternal::Set_Border_Color(glm::vec4 color)
 {
 	default_config.border_color = color;
 }
 
-void SageRendererInternal::SetBorderRadius(float radius)
+void SageRendererInternal::Set_Border_Radius(float radius)
 {
 	default_config.border_radius = radius;
 }
 
-void SageRendererInternal::SetBorderWidth(float width)
+void SageRendererInternal::Set_Border_Width(float width)
 {
 	default_config.border_width = width;
 }
 
-void SageRendererInternal::SetTransformationMatrix(glm::mat3& matrix)
+void SageRendererInternal::Set_Transformation_Matrix(glm::mat3& matrix)
 {
 	default_config.transformation_matrix = matrix;
 }
@@ -310,7 +313,7 @@ void SageRendererInternal::Set_Default_Shader(SageShader* shader)
 }
 
 
-void SageRendererInternal::DrawLine(SageLine const& line, float size)
+void SageRendererInternal::Draw_Line(SageLine const& line, float size)
 {
 	SageShader* shader = default_shader;
 	glBindVertexArray(line.line->get_vao_handle());
@@ -334,7 +337,7 @@ void SageRendererInternal::DrawLine(SageLine const& line, float size)
 	if (default_config.options & I_SAGE_ENABLE_CAMERA)
 	{
 
-		shader->SetUniform("uModel_xform", camera->get_projection_view_matrix());
+		shader->SetUniform("uModel_xform", camera->Get_Projection_View_Matrix());
 	}
 	else
 	{
@@ -373,19 +376,19 @@ void SageRendererInternal::DrawLine(SageLine const& line, float size)
 }
 
 
-void SageRendererInternal::DrawLine(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color, float size)
+void SageRendererInternal::Draw_Line(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color, float size)
 {
 	SageLine line({ start.getX(), start.getY() }, { end.getX(), end.getY() }, { color.x,color.y,color.z,color.a }, size);
 	line.line = &SageModelManager::models["PRIMITIVE_LINE"];
 
 	line.update_dist(line.start, line.end);
 
-	DrawLine(line, line.width);
+	Draw_Line(line, line.width);
 
 
 }
 
-void SageRendererInternal::DrawRect(float x, float y, float width, float height, ToastBox::Vec4 color)
+void SageRendererInternal::Draw_Rect(float x, float y, float width, float height, ToastBox::Vec4 color)
 {
 	SageObject obj;
 	obj.init("RECT", &SageModelManager::models["PRIMITIVE_RECT"]);
@@ -393,11 +396,11 @@ void SageRendererInternal::DrawRect(float x, float y, float width, float height,
 	obj.transform.scale = { width,height };
 	obj.GetMaterial().color = { color.x,color.y,color.z,color.a };
 	obj.transform.calculate_model_matrix();
-	DrawFilled(obj);
+	Draw_Filled(obj);
 }
 
 
-void SageRendererInternal::DrawPoint(SagePoint const& point)
+void SageRendererInternal::Draw_Point(SagePoint const& point)
 {
 	SageShader* shader = default_shader;
 	SageModel* model = point.point;
@@ -421,7 +424,7 @@ void SageRendererInternal::DrawPoint(SagePoint const& point)
 
 		ToastBox::Matrix3x3 m3;
 
-		m3.Matrix3Transpose(~camera->get_projection_view_matrix() * ~mtx);
+		m3.Matrix3Transpose(~camera->Get_Projection_View_Matrix() * ~mtx);
 		shader->SetUniform("uModel_xform", m3);
 	}
 	else
@@ -465,16 +468,16 @@ void SageRendererInternal::DrawPoint(SagePoint const& point)
 	glDisable(GL_BLEND);
 }
 
-void SageRendererInternal::DrawPoint(ToastBox::Vec2 position, ToastBox::Vec4 color, float _s)
+void SageRendererInternal::Draw_Point(ToastBox::Vec2 position, ToastBox::Vec4 color, float _s)
 {
 	SagePoint point({ position.getX(), position.getY() }, { color.x,color.y,color.z,color.a }, _s);
 	point.point = &SageModelManager::models["PRIMITIVE_POINT"];
 	point.calculate_transform();
-	DrawPoint(point);
+	Draw_Point(point);
 }
 
 
-void SageRendererInternal::SetColor(glm::vec4 color)
+void SageRendererInternal::Set_Color(glm::vec4 color)
 {
 	default_config.color = color;
 }
@@ -496,7 +499,7 @@ RENDER_CONFIG_INTERNAL::RENDER_CONFIG_INTERNAL(unsigned int options, float rende
 	this->current_texture = current_texture;
 }
 
-void SageRendererInternal::ClearColor(ToastBox::Vec4 clr)
+void SageRendererInternal::Clear_Color(ToastBox::Vec4 clr)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(clr.x, clr.y, clr.z, clr.a);

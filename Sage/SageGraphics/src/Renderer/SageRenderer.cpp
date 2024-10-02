@@ -7,9 +7,9 @@ SageViewport SageRenderer::viewport;
 RENDER_CONFIG SageRenderer::default_config{ SageRenderer::SAGE_ENABLE_TEXTURE | SageRenderer::SAGE_ENABLE_ALPHA};
 SageCamera* SageRenderer::camera;
 SageShader* SageRenderer::default_shader;
-void SageRenderer::DrawFilled(SageObject& object, RENDER_CONFIG config)
+void SageRenderer::Draw_Filled(SageObject& object, RENDER_CONFIG config)
 {
-	SageRendererInternal::DrawFilled(object, {
+	SageRendererInternal::Draw_Filled(object, {
 		config.options, config.render_alpha, config.border_width,
 		{config.color.r,config.color.g,config.color.b,config.color.a},
 		{config.border_color.r,config.border_color.g,config.border_color.b,config.border_color.a},
@@ -22,49 +22,49 @@ void SageRenderer::DrawFilled(SageObject& object, RENDER_CONFIG config)
 
 }
 
-void SageRenderer::SetCurrentView(SageViewport& view)
+void SageRenderer::Set_Current_View(SageViewport& view)
 {
 	viewport = view;
-	SageRendererInternal::SetCurrentView(view);
+	SageRendererInternal::Set_Current_View(view);
 }
 
-void SageRenderer::SetCurrentView(SageCamera* view)
+void SageRenderer::Set_Current_View(SageCamera* view)
 {
 	camera = view;
-	SageRendererInternal::SetCurrentView(view);
+	SageRendererInternal::Set_Current_View(view);
 }
 
 
-void SageRenderer::DrawFilled(SageObject& object)
+void SageRenderer::Draw_Filled(SageObject& object)
 {
-	SageRendererInternal::DrawFilled(object);
+	SageRendererInternal::Draw_Filled(object);
 }
 
 
 
 
 
-void SageRenderer::SetOptionOn(int options)
+void SageRenderer::Set_Option_On(int options)
 {
 	SageRenderer::default_config.options |= options;
 	SageRendererInternal::default_config.options |= options;
 }
 
-void SageRenderer::SetOptionOff(int options)
+void SageRenderer::Set_Option_Off(int options)
 {
 	default_config.options &= ~options;
 	SageRendererInternal::default_config.options &= ~options;
 }
 
-void SageRenderer::DrawFilled(SageModel& model)
+void SageRenderer::Draw_Filled(SageModel& model)
 {
-	SageRendererInternal::DrawFilled(model);
+	SageRendererInternal::Draw_Filled(model);
 }
 
-void SageRenderer::DrawFilled(SageModel& model, glm::mat3& matrix, RENDER_CONFIG config)
+void SageRenderer::Draw_Filled(SageModel& model, glm::mat3& matrix, RENDER_CONFIG config)
 {
 
-	SageRendererInternal::DrawFilled(model, matrix, {
+	SageRendererInternal::Draw_Filled(model, matrix, {
 		config.options, config.render_alpha, config.border_width,
 		{config.color.r,config.color.g,config.color.b,config.color.a},
 		{config.border_color.r,config.border_color.g,config.border_color.b,config.border_color.a},
@@ -86,34 +86,34 @@ void SageRenderer::init()
 
 
 
-void SageRenderer::SetAlpha(float alpha)
+void SageRenderer::Set_Alpha(float alpha)
 {
 	default_config.render_alpha = alpha;
-	SageRendererInternal::SetAlpha(alpha);
+	SageRendererInternal::Set_Alpha(alpha);
 }
 
-void SageRenderer::SetBorderColor(glm::vec4 color)
+void SageRenderer::Set_Border_Color(glm::vec4 color)
 {
 	default_config.border_color = color;
-	SageRendererInternal::SetBorderColor(color);
+	SageRendererInternal::Set_Border_Color(color);
 }
 
-void SageRenderer::SetBorderRadius(float radius)
+void SageRenderer::Set_Border_Radius(float radius)
 {
 	default_config.border_radius = radius;
-	SageRendererInternal::SetBorderRadius(radius);
+	SageRendererInternal::Set_Border_Radius(radius);
 }
 
-void SageRenderer::SetBorderWidth(float width)
+void SageRenderer::Set_Border_Width(float width)
 {
 	default_config.border_width = width;
-	SageRendererInternal::SetBorderWidth(width);
+	SageRendererInternal::Set_Border_Width(width);
 }
 
-void SageRenderer::SetTransformationMatrix(glm::mat3& matrix)
+void SageRenderer::Set_Transformation_Matrix(glm::mat3& matrix)
 {
 	default_config.transformation_matrix = matrix;
-	SageRendererInternal::SetTransformationMatrix(matrix);
+	SageRendererInternal::Set_Transformation_Matrix(matrix);
 }
 
 void SageRenderer::Set_Default_Shader(SageShader* shader)
@@ -123,40 +123,40 @@ void SageRenderer::Set_Default_Shader(SageShader* shader)
 }
 
 
-void SageRenderer::DrawLine(SageLine const& line)
+void SageRenderer::Draw_Line(SageLine const& line)
 {
-	SageRendererInternal::DrawLine(line);
+	SageRendererInternal::Draw_Line(line);
 }
 
 
-void SageRenderer::DrawLine(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color, float size)
+void SageRenderer::Draw_Line(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color, float size)
 {
-	SageRendererInternal::DrawLine(start, end, color, size);
+	SageRendererInternal::Draw_Line(start, end, color, size);
 
 
 }
 
-void SageRenderer::DrawRect(float x, float y, float width, float height, ToastBox::Vec4 color)
+void SageRenderer::Draw_Rect(float x, float y, float width, float height, ToastBox::Vec4 color)
 {
-	SageRendererInternal::DrawRect(x, y, width, height, color);
+	SageRendererInternal::Draw_Rect(x, y, width, height, color);
 }
 
 
-void SageRenderer::DrawPoint(SagePoint const& point)
+void SageRenderer::Draw_Point(SagePoint const& point)
 {
-	SageRendererInternal::DrawPoint(point);
+	SageRendererInternal::Draw_Point(point);
 }
 
-void SageRenderer::DrawPoint(ToastBox::Vec2 position, ToastBox::Vec4 color, float _s)
+void SageRenderer::Draw_Point(ToastBox::Vec2 position, ToastBox::Vec4 color, float _s)
 {
-	SageRendererInternal::DrawPoint(position, color, _s);
+	SageRendererInternal::Draw_Point(position, color, _s);
 }
 
 
-void SageRenderer::SetColor(glm::vec4 color)
+void SageRenderer::Set_Color(glm::vec4 color)
 {
 	default_config.color = color;
-	SageRendererInternal::SetColor(color);
+	SageRendererInternal::Set_Color(color);
 }
 
 
@@ -176,9 +176,9 @@ RENDER_CONFIG::RENDER_CONFIG(unsigned int options, float render_alpha, float bor
 	this->current_texture = current_texture;
 }
 
-void SageRenderer::ClearColor(ToastBox::Vec4 clr)
+void SageRenderer::Clear_Color(ToastBox::Vec4 clr)
 {
-	SageRendererInternal::ClearColor(clr);
+	SageRendererInternal::Clear_Color(clr);
 
 }
 

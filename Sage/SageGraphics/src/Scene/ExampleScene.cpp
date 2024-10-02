@@ -37,7 +37,7 @@ void ExampleScene::init()
 
 
 
-	SageRenderer::SetCurrentView(v_p);
+	SageRenderer::Set_Current_View(v_p);
 
 
 
@@ -81,7 +81,7 @@ void ExampleScene::init()
 		SageObjectManager::objects["Rect3"].transform.scale = { 150.f,50.f };
 		SageObjectManager::objects["Rect3"].transform.orientation = { 0,0 };
 		SageObjectManager::objects["Rect3"].GetMaterial().color = { 1,0,1,1 };
-		SageObject* obj = &SageObjectManager::objects["Circle3"];
+	//	SageObject* obj = &SageObjectManager::objects["Circle3"];
 		
 
 		//obj->GetMaterial().enable_texture = true;
@@ -107,7 +107,7 @@ void ExampleScene::init()
 
 	v_p.setViewport();
 
-	SageRenderer::SetCurrentView(&camera2d);
+	SageRenderer::Set_Current_View(&camera2d);
 	
 
 }
@@ -154,22 +154,23 @@ void ExampleScene::draw()
 
 	ss << "Scene 1 | " << "FPS: " << std::fixed << SageHelper::FPS;
 	//glfwSetWindowTitle(SageHelper::ptr_window, ss.str().c_str());
-	SageHelper::sage_ptr_window->set_title(ss.str().c_str());
+	SageHelper::sage_ptr_window->Set_Title(ss.str().c_str());
 
 
 
 
-	SageRenderer::SetOptionOn(SageRenderer::SAGE_ENABLE_CAMERA);
-	SageRenderer::SetOptionOff(SageRenderer::SAGE_ENABLE_BORDER);
+	SageRenderer::Set_Option_On(SageRenderer::SAGE_ENABLE_CAMERA);
+	SageRenderer::Set_Option_Off(SageRenderer::SAGE_ENABLE_BORDER);
 	for (auto& obj : SageObjectManager::objects)
 	{
 		//obj.second.GetMaterial().color = { 0,1,0,1 };
-		SageRenderer::SetAlpha(1.f);
-		//SageRenderer::SetOptionOn();/
+		SageRenderer::Set_Alpha(1.f);
+		//SageRenderer::Set_Option_On();/
 		
-		SageRenderer::DrawFilled(obj.second);
+		SageRenderer::Draw_Filled(obj.second);
 		float scale = obj.second.transform.scale.x;
-		if (obj.second.obj_mesh.model_ref->get_shape_type() == PrimitiveShape::PRIMITIVE_CIRCLE)
+		if (obj.second.obj_mesh.model_ref->get_shape_type() == static_cast<int>(
+			PrimitiveShape::PRIMITIVE_CIRCLE))
 		{
 			scale *= 2;
 		}
@@ -177,18 +178,18 @@ void ExampleScene::draw()
 		for (ToastBox::Vec2& v : aabb)
 		{
 			
-			SageRenderer::DrawPoint(v, { 1,0,0,1 }, 5.f);
+			SageRenderer::Draw_Point(v, { 1,0,0,1 }, 5.f);
 
 		}
 		for (int i =0; i < aabb.size(); i++)
 		{
 			if (i < aabb.size() - 1)
 			{
-				SageRenderer::DrawLine(aabb[i], aabb[i + 1], { 1,0,0,1 });
+				SageRenderer::Draw_Line(aabb[i], aabb[i + 1], { 1,0,0,1 });
 			}
 			else
 			{
-				SageRenderer::DrawLine(aabb[i], aabb[0], { 1,0,0,1 });
+				SageRenderer::Draw_Line(aabb[i], aabb[0], { 1,0,0,1 });
 			}
 		}
 	}
@@ -196,15 +197,15 @@ void ExampleScene::draw()
 
 	ToastBox::Vec2 start = { 0,0 };
 	ToastBox::Vec2 end = { 100,0 };
-	SageRenderer::DrawLine(start, end, ToastBox::Vec4{ 0,0,1,1 });
+	SageRenderer::Draw_Line(start, end, ToastBox::Vec4{ 0,0,1,1 });
 
-	SageRenderer::SetOptionOff(SageRenderer::SAGE_ENABLE_CAMERA | SageRenderer::SAGE_ENABLE_BORDER);
-	SageRenderer::DrawRect(1000,500,50,50, {1,0,0,1});
-	SageRenderer::DrawLine({ 0,0 }, { 500,200 }, { 1,0,0,1 });
-	//SageRenderer::DrawPoint({ 500,100 }, { 0,0,1,1 }, 15.f);
+	SageRenderer::Set_Option_Off(SageRenderer::SAGE_ENABLE_CAMERA | SageRenderer::SAGE_ENABLE_BORDER);
+	SageRenderer::Draw_Rect(1000,500,50,50, {1,0,0,1});
+	SageRenderer::Draw_Line({ 0,0 }, { 500,200 }, { 1,0,0,1 });
+	//SageRenderer::Draw_Point({ 500,100 }, { 0,0,1,1 }, 15.f);
 
 	std::cout << camera2d.Screen_To_World({ 0,-250.f }).x << " " << camera2d.Screen_To_World({ 500,1000.f }).y << std::endl;
-	SageRenderer::DrawPoint(camera2d.World_To_Screen({ 0,-250.f }), { 0,1,1,1 }, 15.f);
+	SageRenderer::Draw_Point(camera2d.World_To_Screen({ 0,-250.f }), { 0,1,1,1 }, 15.f);
 }
 
 void ExampleScene::exit()

@@ -32,24 +32,24 @@ public:
 	void Update();
 	void Exit();
 
-	void CalculateCameraMatrix();
+	void Calculate_Camera_Matrix();
 
-	void set_position(glm::vec2 _position);
-	void set_view_rect_size(glm::vec2 _view_rect_size);
-	void set_orientation(glm::vec2 _orientation);
+	void Set_Position(glm::vec2 _position);
+	void Set_View_Rect_Size(glm::vec2 _view_rect_size);
+	void Set_Orientation(glm::vec2 _orientation);
 
-	glm::vec2 GetPosition() const;
-	glm::vec2 GetViewRectSize() const;
-	glm::vec2 GetOrientation() const;
-	glm::mat3 GetViewMatrix() const;
-	glm::mat3 GetProjectionMatrix() const;
-	glm::mat3 GetViewProjectionMatrix() const;
-
-
-	void move_camera(glm::vec2 _move_vector, float speed);
+	glm::vec2 Get_Position() const;
+	glm::vec2 Get_View_Rect_Size() const;
+	glm::vec2 Get_Orientation() const;
+	glm::mat3 Get_View_Matrix() const;
+	glm::mat3 Get_Projection_Matrix() const;
+	glm::mat3 Get_View_Projection_Matrix() const;
 
 
-	void* GetCamera()
+	void Move_Camera(glm::vec2 _move_vector, float speed);
+
+
+	void* Get_Camera()
 	{
 		return this;
 	}

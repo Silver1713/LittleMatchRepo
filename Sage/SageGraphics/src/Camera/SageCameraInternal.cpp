@@ -3,6 +3,7 @@
 #include <iostream>
 #include <ostream>
 
+
 #include "SageHelper.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
@@ -10,17 +11,20 @@
 
 void SageCameraInternal2D::Init(glm::vec2 _position, glm::vec2 _view_rect_size, glm::vec2 _orientation, InternalSageCameraType _camera_type)
 {
+	(_camera_type);
 	position = _position;
 	view_rect_size = _view_rect_size;
 	orientation = _orientation;
 	zoom = 1.0f;
 
 	
+
 	
-	CalculateCameraMatrix();
+	
+	Calculate_Camera_Matrix();
 }
 
-void SageCameraInternal2D::CalculateCameraMatrix()
+void SageCameraInternal2D::Calculate_Camera_Matrix()
 {
 	// Calculate the up and right vectors
 	up_vec = glm::vec2(-glm::sin(orientation.x), glm::cos(orientation.x));
@@ -60,24 +64,24 @@ void SageCameraInternal2D::CalculateCameraMatrix()
 }
 
 
-void SageCameraInternal2D::move_camera(glm::vec2 _move_vector, float speed)
+void SageCameraInternal2D::Move_Camera(glm::vec2 _move_vector, float speed)
 {
 	position += _move_vector * (speed * static_cast<float>(SageHelper::delta_time));
 	std::cout << "camera: "  << position.x << " " << position.y << std::endl;
 }
 
-void SageCameraInternal2D::set_position(glm::vec2 _position)
+void SageCameraInternal2D::Set_Position(glm::vec2 _position)
 {
 	position = _position;
 }
 
 
-void SageCameraInternal2D::set_view_rect_size(glm::vec2 _view_rect_size)
+void SageCameraInternal2D::Set_View_Rect_Size(glm::vec2 _view_rect_size)
 {
 	view_rect_size = _view_rect_size;
 }
 
-void SageCameraInternal2D::set_orientation(glm::vec2 _orientation)
+void SageCameraInternal2D::Set_Orientation(glm::vec2 _orientation)
 {
 	orientation = _orientation;
 }
@@ -89,7 +93,7 @@ void SageCameraInternal2D::Exit()
 
 void SageCameraInternal2D::Update()
 {
-	CalculateCameraMatrix();
+	Calculate_Camera_Matrix();
 }
 
 
@@ -106,32 +110,32 @@ SageCameraInternal2D::SageCameraInternal2D(glm::vec2 _position, glm::vec2 _view_
 }
 
 
-glm::vec2 SageCameraInternal2D::GetOrientation() const
+glm::vec2 SageCameraInternal2D::Get_Orientation() const
 {
 	return orientation;
 }
 
-glm::vec2 SageCameraInternal2D::GetPosition() const
+glm::vec2 SageCameraInternal2D::Get_Position() const
 {
 	return position;
 }
 
-glm::mat3 SageCameraInternal2D::GetProjectionMatrix() const
+glm::mat3 SageCameraInternal2D::Get_Projection_Matrix() const
 {
 	return projection_matrix;
 }
 
-glm::mat3 SageCameraInternal2D::GetViewMatrix() const
+glm::mat3 SageCameraInternal2D::Get_View_Matrix() const
 {
 	return view_matrix;
 }
 
-glm::mat3 SageCameraInternal2D::GetViewProjectionMatrix() const
+glm::mat3 SageCameraInternal2D::Get_View_Projection_Matrix() const
 {
 	return view_projection_matrix;
 }
 
-glm::vec2 SageCameraInternal2D::GetViewRectSize() const
+glm::vec2 SageCameraInternal2D::Get_View_Rect_Size() const
 {
 	return view_rect_size;
 }

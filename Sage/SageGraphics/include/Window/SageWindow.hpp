@@ -4,13 +4,13 @@
 #include <string>
 
 
-#endif
+
 
 // Abstraction through PIMPL
 
 class SageWindow
 {
-	static SageWindow* active_window;
+	static SageWindow* Active_Window;
 public:
 	SageWindow(int width, int height, const char* title);
 	~SageWindow();
@@ -19,8 +19,8 @@ public:
 	void Draw();
 	void Exit();
 
-	bool should_window_close() const;
-	SageWindow const& GetWindow() const;
+	bool Should_Window_Close() const;
+	SageWindow const& Get_Window() const;
 private:
 	class SageWindowImpl;
 	std::unique_ptr<SageWindowImpl> window_internal_impl;
@@ -45,33 +45,36 @@ private:
 public:
 	void Activate_Context();
 	void Deactivate_Context();
-	void set_dims(int width, int height);
-	void set_title(const char* title);
-	void toggle_fullscreen();
-	void set_resizable(bool resizable);
-	void set_maximize(bool maximize);
-	void set_pos_x(int pos_x);
-	void set_pos_y(int pos_y);
+	void Set_Dims(int width, int height);
+	void Set_Title(const char* title);
+	void Toggle_Fullscreen();
+	void Set_Resizable(bool resizable);
+	void Set_Maximize(bool maximize);
+	void Set_Pos_X(int pos_x);
+	void Set_Pos_Y(int pos_y);
 
-	void set_framebuffer_callback();
+	void Set_Framebuffer_Callback();
 
-	void swap_buffers();
+	void Swap_Buffers();
 
 
-	bool get_fullscreen() const;
-	bool get_resizable() const;
-	bool get_maximize() const;
+	bool Get_Fullscreen() const;
+	bool Get_Resizable() const;
+	bool Get_Maximize() const;
 	bool check_active() const;
 
 
-	int get_pos_x() const;
-	int get_pos_y() const;
-	int get_size_x() const;
-	int get_size_y() const;
-	std::string get_title() const;
+	int Get_Pos_X() const;
+	int Get_Pos_Y() const;
+	int Get_Size_X() const;
+	int Get_Size_Y() const;
+	std::string Get_Title() const;
 
 
 	static SageWindow* Get_Active_Window();
 
 
 };
+
+
+#endif

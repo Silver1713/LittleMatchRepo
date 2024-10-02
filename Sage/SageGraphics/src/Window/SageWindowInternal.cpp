@@ -62,21 +62,21 @@ void SageWindowInternal::Deactivate_Context()
 	is_active = false;
 }
 
-void SageWindowInternal::set_dims(int width, int height)
+void SageWindowInternal::set_dims(int _width, int _height)
 {
-	this->width = width;
-	this->height = height;
+	this->width = _width;
+	this->height = _height;
 	if (!is_fullscreen)
 	glfwSetWindowSize(window, width, height);
 }
 
-void SageWindowInternal::set_title(const char* title)
+void SageWindowInternal::set_title(const char* _title)
 {
-	this->title = title;
-	glfwSetWindowTitle(window, title);
+	this->title = _title;
+	glfwSetWindowTitle(window, _title);
 }
 
-void SageWindowInternal::toggle_fullscreen()
+void SageWindowInternal::Toggle_Fullscreen()
 {
 	
 	if (!is_fullscreen)

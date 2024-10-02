@@ -30,14 +30,14 @@ int main()
 	init();
 	// SceneMain: A example of a scene that can be used in the main loop
 	// SageHelper: A utility class that enable compiling of sjhaders and the calculation of deltatime	
-	while (!SageHelper::sage_ptr_window->should_window_close())
+	while (!SageHelper::sage_ptr_window->Should_Window_Close())
 	{
 		glfwPollEvents();
 		update();
 		draw();
 
 
-		SageHelper::sage_ptr_window->swap_buffers();
+		SageHelper::sage_ptr_window->Swap_Buffers();
 		
 		
 	}
@@ -48,8 +48,7 @@ int main()
 
 void init()
 {
-	int status = SageHelper::init(1000.f, 1000.f, "Hello World");
-	const GLubyte* a = glGetString(GL_EXTENSIONS);
+	int status = SageHelper::init(1000, 1000, "Hello World");
 
 	if (status)
 	{

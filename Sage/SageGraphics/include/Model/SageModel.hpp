@@ -7,8 +7,8 @@
 #include "SageRenderer.hpp"
 
 
-enum PrimitiveShape;
-enum RENDER_TYPE;
+enum class PrimitiveShape;
+enum class RENDER_TYPE;
 
 
 /// A class for handling 2D model data

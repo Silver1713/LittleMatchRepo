@@ -16,7 +16,7 @@ public:
 
 	SageTextureInternalImpl()
 	{
-		texture_handle = -1;
+		texture_handle = static_cast<unsigned int>(-1);
 		texture_unit = -1;
 		_type = -1;
 
@@ -92,7 +92,9 @@ public:
 	}
 };
 
-SageTexture::SageTexture() : sage_internal_impl(std::make_unique<SageTextureInternalImpl>()),texture_unit(-1),texture_id(-1) {
+SageTexture::SageTexture() : sage_internal_impl(std::make_unique<SageTextureInternalImpl>()),texture_unit(static_cast
+	                             <unsigned int>(-1)),texture_id(static_cast
+	                             <unsigned int>(-1)) {
 	
 
 }

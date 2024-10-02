@@ -34,14 +34,14 @@ void SageLine::update()
 }
 
 
-void SageLine::update_dist(glm::vec2 start, glm::vec2 end)
+void SageLine::update_dist(glm::vec2 _start, glm::vec2 _end)
 {
-	this->start = start;
-	this->end = end;
+	this->start = _start;
+	this->end = _end;
 
 	SageModel& model = *line;
-	model.get_vertex_positions()[0] = start;
-	model.get_vertex_positions()[1] = end;
+	model.get_vertex_positions()[0] = _start;
+	model.get_vertex_positions()[1] = _end;
 
 	model.update_vtx_buffer_GPU();
 

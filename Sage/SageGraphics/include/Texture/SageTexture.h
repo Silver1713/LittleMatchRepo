@@ -1,3 +1,5 @@
+
+
 #ifndef SAGE_TEXTURE_HPP
 #define SAGE_TEXTURE_HPP
 #include <string>

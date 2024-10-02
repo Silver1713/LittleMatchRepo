@@ -78,14 +78,14 @@ int main()
     SageAudio::Play_Sound("MAIN_MENU");
     //SageAudio::Play_Sound("RAIN");
 
-	while (!SageHelper::sage_ptr_window->should_window_close())
+	while (!SageHelper::sage_ptr_window->Should_Window_Close())
 	{
 		glfwPollEvents();        
 		update();
 
 		draw();
 
-		SageHelper::sage_ptr_window->swap_buffers();
+		SageHelper::sage_ptr_window->Swap_Buffers();
 
 
 	}
@@ -157,7 +157,7 @@ void draw()
 {
     SageHelper::draw();
     std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS);
-    SageHelper::sage_ptr_window->set_title(s.c_str());
+    SageHelper::sage_ptr_window->Set_Title(s.c_str());
     SM::Draw();
 	
 }

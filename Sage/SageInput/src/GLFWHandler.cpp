@@ -16,6 +16,8 @@
 
 #include <unordered_map>
 
+#include "../../SageIO/include/Texture/PNG_Container.hpp"
+
 std::unordered_map<int, std::byte> GLFWInputHandler::key_map{};
 double GLFWInputHandler::g_mouse_pos_x = 0;
 double GLFWInputHandler::g_mouse_pos_y = 0;
@@ -50,6 +52,9 @@ bool GLFWInputHandler::Get_Key(int keycode)
 
 void GLFWInputHandler::Key_Cb(GLFWwindow* window, int keycode, int scancode, int action, int mods)
 {
+	UNREFERENCED_PARAMETER(mods);
+	UNREFERENCED_PARAMETER(scancode);
+	
 	if (keycode == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, GLFW_TRUE);

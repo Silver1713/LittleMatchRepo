@@ -27,8 +27,7 @@
 
 //FOR TESTING PURPOSES
 #include <cstdlib> // for srand()
-#include <memory>
-#include "Components/Physics.hpp"
+#include <memory>	
 
 
 namespace Game {
@@ -46,6 +45,9 @@ namespace Game {
 	static SageCamera camera;
 	static SageViewport vp;
 
+
+	static bool enable_collider_view{ false };
+
 	/*!*****************************************************************************
 	  \brief
 		Loads data the scene may need
@@ -57,8 +59,17 @@ namespace Game {
 		GameObject* obj = Game_Objects::Get_Game_Object("Player");
 		//caches the player's transforms
 		transform_cache["Player"] = dynamic_cast<Transform*>(Game_Objects::Get_Game_Object("Player")->Get_Component(TRANSFORM));
-		collider_cache["Player"] = dynamic_cast<BoxCollider2D*>(Game_Objects::Get_Game_Object("Player")->Get_Component(BOXCOLLIDER2D));
-		collider_cache["Wall"] = dynamic_cast<BoxCollider2D*>(Game_Objects::Get_Game_Object("Wall")->Get_Component(BOXCOLLIDER2D));
+
+		auto& objects = Game_Objects::Get_Game_Objects();
+		for (auto& object : objects)
+		{
+			BoxCollider2D* collider = dynamic_cast<BoxCollider2D*>(object.second->Get_Component(BOXCOLLIDER2D));
+			if (collider)
+			{
+				collider_cache[object.first] = collider;
+			}
+		}
+
 		//Creates 2.5k instantiated "WHITE" prefab to test
 		for (unsigned int i{}; i < game_objects_to_create; ++i)
 		{
@@ -94,8 +105,8 @@ namespace Game {
 		vp.set_dims({ static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) });
 		vp.calculate_viewport_xform();
 
-		SageRenderer::SetCurrentView(&camera);
-		SageRenderer::SetCurrentView(vp);
+		SageRenderer::Set_Current_View(&camera);
+		SageRenderer::Set_Current_View(vp);
 
 
 		vp.setViewport();
@@ -104,7 +115,7 @@ namespace Game {
 
 
 		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
-		plrphy->set_gravity_disable(false);
+		plrphy->Set_Gravity_Disable(false);
 
 	}
 
@@ -176,12 +187,16 @@ namespace Game {
 			{
 				collider.second->Set_Debug(!collider.second->Get_Debug());
 			}
+
+			enable_collider_view = !enable_collider_view;
+
+
 		}
 		else if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_G))
 		{
 			static bool g = true;
 			g = !g;
-			plrphy->set_gravity_disable(g);
+			plrphy->Set_Gravity_Disable(g);
 		}
 
 
@@ -225,9 +240,11 @@ namespace Game {
 
 
 
-			GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("BLUE"), "White_1");
+			GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("SPAWN"), "White_1");
 			transform_cache["White_1"] = dynamic_cast<Transform*>(random->Get_Component(TRANSFORM));
 			collider_cache["White_1"] = random->Get_Component<BoxCollider2D>();
+
+			random->Get_Component<BoxCollider2D>()->Set_Debug(enable_collider_view);
 
 			float min_scale[3] = { 100.0f,100.0f,00.0f }, max_scale[3] = { 100.0f,100.0f,0.0f };
 
@@ -285,7 +302,6 @@ namespace Game {
 			}
 		}
 
-		float deccel = 100.f;
 
 		plrphy->Get_Velocity() *= 0.99f;
 
@@ -348,6 +364,7 @@ namespace Game {
 						// Get the current velocity
 						ToastBox::Vec2 curr_vel = phys->Get_Velocity();
 						ToastBox::Vec3 pos = { transform->Get_Positions()[0], transform->Get_Positions()[1], transform->Get_Positions()[2] };
+
 						ToastBox::Vec3 dir = pos - prevPos; // Direction of movement
 
 						// Get reference to the velocity for easier access
@@ -367,6 +384,7 @@ namespace Game {
 							{
 								std::cout << "Enter left;\n";
 								vel.x = 0;
+
 							}
 							else if (dir.x < 0 && !(vel.x > 0))
 							{
@@ -374,7 +392,7 @@ namespace Game {
 								vel.x = 0;
 							}
 
-
+							transform->Set_Positions({ curr_vel.x * time + prevPos.x,pos.y, 1.f });
 						}
 						else
 						{
@@ -388,10 +406,12 @@ namespace Game {
 								std::cout << "Enter top;\n";
 								vel.y = 0;
 							}
+
+							transform->Set_Positions({ pos.x, curr_vel.y * time + prevPos.y, 1.f });
 						}
 
 
-						transform->Set_Positions({ curr_vel.x * time + prevPos.x, curr_vel.y * time + prevPos.y, 1.f });
+						
 					}
 
 			}
