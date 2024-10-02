@@ -24,8 +24,14 @@ double GLFWInputHandler::g_mouse_pos_y = 0;
 static GLFWInputHandler* instance = nullptr;
 
 /*!*****************************************************************************
-\brief
+  \brief
 	Check if a specific key/mouse is pressed once
+
+  \param _keycode
+	The key that is pressed
+
+  \return
+	A boolean value
 *******************************************************************************/
 bool GLFWInputHandler::Get_Key_Pressed(int _keycode)
 {
@@ -42,8 +48,14 @@ bool GLFWInputHandler::Get_Key_Pressed(int _keycode)
 }
 
 /*!*****************************************************************************
-\brief
+  \brief
 	Check if a specific key/mouse is held down
+
+  \param _keycode
+	The key that is pressed/held down
+
+  \return
+	A boolean value
 *******************************************************************************/
 bool GLFWInputHandler::Get_Key(int _keycode)
 {
@@ -60,9 +72,27 @@ bool GLFWInputHandler::Get_Key(int _keycode)
 }
 
 /*!*****************************************************************************
-\brief
+  \brief
 	A key callback function that is called whenever a key is pressed, released
 	or held down. It register the key event using glfw call back mechanism.
+
+  \param _window
+	The window application that receive the key event
+
+  \param _keycode
+	The key that is pressed
+
+  \param _scancode
+    The hardware specific code of key
+
+  \param _action
+	The type of action occured with the key pressed
+
+  \param _mods
+	Bitfield to describe any modifier keys that were held down
+
+  \return
+	Null
 *******************************************************************************/
 void GLFWInputHandler::Key_Cb(GLFWwindow* _window, int _keycode, int _scancode, int _action, int _mods)
 {
@@ -98,9 +128,24 @@ void GLFWInputHandler::Key_Cb(GLFWwindow* _window, int _keycode, int _scancode, 
 }
 
 /*!*****************************************************************************
-\brief
+  \brief
 	A mouse callback function that is called whenever a mouse is pressed, released
 	or held down. It register the mouse event using glfw call back mechanism.
+
+  \param _window
+	The window application that receive the key event
+
+  \param _button
+	The mouse button that is pressed
+
+  \param _action
+	The type of action occured with the mouse pressed
+
+  \param _mods
+	Bitfield to describe any modifier keys that were held down
+
+  \return
+	Null
 *******************************************************************************/
 void GLFWInputHandler::Mouse_Cb(GLFWwindow* _window, int _button, int _action, int _mods)
 {
@@ -140,8 +185,20 @@ void GLFWInputHandler::Poll_Events()
 }
 
 /*!*****************************************************************************
-\brief
+  \brief
 	To get the mouse position
+
+  \param _window
+	The window application that receive the key event
+
+  \param _xpos
+	The x coordinate of the mouse
+
+  \param _ypos
+	The y coordinate of the mouse
+
+  \return
+	Null
 *******************************************************************************/
 void GLFWInputHandler::Mouse_Pos_Cb(GLFWwindow* _window, double _xpos, double _ypos)
 {

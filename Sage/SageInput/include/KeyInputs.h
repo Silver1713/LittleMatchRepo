@@ -151,43 +151,83 @@ public:
 
 	/*!*****************************************************************************
 	\brief
-		Function to access glfw handler to check if a specific key is pressed once
+		Function to access SageInput pointer to implementation to check if a specific
+		key is pressed once
+
+	\param _keycode
+		The key that is pressed
+
+	\return
+		Return a boolean
 	*******************************************************************************/
 	static bool Get_Key_Pressed(int _keycode);
 
 	/*!*****************************************************************************
 	\brief
-		Function to access glfw handler to check if a specific key is held down
+		Function to access SageInput pointer to implementation to check if a specific
+		key is held down
+
+	\param _keycode
+		The key that is pressed
+
+	\return
+		Return a boolean
 	*******************************************************************************/
 	static bool Get_Key(int _keycode);
 
 	/*!*****************************************************************************
 	\brief
-		Function to access glfw handler to check if a mouse input is clicked once
+		Function to access SageInput pointer to implementation to check if the mouse
+		input is clicked once
+
+	\param _mouse
+		The mouse that is pressed
+
+	\return
+		Return a boolean
 	*******************************************************************************/
 	static bool Get_Mouse_Clicked(int _mouse);
 
 	/*!*****************************************************************************
 	\brief
-		Function to access glfw handler to check if a mouse input is held down
+		Function to access SageInput pointer to implementation to check if the mouse
+		input is held down
+
+	\param _mouse
+		The mouse that is pressed
+
+	\return
+		Return a boolean
 	*******************************************************************************/
 	static bool Get_Mouse(int _mouse);
 
 	/*!*****************************************************************************
 	\brief
-		Function to get the mouse x position
+		Function to get the mouse x position using SageInput pointer to implementation
+
+	\param
+		Return a double
 	*******************************************************************************/
 	static double Get_Mouse_X();
 
 	/*!*****************************************************************************
 	\brief
-		Function to get the mouse y position
+		Function to get the mouse y position using SageInput pointer to implementation
+
+	\param
+		Return a double
 	*******************************************************************************/
 	static double Get_Mouse_Y();
 
 	/*!*****************************************************************************
 	\brief
-		Function to get mouse coordinates
+		Function to get the mouse coordinates using SageInput pointer to implementation
+
+	\param _x
+		The x coordinate of mouse
+
+	\param _y
+		The y coordinate of mouse
 	*******************************************************************************/
 	static void Get_Mouse_Position(double& _x, double& _y);
 
@@ -215,6 +255,9 @@ private:
 	/*!*****************************************************************************
 	\brief
 		Function to delete the pointer to implementation for sage input
+
+	\param _p
+		A pointer to PIML implementation of the SageInput class
 	*******************************************************************************/
 	static void Custom_Sage_Input_PIMPL_Delete(void*& _p);
 

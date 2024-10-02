@@ -30,6 +30,9 @@ SageTextureInternal::SageTextureInternal() : texture_hdl(0), texture_unit(0), er
 /*!*****************************************************************************
 \brief
 	An overloaded constructor for SageTextureInternal class
+
+\param _other
+	Another texture object
 *******************************************************************************/
 SageTextureInternal::SageTextureInternal(const SageTextureInternal& _other) : texture_hdl(_other.texture_hdl),
 texture_unit(_other.texture_unit), erro_no()
@@ -40,6 +43,9 @@ texture_unit(_other.texture_unit), erro_no()
 /*!*****************************************************************************
 \brief
 	A copy assignment operator of SageTextureInternal class
+
+\param _other
+	Another texture object
 *******************************************************************************/
 SageTextureInternal& SageTextureInternal::operator=(const SageTextureInternal& _other)
 {
@@ -55,10 +61,16 @@ SageTextureInternal& SageTextureInternal::operator=(const SageTextureInternal& _
 /*!*****************************************************************************
 \brief
 	A copy constructor of SageTextureInternal class
+
+\param _path
+	A texture path
+
+\param _type
+	A texture type
 *******************************************************************************/
-SageTextureInternal::SageTextureInternal(std::string const& _path, int _internal_type) : texture_path(_path), texture_hdl(), texture_unit()
+SageTextureInternal::SageTextureInternal(std::string const& _path, int _type) : texture_path(_path), texture_hdl(), texture_unit()
 {
-	switch (_internal_type % 4)
+	switch (_type % 4)
 	{
 	case 0:
 		texture_unit = static_cast<GLint>(INTERNAL_TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
@@ -86,7 +98,7 @@ SageTextureInternal::SageTextureInternal(std::string const& _path, int _internal
 	
 #endif
 
-	texture_unit += (_internal_type / 4) * 4;
+	texture_unit += (_type / 4) * 4;
 
 	texture_hdl = SOIL_load_OGL_texture(_path.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT);
 	if (texture_hdl == 0)
@@ -131,6 +143,9 @@ void SageTextureInternal::set_texture_mirror_repeat() const
 /*!*****************************************************************************
 \brief
 	Function to bind the texture
+
+\return
+	A bool value
 *******************************************************************************/
 bool SageTextureInternal::bind_texture() const
 {
@@ -141,6 +156,15 @@ bool SageTextureInternal::bind_texture() const
 /*!*****************************************************************************
 \brief
 	Function to load the texture
+
+\param _name
+	Name of texture
+
+\param _type
+	Type of texture
+
+\return
+	An int value
 *******************************************************************************/
 int SageTextureInternal::load(const char* _name ,int _type)
 {
@@ -192,6 +216,9 @@ int SageTextureInternal::load(const char* _name ,int _type)
 /*!*****************************************************************************
 \brief
 	Function to get the texture handle
+
+\return
+	Return an unsigned int value
 *******************************************************************************/
 unsigned int SageTextureInternal::get_texture_handle() const
 {
@@ -201,6 +228,9 @@ unsigned int SageTextureInternal::get_texture_handle() const
 /*!*****************************************************************************
 \brief
 	Function to get the texture unit
+
+\return
+	Return an int value
 *******************************************************************************/
 int SageTextureInternal::get_texture_unit() const
 {

@@ -30,7 +30,7 @@ public:
 	
 	/*!*****************************************************************************
 	\brief
-		A constructor for SageTextureInternalImpl 
+		A constructor for SageTextureInternalImpl
 	*******************************************************************************/
 	SageTextureInternalImpl()
 	{
@@ -42,6 +42,12 @@ public:
 	/*!*****************************************************************************
 	\brief
 		An overloaded constructor for SageTextureInternalImpl
+
+	\param _path
+		The texture path
+
+	\param _type
+		The texture type
 	*******************************************************************************/
 	SageTextureInternalImpl(std::string const& _path, int _type) : texture_path(_path), texture_handle(0), texture_unit(0), texture_type(_type), texture_internal(_path, _type)
 	{
@@ -66,6 +72,15 @@ public:
 	/*!*****************************************************************************
 	\brief
 		Load function of SageTextureInternalImpl
+
+	\param src
+		The source of texture
+
+	\param _type
+		The texture unit
+
+	\return
+		An int value
 	*******************************************************************************/
 	int load(const char* src, TEXTURE_UNIT_TYPE const& _type)
 	{
@@ -88,6 +103,9 @@ public:
 	\brief
 		Function to bind the texture by accessing bind texture function of
 		SageTextureInternalImpl which calls SageTextureInternal
+
+	\return
+		Return a boolean value
 	*******************************************************************************/
 	bool bind_texture() const
 	{
@@ -108,6 +126,9 @@ public:
 	/*!*****************************************************************************
 	\brief
 		Function of SageTextureInternalImpl to get texture unit
+
+	\return
+		An int value
 	*******************************************************************************/
 	int get_unit() const
 	{
@@ -147,6 +168,9 @@ public:
 	/*!*****************************************************************************
 	\brief
 		Function of SageTextureInternalImpl to get the texture handle
+
+	\return
+		Return an unsigned int value
 	*******************************************************************************/
 	unsigned int get_handle() const
 	{
@@ -156,6 +180,9 @@ public:
 	/*!*****************************************************************************
 	\brief
 		Function of SageTextureInternalImpl to check if a texture is loaded or not
+
+	\return
+		A boolean value
 	*******************************************************************************/
 	bool is_loaded_texture() const
 	{
@@ -174,6 +201,12 @@ SageTexture::SageTexture() : sage_internal_impl(std::make_unique<SageTextureInte
 /*!*****************************************************************************
 \brief
 	An overloaded constructor for SageTexture class
+
+\param _source
+	The sage texture source
+
+\param _type
+	Sage texture unit type
 *******************************************************************************/
 SageTexture::SageTexture(const char* _source, TEXTURE_UNIT_TYPE _type) : texture_path(_source), sage_internal_impl(std::make_unique<SageTextureInternalImpl>(_source, static_cast
 	<int>(_type))) {
@@ -185,6 +218,9 @@ SageTexture::SageTexture(const char* _source, TEXTURE_UNIT_TYPE _type) : texture
 /*!*****************************************************************************
 \brief
 	A copy constructor of SageTexture class
+
+\param _other
+	Another sage texture object
 *******************************************************************************/
 SageTexture::SageTexture(const SageTexture& _other) : texture_path(_other.texture_path) {
 	if (this != &_other)
@@ -199,6 +235,9 @@ SageTexture::SageTexture(const SageTexture& _other) : texture_path(_other.textur
 /*!*****************************************************************************
 \brief
 	A copy assignment operator of SageTexture class
+
+\param _other
+	Another sage texture object
 *******************************************************************************/
 SageTexture& SageTexture::operator=(const SageTexture& _other) {
 	if (this != &_other) {
@@ -208,10 +247,12 @@ SageTexture& SageTexture::operator=(const SageTexture& _other) {
 }
 
 // Getters
-
 /*!*****************************************************************************
 \brief
 	Function of SageTexture to get the texture handle
+
+\return
+	An int object
 *******************************************************************************/
 int SageTexture::get_texture_handle() const {
 	return texture_id;
@@ -220,6 +261,9 @@ int SageTexture::get_texture_handle() const {
 /*!*****************************************************************************
 \brief
 	Function of SageTexture to get the texture unit
+
+\return
+	Return an int value object
 *******************************************************************************/
 int SageTexture::get_texture_unit() const {
 	return texture_unit;
@@ -262,6 +306,12 @@ SageTexture::~SageTexture()
 /*!*****************************************************************************
 \brief
 	Function of SageTexture to load the texture
+
+\param _filepath
+	The file path of loading the texture
+
+\param _type
+	The type of the texture unit
 *******************************************************************************/
 void SageTexture::load_texture(const char* _filepath, TEXTURE_UNIT_TYPE _type)
 {
@@ -278,6 +328,9 @@ void SageTexture::load_texture(const char* _filepath, TEXTURE_UNIT_TYPE _type)
 /*!*****************************************************************************
 \brief
 	Function of SageTexture to bind the texture
+
+\return
+	Return a boolean object
 *******************************************************************************/
 bool SageTexture::bind_texture()
 {
