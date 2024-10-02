@@ -102,6 +102,7 @@ namespace Assets
 			std::string has_physics{};
 			float velocity{};
 			std::string audio_data{};
+			std::string object_shape{};
 		};
 		
 		//label for each type of information a parsed prefab will have
@@ -126,6 +127,7 @@ namespace Assets
 			HAS_PHYSICS,
 			PHYSICS_VELOCITY,
 			AUDIO_D,
+			OBJ_SHAPE,
 			NUM_DATA_TYPES
 		} Data_Type;
 
