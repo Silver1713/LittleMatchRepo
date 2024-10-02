@@ -3,9 +3,9 @@
 \file		Prefabs.cpp
 \title		Memory's Flame
 \authors	Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (40%)
-            Halis (20%)
+            Halis Ilyasa Bin Amat Sarijan, halisilyasa.b, 2301333 (20%)
             Jia Hao (40%)
-\par		b.muhammadhafiz@digipen.edu, halis digipen, jia hao digipen
+\par		b.muhammadhafiz@digipen.edu, halisilyasa.b@digipen.edu, jia hao digipen
 \date		10 September 2024
 \brief		This is the main entry point for the engine.
             It include libraries and manages life cycle of the engine.
@@ -74,8 +74,6 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	init();
-    SageAudio::Play_Sound("bgm_main_menu", LOOP);
-    SageAudio::Play_Sound("ambient_rain", LOOP);
 
 	while (!SageHelper::sage_ptr_window->should_window_close())
 	{

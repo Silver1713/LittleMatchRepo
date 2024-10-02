@@ -1,14 +1,15 @@
-/******************************************************************************
-File name	 : Matrix3x3.cpp
-Project		 : Memory's Flame
-Author       : Edwin Lee
-E-mail		 : edwinzirui.lee@digipen.edu
-Data		 : 11/09/2024
-Brief		 : Matrix3x3 class and class operation definition
-*
-* \copyright	All content 2024 DigiPen Institute of Technology Singapore. All
-				rights reserved.
-******************************************************************************/
+﻿/* Start Header ************************************************************************/
+/*!
+\file		Matrix3x3.cpp
+\title		Memory's Flame
+\author		Halis Ilyasa Bin Amat Sarijan, halisilyasa.b, 2301333 (100%)
+\par		halisilyasa.b@digipen.edu
+\date		08 September 2024
+\brief		Contains the functions to calculate matrices.
+
+			All content � 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 
 
 #include "Matrix3x3.h"
@@ -569,6 +570,7 @@ namespace ToastBox {
 
 		return result;
 	}
+
 	Matrix3x3 Matrix3Scaling(Matrix3x3& data, float x, float y)
 	{
 		Matrix3x3 result{data};
@@ -598,17 +600,10 @@ namespace ToastBox {
 		return result;
 	}
 
-	
 	Matrix3x3 Matrix3x3::operator~()
 	{
 		Matrix3x3 result{};
 		result.Matrix3Transpose(*this);
 		return result;
 	}
-
-
-
-
-
 }
-

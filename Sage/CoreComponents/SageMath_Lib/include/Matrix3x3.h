@@ -1,14 +1,15 @@
-/******************************************************************************
-File name	 : Matrix3x3.h
-Project		 : Memory's Flame
-Author       : Edwin Lee
-E-mail		 : edwinzirui.lee@digipen.edu
-Data		 : 11/09/2024
-Brief		 : Matrix3x3 class and class operation declaration
-*
-* \copyright	All content 2024 DigiPen Institute of Technology Singapore. All
-				rights reserved.
-******************************************************************************/
+﻿/* Start Header ************************************************************************/
+/*!
+\file		Matrix3x3.h
+\title		Memory's Flame
+\author		Halis Ilyasa Bin Amat Sarijan, halisilyasa.b, 2301333 (100%)
+\par		halisilyasa.b@digipen.edu
+\date		08 September 2024
+\brief		Contains the functions to calculate matrices.
+
+			All content � 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #pragma once
 
 
