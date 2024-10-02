@@ -34,7 +34,7 @@ Sprite2D::Sprite2D() {}
   \param _colour
 	what color the sprite should be
 *******************************************************************************/
-Sprite2D::Sprite2D(std::string const& _texture_ID, float const* _colour) : sprite_texture_ID{ _texture_ID }, colour{ *_colour, *(_colour + 1),*(_colour + 2),*(_colour + 3) } {}
+Sprite2D::Sprite2D(std::string const& _texture_ID, float const* _colour, std::string const& _object_shape) : sprite_texture_ID{ _texture_ID }, colour{ *_colour, *(_colour + 1),*(_colour + 2),*(_colour + 3) }, object_shape{ _object_shape } {}
 /*!*****************************************************************************
   \brief
 	Override for the constructor for Sprite2D that takes in what texture you want the sprite to have
@@ -46,7 +46,7 @@ Sprite2D::Sprite2D(std::string const& _texture_ID, float const* _colour) : sprit
   \param _colour
 	what color the sprite should be
 *******************************************************************************/
-Sprite2D::Sprite2D(std::string const& _texture_ID, std::initializer_list<float> const& _colour) : Sprite2D(_texture_ID, _colour.begin()) {}
+Sprite2D::Sprite2D(std::string const& _texture_ID, std::initializer_list<float> const& _colour, std::string const& _object_shape) : Sprite2D(_texture_ID, _colour.begin(), _object_shape) {}
 
 /*!*****************************************************************************
   \brief
@@ -63,11 +63,23 @@ void Sprite2D::Init(GameObject* _parent)
 	transform = dynamic_cast<Transform*>(_parent->Get_Component(TRANSFORM));
 
 	//create sageobject
-	SageObjectManager::CreatePrimitiveObject(Get_Parent()->Get_ID().c_str(), PRIMITIVE_OBJECT_RECT,
-		{ transform->Get_Positions()[0],transform->Get_Positions()[1] },
-		{ transform->Get_Scale()[0],transform->Get_Scale()[1] },
-		{ transform->Get_Rotations()[0],transform->Get_Rotations()[1] },
-		{ colour[0],colour[1],colour[2],colour[3] });
+	if (object_shape == "Rect")
+	{
+		SageObjectManager::CreatePrimitiveObject(Get_Parent()->Get_ID().c_str(), PRIMITIVE_OBJECT_RECT,
+			{ transform->Get_Positions()[0],transform->Get_Positions()[1] },
+			{ transform->Get_Scale()[0],transform->Get_Scale()[1] },
+			{ transform->Get_Rotations()[0],transform->Get_Rotations()[1] },
+			{ colour[0],colour[1],colour[2],colour[3] });
+	}
+	else if (object_shape == "Circle")
+	{
+		SageObjectManager::CreatePrimitiveObject(Get_Parent()->Get_ID().c_str(), PRIMITIVE_OBJECT_CIRCLE,
+			{ transform->Get_Positions()[0],transform->Get_Positions()[1] },
+			{ transform->Get_Scale()[0],transform->Get_Scale()[1] },
+			{ transform->Get_Rotations()[0],transform->Get_Rotations()[1] },
+			{ colour[0],colour[1],colour[2],colour[3] });
+	}
+
 
 	//keep track of create sageobject
 	obj = &SageObjectManager::objects[Get_Parent()->Get_ID().c_str()];

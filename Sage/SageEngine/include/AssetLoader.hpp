@@ -2,13 +2,14 @@
 /*!
 \file		AssetLoader.hpp
 \title		Memory's Flame
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
-\par		b.muhammadhafiz@digipen.edu
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (95%)
+\author		Halis Ilyasa Bin Amat Sarijan, halisilyasa.b, 2301333 (5%)
+\par		b.muhammadhafiz@digipen.edu, halisilyasa.b@digipen.edu
 \date		08 September 2024
 \brief		Contains the data structures and functions for managing game assets, 
 			including textures and prefabs.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content ï¿½ 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #pragma once
@@ -18,6 +19,9 @@
 
 //forward declaration
 class SageTexture;
+
+#define PATH "../SageEngine/data/assets/audio/"
+#define AUDIO_EXTENSION ".ogg"
 
 //Every file is an asset, which is broken down into categories
 namespace Assets
@@ -98,6 +102,7 @@ namespace Assets
 			std::string has_physics{};
 			float velocity{};
 			std::string audio_data{};
+			std::string object_shape{};
 		};
 		
 		//label for each type of information a parsed prefab will have
@@ -122,6 +127,7 @@ namespace Assets
 			HAS_PHYSICS,
 			PHYSICS_VELOCITY,
 			AUDIO_D,
+			OBJ_SHAPE,
 			NUM_DATA_TYPES
 		} Data_Type;
 
@@ -152,6 +158,18 @@ namespace Assets
 			The reference to the map of prefabs
 		*******************************************************************************/
 		std::unordered_map<std::string, Prefab>const& Get_Prefabs();
+	}
+	
+	namespace Audio
+	{
+		void Init();
+		std::unordered_map<std::string, std::vector<std::string>> const & Get_Audio();
+	}
+
+	namespace Font
+	{
+		void Init();
+		//return_type const& Get_Font();
 	}
 
 	//Levels category

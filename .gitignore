@@ -17,6 +17,7 @@
 *.exp
 *.iobj
 *.ipdb
+*.orig
 bin
 Debug
 Release

@@ -17,6 +17,7 @@
 #include "Prefabs.hpp"
 #include "SageRenderer.hpp"
 #include "SageHelper.hpp"
+#include "SageAudio.hpp"
 #include "KeyInputs.h"
 #include "Game.hpp"
 #include "Components/Physics.hpp"
@@ -56,7 +57,6 @@ namespace Game {
 	{
 		game_objects.clear();
 		transform_cache.clear();
-		GameObject* obj = Game_Objects::Get_Game_Object("Player");
 		//caches the player's transforms
 		transform_cache["Player"] = dynamic_cast<Transform*>(Game_Objects::Get_Game_Object("Player")->Get_Component(TRANSFORM));
 
@@ -115,7 +115,10 @@ namespace Game {
 
 
 		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
-		plrphy->Set_Gravity_Disable(false);
+		plrphy->set_gravity_disable(false);
+		
+		SageAudio::Play_Sound("bgm_main_menu", LOOP);
+		SageAudio::Play_Sound("ambient_rain", LOOP);
 
 	}
 
@@ -244,14 +247,14 @@ namespace Game {
 			transform_cache["White_1"] = dynamic_cast<Transform*>(random->Get_Component(TRANSFORM));
 			collider_cache["White_1"] = random->Get_Component<BoxCollider2D>();
 
-			random->Get_Component<BoxCollider2D>()->Set_Debug(enable_collider_view);
+			float m_min_scale[3] = { 10.0f,10.0f,0.0f }, m_max_scale[3] = { 100.0f,100.0f,0.0f };
 
-			float min_scale[3] = { 100.0f,100.0f,00.0f }, max_scale[3] = { 100.0f,100.0f,0.0f };
+			
 
 
 			float pos[3]{ world.x,world.y,0.f };
 			float rot[3]{ (float)(std::rand() % (int)max_rot[0] + (int)min_rot[0]), (float)(std::rand() % (int)max_rot[1] + (int)min_rot[1]),0.0f };
-			float scale[3]{ (float)(std::rand() % (int)max_scale[0] + (int)min_scale[0]), (float)(std::rand() % (int)max_scale[1] + (int)min_scale[1]),0.0f };
+			float scale[3]{ (float)(std::rand() % (int)m_max_scale[0] + (int)m_min_scale[0]), (float)(std::rand() % (int)m_max_scale[1] + (int)m_min_scale[1]),0.0f };
 			float col[3]{ (float)(std::rand() % (int)max_col[0] + (int)min_col[0]) / 100.0f, (float)(std::rand() % (int)max_col[1] + (int)min_col[1]) / 100.0f,(float)(std::rand() % (int)max_col[2] + (int)min_col[2]) / 100.0f };
 
 			transform_cache["White_1"]->Set_Positions({ pos[0],pos[1],pos[2] });
@@ -300,6 +303,21 @@ namespace Game {
 					game_objects.erase("Green" + std::to_string(i));
 				}
 			}
+		}
+
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_7))
+		{
+			SageAudio::Play_Sound("sfx_sword",NO_LOOP);
+		}
+
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_8))
+		{
+			SageAudio::Play_Sound("sfx_spear", NO_LOOP);
+		}
+
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_9))
+		{
+			SageAudio::Play_Sound("sfx_crossbow", NO_LOOP);
 		}
 
 
