@@ -17,32 +17,32 @@
 \brief
 	Function to access glfw handler to check if a specific key is pressed once
 *******************************************************************************/
-bool SageInputPIML::Get_Key_Pressed(int keycode) {
-	return GLFWInputHandler::Get_Key_Pressed(keycode);
+bool SageInputPIML::Get_Key_Pressed(int _keycode) {
+	return GLFWInputHandler::Get_Key_Pressed(_keycode);
 }
 
 /*!*****************************************************************************
 \brief
 	Function to access glfw handler to check if a specific key is held down
 *******************************************************************************/
-bool SageInputPIML::Get_Key(int keycode) {
-	return GLFWInputHandler::Get_Key(keycode);
+bool SageInputPIML::Get_Key(int _keycode) {
+	return GLFWInputHandler::Get_Key(_keycode);
 }
 
 /*!*****************************************************************************
 \brief
 	Function to access glfw handler to check if a mouse input is clicked once
 *******************************************************************************/
-bool SageInputPIML::Get_Mouse_Clicked(int mouse) {
-	return GLFWInputHandler::Get_Key_Pressed(mouse);
+bool SageInputPIML::Get_Mouse_Clicked(int _mouse) {
+	return GLFWInputHandler::Get_Key_Pressed(_mouse);
 }
 
 /*!*****************************************************************************
 \brief
 	Function to access glfw handler to check if a mouse input is held down
 *******************************************************************************/
-bool SageInputPIML::Get_Mouse(int mouse) {
-	return GLFWInputHandler::Get_Key(mouse);
+bool SageInputPIML::Get_Mouse(int _mouse) {
+	return GLFWInputHandler::Get_Key(_mouse);
 }
 
 /*!*****************************************************************************

@@ -31,8 +31,8 @@ SageTextureInternal::SageTextureInternal() : texture_hdl(0), texture_unit(0), er
 \brief
 	An overloaded constructor for SageTextureInternal class
 *******************************************************************************/
-SageTextureInternal::SageTextureInternal(const SageTextureInternal& other) : texture_hdl(other.texture_hdl),
-texture_unit(other.texture_unit), erro_no()
+SageTextureInternal::SageTextureInternal(const SageTextureInternal& _other) : texture_hdl(_other.texture_hdl),
+texture_unit(_other.texture_unit), erro_no()
 {
 
 }
@@ -41,12 +41,12 @@ texture_unit(other.texture_unit), erro_no()
 \brief
 	A copy assignment operator of SageTextureInternal class
 *******************************************************************************/
-SageTextureInternal& SageTextureInternal::operator=(const SageTextureInternal& other)
+SageTextureInternal& SageTextureInternal::operator=(const SageTextureInternal& _other)
 {
-	if (this != &other)
+	if (this != &_other)
 	{
-		texture_hdl = other.texture_hdl;
-		texture_unit = other.texture_unit;
+		texture_hdl = _other.texture_hdl;
+		texture_unit = _other.texture_unit;
 	}
 	return *this;
 
@@ -56,9 +56,9 @@ SageTextureInternal& SageTextureInternal::operator=(const SageTextureInternal& o
 \brief
 	A copy constructor of SageTextureInternal class
 *******************************************************************************/
-SageTextureInternal::SageTextureInternal(std::string const& path, int internal_type) : texture_path(path), texture_hdl(), texture_unit()
+SageTextureInternal::SageTextureInternal(std::string const& _path, int _internal_type) : texture_path(_path), texture_hdl(), texture_unit()
 {
-	switch (internal_type % 4)
+	switch (_internal_type % 4)
 	{
 	case 0:
 		texture_unit = static_cast<GLint>(INTERNAL_TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
@@ -86,13 +86,13 @@ SageTextureInternal::SageTextureInternal(std::string const& path, int internal_t
 	
 #endif
 
-	texture_unit += (internal_type / 4) * 4;
+	texture_unit += (_internal_type / 4) * 4;
 
-	texture_hdl = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT);
+	texture_hdl = SOIL_load_OGL_texture(_path.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT);
 	if (texture_hdl == 0)
 	{
 		erro_no = static_cast<int>(INTERNAL_SAGE_TEXTURE_ERRORS::I_SAGE_TEXTURE_FILE_NOT_FOUND);
-		std::cerr << "Error loading texture: " << path << std::endl;
+		std::cerr << "Error loading texture: " << _path << std::endl;
 		std::cerr << "Error: " << SOIL_last_result() << std::endl;
 	}
 	set_texture_repeat();
@@ -142,21 +142,21 @@ bool SageTextureInternal::bind_texture() const
 \brief
 	Function to load the texture
 *******************************************************************************/
-int SageTextureInternal::load(const char* name ,int type)
+int SageTextureInternal::load(const char* _name ,int _type)
 {
 	if (texture_hdl != 0)
 	{
 		unload();
 	}
-	texture_hdl = SOIL_load_OGL_texture(name, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_INVERT_Y);
+	texture_hdl = SOIL_load_OGL_texture(_name, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_INVERT_Y);
 	if (texture_hdl == 0)
 	{
-		std::cerr << "Error loading texture: " << name << std::endl;
+		std::cerr << "Error loading texture: " << _name << std::endl;
 		std::cerr << "Error: " << SOIL_last_result() << std::endl;
 		// std::exit(1);
 	}
 
-	switch (type % 4)
+	switch (_type % 4)
 	{
 	case 0:
 		texture_unit = static_cast<GLint>(INTERNAL_TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
@@ -184,7 +184,7 @@ int SageTextureInternal::load(const char* name ,int type)
 
 #endif
 
-	texture_unit += (type / 4) * 4;
+	texture_unit += (_type / 4) * 4;
 
 	return texture_unit;
 }

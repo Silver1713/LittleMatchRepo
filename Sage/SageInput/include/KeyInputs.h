@@ -153,25 +153,25 @@ public:
 	\brief
 		Function to access glfw handler to check if a specific key is pressed once
 	*******************************************************************************/
-	static bool Get_Key_Pressed(int keycode);
+	static bool Get_Key_Pressed(int _keycode);
 
 	/*!*****************************************************************************
 	\brief
 		Function to access glfw handler to check if a specific key is held down
 	*******************************************************************************/
-	static bool Get_Key(int keycode);
+	static bool Get_Key(int _keycode);
 
 	/*!*****************************************************************************
 	\brief
 		Function to access glfw handler to check if a mouse input is clicked once
 	*******************************************************************************/
-	static bool Get_Mouse_Clicked(int mouse);
+	static bool Get_Mouse_Clicked(int _mouse);
 
 	/*!*****************************************************************************
 	\brief
 		Function to access glfw handler to check if a mouse input is held down
 	*******************************************************************************/
-	static bool Get_Mouse(int mouse);
+	static bool Get_Mouse(int _mouse);
 
 	/*!*****************************************************************************
 	\brief
@@ -189,7 +189,7 @@ public:
 	\brief
 		Function to get mouse coordinates
 	*******************************************************************************/
-	static void Get_Mouse_Position(double& x, double& y);
+	static void Get_Mouse_Position(double& _x, double& _y);
 
 	/*!*****************************************************************************
 	\brief
@@ -216,7 +216,7 @@ private:
 	\brief
 		Function to delete the pointer to implementation for sage input
 	*******************************************************************************/
-	static void Custom_Sage_Input_PIMPL_Delete(void*& p);
+	static void Custom_Sage_Input_PIMPL_Delete(void*& _p);
 
 	static std::unique_ptr<void, decltype(&Custom_Sage_Input_PIMPL_Delete)> impl_pointer;
 };
