@@ -122,7 +122,7 @@ public:
 
 	void SetUniform(const char* name, const ToastBox::Matrix4& val) const
 	{
-		internal_impl->SetUniform4fm(name, val.data());
+		internal_impl->SetUniform4fm(name, val.Data());
 	}
 
 };
