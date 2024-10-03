@@ -57,7 +57,7 @@ namespace Game {
 	{
 		game_objects.clear();
 		transform_cache.clear();
-		GameObject* obj = Game_Objects::Get_Game_Object("Player");
+		//GameObject* obj = Game_Objects::Get_Game_Object("Player");
 		//caches the player's transforms
 		transform_cache["Player"] = dynamic_cast<Transform*>(Game_Objects::Get_Game_Object("Player")->Get_Component(TRANSFORM));
 

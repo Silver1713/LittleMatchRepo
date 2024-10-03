@@ -42,7 +42,7 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* _name, Primit
 		//Create base shader
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end()) {
 			SageShader& shdr = SageShaderManager::Search_And_Create_Shader_Program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
-			mdl.AssignShaderProgram(&shdr);
+			mdl.Assign_Shader_Program(&shdr);
 		}
 		else
 			mdl.Assign_Shader_Program(&SageShaderManager::shaders["BASE_SHADER"]);
@@ -70,7 +70,7 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* _name, Primit
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end())
 		{
 			SageShader& shdr = SageShaderManager::Search_And_Create_Shader_Program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
-			mdl.AssignShaderProgram(&shdr);
+			mdl.Assign_Shader_Program(&shdr);
 		}
 		else
 		{
@@ -109,7 +109,7 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* _name, Primit
 		//Create base shader
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end()) {
 			SageShader& shdr = SageShaderManager::Create_Shader_Program("BASE_SHADER", "../SageGraphics/shaders/BaseVertexShader.glsl", "../SageGraphics/shaders/BaseFragmentShader.glsl");
-			mdl.AssignShaderProgram(&shdr);
+			mdl.Assign_Shader_Program(&shdr);
 		}
 		else
 			mdl.Assign_Shader_Program(&SageShaderManager::shaders["BASE_SHADER"]);
@@ -144,7 +144,7 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* _name, Primit
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end())
 		{
 			SageShader& shdr = SageShaderManager::Search_And_Create_Shader_Program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
-			mdl.AssignShaderProgram(&shdr);
+			mdl.Assign_Shader_Program(&shdr);
 		}
 		else
 		{
