@@ -1,15 +1,43 @@
+﻿/* Start Header ************************************************************************/
+/*!
+\file		SageModelManager.cpp
+\title		Memory's Flame
+\author		Neo Hui Zong, neo.h, 2301357 (100%)
+\par		neo.h@digipen.edu
+\date		27 September 2024
+\brief		The definition of function to create sage models for rendering
+
+			All content � 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
+
 #include "SageModelManager.hpp"
 
 #include <iostream>
 
-
 std::map<std::string, SageModel> SageModelManager::models{};
 float pi = static_cast<float>(std::atan(1) * 4);
 
-SageModel& SageModelManager::CreatePrimitiveModel(std::string name, int shape, int type)
-{
+/*!*****************************************************************************
+  \brief
+	Gets the texture with the provided ID
 
-	if (shape == static_cast<int>(PrimitiveShape::PRIMITIVE_SQUARE))
+  \param _name
+	The name of the model
+
+  \param _shape
+	The shape of the model
+
+  \param _type
+	The render type of the model
+
+  \return
+	A reference to SageModel
+*******************************************************************************/
+SageModel& SageModelManager::CreatePrimitiveModel(std::string _name, int _shape, int _type)
+{
+	// For squares
+	if (_shape == static_cast<int>(PrimitiveShape::PRIMITIVE_SQUARE))
 	{
 		//Use ndc [-1,1] for square
 		std::vector<glm::vec2> pos_vtx{
@@ -38,19 +66,21 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, int shape, i
 			0,1,2,
 		};
 
-		SageModel mdl_square{ name.c_str(), &pos_vtx, &tex_vtx, &clr_vtx, &idx_vtx };
-		mdl_square.set_render_type(type);
-		mdl_square.set_shape_type(shape);
+		SageModel mdl_square{ _name.c_str(), &pos_vtx, &tex_vtx, &clr_vtx, &idx_vtx };
+		mdl_square.set_render_type(_type);
+		mdl_square.set_shape_type(_shape);
 
 		
 
 		// Add to the map
-		models[name] = mdl_square;
+		models[_name] = mdl_square;
 
-		return models[name];
+		return models[_name];
 
 	}
-	else if (shape ==static_cast<int>(PrimitiveShape::PRIMITIVE_CIRCLE))
+
+	// For circles
+	else if (_shape ==static_cast<int>(PrimitiveShape::PRIMITIVE_CIRCLE))
 	{
 		
 		// default radius
@@ -90,14 +120,17 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, int shape, i
 		idx_vtx.push_back(static_cast<GLushort>(slices)); // Last vertex
 		idx_vtx.push_back(1); // First perimeter vertex to close the loop
 
-		SageModel mdl_circle(name.c_str(), &pos_vtx, &tex_vtx, &clr_vtx, &idx_vtx);
-		mdl_circle.set_render_type(type);
-		mdl_circle.set_shape_type(shape);
+		SageModel mdl_circle(_name.c_str(), &pos_vtx, &tex_vtx, &clr_vtx, &idx_vtx);
+		mdl_circle.set_render_type(_type);
+		mdl_circle.set_shape_type(_shape);
 
-		models[name] = mdl_circle;
-		return models[name];
+		models[_name] = mdl_circle;
+		return models[_name];
 
-	} else if (shape == static_cast<int>(PrimitiveShape::PRIMITIVE_LINE))
+	}
+
+	// If lines
+	else if (_shape == static_cast<int>(PrimitiveShape::PRIMITIVE_LINE))
 	{
 		std::vector<glm::vec2> pos_vtx{
 			glm::vec2(-1.f,0.f),
@@ -118,24 +151,27 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string name, int shape, i
 			0,1
 		};
 
-		SageModel mdl_line{ name.c_str(), &pos_vtx, &tex_vtx, &clr_vtx, &idx_vtx };
-		mdl_line.set_render_type(type);
-		mdl_line.set_shape_type(shape);
+		SageModel mdl_line{ _name.c_str(), &pos_vtx, &tex_vtx, &clr_vtx, &idx_vtx };
+		mdl_line.set_render_type(_type);
+		mdl_line.set_shape_type(_shape);
 
-		models[name] = mdl_line;
-		return models[name];
-	} else if (shape  == static_cast<int>(PrimitiveShape::PRIMITIVE_POINTS))
+		models[_name] = mdl_line;
+		return models[_name];
+	}
+
+	// If points
+	else if (_shape == static_cast<int>(PrimitiveShape::PRIMITIVE_POINTS))
 	{
 		std::vector<glm::vec2> pos_vtx{
 			glm::vec2{0.f,0.f}
 		};
 
-		SageModel mdl_points{ name.c_str(), &pos_vtx};
-		mdl_points.set_render_type(type);
-		mdl_points.set_shape_type(shape);
+		SageModel mdl_points{ _name.c_str(), &pos_vtx};
+		mdl_points.set_render_type(_type);
+		mdl_points.set_shape_type(_shape);
 
-		models[name] = mdl_points;
-		return models[name];
+		models[_name] = mdl_points;
+		return models[_name];
 	}
 	else
 	{

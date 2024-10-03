@@ -57,6 +57,7 @@ namespace Game {
 	{
 		game_objects.clear();
 		transform_cache.clear();
+		GameObject* obj = Game_Objects::Get_Game_Object("Player");
 		//caches the player's transforms
 		transform_cache["Player"] = dynamic_cast<Transform*>(Game_Objects::Get_Game_Object("Player")->Get_Component(TRANSFORM));
 
@@ -246,6 +247,9 @@ namespace Game {
 			GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("SPAWN"), "White_1");
 			transform_cache["White_1"] = dynamic_cast<Transform*>(random->Get_Component(TRANSFORM));
 			collider_cache["White_1"] = random->Get_Component<BoxCollider2D>();
+
+			random->Get_Component<BoxCollider2D>()->Set_Debug(enable_collider_view);
+
 
 			float m_min_scale[3] = { 10.0f,10.0f,0.0f }, m_max_scale[3] = { 100.0f,100.0f,0.0f };
 
