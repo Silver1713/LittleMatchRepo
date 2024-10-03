@@ -4,15 +4,15 @@
 #include <glm/ext/matrix_clip_space.hpp>
 
 
-void SageViewport::set_position(glm::vec2 pos)
+void SageViewport::set_position(glm::vec2 _pos)
 {
-	position = pos;
+	position = _pos;
 
 }
 
-void SageViewport::set_dims(glm::vec2 size)
+void SageViewport::set_dims(glm::vec2 _size)
 {
-	this->size = size;
+	this->size = _size;
 }
 
 glm::vec2 SageViewport::get_position() const

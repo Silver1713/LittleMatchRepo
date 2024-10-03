@@ -64,7 +64,7 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Draw()
 	{
-		SageRenderer::ClearColor({ 1,1,1,1 });
+		SageRenderer::Clear_Color({ 1,1,1,1 });
 
 		for (unsigned int current_z{}; current_z <= max_z_orders; ++current_z)
 		{
@@ -169,7 +169,7 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Clear_Game_Objects()
 	{
-		SageObjectManager::DestroyAllObjects();
+		SageObjectManager::Destroy_All_Objects();
 		g_game_objects.clear();
 	}
 }
@@ -198,11 +198,11 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
 	if (!(_p.sprite_texture_ID == "Nil"))
 	{
-		Add_Component(std::make_unique<Sprite2D>(_p.sprite_texture_ID, _p.colour));
+		Add_Component(std::make_unique<Sprite2D>(_p.sprite_texture_ID, _p.colour,_p.object_shape));
 	}
 	else
 	{
-		Add_Component(std::make_unique<Sprite2D>("", _p.colour));
+		Add_Component(std::make_unique<Sprite2D>("", _p.colour, _p.object_shape));
 	}
 	if (!(_p.collision_data == "Nil"))
 	{

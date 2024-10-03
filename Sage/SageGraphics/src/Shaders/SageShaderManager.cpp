@@ -1,3 +1,14 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageShaderManager.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		A shader manager that allow multiple shader program to be compiled linked and
+			managed.
+*/
+/* End Header **************************************************************************/
 #include "SageHelper.hpp"
 #include "SageShader.hpp"
 #include "SageShaderManager.hpp"
@@ -7,19 +18,19 @@
 std::map<std::string, SageShader> SageShaderManager::shaders;
 std::string SageShaderManager::prev_found_shader_dir{};
 std::map<std::string, std::string> SageShaderManager::shader_buckets;
-SageShader& SageShaderManager::CreateShaderProgram(std::string name, const char* vertex_shader_path, const char* fragment_shader_path)
+SageShader& SageShaderManager::Create_Shader_Program(std::string name, const char* vertex_shader_path, const char* fragment_shader_path)
 {
-	SageShader shdr = SageHelper::CompileShadersFromFile(vertex_shader_path, fragment_shader_path);
+	SageShader shdr = SageHelper::Compile_Shaders_From_File(vertex_shader_path, fragment_shader_path);
 
 	shaders[name] = std::move(shdr);
 
 	return shaders[name];
 }
 
-SageShader& SageShaderManager::search_and_create_shader_program(const char* name, const char* vertex_shader_name, const char* fragment_shader_name)
+SageShader& SageShaderManager::Search_And_Create_Shader_Program(const char* name, const char* vertex_shader_name, const char* fragment_shader_name)
 {
-	std::string vertex_shader_path = get_shader_file_path(vertex_shader_name);
-	std::string fragment_shader_path = get_shader_file_path(fragment_shader_name);
+	std::string vertex_shader_path = Get_Shader_File_Path(vertex_shader_name);
+	std::string fragment_shader_path = Get_Shader_File_Path(fragment_shader_name);
 
 	if (vertex_shader_path.empty() || fragment_shader_path.empty())
 	{
@@ -27,17 +38,17 @@ SageShader& SageShaderManager::search_and_create_shader_program(const char* name
 		std::exit(EXIT_FAILURE);
 	}
 
-	return CreateShaderProgram(name, vertex_shader_path.c_str(), fragment_shader_path.c_str());
+	return Create_Shader_Program(name, vertex_shader_path.c_str(), fragment_shader_path.c_str());
 
 }
 
 
-void SageShaderManager::add_shader_include(const char* name, const char* dir)
+void SageShaderManager::Add_Shader_Include(const char* name, const char* dir)
 {
 	shader_buckets[name] = dir;
 }
 
-std::string SageShaderManager::get_shader_file_path(std::string const& name) 
+std::string SageShaderManager::Get_Shader_File_Path(std::string const& name) 
 {
 	if (shader_buckets.empty())
 	{

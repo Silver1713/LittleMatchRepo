@@ -21,7 +21,7 @@ SageCamera cp;
 
 void SageMain::init()
 {
-	//SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
+	//SageShaderManager::Add_Shader_Include("graphic_lib", "../SageGraphics/shaders/");
 	//SageRenderer::init();
 
 	
@@ -33,8 +33,8 @@ void SageMain::init()
 
 
 
-	SageRenderer::SetCurrentView(vp);
-	SageRenderer::SetCurrentView(&cp);
+	SageRenderer::Set_Current_View(vp);
+	SageRenderer::Set_Current_View(&cp);
 
 
 	SageRenderer::camera->update();
@@ -84,7 +84,7 @@ void SageMain::draw()
 
 	ss << "Scene 1 | " << "FPS: " << std::fixed << SageHelper::FPS;
 	//glfwSetWindowTitle(SageHelper::ptr_window, ss.str().c_str());
-	SageHelper::sage_ptr_window->set_title(ss.str().c_str());
+	SageHelper::sage_ptr_window->Set_Title(ss.str().c_str());
 
 	
 
@@ -93,7 +93,7 @@ void SageMain::draw()
 
 	//for (auto& obj : SageObjectManager::objects)
 	//{
-	//	SageRenderer::DrawFilled(obj.second);
+	//	SageRenderer::Draw_Filled(obj.second);
 	//}
 	//
 	//glfwSetWindowTitle(SageHelper::ptr_window, "Scene 1");

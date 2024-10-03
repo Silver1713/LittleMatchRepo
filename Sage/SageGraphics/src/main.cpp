@@ -26,39 +26,30 @@ extern "C"
 
 int main()
 {
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	init();
-	// SceneMain: A example of a scene that can be used in the main loop
-	// SageHelper: A utility class that enable compiling of sjhaders and the calculation of deltatime	
-	while (!SageHelper::sage_ptr_window->should_window_close())
-	{
-		glfwPollEvents();
-		update();
-		draw();
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//init();
+	//// SceneMain: A example of a scene that can be used in the main loop
+	//// SageHelper: A utility class that enable compiling of sjhaders and the calculation of deltatime	
+	//while (!SageHelper::sage_ptr_window->Should_Window_Close())
+	//{
+	//	glfwPollEvents();
+	//	update();
+	//	draw();
 
 
-		SageHelper::sage_ptr_window->swap_buffers();
-		
-		
-	}
-	exit();
+	//	SageHelper::sage_ptr_window->Swap_Buffers();
+	//	
+	//	
+	//}
+	//exit();
 	return 0;
 }
 
 
 void init()
 {
-	int status = SageHelper::init(1000.f, 1000.f, "Hello World");
-	const GLubyte* a = glGetString(GL_EXTENSIONS);
 
-	if (status)
-	{
-		std::cerr << "Sage failed to create OpenGL context.";
-		std::exit(EXIT_FAILURE);
-	}
-
-	ExampleScene::init();
-
+	
 	
 
 
@@ -67,20 +58,19 @@ void init()
 
 void update()
 {
-	SageHelper::update();
+	SageHelper::Update();
 	ExampleScene::update();
 }
 
 void draw()
 {
-	SageHelper::draw();
 	ExampleScene::draw();
 }
 
 
 void exit()
 {
-	SageHelper::exit();
+	SageHelper::Exit();
 	ExampleScene::exit();
 	
 }

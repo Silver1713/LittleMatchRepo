@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageShader.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		This source file defines the public interface containing the SageShader class containing
+			methods and attributes to manage shader programs, compiling and linking of the shader programs.
+			Furthmore, this class expose methods from the internal class allowing calls to be
+			delegated to the private interface.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include <iostream>
 #include <fstream>
 
@@ -15,12 +30,12 @@ public:
 
 	bool Compile(std::string const& path, SAGE_SHADER_TYPE type)
 	{
-		return internal_impl->CompileFromFile(static_cast<SageShaderInternal::SAGE_INTERNAL_SHADER_TYPE>(type), path);
+		return internal_impl->Compile_From_File(static_cast<SageShaderInternal::SAGE_INTERNAL_SHADER_TYPE>(type), path);
 	}
 
 	bool Compile_Raw_String(std::string const& source, SAGE_SHADER_TYPE type, std::string const& path)
 	{
-		return internal_impl->CompileFromString(static_cast<SageShaderInternal::SAGE_INTERNAL_SHADER_TYPE>(type), source, path);
+		return internal_impl->Compile_From_String(static_cast<SageShaderInternal::SAGE_INTERNAL_SHADER_TYPE>(type), source, path);
 	}
 
 	bool Link()
@@ -49,12 +64,12 @@ public:
 
 	std::string GetLog()
 	{
-		return internal_impl->GetLog();
+		return internal_impl->Get_Log();
 	}
 
 	unsigned int GetProgramID()
 	{
-		return internal_impl->GetProgramHandle();
+		return internal_impl->Get_Program_Handle();
 
 	}
 
@@ -62,7 +77,7 @@ public:
 
 	void PrintActiveAttribs()
 	{
-		internal_impl->PrintActiveAttribs();
+		internal_impl->Print_Active_Attribs();
 	}
 
 	void PrintActiveUniform()
@@ -73,56 +88,56 @@ public:
 
 	bool DeleteShaderProgram()
 	{
-		return internal_impl->DeleteShaderProgram();
+		return internal_impl->Delete_Shader_Program();
 
 	}
 
 
 	void SetUniform(const char* name, int const& val) const
 	{
-		internal_impl->SetUniform(name, val);
+		internal_impl->Set_Uniform(name, val);
 	}
 
 	void SetUniform(const char* name, float const& val) const
 	{
-		internal_impl->SetUniform(name, val);
+		internal_impl->Set_Uniform(name, val);
 	}
 
 	void SetUniform(const char* name, double const& val) const
 	{
-		internal_impl->SetUniform(name, val);
+		internal_impl->Set_Uniform(name, val);
 	}
 
 
 	void SetUniform(const char* name, bool val) const
 	{
-		internal_impl->SetUniform(name, val);
+		internal_impl->Set_Uniform(name, val);
 	}
 
 	void SetUniform(const char* name, float x, float y) const
 	{
-		internal_impl->SetUniform(name, x, y);
+		internal_impl->Set_Uniform(name, x, y);
 	}
 
 	void SetUniform(const char* name, float x, float y, float z) const
 	{
-		internal_impl->SetUniform(name, x, y, z);
+		internal_impl->Set_Uniform(name, x, y, z);
 	}
 
 	void SetUniform(const char* name, float x, float y, float z, float w) const
 	{
-		internal_impl->SetUniform(name, x, y, z, w);
+		internal_impl->Set_Uniform(name, x, y, z, w);
 	}
 
 	void SetUniform(const char* name, const ToastBox::Matrix3x3& val) const
 	{
 		
-		internal_impl->SetUniform3fm(name, val.data());
+		internal_impl->Set_Uniform_3f_m(name, val.data());
 	}
 
 	void SetUniform(const char* name, const ToastBox::Matrix4& val) const
 	{
-		internal_impl->SetUniform4fm(name, val.Data());
+		internal_impl->Set_Uniform_4f_m(name, val.data());
 	}
 
 };
@@ -157,12 +172,12 @@ SageShader& SageShader::operator=(SageShader&& other) noexcept
 
 
 
-bool SageShader::CompileFromString(SAGE_SHADER_TYPE shader_type, std::string const& source, std::string const& path)
+bool SageShader::Compile_From_String(SAGE_SHADER_TYPE shader_type, std::string const& source, std::string const& path)
 {
 	return sage_impl->Compile_Raw_String(source, shader_type, path);
 }
 
-bool SageShader::CompileFromFile(SAGE_SHADER_TYPE shader_type, std::string const& file_name)
+bool SageShader::Compile_From_File(SAGE_SHADER_TYPE shader_type, std::string const& file_name)
 {
 	return sage_impl->Compile(file_name, shader_type);
 }
@@ -199,34 +214,25 @@ void SageShader::Deactivate()
 
 
 
-unsigned int SageShader::GetProgramHandle()
+unsigned int SageShader::Get_Program_Handle()
 {
 	pgm_handle = sage_impl->GetProgramID();
 	return sage_impl->GetProgramID();
 }
 
-std::string SageShader::GetLog() const
+std::string SageShader::Get_Log() const
 {
 	return sage_impl->GetLog();
 }
 
-bool SageShader::IsLinked() const
+bool SageShader::Is_Linked() const
 {
 	return is_linked;
 }
 
-void SageShader::BindVertexAttribLocation(int index, const char* name)
-{
-	glBindAttribLocation(pgm_handle, index, name);
-}
 
-void SageShader::BindFragAttribLocation(int index, const char* name)
-{
-	glBindFragDataLocation(pgm_handle, index, name);
 
-}
-
-int SageShader::GetUniformLocation(const char* name, bool exit_on_error)
+int SageShader::Get_Uniform_Location(const char* name, bool exit_on_error)
 {
 
 	GLint loc = glGetUniformLocation(pgm_handle, name);
@@ -244,110 +250,104 @@ int SageShader::GetUniformLocation(const char* name, bool exit_on_error)
 
 // Uniform setter - Numerical
 
-void SageShader::SetUniform(const char* name, int val)
+void SageShader::Set_Uniform(const char* name, int val)
 {
 	sage_impl->SetUniform(name, val);
 }
 
 
-void SageShader::SetUniform(const char* name, float val)
+void SageShader::Set_Uniform(const char* name, float val)
 {
 	sage_impl->SetUniform(name, val);
 }
 
-void SageShader::SetUniform(const char* name, double val)
+void SageShader::Set_Uniform(const char* name, double val)
 {
 	sage_impl->SetUniform(name, val);
 }
 
-void SageShader::SetUniform(const char* name, bool val)
+void SageShader::Set_Uniform(const char* name, bool val)
 {
 	sage_impl->SetUniform(name, val);
 }
 // Uniform setter - Vector - Singular
 
-void SageShader::SetUniform(const char* name, float x, float y)
+void SageShader::Set_Uniform(const char* name, float x, float y)
 {
 	sage_impl->SetUniform(name, x, y);
 }
-void SageShader::SetUniform(const char* name, float x, float y, float z)
+void SageShader::Set_Uniform(const char* name, float x, float y, float z)
 {
 	sage_impl->SetUniform(name, x, y, z);
 
 }
 
-void SageShader::SetUniform(const char* name, float x, float y, float z, float w)
+void SageShader::Set_Uniform(const char* name, float x, float y, float z, float w)
 {
 	sage_impl->SetUniform(name, x, y, z, w);
 }
 
 // Uniform setter - Vector - glm
 
-void SageShader::SetUniform(const char* name, const ToastBox::Vec2& val)
+void SageShader::Set_Uniform(const char* name, const ToastBox::Vec2& val)
 {
 	sage_impl->SetUniform(name, val.GetX(), val.GetY());
 }
 
-void SageShader::SetUniform(const char* name, const ToastBox::Vec3& val)
+void SageShader::Set_Uniform(const char* name, const ToastBox::Vec3& val)
 {
 	sage_impl->SetUniform(name, val.x, val.y, val.z);
 }
 
-void SageShader::SetUniform(const char* name,  ToastBox::Vec4 const& val)
+void SageShader::Set_Uniform(const char* name,  ToastBox::Vec4 const& val)
 {
 	sage_impl->SetUniform(name, val.x, val.y, val.z, val.w);
 }
 
 // Uniform setter - Matrices - glm
 
-void SageShader::SetUniform(const char* name, const glm::mat2& val)
+void SageShader::Set_Uniform(const char* name, const glm::mat3& val)
 {
-	return;
-
-}
-
-void SageShader::SetUniform(const char* name, const glm::mat3& val)
-{
-	GLint loc = GetUniformLocation(name);
+	GLint loc = Get_Uniform_Location(name);
 	glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(val));
 }
-void SageShader::SetUniform(const char* name, const glm::mat4& val)
+void SageShader::Set_Uniform(const char* name, const glm::mat4& val)
 {
-	GLint loc = GetUniformLocation(name);
+	GLint loc = Get_Uniform_Location(name);
 	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(val));
 }
 
 // Helper Functions
-bool SageShader::FileExists(const std::string& file_name)
+bool SageShader::File_Exists(const std::string& file_name)
 {
 	std::ifstream file(file_name);
 	return file.good();
 }
 
-bool SageShader::DeleteShaderProgram()
+bool SageShader::Delete_Shader_Program()
 {
 	return sage_impl->DeleteShaderProgram();
 }
 
 // Print Active Attributes in a neatly table format
-void SageShader::PrintActiveAttribs() const
+void SageShader::Print_Active_Attribs() const
 {
 
 	sage_impl->PrintActiveAttribs();
 }
 
-void SageShader::PrintActiveUniforms() const
+void SageShader::Print_Active_Uniforms() const
 {
 	sage_impl->PrintActiveUniform();
 }
 
-void SageShader::SetUniform(const char* name, const ToastBox::Matrix3x3& val)
+void SageShader::Set_Uniform(const char* name, const ToastBox::Matrix3x3& val)
 {
 	sage_impl->SetUniform(name, val);
 
 }
 
-void SageShader::SetUniform(const char* name, const ToastBox::Matrix4& val)
+void SageShader::Set_Uniform(const char* name, const ToastBox::Matrix4& val)
 {
 	sage_impl->SetUniform(name, val);
 }

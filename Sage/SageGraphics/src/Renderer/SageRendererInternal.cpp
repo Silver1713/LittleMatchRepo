@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageRendererInternal.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		This source file defines the private/internal renderer class that handles rendering of
+			objects and models to the screen. This class make calls to the OpenGL library
+			to render objects to screen.
+
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "SageLine.hpp"
 #include "SageModelManager.hpp"
 #include "SageShaderManager.hpp"
@@ -7,12 +22,15 @@
 #include "SageRendererInternal.hpp"
 #include "SageCamera.hpp"
 #include "glm/gtc/type_ptr.inl"
+
+
+
 class SageCameraInternal2D;
 SageViewport SageRendererInternal::viewport;
 RENDER_CONFIG_INTERNAL SageRendererInternal::default_config{ SageRendererInternal::I_SAGE_ENABLE_TEXTURE | SageRendererInternal::I_SAGE_ENABLE_ALPHA };
 SageCamera* SageRendererInternal::camera;
 SageShader* SageRendererInternal::default_shader;
-void SageRendererInternal::DrawFilled(SageObject& object, RENDER_CONFIG_INTERNAL config)
+void SageRendererInternal::Draw_Filled(SageObject& object, RENDER_CONFIG_INTERNAL config)
 {
 	SageObject::SageMaterial& mat = object.GetMaterial();
 	if (config.options & I_SAGE_ENABLE_BORDER)
@@ -38,27 +56,27 @@ void SageRendererInternal::DrawFilled(SageObject& object, RENDER_CONFIG_INTERNAL
 	}
 	if (config.options & I_SAGE_ENABLE_CAMERA)
 	{
-		object.draw(camera);
+		object.Draw(camera);
 	}
 	else
 	{
-		object.draw(&viewport);
+		object.Draw(&viewport);
 	}
 	//object.draw(&viewport);
 }
 
-void SageRendererInternal::SetCurrentView(SageViewport& view)
+void SageRendererInternal::Set_Current_View(SageViewport& view)
 {
 	viewport = view;
 }
 
-void SageRendererInternal::SetCurrentView(SageCamera* view)
+void SageRendererInternal::Set_Current_View(SageCamera* view)
 {
 	camera = view;
 }
 
 
-void SageRendererInternal::DrawFilled(SageObject& object)
+void SageRendererInternal::Draw_Filled(SageObject& object)
 {
 	SageObject::SageMaterial& mat = object.GetMaterial();
 	if (default_config.options & I_SAGE_ENABLE_BORDER)
@@ -84,11 +102,11 @@ void SageRendererInternal::DrawFilled(SageObject& object)
 	}
 	if (default_config.options & I_SAGE_ENABLE_CAMERA)
 	{
-		object.draw(camera);
+		object.Draw(camera);
 	}
 	else
 	{
-		object.draw(&viewport);
+		object.Draw(&viewport);
 	}
 	//object.draw(&viewport);
 }
@@ -97,46 +115,46 @@ void SageRendererInternal::DrawFilled(SageObject& object)
 
 
 
-void SageRendererInternal::SetOptionOn(int options)
+void SageRendererInternal::Set_Option_On(int options)
 {
 	default_config.options |= options;
 }
 
-void SageRendererInternal::SetOptionOff(int options)
+void SageRendererInternal::Set_Option_Off(int options)
 {
 	default_config.options &= ~options;
 }
 
-void SageRendererInternal::DrawFilled(SageModel& model)
+void SageRendererInternal::Draw_Filled(SageModel& model)
 {
 	SageShader* shader = default_shader;
 
 
-	glBindVertexArray(model.get_vao_handle());
+	glBindVertexArray(model.Get_VAO_Handle());
 
 
 	shader->Activate();
-	shader->SetUniform("uAlpha", default_config.render_alpha);
-	shader->SetUniform("uUseColor", static_cast<bool>(default_config.options & I_SAGE_ENABLE_VERTEX_COLOR));
-	shader->SetUniform("uUseBorderColor", static_cast<bool>(default_config.options & I_SAGE_ENABLE_BORDER));
+	shader->Set_Uniform("uAlpha", default_config.render_alpha);
+	shader->Set_Uniform("uUseColor", static_cast<bool>(default_config.options & I_SAGE_ENABLE_VERTEX_COLOR));
+	shader->Set_Uniform("uUseBorderColor", static_cast<bool>(default_config.options & I_SAGE_ENABLE_BORDER));
 
 	ToastBox::Vector4 color = { default_config.border_color.r,default_config.border_color.g,default_config.border_color.b,default_config.border_color.a };
-	shader->SetUniform("uBorderColor", color);
+	shader->Set_Uniform("uBorderColor", color);
 
-	shader->SetUniform("uBorderSize", default_config.border_width);
-	shader->SetUniform("uCornerRadius", default_config.border_radius);
-	//shader->SetUniform("uObjectSize", transform.scale.x, transform.scale.y);
+	shader->Set_Uniform("uBorderSize", default_config.border_width);
+	shader->Set_Uniform("uCornerRadius", default_config.border_radius);
+	//shader->Set_Uniform("uObjectSize", transform.scale.x, transform.scale.y);
 	/*glm::mat3 d = viewport->get_viewport_xform() * transform.model_matrix;
 	glm::mat3 m = glm::mat3(1.0f);*/
 
-	shader->SetUniform("uModel_xform", default_config.matrix);
-	//shader->SetUniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix
+	shader->Set_Uniform("uModel_xform", default_config.matrix);
+	//shader->Set_Uniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix
 	bool use_texture = static_cast<bool>(default_config.options & I_SAGE_ENABLE_TEXTURE);
-	shader->SetUniform("uUseTexture", use_texture);
+	shader->Set_Uniform("uUseTexture", use_texture);
 	if (use_texture)
 	{
-		glActiveTexture(default_config.current_texture->get_texture_unit());
-		shader->SetUniform("uTex2D", default_config.current_texture->get_texture_unit());
+		glActiveTexture(default_config.current_texture->Get_Texture_Unit());
+		shader->Set_Uniform("uTex2D", default_config.current_texture->Get_Texture_Unit());
 	}
 
 
@@ -144,21 +162,21 @@ void SageRendererInternal::DrawFilled(SageModel& model)
 
 
 
-	if (model.is_idx_enabled())
+	if (model.Is_Idx_Enabled())
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//if (this->obj_mesh->model_ref->)
 
-		glDrawElements(GL_TRIANGLES, static_cast<int>(model.get_vertex_indices().size()), GL_UNSIGNED_SHORT, nullptr);
+		glDrawElements(GL_TRIANGLES, static_cast<int>(model.Get_Vertex_Indices().size()), GL_UNSIGNED_SHORT, nullptr);
 		// Check for errors
 
 
 	}
 	else
 	{
-		glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(model.get_vertex_positions().size()));
+		glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(model.Get_Vertex_Positions().size()));
 	}
 
 	glBindVertexArray(0);
@@ -167,37 +185,37 @@ void SageRendererInternal::DrawFilled(SageModel& model)
 
 }
 
-void SageRendererInternal::DrawFilled(SageModel& model, glm::mat3& matrix, RENDER_CONFIG_INTERNAL config)
+void SageRendererInternal::Draw_Filled(SageModel& model, glm::mat3& matrix, RENDER_CONFIG_INTERNAL config)
 {
 
 	SageShader* shader = default_shader;
 
 
-	glBindVertexArray(model.get_vao_handle());
+	glBindVertexArray(model.Get_VAO_Handle());
 
 
 	shader->Activate();
-	shader->SetUniform("uAlpha", config.render_alpha);
-	shader->SetUniform("uUseColor", static_cast<bool>(config.options & I_SAGE_ENABLE_VERTEX_COLOR));
-	shader->SetUniform("uUseBorderColor", static_cast<bool>(config.options & I_SAGE_ENABLE_BORDER));
+	shader->Set_Uniform("uAlpha", config.render_alpha);
+	shader->Set_Uniform("uUseColor", static_cast<bool>(config.options & I_SAGE_ENABLE_VERTEX_COLOR));
+	shader->Set_Uniform("uUseBorderColor", static_cast<bool>(config.options & I_SAGE_ENABLE_BORDER));
 
 	ToastBox::Vector4 color = { config.border_color.r,config.border_color.g,config.border_color.b,config.border_color.a };
-	shader->SetUniform("uBorderColor", color);
+	shader->Set_Uniform("uBorderColor", color);
 
-	shader->SetUniform("uBorderSize", config.border_width);
-	shader->SetUniform("uCornerRadius", config.border_radius);
-	//shader->SetUniform("uObjectSize", transform.scale.x, transform.scale.y);
+	shader->Set_Uniform("uBorderSize", config.border_width);
+	shader->Set_Uniform("uCornerRadius", config.border_radius);
+	//shader->Set_Uniform("uObjectSize", transform.scale.x, transform.scale.y);
 	/*glm::mat3 d = viewport->get_viewport_xform() * transform.model_matrix;
 	glm::mat3 m = glm::mat3(1.0f);*/
 
-	shader->SetUniform("uModel_xform", matrix);
-	//shader->SetUniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix
+	shader->Set_Uniform("uModel_xform", matrix);
+	//shader->Set_Uniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix
 	bool use_texture = static_cast<bool>(config.options & I_SAGE_ENABLE_TEXTURE);
-	shader->SetUniform("uUseTexture", use_texture);
+	shader->Set_Uniform("uUseTexture", use_texture);
 	if (use_texture)
 	{
-		glActiveTexture(config.current_texture->get_texture_unit());
-		shader->SetUniform("uTex2D", config.current_texture->get_texture_unit());
+		glActiveTexture(config.current_texture->Get_Texture_Unit());
+		shader->Set_Uniform("uTex2D", config.current_texture->Get_Texture_Unit());
 	}
 
 
@@ -205,21 +223,21 @@ void SageRendererInternal::DrawFilled(SageModel& model, glm::mat3& matrix, RENDE
 
 
 
-	if (model.is_idx_enabled())
+	if (model.Is_Idx_Enabled())
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//if (this->obj_mesh->model_ref->)
 
-		glDrawElements(GL_TRIANGLES, static_cast<int>(model.get_vertex_indices().size()), GL_UNSIGNED_SHORT, nullptr);
+		glDrawElements(GL_TRIANGLES, static_cast<int>(model.Get_Vertex_Indices().size()), GL_UNSIGNED_SHORT, nullptr);
 		// Check for errors
 
 
 	}
 	else
 	{
-		glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(model.get_vertex_positions().size()));
+		glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(model.Get_Vertex_Positions().size()));
 	}
 
 	glBindVertexArray(0);
@@ -230,7 +248,7 @@ void SageRendererInternal::DrawFilled(SageModel& model, glm::mat3& matrix, RENDE
 }
 
 
-void SageRendererInternal::init()
+void SageRendererInternal::Init()
 {
 	default_config.options = 0;
 	if (SageShaderManager::shaders.find("BASE_SHADER") != SageShaderManager::shaders.end())
@@ -239,12 +257,12 @@ void SageRendererInternal::init()
 	}
 	else
 	{
-		SageShaderManager::search_and_create_shader_program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
+		SageShaderManager::Search_And_Create_Shader_Program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
 		default_shader = &SageShaderManager::shaders["BASE_SHADER"];
 
 	}
 
-	SetOptionOn(I_SAGE_ENABLE_ALPHA | I_SAGE_ENABLE_BORDER);
+	Set_Option_On(I_SAGE_ENABLE_ALPHA | I_SAGE_ENABLE_BORDER);
 
 	default_config.border_radius = 15.f;
 	default_config.border_width = 15.f;
@@ -253,10 +271,10 @@ void SageRendererInternal::init()
 
 	// Initialize Primitives
 
-	SageModelManager::CreatePrimitiveModel("PRIMITIVE_RECT", PRIMITIVE_SQUARE, RENDER_TYPE::TYPE_TRIANGLE);
-	SageModelManager::CreatePrimitiveModel("PRIMITIVE_CIRCLE", PRIMITIVE_CIRCLE, RENDER_TYPE::TYPE_TRIANGLE_FAN);
-	SageModelManager::CreatePrimitiveModel("PRIMITIVE_LINE", PRIMITIVE_LINE, RENDER_TYPE::TYPE_LINES);
-	SageModelManager::CreatePrimitiveModel("PRIMITIVE_POINT", PRIMITIVE_POINTS, RENDER_TYPE::TYPE_POINTS);
+	SageModelManager::CreatePrimitiveModel("PRIMITIVE_RECT", static_cast<int>(PrimitiveShape::PRIMITIVE_SQUARE), RENDER_TYPE::TYPE_TRIANGLE);
+	SageModelManager::CreatePrimitiveModel("PRIMITIVE_CIRCLE", static_cast<int>(PrimitiveShape::PRIMITIVE_CIRCLE), RENDER_TYPE::TYPE_TRIANGLE_FAN);
+	SageModelManager::CreatePrimitiveModel("PRIMITIVE_LINE", static_cast<int>(PrimitiveShape::PRIMITIVE_LINE), RENDER_TYPE::TYPE_LINES);
+	SageModelManager::CreatePrimitiveModel("PRIMITIVE_POINT", static_cast<int>(PrimitiveShape::PRIMITIVE_POINTS), RENDER_TYPE::TYPE_POINTS);
 
 	// initialize VAO
 	SageModelManager::models["PRIMITIVE_RECT"].setup_gpu_buffer();
@@ -269,62 +287,62 @@ void SageRendererInternal::init()
 	SageModelManager::models["PRIMITIVE_LINE"].AssignShaderProgram(default_shader);
 	SageModelManager::models["PRIMITIVE_POINT"].AssignShaderProgram(default_shader);
 
-	SageModelManager::models["PRIMITIVE_RECT"].set_render_type(RENDER_TYPE::TYPE_TRIANGLE);
-	SageModelManager::models["PRIMITIVE_CIRCLE"].set_render_type(RENDER_TYPE::TYPE_TRIANGLE_FAN);
-	SageModelManager::models["PRIMITIVE_LINE"].set_render_type(RENDER_TYPE::TYPE_LINES);
-	SageModelManager::models["PRIMITIVE_POINT"].set_render_type(RENDER_TYPE::TYPE_POINTS);
+	SageModelManager::models["PRIMITIVE_RECT"].Set_Render_Type(RENDER_TYPE::TYPE_TRIANGLE);
+	SageModelManager::models["PRIMITIVE_CIRCLE"].Set_Render_Type(RENDER_TYPE::TYPE_TRIANGLE_FAN);
+	SageModelManager::models["PRIMITIVE_LINE"].Set_Render_Type(RENDER_TYPE::TYPE_LINES);
+	SageModelManager::models["PRIMITIVE_POINT"].Set_Render_Type(RENDER_TYPE::TYPE_POINTS);
 
 
 }
 
 
 
-void SageRendererInternal::SetAlpha(float alpha)
+void SageRendererInternal::Set_Alpha(float alpha)
 {
 	default_config.render_alpha = alpha;
 }
 
-void SageRendererInternal::SetBorderColor(glm::vec4 color)
+void SageRendererInternal::Set_Border_Color(glm::vec4 color)
 {
 	default_config.border_color = color;
 }
 
-void SageRendererInternal::SetBorderRadius(float radius)
+void SageRendererInternal::Set_Border_Radius(float radius)
 {
 	default_config.border_radius = radius;
 }
 
-void SageRendererInternal::SetBorderWidth(float width)
+void SageRendererInternal::Set_Border_Width(float width)
 {
 	default_config.border_width = width;
 }
 
-void SageRendererInternal::SetTransformationMatrix(glm::mat3& matrix)
+void SageRendererInternal::Set_Transformation_Matrix(glm::mat3& matrix)
 {
 	default_config.transformation_matrix = matrix;
 }
 
-void SageRendererInternal::Set_Default_Shader(SageShader* shader)
+void SageRendererInternal::Set_Default_Shader(SageShader* _shader)
 {
-	default_shader = shader;
+	default_shader = _shader;
 }
 
 
-void SageRendererInternal::DrawLine(SageLine const& line, float size)
+void SageRendererInternal::Draw_Line(SageLine const& line, float size)
 {
 	SageShader* shader = default_shader;
-	glBindVertexArray(line.line->get_vao_handle());
+	glBindVertexArray(line.line->Get_VAO_Handle());
 	shader->Activate();
-	shader->SetUniform("uAlpha", default_config.render_alpha);
-	shader->SetUniform("uUseColor", true);
-	shader->SetUniform("uUseBorderColor", false);
+	shader->Set_Uniform("uAlpha", default_config.render_alpha);
+	shader->Set_Uniform("uUseColor", true);
+	shader->Set_Uniform("uUseBorderColor", false);
 
 	ToastBox::Vector4 color = { default_config.border_color.r,default_config.border_color.g,default_config.border_color.b,default_config.border_color.a };
-	shader->SetUniform("uBorderColor", color);
-	shader->SetUniform("uColor", ToastBox::Vec4{ line.color.x ,line.color.y,line.color.z, line.color.a });
+	shader->Set_Uniform("uBorderColor", color);
+	shader->Set_Uniform("uColor", ToastBox::Vec4{ line.color.x ,line.color.y,line.color.z, line.color.a });
 
-	shader->SetUniform("uBorderSize", default_config.border_width);
-	shader->SetUniform("uCornerRadius", default_config.border_radius);
+	shader->Set_Uniform("uBorderSize", default_config.border_width);
+	shader->Set_Uniform("uCornerRadius", default_config.border_radius);
 
 	glLineWidth(size);
 
@@ -334,37 +352,37 @@ void SageRendererInternal::DrawLine(SageLine const& line, float size)
 	if (default_config.options & I_SAGE_ENABLE_CAMERA)
 	{
 
-		shader->SetUniform("uModel_xform", camera->get_projection_view_matrix());
+		shader->Set_Uniform("uModel_xform", camera->Get_Projection_View_Matrix());
 	}
 	else
 	{
 		//ToastBox::Matrix3x3 mtx = { glm::value_ptr(line.transformation_matrix) };
 		ToastBox::Matrix3x3 vp_xf = { glm::value_ptr(viewport.get_viewport_xform()) };
 
-		shader->SetUniform("uModel_xform", vp_xf);
+		shader->Set_Uniform("uModel_xform", vp_xf);
 	}
 
 	bool use_texture = false;
-	shader->SetUniform("uUseTexture", false);
+	shader->Set_Uniform("uUseTexture", false);
 	if (use_texture)
 	{
-		glActiveTexture(default_config.current_texture->get_texture_unit());
-		shader->SetUniform("uTex2D", default_config.current_texture->get_texture_unit());
+		glActiveTexture(default_config.current_texture->Get_Texture_Unit());
+		shader->Set_Uniform("uTex2D", default_config.current_texture->Get_Texture_Unit());
 	}
 
-	if (line.line->is_idx_enabled())
+	if (line.line->Is_Idx_Enabled())
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//if (this->obj_mesh->model_ref->)
 
-		glDrawElements(GL_LINES, static_cast<int>(line.line->get_vertex_indices().size()), GL_UNSIGNED_SHORT, nullptr);
+		glDrawElements(GL_LINES, static_cast<int>(line.line->Get_Vertex_Indices().size()), GL_UNSIGNED_SHORT, nullptr);
 		// Check for errors
 	}
 	else
 	{
-		glDrawArrays(GL_LINES, 0, static_cast<int>(line.line->get_vertex_positions().size()));
+		glDrawArrays(GL_LINES, 0, static_cast<int>(line.line->Get_Vertex_Positions().size()));
 	}
 
 	glBindVertexArray(0);
@@ -373,46 +391,46 @@ void SageRendererInternal::DrawLine(SageLine const& line, float size)
 }
 
 
-void SageRendererInternal::DrawLine(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color, float size)
+void SageRendererInternal::Draw_Line(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color, float size)
 {
 	SageLine line({ start.GetX(), start.GetY() }, { end.GetX(), end.GetY() }, { color.x,color.y,color.z,color.a }, size);
 	line.line = &SageModelManager::models["PRIMITIVE_LINE"];
 
-	line.update_dist(line.start, line.end);
+	line.Update_Dist(line.start, line.end);
 
-	DrawLine(line, line.width);
+	Draw_Line(line, line.width);
 
 
 }
 
-void SageRendererInternal::DrawRect(float x, float y, float width, float height, ToastBox::Vec4 color)
+void SageRendererInternal::Draw_Rect(float x, float y, float width, float height, ToastBox::Vec4 color)
 {
 	SageObject obj;
-	obj.init("RECT", &SageModelManager::models["PRIMITIVE_RECT"]);
+	obj.Init("RECT", &SageModelManager::models["PRIMITIVE_RECT"]);
 	obj.transform.position = { x,y };
 	obj.transform.scale = { width,height };
 	obj.GetMaterial().color = { color.x,color.y,color.z,color.a };
-	obj.transform.calculate_model_matrix();
-	DrawFilled(obj);
+	obj.transform.Calculate_Model_Matrix();
+	Draw_Filled(obj);
 }
 
 
-void SageRendererInternal::DrawPoint(SagePoint const& point)
+void SageRendererInternal::Draw_Point(SagePoint const& point)
 {
 	SageShader* shader = default_shader;
 	SageModel* model = point.point;
-	glBindVertexArray(model->get_vao_handle());
+	glBindVertexArray(model->Get_VAO_Handle());
 	shader->Activate();
-	shader->SetUniform("uAlpha", default_config.render_alpha);
-	shader->SetUniform("uUseColor", true);
-	shader->SetUniform("uUseBorderColor", false);
+	shader->Set_Uniform("uAlpha", default_config.render_alpha);
+	shader->Set_Uniform("uUseColor", true);
+	shader->Set_Uniform("uUseBorderColor", false);
 
 	ToastBox::Vector4 color = { default_config.border_color.r,default_config.border_color.g,default_config.border_color.b,default_config.border_color.a };
-	shader->SetUniform("uBorderColor", color);
-	shader->SetUniform("uColor", ToastBox::Vec4{ point.color.x ,point.color.y,point.color.z, point.color.a });
+	shader->Set_Uniform("uBorderColor", color);
+	shader->Set_Uniform("uColor", ToastBox::Vec4{ point.color.x ,point.color.y,point.color.z, point.color.a });
 
-	shader->SetUniform("uBorderSize", default_config.border_width);
-	shader->SetUniform("uCornerRadius", default_config.border_radius);
+	shader->Set_Uniform("uBorderSize", default_config.border_width);
+	shader->Set_Uniform("uCornerRadius", default_config.border_radius);
 
 
 	if (default_config.options & I_SAGE_ENABLE_CAMERA)
@@ -421,8 +439,8 @@ void SageRendererInternal::DrawPoint(SagePoint const& point)
 
 		ToastBox::Matrix3x3 m3;
 
-		m3.Matrix3Transpose(~camera->get_projection_view_matrix() * ~mtx);
-		shader->SetUniform("uModel_xform", m3);
+		m3.Matrix3Transpose(~camera->Get_Projection_View_Matrix() * ~mtx);
+		shader->Set_Uniform("uModel_xform", m3);
 	}
 	else
 	{
@@ -432,32 +450,32 @@ void SageRendererInternal::DrawPoint(SagePoint const& point)
 		m1.Matrix3Transpose(mtx);
 		m2.Matrix3Transpose(vp_xf);
 		m3.Matrix3Transpose(m2 * m1);
-		shader->SetUniform("uModel_xform", m3);
+		shader->Set_Uniform("uModel_xform", m3);
 	}
 
 	bool use_texture = false;
-	shader->SetUniform("uUseTexture", false);
+	shader->Set_Uniform("uUseTexture", false);
 	if (use_texture)
 	{
-		glActiveTexture(default_config.current_texture->get_texture_unit());
-		shader->SetUniform("uTex2D", default_config.current_texture->get_texture_unit());
+		glActiveTexture(default_config.current_texture->Get_Texture_Unit());
+		shader->Set_Uniform("uTex2D", default_config.current_texture->Get_Texture_Unit());
 	}
 
 	glPointSize(point.size);
 
-	if (point.point->is_idx_enabled())
+	if (point.point->Is_Idx_Enabled())
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//if (this->obj_mesh->model_ref->)
 
-		glDrawElements(GL_POINTS, static_cast<int>(model->get_vertex_indices().size()), GL_UNSIGNED_SHORT, nullptr);
+		glDrawElements(GL_POINTS, static_cast<int>(model->Get_Vertex_Indices().size()), GL_UNSIGNED_SHORT, nullptr);
 		// Check for errors
 	}
 	else
 	{
-		glDrawArrays(GL_POINTS, 0, static_cast<int>(model->get_vertex_positions().size()));
+		glDrawArrays(GL_POINTS, 0, static_cast<int>(model->Get_Vertex_Positions().size()));
 	}
 
 	glBindVertexArray(0);
@@ -465,16 +483,16 @@ void SageRendererInternal::DrawPoint(SagePoint const& point)
 	glDisable(GL_BLEND);
 }
 
-void SageRendererInternal::DrawPoint(ToastBox::Vec2 position, ToastBox::Vec4 color, float _s)
+void SageRendererInternal::Draw_Point(ToastBox::Vec2 position, ToastBox::Vec4 color, float _s)
 {
 	SagePoint point({ position.GetX(), position.GetY() }, { color.x,color.y,color.z,color.a }, _s);
 	point.point = &SageModelManager::models["PRIMITIVE_POINT"];
 	point.calculate_transform();
-	DrawPoint(point);
+	Draw_Point(point);
 }
 
 
-void SageRendererInternal::SetColor(glm::vec4 color)
+void SageRendererInternal::Set_Color(glm::vec4 color)
 {
 	default_config.color = color;
 }
@@ -496,7 +514,7 @@ RENDER_CONFIG_INTERNAL::RENDER_CONFIG_INTERNAL(unsigned int options, float rende
 	this->current_texture = current_texture;
 }
 
-void SageRendererInternal::ClearColor(ToastBox::Vec4 clr)
+void SageRendererInternal::Clear_Color(ToastBox::Vec4 clr)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(clr.x, clr.y, clr.z, clr.a);

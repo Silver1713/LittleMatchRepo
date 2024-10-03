@@ -1,169 +1,164 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageTexture.cpp
+\title		Memory's Flame
+\author		Neo Hui Zong, neo.h, 2301357 (100%)
+\par		neo.h@digipen.edu
+\date		27 September 2024
+\brief		Contains the definition for the public interface that will access
+			SageTextureInternal functions which will interact with SOIL and openGL
+
+			All content � 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "SageTextureInternal.hpp"
+#include "SageTextureInternalImpl.hpp"
 #include "SageTexture.h"
 #include <iostream>
 
-class SageTexture::SageTextureInternalImpl
-{
-	std::string texture_path{};
-	unsigned int texture_handle;
-	int texture_unit;
-	int _type;
-
-	bool is_loaded = false;
-public:
-
-	SageTextureInternal texture_internal;
-
-	SageTextureInternalImpl()
-	{
-		texture_handle = -1;
-		texture_unit = -1;
-		_type = -1;
-
-	}
-
-	SageTextureInternalImpl(std::string const& path, int type) : texture_path(path), texture_handle(0), texture_unit(0), _type(type), texture_internal(path, type)
-	{
-		texture_internal = SageTextureInternal(texture_path, type);
-		texture_unit = texture_internal.get_texture_unit();
-		texture_handle = texture_internal.get_texture_handle();
-		is_loaded = true;
-
-	}
-
-	~SageTextureInternalImpl()
-	{
-		texture_internal.unload();
-
-	}
-
-	int load(const char* src, TEXTURE_UNIT_TYPE const& type)
-	{
-		texture_unit = texture_internal.load(src, static_cast<int>(type));
-		texture_path = src;
-
-		texture_handle = texture_internal.get_texture_handle();
-		_type = static_cast<int>(type);
-
-		if (texture_unit == -1)
-		{
-			std::cout << "Error loading texture" << std::endl;
-			return -1;
-		}
-		is_loaded = true;
-		return texture_unit;
-	}
-	bool bind_texture() const
-	{
-
-		return texture_internal.bind_texture();
-	}
-	void unload()
-	{
-		texture_internal.unload();
-		is_loaded = false;
-	}
-
-	int get_unit() const
-	{
-		return texture_unit;
-	}
-
-	void set_texture_repeat() const
-	{
-		texture_internal.set_texture_repeat();
-	}
-	void set_texture_clamp() const
-	{
-		texture_internal.set_texture_clamp();
-	}
-	void set_texture_mirror_repeat() const
-	{
-		texture_internal.set_texture_mirror_repeat();
-	}
-	unsigned int get_handle() const
-	{
-		return texture_handle;
-	}
-
-	bool is_loaded_texture() const
-	{
-		return is_loaded;
-	}
-};
-
-SageTexture::SageTexture() : sage_internal_impl(std::make_unique<SageTextureInternalImpl>()),texture_unit(-1),texture_id(-1) {
-	
+/*!*****************************************************************************
+\brief
+	A constructor for SageTexture
+*******************************************************************************/
+SageTexture::SageTexture() : sage_internal_impl(std::make_unique<SageTextureInternalImpl>()),texture_unit(static_cast<unsigned int>(-1)), texture_id(static_cast<unsigned int>(-1)) {
 
 }
 
-SageTexture::SageTexture(const char* source, TEXTURE_UNIT_TYPE type) : texture_path(source), sage_internal_impl(std::make_unique<SageTextureInternalImpl>(source, static_cast
-	<int>(type))) {
+/*!*****************************************************************************
+\brief
+	An overloaded constructor for SageTexture class
+
+\param _source
+	The sage texture source
+
+\param _type
+	Sage texture unit type
+*******************************************************************************/
+SageTexture::SageTexture(const char* _source, TEXTURE_UNIT_TYPE _type) : texture_path(_source), sage_internal_impl(std::make_unique<SageTextureInternalImpl>(_source, static_cast
+	<int>(_type))) {
 	texture_id = sage_internal_impl->get_handle();
 	texture_unit = sage_internal_impl->get_unit();
 
 }
 
-SageTexture::SageTexture(const SageTexture& other) : texture_path(other.texture_path) {
-	if (this != &other)
+/*!*****************************************************************************
+\brief
+	A copy constructor of SageTexture class
+
+\param _other
+	Another sage texture object
+*******************************************************************************/
+SageTexture::SageTexture(const SageTexture& _other) : texture_path(_other.texture_path) {
+	if (this != &_other)
 	{
 		//To load or not to load
-		texture_id = other.get_texture_handle();
-		texture_unit = other.texture_unit;
+		texture_id = _other.Get_Texture_Handle();
+		texture_unit = _other.texture_unit;
 
 	}
 }
 
-SageTexture& SageTexture::operator=(const SageTexture& other) {
-	if (this != &other) {
-		texture_path = other.texture_path;
+/*!*****************************************************************************
+\brief
+	A copy assignment operator of SageTexture class
+
+\param _other
+	Another sage texture object
+*******************************************************************************/
+SageTexture& SageTexture::operator=(const SageTexture& _other) {
+	if (this != &_other) {
+		texture_path = _other.texture_path;
 	}
 	return *this;
 }
 
 // Getters
-int SageTexture::get_texture_handle() const {
+/*!*****************************************************************************
+\brief
+	Function of SageTexture to get the texture handle
+
+\return
+	An int object
+*******************************************************************************/
+int SageTexture::Get_Texture_Handle() const {
 	return texture_id;
 }
 
-int SageTexture::get_texture_unit() const {
+/*!*****************************************************************************
+\brief
+	Function of SageTexture to get the texture unit
+
+\return
+	Return an int value object
+*******************************************************************************/
+int SageTexture::Get_Texture_Unit() const {
 	return texture_unit;
 }
 
 // Setters
-// Default state
-void SageTexture::setTextureRepeat() {
+/*!*****************************************************************************
+\brief
+	Function of SageTexture to set the texture mode to repeat (default mode)
+*******************************************************************************/
+void SageTexture::Set_Texture_Repeat() {
 	sage_internal_impl->set_texture_repeat();
 }
 
-void SageTexture::setTextureClamp() {
+/*!*****************************************************************************
+\brief
+	Function of SageTexture to set the texture mode to clamp
+*******************************************************************************/
+void SageTexture::Set_Texture_Clamp() {
 	sage_internal_impl->set_texture_clamp();
 }
 
-void SageTexture::setTextureMirrorRepeat() {
+/*!*****************************************************************************
+\brief
+	Function of SageTexture to set the texture mode to mirror repeat
+*******************************************************************************/
+void SageTexture::Set_Texture_Mirror_Repeat() {
 	sage_internal_impl->set_texture_mirror_repeat();
 }
 
+/*!*****************************************************************************
+\brief
+	A destructor to destroy the sage texture object
+*******************************************************************************/
 SageTexture::~SageTexture()
 {
 	sage_internal_impl->unload();
 }
 
+/*!*****************************************************************************
+\brief
+	Function of SageTexture to load the texture
 
+\param _filepath
+	The file path of loading the texture
 
-void SageTexture::load_texture(const char* filepath, TEXTURE_UNIT_TYPE type)
+\param _type
+	The type of the texture unit
+*******************************************************************************/
+void SageTexture::Load_Texture(const char* _filepath, TEXTURE_UNIT_TYPE _type)
 {
-	int status = sage_internal_impl->load(filepath, type);
+	int status = sage_internal_impl->load(_filepath, _type);
 	if (status == -1)
 	{
 		std::cout << "Error loading texture" << std::endl;
 	}
-	texture_path = filepath;
+	texture_path = _filepath;
 	texture_id = sage_internal_impl->get_handle();
 	texture_unit = sage_internal_impl->get_unit();
 }
 
-bool SageTexture::bind_texture()
+/*!*****************************************************************************
+\brief
+	Function of SageTexture to bind the texture
+
+\return
+	Return a boolean object
+*******************************************************************************/
+bool SageTexture::Bind_Texture()
 {
 	return sage_internal_impl->bind_texture();
 }

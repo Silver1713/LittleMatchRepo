@@ -7,19 +7,19 @@ SageLine::SageLine() : start(), end(), color(), width(0), line(nullptr), transfo
 }
 
 
-SageLine::SageLine(glm::vec2 start, glm::vec2 end, glm::vec4 color, float width)
+SageLine::SageLine(glm::vec2 _start, glm::vec2 _end, glm::vec4 color, float _width)
 {
-	this->start = start;
-	this->end = end;
+	this->start = _start;
+	this->end = _end;
 	this->color = color;
-	this->width = width;
+	this->width = _width;
 	this->line = nullptr;
 	this->transformation_matrix = glm::mat3(1.f);
 
 
 }
 
-void SageLine::calculate_matrix()
+void SageLine::Calculate_Matrix()
 {
 	
 
@@ -27,23 +27,23 @@ void SageLine::calculate_matrix()
 }
 
 
-void SageLine::update()
+void SageLine::Update()
 {
-	calculate_matrix();
+	Calculate_Matrix();
 	
 }
 
 
-void SageLine::update_dist(glm::vec2 start, glm::vec2 end)
+void SageLine::Update_Dist(glm::vec2 _start, glm::vec2 _end)
 {
-	this->start = start;
-	this->end = end;
+	this->start = _start;
+	this->end = _end;
 
 	SageModel& model = *line;
-	model.get_vertex_positions()[0] = start;
-	model.get_vertex_positions()[1] = end;
+	model.Get_Vertex_Positions()[0] = _start;
+	model.Get_Vertex_Positions()[1] = _end;
 
-	model.update_vtx_buffer_GPU();
+	model.Update_Vtx_Buffer_GPU();
 
 }
 

@@ -1,54 +1,23 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageCamera.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		The source file containing the definition  of the public interface,
+			SageCamera class that contains methods and data to facilitate creation and
+			manipulation of a camera object.
+
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "SageCamera.hpp"
+#include "SageCameraImpl.hpp"
 #include "SageCameraInternal.hpp"
 #include "Vector3.h"
 #include "glm/gtc/type_ptr.inl"
-
-class SageCamera::SageCameraImpl
-{
-	SageCameraInternal2D camera;
-
-public:
-	SageCameraImpl() : camera() {}
-	SageCameraImpl(ToastBox::Vec2 _position, ToastBox::Vec2 _view_rect_size, float _orientation, int _camera_type) : camera({ _position.GetX(), _position.GetY() }, { _view_rect_size.GetX(),_view_rect_size.GetY() }, { _orientation,0 }, static_cast
-		<SageCameraInternal2D::InternalSageCameraType>(_camera_type)) {}
-
-	float const* get_projection_view() const
-	{
-		return glm::value_ptr(camera.GetViewProjectionMatrix());
-
-	}
-
-
-	ToastBox::Vec2 GetPosition() const
-	{
-		return ToastBox::Vec2{ camera.GetPosition().x, camera.GetPosition().y };
-	}
-	ToastBox::Vec2 GetViewRectSize() const
-	{
-		return ToastBox::Vec2{ camera.GetViewRectSize().x, camera.GetViewRectSize().y };
-	}
-
-	void MoveCamera(ToastBox::Vec2 _move_vector, float speed)
-	{
-		camera.move_camera({ _move_vector.GetX(), _move_vector.GetY() }, speed);
-	}
-
-	void Update()
-	{
-		camera.Update();
-
-	}
-
-	void Init(ToastBox::Vec2 _position, ToastBox::Vec2 _view_rect_size, ToastBox::Vec2 _orientation, SageCameraInternal2D::InternalSageCameraType _camera_type)
-	{
-		camera.Init({ _position.GetX(), _position.GetY() }, { _view_rect_size.GetX(),_view_rect_size.GetY() }, { _orientation.GetX(),_orientation.GetY() }, _camera_type);
-	}
-
-	void* GetCam()
-	{
-		return camera.GetCamera();
-	}
-};
 
 
 SageCamera::SageCamera() : impl(nullptr), zoom(1.0f), orientation(0.0f), position(0.0f, 0.0f), rect_size(0.0f, 0.0f), aspect_ratio(1.0f), view_matrix(), projection_matrix(), view_projection_matrix()
@@ -64,30 +33,30 @@ SageCamera::SageCamera(ToastBox::Vec2 _position, ToastBox::Vec2 _view_rect_size,
 	init(_position, _view_rect_size, _orientation, _camera_type);
 }
 
-ToastBox::Matrix3x3 SageCamera::get_projection_view_matrix() 
+ToastBox::Matrix3x3 SageCamera::Get_Projection_View_Matrix() 
 {
-	view_projection_matrix = ToastBox::Matrix3x3{impl->get_projection_view()};
+	view_projection_matrix = ToastBox::Matrix3x3{impl->Get_Projection_View()};
 	return view_projection_matrix;
 }
 
 
-ToastBox::Vec2 SageCamera::GetPosition()
+ToastBox::Vec2 SageCamera::Get_Position()
 {
-	position = impl->GetPosition();
+	position = impl->Get_Position();
 	return position;
 }
 
-ToastBox::Vec2 SageCamera::GetViewRectSize()
+ToastBox::Vec2 SageCamera::Get_View_Rect_Size()
 {
-	rect_size = impl->GetViewRectSize();
+	rect_size = impl->Get_View_Rect_Size();
 	return rect_size;
 }
 
-void SageCamera::MoveCamera(ToastBox::Vec2 _move_vector, float speed)
+void SageCamera::Move_Camera(ToastBox::Vec2 _move_vector, float speed)
 {
-	impl->MoveCamera(_move_vector, speed);
+	impl->Move_Camera(_move_vector, speed);
 
-	position = GetPosition();
+	position = Get_Position();
 }
 
 void SageCamera::update()
@@ -106,7 +75,7 @@ void SageCamera::init(ToastBox::Vec2 _position, ToastBox::Vec2 _view_rect_size, 
 	orientation = _orientation;
 	this->aspect_ratio = static_cast<float>(_view_rect_size.GetX()) / static_cast<float>(_view_rect_size.y);
 	this->zoom = 1.0f;
-	this->view_projection_matrix = impl->get_projection_view();
+	this->view_projection_matrix = impl->Get_Projection_View();
 
 }
 
@@ -128,9 +97,9 @@ SageCamera::~SageCamera()
 {
 	impl->~SageCameraImpl();
 }
-void* SageCamera::GetCamera()
+void* SageCamera::Get_Camera()
 {
-	return impl->GetCam();
+	return impl->Get_Cam();
 }
 
 ToastBox::Vec2 SageCamera::Screen_To_World(ToastBox::Vec2 screen_pos)
@@ -141,7 +110,7 @@ ToastBox::Vec2 SageCamera::Screen_To_World(ToastBox::Vec2 screen_pos)
 	world_pos.y = -(screen_pos.y * (1.f / (rect_size.y/2.f)) -1.f);
 
 	
-	ToastBox::Matrix3x3 vpm = get_projection_view_matrix();
+	ToastBox::Matrix3x3 vpm = Get_Projection_View_Matrix();
 
 	ToastBox::Vec3 pos{ world_pos.x, world_pos.y, 1.0f };
 	ToastBox::Matrix3x3 inv = ~vpm.inverse();
@@ -176,5 +145,4 @@ ToastBox::Vec2 SageCamera::World_To_Screen(ToastBox::Vec2 world_pos)
 
 	return screen_pos;
 }
-
 

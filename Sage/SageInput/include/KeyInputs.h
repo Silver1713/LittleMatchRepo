@@ -1,5 +1,17 @@
 #pragma once
-// SECOND LAYER HEADER FILE
+/* Start Header ************************************************************************/
+/*!
+\file		KeyInputs.h
+\title		Memory's Flame
+\author		Neo Hui Zong, neo.h, 2301357 (100%)
+\par		neo.h@digipen.edu
+\date		27 September 2024
+\brief		Contains the declaration of functions for the public interface for the input system.
+			Also contain the definition of key and mouse supported by sage input system.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 
 /* Printable keys */
 #define SAGE_KEY_SPACE              32
@@ -136,23 +148,119 @@ class SageInputPIML;
 class SAGEInputHandler
 {
 public:
-	static bool Get_Key_Pressed(int keycode); // Check if specific key is pressed once
-	static bool Get_Key(int keycode); // Check if specific key is held down
 
-	static bool Get_Mouse_Clicked(int mouse); // Check if mouse is clicked once
-	static bool Get_Mouse(int mouse); // Check if mouse is held down
+	/*!*****************************************************************************
+	\brief
+		Function to access SageInput pointer to implementation to check if a specific
+		key is pressed once
 
+	\param _keycode
+		The key that is pressed
+
+	\return
+		Return a boolean
+	*******************************************************************************/
+	static bool Get_Key_Pressed(int _keycode);
+
+	/*!*****************************************************************************
+	\brief
+		Function to access SageInput pointer to implementation to check if a specific
+		key is held down
+
+	\param _keycode
+		The key that is pressed
+
+	\return
+		Return a boolean
+	*******************************************************************************/
+	static bool Get_Key(int _keycode);
+
+	/*!*****************************************************************************
+	\brief
+		Function to access SageInput pointer to implementation to check if the mouse
+		input is clicked once
+
+	\param _mouse
+		The mouse that is pressed
+
+	\return
+		Return a boolean
+	*******************************************************************************/
+	static bool Get_Mouse_Clicked(int _mouse);
+
+	/*!*****************************************************************************
+	\brief
+		Function to access SageInput pointer to implementation to check if the mouse
+		input is held down
+
+	\param _mouse
+		The mouse that is pressed
+
+	\return
+		Return a boolean
+	*******************************************************************************/
+	static bool Get_Mouse(int _mouse);
+
+	/*!*****************************************************************************
+	\brief
+		Function to get the mouse x position using SageInput pointer to implementation
+
+	\param
+		Return a double
+	*******************************************************************************/
 	static double Get_Mouse_X();
-	static double Get_Mouse_Y();
-	static void Get_Mouse_Position(double& x, double& y);
 
+	/*!*****************************************************************************
+	\brief
+		Function to get the mouse y position using SageInput pointer to implementation
+
+	\param
+		Return a double
+	*******************************************************************************/
+	static double Get_Mouse_Y();
+
+	/*!*****************************************************************************
+	\brief
+		Function to get the mouse coordinates using SageInput pointer to implementation
+
+	\param _x
+		The x coordinate of mouse
+
+	\param _y
+		The y coordinate of mouse
+	*******************************************************************************/
+	static void Get_Mouse_Position(double& _x, double& _y);
+
+	/*!*****************************************************************************
+	\brief
+		Function to initialize the sage input system
+	*******************************************************************************/
 	static void init();
+
+	/*!*****************************************************************************
+	\brief
+		Function to update the sage input system
+	*******************************************************************************/
 	static void update();
+
+	/*!*****************************************************************************
+	\brief
+		Function to terminate the sage input system
+	*******************************************************************************/
 	static void terminate();
 
 
 private:
-	static void Custom_Sage_Input_PIMPL_Delete(void*& p);
+
+	/*!*****************************************************************************
+	\brief
+		Function to delete the pointer to implementation for sage input
+
+	\param _p
+		A pointer to PIML implementation of the SageInput class
+	*******************************************************************************/
+	static void Custom_Sage_Input_PIMPL_Delete(void*& _p);
+
 	static std::unique_ptr<void, decltype(&Custom_Sage_Input_PIMPL_Delete)> impl_pointer;
 };
 

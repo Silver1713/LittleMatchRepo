@@ -1,5 +1,8 @@
 Prefab ID,Identifier,Position X,Position Y,Position Z,Rotation X,Rotation Y,Rotation Z,Scale X ,Scale Y,Scale Z,R,G ,B,A,Z Order
 BLUE_SKY,Background,0,0,0,0,0,0,3840,2160,0,1,1,1,1,0
-RED,Player,-500,0,0,0,0,0,100,100,0,1,0,0,1,1
-BLUE,Wall,0,0,0,0,0,0,100,1000,0,0,0,1,1,1
-RED,Floor,0,-500,0,0,0,0,2160,100,0,0,1,0,1,1
+RED,Player,-540,0,0,0,0,0,100,100,0,1,0,0,1,2
+BLUE,Wall,1010,0,0,0,0,0,100,1000,0,0.6,0.6,0.6,1,1
+BLUE,Floor,0,-500,0,0,0,0,2160,100,0,1,0.894,0.678,1,1
+CIRCLE,Circle,500,200,0,0,0,0,100,100,0,1,1,0,1,1
+WHITE,TRUNK,250,-300,0,0,0,0,75,440,0,0.259,0.204,0.004,1,1
+WHITE,LEAVES,275,-100,0,0,0,0,300,200,0,0.051,0.322,0,1,1

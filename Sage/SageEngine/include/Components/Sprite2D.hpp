@@ -18,6 +18,7 @@ class Sprite2D : public Component
 {
 private:
 	std::string sprite_texture_ID{ "" };
+	std::string object_shape{"Rect"};
 	float colour[4]{};
 	Transform* transform{ nullptr };
 	SageObject* obj{ nullptr };
@@ -41,7 +42,7 @@ public:
 	  \param _colour
 		what color the sprite should be
 	*******************************************************************************/
-	Sprite2D(std::string const& _texture_ID, float const* _colour);
+	Sprite2D(std::string const& _texture_ID, float const* _colour, std::string const& _object_shape = "Rect");
 
 	/*!*****************************************************************************
 	  \brief
@@ -54,7 +55,7 @@ public:
 	  \param _colour
 		what color the sprite should be
 	*******************************************************************************/
-	Sprite2D(std::string const& _texture_ID, std::initializer_list<float> const& _colour);
+	Sprite2D(std::string const& _texture_ID, std::initializer_list<float> const& _colour, std::string const& _object_shape = "Rect");
 
 	/*!*****************************************************************************
 	  \brief

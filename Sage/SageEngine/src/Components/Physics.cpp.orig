@@ -62,7 +62,11 @@ void Physics::ApplyGravity(float _delta_time)
 
 void Physics::UpdateVelocity(float _delta_time) 
 {
+<<<<<<< HEAD
+
+=======
 	std::cout << "HI";
 
 	(void)_delta_time;
+>>>>>>> hafiz
 }

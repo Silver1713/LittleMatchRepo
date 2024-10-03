@@ -58,8 +58,8 @@ namespace Splash_Screen {
 
 		camera.init({ 0,0 }, { SageHelper::WINDOW_WIDTH / 1.f, SageHelper::WINDOW_HEIGHT / 1.f }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
 
-		SageRenderer::SetCurrentView(&camera);
-		SageRenderer::SetCurrentView(vp);
+		SageRenderer::Set_Current_View(&camera);
+		SageRenderer::Set_Current_View(vp);
 	}
 
 	/*!*****************************************************************************

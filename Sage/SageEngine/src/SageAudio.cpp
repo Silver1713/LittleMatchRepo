@@ -243,11 +243,11 @@ namespace SageAudio
 
 		result = channel_group[4]->setVolume(1.f);
 		FMOD_ErrorCheck(result);
-		result = channel_group[0]->setVolume(.5f);
+		result = channel_group[0]->setVolume(.75f);
 		FMOD_ErrorCheck(result);
-		result = channel_group[1]->setVolume(.3f);
+		result = channel_group[1]->setVolume(1.f);
 		FMOD_ErrorCheck(result);
-		result = channel_group[2]->setVolume(.2f);
+		result = channel_group[2]->setVolume(.1f);
 		FMOD_ErrorCheck(result);
 		result = channel_group[3]->setVolume(.4f);
 		FMOD_ErrorCheck(result);

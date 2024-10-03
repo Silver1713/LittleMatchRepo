@@ -17,27 +17,82 @@
 class SageInputPIML
 {
 public:
-	// Check if specific key is pressed once
-	static bool Get_Key_Pressed(int keycode);
+	/*!*****************************************************************************
+	  \brief
+		Function to access glfw handler to check if a specific key is pressed once
 
-	// Check if specific key is held down
-	static bool Get_Key(int keycode);
+	  \param _keycode
+		The key that is pressed
 
-	// Check if mouse is clicked once
-	static bool Get_Mouse_Clicked(int mouse);
+	  \return
+		A boolean value
+	*******************************************************************************/
+	static bool Get_Key_Pressed(int _keycode);
 
-	// Check if mouse is held down
-	static bool Get_Mouse(int mouse);
+	/*!*****************************************************************************
+	  \brief
+		Function to access glfw handler to check if a specific key is held down
 
-	// Start input polling - process inputs
+	  \param _keycode
+		The key that is pressed/held down
+
+	  \return
+		A boolean value
+	*******************************************************************************/
+	static bool Get_Key(int _keycode);
+
+	/*!*****************************************************************************
+	  \brief
+		Function to access glfw handler to check if a mouse input is clicked once
+
+	  \param _mouse
+		The mouse that is pressed
+
+	  \return
+		A boolean value
+	*******************************************************************************/
+	static bool Get_Mouse_Clicked(int _mouse);
+
+	/*!*****************************************************************************
+	  \brief
+		Function to access glfw handler to check if a mouse input is held down
+
+	  \param _mouse
+		The key that is pressed/held down
+
+	  \return
+		A boolean value
+	*******************************************************************************/
+	static bool Get_Mouse(int _mouse);
+
+	/*!*****************************************************************************
+	\brief
+		A polling function to process and handle the input events
+	*******************************************************************************/
 	static void poll();
 
-	// Link Callback
+	/*!*****************************************************************************
+	\brief
+		A call back function to link the custom mouse, mouse position and key
+		call back functions with the glfw call back functions
+	*******************************************************************************/
 	static void Set_Callback();
 
-	// Get mouse x position
+	/*!*****************************************************************************
+	\brief
+		Function to get the mouse x position
+
+	\return
+		Return a double
+	*******************************************************************************/
 	static double Get_Mouse_X();
 
-	// Get mouse y position
+	/*!*****************************************************************************
+	\brief
+		Function to get the mouse y position
+
+	\return
+		Return a double
+	*******************************************************************************/
 	static double Get_Mouse_Y();
 };

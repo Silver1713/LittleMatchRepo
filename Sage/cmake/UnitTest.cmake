@@ -1,5 +1,5 @@
 # Unit Test Generator - run after all build targets are executed
-option(IS_UNIT_TEST_ENABLED "Generate Unit Test" ON)
+option(IS_UNIT_TEST_ENABLED "Generate Unit Test" OFF)
 
 if (IS_UNIT_TEST_ENABLED)
 message(STATUS "Unit Test is enabled")

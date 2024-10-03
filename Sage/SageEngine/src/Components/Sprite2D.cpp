@@ -34,7 +34,7 @@ Sprite2D::Sprite2D() {}
   \param _colour
 	what color the sprite should be
 *******************************************************************************/
-Sprite2D::Sprite2D(std::string const& _texture_ID, float const* _colour) : sprite_texture_ID{ _texture_ID }, colour{ *_colour, *(_colour + 1),*(_colour + 2),*(_colour + 3) } {}
+Sprite2D::Sprite2D(std::string const& _texture_ID, float const* _colour, std::string const& _object_shape) : sprite_texture_ID{ _texture_ID }, colour{ *_colour, *(_colour + 1),*(_colour + 2),*(_colour + 3) }, object_shape{ _object_shape } {}
 /*!*****************************************************************************
   \brief
 	Override for the constructor for Sprite2D that takes in what texture you want the sprite to have
@@ -46,7 +46,7 @@ Sprite2D::Sprite2D(std::string const& _texture_ID, float const* _colour) : sprit
   \param _colour
 	what color the sprite should be
 *******************************************************************************/
-Sprite2D::Sprite2D(std::string const& _texture_ID, std::initializer_list<float> const& _colour) : Sprite2D(_texture_ID, _colour.begin()) {}
+Sprite2D::Sprite2D(std::string const& _texture_ID, std::initializer_list<float> const& _colour, std::string const& _object_shape) : Sprite2D(_texture_ID, _colour.begin(), _object_shape) {}
 
 /*!*****************************************************************************
   \brief
@@ -63,11 +63,23 @@ void Sprite2D::Init(GameObject* _parent)
 	transform = dynamic_cast<Transform*>(_parent->Get_Component(TRANSFORM));
 
 	//create sageobject
-	SageObjectManager::CreatePrimitiveObject(Get_Parent()->Get_ID().c_str(), PRIMITIVE_OBJECT_RECT,
-		{ transform->Get_Positions()[0],transform->Get_Positions()[1] },
-		{ transform->Get_Scale()[0],transform->Get_Scale()[1] },
-		{ transform->Get_Rotations()[0],transform->Get_Rotations()[1] },
-		{ colour[0],colour[1],colour[2],colour[3] });
+	if (object_shape == "Rect")
+	{
+		SageObjectManager::Create_Primitive_Object(Get_Parent()->Get_ID().c_str(), PRIMITIVE_OBJECT_RECT,
+			{ transform->Get_Positions()[0],transform->Get_Positions()[1] },
+			{ transform->Get_Scale()[0],transform->Get_Scale()[1] },
+			{ transform->Get_Rotations()[0],transform->Get_Rotations()[1] },
+			{ colour[0],colour[1],colour[2],colour[3] });
+	}
+	else if (object_shape == "Circle")
+	{
+		SageObjectManager::Create_Primitive_Object(Get_Parent()->Get_ID().c_str(), PRIMITIVE_OBJECT_CIRCLE,
+			{ transform->Get_Positions()[0],transform->Get_Positions()[1] },
+			{ transform->Get_Scale()[0],transform->Get_Scale()[1] },
+			{ transform->Get_Rotations()[0],transform->Get_Rotations()[1] },
+			{ colour[0],colour[1],colour[2],colour[3] });
+	}
+
 
 	//keep track of create sageobject
 	obj = &SageObjectManager::objects[Get_Parent()->Get_ID().c_str()];
@@ -77,7 +89,7 @@ void Sprite2D::Init(GameObject* _parent)
 	{
 		obj->GetMaterial().enable_texture = true;
 		SageTexture* texture = &Assets::Textures::Get_Texture(sprite_texture_ID);
-		obj->attach_texture(texture);
+		obj->Attach_Texture(texture);
 	}
 }
 
@@ -94,7 +106,7 @@ void Sprite2D::Update()
 	obj->transform.scale[1] = transform->Get_Scale()[1];
 	obj->transform.orientation[0] = transform->Get_Rotations()[0];
 	obj->transform.orientation[1] = transform->Get_Rotations()[1];
-	obj->update();
+	obj->Update();
 }
 /*!*****************************************************************************
   \brief
@@ -105,7 +117,7 @@ void Sprite2D::Draw()
 	//if sageobject exists, draw it 
 	if (obj)
 	{
-		SageRenderer::DrawFilled(*obj, {
+		SageRenderer::Draw_Filled(*obj, {
 		SageRenderer::SAGE_ENABLE_ALPHA | SageRenderer::SAGE_ENABLE_TEXTURE | SageRenderer::SAGE_ENABLE_CAMERA
 		});
 	}
@@ -113,15 +125,15 @@ void Sprite2D::Draw()
 	BoxCollider2D* collider = dynamic_cast<BoxCollider2D*>(Get_Parent()->Get_Component(BOXCOLLIDER2D));
 	if (collider && collider->Get_Debug())
 	{
-		SageRenderer::SetOptionOn(SageRenderer::SAGE_ENABLE_CAMERA);
+		SageRenderer::Set_Option_On(SageRenderer::SAGE_ENABLE_CAMERA);
 		collider->aabb.calculate_model_matrix(Get_Parent());
 		auto& aabb = collider->aabb;
-		SageRenderer::DrawLine(aabb.min, aabb.min + ToastBox::Vec2{ aabb.scale.x ,0 }, { 0,1,0,1 }, 1.f);
-		SageRenderer::DrawLine(aabb.min, aabb.min + ToastBox::Vec2{ 0,aabb.scale.y }, { 0,1,0,1 }, 1.f);
-		SageRenderer::DrawLine(aabb.max, aabb.max - ToastBox::Vec2{ aabb.scale.x ,0 }, { 0,1,0,1 }, 1.f);
-		SageRenderer::DrawLine(aabb.max, aabb.max - ToastBox::Vec2{ 0,aabb.scale.y }, { 0,1,0,1 }, 1.f);
+		SageRenderer::Draw_Line(aabb.min, aabb.min + ToastBox::Vec2{ aabb.scale.x ,0 }, { 0,1,0,1 }, 1.f);
+		SageRenderer::Draw_Line(aabb.min, aabb.min + ToastBox::Vec2{ 0,aabb.scale.y }, { 0,1,0,1 }, 1.f);
+		SageRenderer::Draw_Line(aabb.max, aabb.max - ToastBox::Vec2{ aabb.scale.x ,0 }, { 0,1,0,1 }, 1.f);
+		SageRenderer::Draw_Line(aabb.max, aabb.max - ToastBox::Vec2{ 0,aabb.scale.y }, { 0,1,0,1 }, 1.f);
 
-		SageRenderer::SetOptionOff(SageRenderer::SAGE_ENABLE_CAMERA);
+		SageRenderer::Set_Option_Off(SageRenderer::SAGE_ENABLE_CAMERA);
 	}
 }
 /*!*****************************************************************************
@@ -206,6 +218,6 @@ void Sprite2D::Set_Transparency(float _a)
 	colour[3] = _a;
 	if (obj)
 	{
-		obj->set_alpha(_a);
+		obj->Set_Alpha(_a);
 	}
 }
