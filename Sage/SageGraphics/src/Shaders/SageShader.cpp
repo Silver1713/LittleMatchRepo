@@ -157,12 +157,12 @@ SageShader& SageShader::operator=(SageShader&& other) noexcept
 
 
 
-bool SageShader::CompileFromString(SAGE_SHADER_TYPE shader_type, std::string const& source, std::string const& path)
+bool SageShader::Compile_From_String(SAGE_SHADER_TYPE shader_type, std::string const& source, std::string const& path)
 {
 	return sage_impl->Compile_Raw_String(source, shader_type, path);
 }
 
-bool SageShader::CompileFromFile(SAGE_SHADER_TYPE shader_type, std::string const& file_name)
+bool SageShader::Compile_From_File(SAGE_SHADER_TYPE shader_type, std::string const& file_name)
 {
 	return sage_impl->Compile(file_name, shader_type);
 }
@@ -199,25 +199,25 @@ void SageShader::Deactivate()
 
 
 
-unsigned int SageShader::GetProgramHandle()
+unsigned int SageShader::Get_Program_Handle()
 {
 	pgm_handle = sage_impl->GetProgramID();
 	return sage_impl->GetProgramID();
 }
 
-std::string SageShader::GetLog() const
+std::string SageShader::Get_Log() const
 {
 	return sage_impl->GetLog();
 }
 
-bool SageShader::IsLinked() const
+bool SageShader::Is_Linked() const
 {
 	return is_linked;
 }
 
 
 
-int SageShader::GetUniformLocation(const char* name, bool exit_on_error)
+int SageShader::Get_Uniform_Location(const char* name, bool exit_on_error)
 {
 
 	GLint loc = glGetUniformLocation(pgm_handle, name);
@@ -293,35 +293,35 @@ void SageShader::Set_Uniform(const char* name,  ToastBox::Vec4 const& val)
 
 void SageShader::Set_Uniform(const char* name, const glm::mat3& val)
 {
-	GLint loc = GetUniformLocation(name);
+	GLint loc = Get_Uniform_Location(name);
 	glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(val));
 }
 void SageShader::Set_Uniform(const char* name, const glm::mat4& val)
 {
-	GLint loc = GetUniformLocation(name);
+	GLint loc = Get_Uniform_Location(name);
 	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(val));
 }
 
 // Helper Functions
-bool SageShader::FileExists(const std::string& file_name)
+bool SageShader::File_Exists(const std::string& file_name)
 {
 	std::ifstream file(file_name);
 	return file.good();
 }
 
-bool SageShader::DeleteShaderProgram()
+bool SageShader::Delete_Shader_Program()
 {
 	return sage_impl->DeleteShaderProgram();
 }
 
 // Print Active Attributes in a neatly table format
-void SageShader::PrintActiveAttribs() const
+void SageShader::Print_Active_Attribs() const
 {
 
 	sage_impl->PrintActiveAttribs();
 }
 
-void SageShader::PrintActiveUniforms() const
+void SageShader::Print_Active_Uniforms() const
 {
 	sage_impl->PrintActiveUniform();
 }

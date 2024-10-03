@@ -33,13 +33,13 @@ public:
 
 	ToastBox::Vec2 Get_View_Rect_Size() const;
 
-	void MoveCamera(ToastBox::Vec2 _move_vector, float _speed);
+	void Move_Camera(ToastBox::Vec2 _move_vector, float _speed);
 
 	void Update();
 
 	void Init(ToastBox::Vec2 _position, ToastBox::Vec2 _view_rect_size, ToastBox::Vec2 _orientation, SageCameraInternal2D::InternalSageCameraType _camera_type);
 
-	void* GetCam();
+	void* Get_Cam();
 };
 
 #endif

@@ -121,7 +121,7 @@ void init()
     
     int status = SageHelper::Init(window_width, window_height, window_title.c_str());
     SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
-	SageRenderer::init();
+	SageRenderer::Init();
     SageTimer::init();
 
     if (status)

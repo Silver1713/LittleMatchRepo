@@ -24,7 +24,7 @@ ToastBox::Vec2 SageCamera::SageCameraImpl::Get_View_Rect_Size() const
 	return ToastBox::Vec2{ camera.Get_View_Rect_Size().x, camera.Get_View_Rect_Size().y };
 }
 
-void SageCamera::SageCameraImpl::MoveCamera(ToastBox::Vec2 _move_vector, float _speed)
+void SageCamera::SageCameraImpl::Move_Camera(ToastBox::Vec2 _move_vector, float _speed)
 {
 	camera.Move_Camera({ _move_vector.getX(), _move_vector.getY() }, _speed);
 }
@@ -42,7 +42,7 @@ void SageCamera::SageCameraImpl::Init(ToastBox::Vec2 _position, ToastBox::Vec2 _
 
 }
 
-void* SageCamera::SageCameraImpl::GetCam()
+void* SageCamera::SageCameraImpl::Get_Cam()
 {
 	return camera.Get_Camera();
 }

@@ -182,7 +182,7 @@ struct SageRenderer
 		These primitives are the square, circle and triangle. This function prepare
 		the renderer for rendering objects and models.
 	*******************************************************************************/
-	static void init();
+	static void Init();
 	/*!*****************************************************************************
 	\brief
 		Set the default shader program of the renderer.

@@ -7,7 +7,7 @@
 
 std::map<std::string, SageObject> SageObjectManager::objects{};
 
-SageObject& SageObjectManager::Create_Primitive_Object(char const* name, PrimitiveObject OBJ_SHAPE)
+SageObject& SageObjectManager::Create_Primitive_Object(char const* _name, PrimitiveObject OBJ_SHAPE)
 {
 	
 	SageObject obj;
@@ -31,13 +31,13 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* name, Primiti
 		else
 			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
 
-		obj.Init(name, &SageModelManager::models["PRIMITIVE_RECT"]);
+		obj.Init(_name, &SageModelManager::models["PRIMITIVE_RECT"]);
 
 		obj.transform = {};
 
-		objects[name] = obj;
+		objects[_name] = obj;
 
-		return objects[name];
+		return objects[_name];
 	}
 
 	if (OBJ_SHAPE == PRIMITIVE_OBJECT_CIRCLE)
@@ -61,12 +61,12 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* name, Primiti
 			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
 		}
 
-		obj.Init(name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
+		obj.Init(_name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
 		obj.transform = {};
 
-		objects[name] = obj;
+		objects[_name] = obj;
 
-		return objects[name];
+		return objects[_name];
 	}
 	else
 	{
@@ -75,10 +75,10 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* name, Primiti
 	}
 }
 
-SageObject& SageObjectManager::Create_Primitive_Object(char const* name, PrimitiveObject OBJ_SHAPE, glm::vec2 position, glm::vec2 scale, glm::vec2 orientation, glm::vec4 color, glm::vec4 borderColor, float borderWidth, float borderRadius)
+SageObject& SageObjectManager::Create_Primitive_Object(char const* _name, PrimitiveObject _OBJ_SHAPE, glm::vec2 position, glm::vec2 _scale, glm::vec2 _orientation, glm::vec4 _color, glm::vec4 _border_color, float _border_width, float _border_radius)
 {
 	SageObject obj;
-	if (OBJ_SHAPE == PRIMITIVE_OBJECT_RECT)
+	if (_OBJ_SHAPE == PRIMITIVE_OBJECT_RECT)
 	{
 		if (SageModelManager::models.find("PRIMITIVE_RECT") == SageModelManager::models.end())
 		{
@@ -98,23 +98,23 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* name, Primiti
 		else
 			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
 
-		obj.Init(name, &SageModelManager::models["PRIMITIVE_RECT"]);
+		obj.Init(_name, &SageModelManager::models["PRIMITIVE_RECT"]);
 
 		obj.transform.position = position;
-		obj.transform.scale = scale;
-		obj.transform.orientation = orientation;
+		obj.transform.scale = _scale;
+		obj.transform.orientation = _orientation;
 
-		obj.GetMaterial().color = color;
-		obj.GetMaterial().border_color = borderColor;
-		obj.GetMaterial().border_width = borderWidth;
-		obj.GetMaterial().border_radius = borderRadius;
+		obj.GetMaterial().color = _color;
+		obj.GetMaterial().border_color = _border_color;
+		obj.GetMaterial().border_width = _border_width;
+		obj.GetMaterial().border_radius = _border_radius;
 
-		objects[name] = obj;
+		objects[_name] = obj;
 
-		return objects[name];
+		return objects[_name];
 	}
 
-	else if (OBJ_SHAPE == PRIMITIVE_OBJECT_CIRCLE)
+	else if (_OBJ_SHAPE == PRIMITIVE_OBJECT_CIRCLE)
 	{
 		if (SageModelManager::models.find("PRIMITIVE_CIRCLE") == SageModelManager::models.end())
 		{
@@ -135,21 +135,21 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* name, Primiti
 			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
 		}
 
-		obj.Init(name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
+		obj.Init(_name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
 
 		obj.transform.position = position;
-		obj.transform.scale = scale;
-		obj.transform.orientation = orientation;
+		obj.transform.scale = _scale;
+		obj.transform.orientation = _orientation;
 
-		obj.GetMaterial().color = color;
-		obj.GetMaterial().border_color = borderColor;
-		obj.GetMaterial().border_width = borderWidth;
-		obj.GetMaterial().border_radius = borderRadius;
+		obj.GetMaterial().color = _color;
+		obj.GetMaterial().border_color = _border_color;
+		obj.GetMaterial().border_width = _border_width;
+		obj.GetMaterial().border_radius = _border_radius;
 		
 
-		objects[name] = obj;
+		objects[_name] = obj;
 
-		return objects[name];
+		return objects[_name];
 	}
 	else
 	{

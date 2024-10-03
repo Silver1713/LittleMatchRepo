@@ -39,7 +39,7 @@ ToastBox::Vec2 SageCamera::Get_View_Rect_Size()
 
 void SageCamera::Move_Camera(ToastBox::Vec2 _move_vector, float speed)
 {
-	impl->MoveCamera(_move_vector, speed);
+	impl->Move_Camera(_move_vector, speed);
 
 	position = Get_Position();
 }
@@ -84,7 +84,7 @@ SageCamera::~SageCamera()
 }
 void* SageCamera::Get_Camera()
 {
-	return impl->GetCam();
+	return impl->Get_Cam();
 }
 
 ToastBox::Vec2 SageCamera::Screen_To_World(ToastBox::Vec2 screen_pos)

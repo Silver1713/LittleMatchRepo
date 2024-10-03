@@ -69,11 +69,11 @@ private:
 
 public:
 	SageObject();
-	void Init(char const* name, SageModel* model);
+	void Init(char const* _name, SageModel* _model);
 	void Update();
-	void Draw(SageViewport* vp);
-	void Draw(SageCamera* cam);
-	void Attach_Texture(SageTexture* texture);
+	void Draw(SageViewport* _vp);
+	void Draw(SageCamera* _cam);
+	void Attach_Texture(SageTexture* _texture);
 	//Camera;
 
 
@@ -86,7 +86,7 @@ public:
 
 	SageMaterial& GetMaterial();
 
-	void Set_Alpha(float transparency); // 0: Transparent, 1: Opaque
+	void Set_Alpha(float _transparency); // 0: Transparent, 1: Opaque
 
 	void Disable_Object();
 

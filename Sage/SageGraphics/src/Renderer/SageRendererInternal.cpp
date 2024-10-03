@@ -100,12 +100,12 @@ void SageRendererInternal::Draw_Filled(SageObject& object)
 
 
 
-void SageRendererInternal::SetOptionOn(int options)
+void SageRendererInternal::Set_Option_On(int options)
 {
 	default_config.options |= options;
 }
 
-void SageRendererInternal::SetOptionOff(int options)
+void SageRendererInternal::Set_Option_Off(int options)
 {
 	default_config.options &= ~options;
 }
@@ -138,8 +138,8 @@ void SageRendererInternal::Draw_Filled(SageModel& model)
 	shader->Set_Uniform("uUseTexture", use_texture);
 	if (use_texture)
 	{
-		glActiveTexture(default_config.current_texture->get_texture_unit());
-		shader->Set_Uniform("uTex2D", default_config.current_texture->get_texture_unit());
+		glActiveTexture(default_config.current_texture->Get_Texture_Unit());
+		shader->Set_Uniform("uTex2D", default_config.current_texture->Get_Texture_Unit());
 	}
 
 
@@ -199,8 +199,8 @@ void SageRendererInternal::Draw_Filled(SageModel& model, glm::mat3& matrix, REND
 	shader->Set_Uniform("uUseTexture", use_texture);
 	if (use_texture)
 	{
-		glActiveTexture(config.current_texture->get_texture_unit());
-		shader->Set_Uniform("uTex2D", config.current_texture->get_texture_unit());
+		glActiveTexture(config.current_texture->Get_Texture_Unit());
+		shader->Set_Uniform("uTex2D", config.current_texture->Get_Texture_Unit());
 	}
 
 
@@ -247,7 +247,7 @@ void SageRendererInternal::init()
 
 	}
 
-	SetOptionOn(I_SAGE_ENABLE_ALPHA | I_SAGE_ENABLE_BORDER);
+	Set_Option_On(I_SAGE_ENABLE_ALPHA | I_SAGE_ENABLE_BORDER);
 
 	default_config.border_radius = 15.f;
 	default_config.border_width = 15.f;
@@ -307,9 +307,9 @@ void SageRendererInternal::Set_Transformation_Matrix(glm::mat3& matrix)
 	default_config.transformation_matrix = matrix;
 }
 
-void SageRendererInternal::Set_Default_Shader(SageShader* shader)
+void SageRendererInternal::Set_Default_Shader(SageShader* _shader)
 {
-	default_shader = shader;
+	default_shader = _shader;
 }
 
 
@@ -351,8 +351,8 @@ void SageRendererInternal::Draw_Line(SageLine const& line, float size)
 	shader->Set_Uniform("uUseTexture", false);
 	if (use_texture)
 	{
-		glActiveTexture(default_config.current_texture->get_texture_unit());
-		shader->Set_Uniform("uTex2D", default_config.current_texture->get_texture_unit());
+		glActiveTexture(default_config.current_texture->Get_Texture_Unit());
+		shader->Set_Uniform("uTex2D", default_config.current_texture->Get_Texture_Unit());
 	}
 
 	if (line.line->Is_Idx_Enabled())
@@ -442,8 +442,8 @@ void SageRendererInternal::Draw_Point(SagePoint const& point)
 	shader->Set_Uniform("uUseTexture", false);
 	if (use_texture)
 	{
-		glActiveTexture(default_config.current_texture->get_texture_unit());
-		shader->Set_Uniform("uTex2D", default_config.current_texture->get_texture_unit());
+		glActiveTexture(default_config.current_texture->Get_Texture_Unit());
+		shader->Set_Uniform("uTex2D", default_config.current_texture->Get_Texture_Unit());
 	}
 
 	glPointSize(point.size);

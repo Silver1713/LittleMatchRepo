@@ -153,7 +153,7 @@ public:
 			True if the shader is compiled successfully, false otherwise.
 
 	*******************************************************************************/
-	bool CompileFromString(SAGE_SHADER_TYPE shader_type, std::string const& source, std::string const& path = "");
+	bool Compile_From_String(SAGE_SHADER_TYPE shader_type, std::string const& source, std::string const& path = "");
 	/*!*****************************************************************************
 	\brief
 		Compile a shader object from a file.
@@ -170,7 +170,7 @@ public:
 		True if the shader is compiled successfully, false otherwise.
 
 	*******************************************************************************/
-	bool CompileFromFile(SAGE_SHADER_TYPE shader_type, std::string const& file_name);
+	bool Compile_From_File(SAGE_SHADER_TYPE shader_type, std::string const& file_name);
 
 
 
@@ -218,7 +218,7 @@ public:
 	bool Validate();
 
 	//Compile Link and Validate
-	bool CompileLinkValidate(SAGE_SHADER_TYPE shader_type, std::string const& source);
+	bool Compile_Link_Validate(SAGE_SHADER_TYPE shader_type, std::string const& source);
 
 
 	/*!*****************************************************************************
@@ -230,7 +230,7 @@ public:
 	\return
 		The program handle for the shader program.
 	*******************************************************************************/
-	unsigned int GetProgramHandle();
+	unsigned int Get_Program_Handle();
 	/*!*****************************************************************************
 	\brief
 		Check if the shader program is linked.
@@ -240,7 +240,7 @@ public:
 	\return
 		True if the shader program is linked, false otherwise.
 	*******************************************************************************/
-	bool IsLinked() const;
+	bool Is_Linked() const;
 	/*!*****************************************************************************
 	\brief
 		Get the shader program logs.
@@ -251,7 +251,7 @@ public:
 	\return
 		The shader program logs.
 	*******************************************************************************/
-	std::string GetLog() const;
+	std::string Get_Log() const;
 
 	/*!*****************************************************************************
 	\brief
@@ -268,7 +268,7 @@ public:
 	\return
 		An integer representing the uniform location of the variable.
 	*******************************************************************************/
-	int GetUniformLocation(const char* name, bool exit_on_error = false);
+	int Get_Uniform_Location(const char* name, bool exit_on_error = false);
 
 	/*!*****************************************************************************
 	\brief
@@ -452,9 +452,9 @@ public:
 
 
 
-	void PrintActiveAttribs() const;
+	void Print_Active_Attribs() const;
 
-	void PrintActiveUniforms() const;
+	void Print_Active_Uniforms() const;
 
 	// Helper Functions
 	/*!*****************************************************************************
@@ -468,7 +468,7 @@ public:
 	\return
 		True, if the file exist else, false.
 	*******************************************************************************/
-	bool FileExists(const std::string& file_name);
+	bool File_Exists(const std::string& file_name);
 
 	/*!*****************************************************************************
 	\brief
@@ -479,6 +479,6 @@ public:
 	\return
 		True, if deletion is successful else false.
 	*******************************************************************************/
-	bool DeleteShaderProgram();
+	bool Delete_Shader_Program();
 };
 #endif

@@ -275,9 +275,9 @@ void SageHelper::Error_Cb(int error, const char* description)
 SageShader SageHelper::Compile_Shaders_From_File(const char* vertex_shader, const char* fragment_shader)
 {
 	SageShader shader{};
-	bool a = shader.CompileFromFile(SageShader::SAGE_SHADER_TYPE::SAGE_VERTEX_SHADER, vertex_shader);
+	bool a = shader.Compile_From_File(SageShader::SAGE_SHADER_TYPE::SAGE_VERTEX_SHADER, vertex_shader);
 
-	bool b = shader.CompileFromFile(SageShader::SAGE_SHADER_TYPE::SAGE_FRAGMENT_SHADER, fragment_shader);
+	bool b = shader.Compile_From_File(SageShader::SAGE_SHADER_TYPE::SAGE_FRAGMENT_SHADER, fragment_shader);
 	if (a & b)
 	{
 		std::cout << "Shaders compiled successfully" << '\n';
@@ -309,7 +309,7 @@ SageShader SageHelper::Compile_Shaders_From_File(const char* vertex_shader, cons
 		std::cerr << "Shaders failed to validate" << '\n';
 		std::exit(EXIT_FAILURE);
 	}
-	shader.GetProgramHandle();
+	shader.Get_Program_Handle();
 	return shader;
 }
 

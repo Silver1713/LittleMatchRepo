@@ -78,7 +78,7 @@ void SageRenderer::Draw_Filled(SageModel& model, glm::mat3& matrix, RENDER_CONFI
 }
 
 
-void SageRenderer::init()
+void SageRenderer::Init()
 {
 	SageRendererInternal::init();
 	

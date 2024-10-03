@@ -25,9 +25,9 @@ SageCamera camera2d;
 void ExampleScene::init()
 {
 	SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
-	SageRenderer::init();
+	SageRenderer::Init();
 
-	_p.load_texture("../SageIO/image/digipen_splash_screen.png", SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
+	_p.Load_Texture("../SageIO/image/digipen_splash_screen.png", SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
 	v_p = { glm::vec2{0,0}, {SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT} };
 	v_p.calculate_viewport_xform();
 	camera2d.init({ 0,0 }, { static_cast<float>(SageHelper::WINDOW_WIDTH), static_cast<float>(

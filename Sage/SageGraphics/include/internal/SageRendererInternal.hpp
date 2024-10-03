@@ -95,7 +95,7 @@ struct SageRendererInternal
 
 	static void init();
 	static SageCamera* camera;
-	static void Set_Default_Shader(SageShader* shader);
+	static void Set_Default_Shader(SageShader* _shader);
 	static void Set_Current_View(SageViewport& view);
 	static void Set_Current_View(SageCamera* view);
 	static void Draw_Filled(SageObject& object, RENDER_CONFIG_INTERNAL config);
@@ -113,8 +113,8 @@ struct SageRendererInternal
 	static void Draw_Rect(float x, float y, float width, float height, ToastBox::Vec4 color);
 
 
-	static void SetOptionOn(int options);
-	static void SetOptionOff(int options);
+	static void Set_Option_On(int options);
+	static void Set_Option_Off(int options);
 
 	static void Set_Border_Width(float width);
 	static void Set_Border_Radius(float radius);
