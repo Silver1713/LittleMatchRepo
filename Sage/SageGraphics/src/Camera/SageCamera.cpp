@@ -9,7 +9,7 @@ class SageCamera::SageCameraImpl
 
 public:
 	SageCameraImpl() : camera() {}
-	SageCameraImpl(ToastBox::Vec2 _position, ToastBox::Vec2 _view_rect_size, float _orientation, int _camera_type) : camera({ _position.getX(), _position.getY() }, { _view_rect_size.getX(),_view_rect_size.getY() }, { _orientation,0 }, static_cast
+	SageCameraImpl(ToastBox::Vec2 _position, ToastBox::Vec2 _view_rect_size, float _orientation, int _camera_type) : camera({ _position.GetX(), _position.GetY() }, { _view_rect_size.GetX(),_view_rect_size.GetY() }, { _orientation,0 }, static_cast
 		<SageCameraInternal2D::InternalSageCameraType>(_camera_type)) {}
 
 	float const* get_projection_view() const
@@ -30,7 +30,7 @@ public:
 
 	void MoveCamera(ToastBox::Vec2 _move_vector, float speed)
 	{
-		camera.move_camera({ _move_vector.getX(), _move_vector.getY() }, speed);
+		camera.move_camera({ _move_vector.GetX(), _move_vector.GetY() }, speed);
 	}
 
 	void Update()
@@ -41,7 +41,7 @@ public:
 
 	void Init(ToastBox::Vec2 _position, ToastBox::Vec2 _view_rect_size, ToastBox::Vec2 _orientation, SageCameraInternal2D::InternalSageCameraType _camera_type)
 	{
-		camera.Init({ _position.getX(), _position.getY() }, { _view_rect_size.getX(),_view_rect_size.getY() }, { _orientation.getX(),_orientation.getY() }, _camera_type);
+		camera.Init({ _position.GetX(), _position.GetY() }, { _view_rect_size.GetX(),_view_rect_size.GetY() }, { _orientation.GetX(),_orientation.GetY() }, _camera_type);
 	}
 
 	void* GetCam()
@@ -98,13 +98,13 @@ void SageCamera::update()
 
 void SageCamera::init(ToastBox::Vec2 _position, ToastBox::Vec2 _view_rect_size, float _orientation, SageCameraType _camera_type)
 {
-	impl->Init({ _position.getX(), _position.getY() }, { _view_rect_size.getX(),_view_rect_size.getY() }, { _orientation,0 }, static_cast
+	impl->Init({ _position.GetX(), _position.GetY() }, { _view_rect_size.GetX(),_view_rect_size.GetY() }, { _orientation,0 }, static_cast
 		<SageCameraInternal2D::InternalSageCameraType>(_camera_type));
 
 	position = _position;
 	rect_size = _view_rect_size;
 	orientation = _orientation;
-	this->aspect_ratio = static_cast<float>(_view_rect_size.getX()) / static_cast<float>(_view_rect_size.y);
+	this->aspect_ratio = static_cast<float>(_view_rect_size.GetX()) / static_cast<float>(_view_rect_size.y);
 	this->zoom = 1.0f;
 	this->view_projection_matrix = impl->get_projection_view();
 

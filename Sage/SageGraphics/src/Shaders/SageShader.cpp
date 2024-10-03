@@ -285,7 +285,7 @@ void SageShader::SetUniform(const char* name, float x, float y, float z, float w
 
 void SageShader::SetUniform(const char* name, const ToastBox::Vec2& val)
 {
-	sage_impl->SetUniform(name, val.getX(), val.getY());
+	sage_impl->SetUniform(name, val.GetX(), val.GetY());
 }
 
 void SageShader::SetUniform(const char* name, const ToastBox::Vec3& val)

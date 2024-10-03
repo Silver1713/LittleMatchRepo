@@ -375,7 +375,7 @@ void SageRendererInternal::DrawLine(SageLine const& line, float size)
 
 void SageRendererInternal::DrawLine(ToastBox::Vec2 start, ToastBox::Vec2 end, ToastBox::Vec4 color, float size)
 {
-	SageLine line({ start.getX(), start.getY() }, { end.getX(), end.getY() }, { color.x,color.y,color.z,color.a }, size);
+	SageLine line({ start.GetX(), start.GetY() }, { end.GetX(), end.GetY() }, { color.x,color.y,color.z,color.a }, size);
 	line.line = &SageModelManager::models["PRIMITIVE_LINE"];
 
 	line.update_dist(line.start, line.end);
@@ -467,7 +467,7 @@ void SageRendererInternal::DrawPoint(SagePoint const& point)
 
 void SageRendererInternal::DrawPoint(ToastBox::Vec2 position, ToastBox::Vec4 color, float _s)
 {
-	SagePoint point({ position.getX(), position.getY() }, { color.x,color.y,color.z,color.a }, _s);
+	SagePoint point({ position.GetX(), position.GetY() }, { color.x,color.y,color.z,color.a }, _s);
 	point.point = &SageModelManager::models["PRIMITIVE_POINT"];
 	point.calculate_transform();
 	DrawPoint(point);
