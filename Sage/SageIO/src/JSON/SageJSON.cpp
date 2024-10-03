@@ -452,7 +452,6 @@ namespace SageJSON
 		json_file.seekg(0, json_file.end);
 		size = json_file.tellg();
 		json_file.seekg(0, json_file.beg);
-		int i{};
 		SageJSONCout << "Loaded Data: " << file_path << '\n';
 
 		while (!json_file.eof())

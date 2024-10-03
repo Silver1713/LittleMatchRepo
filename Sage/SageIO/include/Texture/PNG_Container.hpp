@@ -35,8 +35,8 @@ public:
 	byte_8 pack8ByteLE(unsigned char data[]);
 	byte_4 pack4ByteLE(unsigned char data[]);
 
-	byte_8 read8ByteLE(std::ifstream& file);
-	byte_4 read4ByteLE(std::ifstream& file);
+	byte_8 read8ByteLE();
+	byte_4 read4ByteLE();
 
 	bool isPNG(std::ifstream& file);
 
