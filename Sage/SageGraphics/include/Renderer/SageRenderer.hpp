@@ -87,7 +87,7 @@ enum SHAPE
 
 /*!*****************************************************************************
 \brief
-	Rendererer configuration struct that contain the configuration of the renderer.
+	Rendererer configuration struct that shadows the internal config structure.s
 
 	This struct encapsulate the configuration of the renderer which is used to
 	modify the behaviour of the renderer. It contain options like color, alpha and

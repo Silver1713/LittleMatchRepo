@@ -233,7 +233,7 @@ void SageRendererInternal::Draw_Filled(SageModel& model, glm::mat3& matrix, REND
 }
 
 
-void SageRendererInternal::init()
+void SageRendererInternal::Init()
 {
 	default_config.options = 0;
 	if (SageShaderManager::shaders.find("BASE_SHADER") != SageShaderManager::shaders.end())

@@ -248,32 +248,32 @@ GLint SageShaderInternal::GetUniformLocation(const char* name, bool exit_on_erro
 
 // Uniform setter - Numerical
 
-void SageShaderInternal::SetUniform(const char* name, GLint val)
+void SageShaderInternal::Set_Uniform(const char* name, GLint val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform1i(loc, val);
 }
 
 
-void SageShaderInternal::SetUniform(const char* name, GLfloat val)
+void SageShaderInternal::Set_Uniform(const char* name, GLfloat val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform1f(loc, val);
 }
 
-void SageShaderInternal::SetUniform(const char* name, GLdouble val)
+void SageShaderInternal::Set_Uniform(const char* name, GLdouble val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform1d(loc, val);
 }
 
-void SageShaderInternal::SetUniform(const char* name, GLboolean val)
+void SageShaderInternal::Set_Uniform(const char* name, GLboolean val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform1i(loc, val);
 }
 
-void SageShaderInternal::SetUniform(const char* name, bool val)
+void SageShaderInternal::Set_Uniform(const char* name, bool val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform1i(loc, val ? GL_TRUE : GL_FALSE);
@@ -281,19 +281,19 @@ void SageShaderInternal::SetUniform(const char* name, bool val)
 
 // Uniform setter - Vector - Singular
 
-void SageShaderInternal::SetUniform(const char* name, GLfloat x, GLfloat y)
+void SageShaderInternal::Set_Uniform(const char* name, GLfloat x, GLfloat y)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform2f(loc, x, y);
 }
-void SageShaderInternal::SetUniform(const char* name, GLfloat x, GLfloat y, GLfloat z)
+void SageShaderInternal::Set_Uniform(const char* name, GLfloat x, GLfloat y, GLfloat z)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform3f(loc, x, y, z);
 
 }
 
-void SageShaderInternal::SetUniform(const char* name, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
+void SageShaderInternal::Set_Uniform(const char* name, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform4f(loc, x, y, z, w);
@@ -301,19 +301,19 @@ void SageShaderInternal::SetUniform(const char* name, GLfloat x, GLfloat y, GLfl
 
 // Uniform setter - Vector - glm
 
-void SageShaderInternal::SetUniform(const char* name, const glm::vec2& val)
+void SageShaderInternal::Set_Uniform(const char* name, const glm::vec2& val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform2fv(loc, 1, glm::value_ptr(val));
 }
 
-void SageShaderInternal::SetUniform(const char* name, const glm::vec3& val)
+void SageShaderInternal::Set_Uniform(const char* name, const glm::vec3& val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform3fv(loc, 1, glm::value_ptr(val));
 }
 
-void SageShaderInternal::SetUniform(const char* name, const glm::vec4& val)
+void SageShaderInternal::Set_Uniform(const char* name, const glm::vec4& val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform4fv(loc, 1, glm::value_ptr(val));
@@ -321,19 +321,19 @@ void SageShaderInternal::SetUniform(const char* name, const glm::vec4& val)
 
 // Uniform setter - Matrices - glm
 
-void SageShaderInternal::SetUniform(const char* name, const glm::mat2& val)
+void SageShaderInternal::Set_Uniform(const char* name, const glm::mat2& val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniformMatrix2fv(loc, 1, GL_FALSE, glm::value_ptr(val));
 
 }
 
-void SageShaderInternal::SetUniform(const char* name, const glm::mat3& val)
+void SageShaderInternal::Set_Uniform(const char* name, const glm::mat3& val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(val));
 }
-void SageShaderInternal::SetUniform(const char* name, const glm::mat4& val)
+void SageShaderInternal::Set_Uniform(const char* name, const glm::mat4& val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(val));
@@ -353,7 +353,7 @@ bool SageShaderInternal::DeleteShaderProgram()
 }
 
 // Print Active Attributes in a neatly table format
-void SageShaderInternal::PrintActiveAttribs() const
+void SageShaderInternal::Print_Active_Attribs() const
 {
 	GLint num_attribs = 0;
 	glGetProgramInterfaceiv(pgm_handle, GL_PROGRAM_INPUT, GL_ACTIVE_RESOURCES, &num_attribs);
@@ -378,7 +378,7 @@ void SageShaderInternal::PrintActiveAttribs() const
 	}
 }
 
-void SageShaderInternal::PrintActiveUniforms() const
+void SageShaderInternal::Print_Active_Uniforms() const
 {
 	GLint num_uniforms = 0;
 	glGetProgramInterfaceiv(pgm_handle, GL_UNIFORM, GL_ACTIVE_RESOURCES, &num_uniforms);
@@ -405,26 +405,26 @@ void SageShaderInternal::PrintActiveUniforms() const
 }
 
 
-void SageShaderInternal::SetUniform3fm(const char* name, float* data)
+void SageShaderInternal::Set_Uniform_3f_m(const char* name, float* data)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform3fv(loc, 1, data);
 }
 
-void SageShaderInternal::SetUniform4fm(const char* name, float* data)
+void SageShaderInternal::Set_Uniform_4f_m(const char* name, float* data)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniform4fv(loc, 1, data);
 }
 
 
-void SageShaderInternal::SetUniform3fm(const char* name, const float* data) const
+void SageShaderInternal::Set_Uniform_3f_m(const char* name, const float* data) const
 {
 	GLint loc = GetUniformLocation(name);
 	glUniformMatrix3fv(loc, 1,GL_FALSE, data);
 }
 
-void SageShaderInternal::SetUniform4fm(const char* name, const float* data) const
+void SageShaderInternal::Set_Uniform_4f_m(const char* name, const float* data) const
 {
 	GLint loc = GetUniformLocation(name);
 	glUniformMatrix4fv(loc, 1,GL_FALSE, data);

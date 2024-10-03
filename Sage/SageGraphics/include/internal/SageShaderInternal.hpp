@@ -23,7 +23,7 @@ public:
 		S_INTERNAL_GEOMETRY_SHADER,
 		S_INTERNAL_TESS_CONTROL_SHADER,
 		S_INTERNAL_TESS_EVALUATION_SHADER,
-		S_INTERNAL_COMPUTE_SHADER,
+		S_INTERNAL_COMPUTE_SHADER,	
 		S_INTERNAL_count // number of shader types
 	};
 	SageShaderInternal();
@@ -68,38 +68,38 @@ public:
 
 	// Setters for uniform variables
 	// Numericals
-	void SetUniform(const char* name, GLint val);
-	void SetUniform(const char* name, GLfloat val);
-	void SetUniform(const char* name, GLdouble val);
-	void SetUniform(const char* name, GLboolean val);
-	void SetUniform(const char* name, bool val);
+	void Set_Uniform(const char* name, GLint val);
+	void Set_Uniform(const char* name, GLfloat val);
+	void Set_Uniform(const char* name, GLdouble val);
+	void Set_Uniform(const char* name, GLboolean val);
+	void Set_Uniform(const char* name, bool val);
 
 	//Vectors - Singular
-	void SetUniform(const char* name, GLfloat x, GLfloat y);
-	void SetUniform(const char* name, GLfloat x, GLfloat y, GLfloat z);
-	void SetUniform(const char* name, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
+	void Set_Uniform(const char* name, GLfloat x, GLfloat y);
+	void Set_Uniform(const char* name, GLfloat x, GLfloat y, GLfloat z);
+	void Set_Uniform(const char* name, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
 
 	//Vector - glm
-	void SetUniform(const char* name, const glm::vec2& val);
-	void SetUniform(const char* name, const glm::vec3& val);
-	void SetUniform(const char* name, const glm::vec4& val);
+	void Set_Uniform(const char* name, const glm::vec2& val);
+	void Set_Uniform(const char* name, const glm::vec3& val);
+	void Set_Uniform(const char* name, const glm::vec4& val);
 
 	// Uniform Matrices
-	void SetUniform(const char* name, const glm::mat2& val);
-	void SetUniform(const char* name, const glm::mat3& val);
-	void SetUniform(const char* name, const glm::mat4& val);
+	void Set_Uniform(const char* name, const glm::mat2& val);
+	void Set_Uniform(const char* name, const glm::mat3& val);
+	void Set_Uniform(const char* name, const glm::mat4& val);
 
 
-	void SetUniform3fm(const char* name, float* data);
-	void SetUniform3fm(const char* name, const float* data) const;
-	void SetUniform4fm(const char* name, float* data);
-	void SetUniform4fm(const char* name, const float* data) const;
+	void Set_Uniform_3f_m(const char* name, float* data);
+	void Set_Uniform_3f_m(const char* name, const float* data) const;
+	void Set_Uniform_4f_m(const char* name, float* data);
+	void Set_Uniform_4f_m(const char* name, const float* data) const;
 
 
 
-	void PrintActiveAttribs() const;
+	void Print_Active_Attribs() const;
 
-	void PrintActiveUniforms() const;
+	void Print_Active_Uniforms() const;
 
 	// Helper Functions
 	bool FileExists(const std::string& file_name);

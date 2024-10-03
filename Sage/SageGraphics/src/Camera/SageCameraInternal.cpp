@@ -139,10 +139,9 @@ glm::vec2 SageCameraInternal2D::Get_View_Rect_Size() const
 {
 	return view_rect_size;
 }
-
-
-
-
-
+void* SageCameraInternal2D::Get_Camera()
+{
+	return this;
+}
 
 

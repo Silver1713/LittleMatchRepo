@@ -62,12 +62,12 @@ public:
 
 	void PrintActiveAttribs()
 	{
-		internal_impl->PrintActiveAttribs();
+		internal_impl->Print_Active_Attribs();
 	}
 
 	void PrintActiveUniform()
 	{
-		internal_impl->PrintActiveUniforms();
+		internal_impl->Print_Active_Uniforms();
 
 	}
 
@@ -80,49 +80,49 @@ public:
 
 	void SetUniform(const char* name, int const& val) const
 	{
-		internal_impl->SetUniform(name, val);
+		internal_impl->Set_Uniform(name, val);
 	}
 
 	void SetUniform(const char* name, float const& val) const
 	{
-		internal_impl->SetUniform(name, val);
+		internal_impl->Set_Uniform(name, val);
 	}
 
 	void SetUniform(const char* name, double const& val) const
 	{
-		internal_impl->SetUniform(name, val);
+		internal_impl->Set_Uniform(name, val);
 	}
 
 
 	void SetUniform(const char* name, bool val) const
 	{
-		internal_impl->SetUniform(name, val);
+		internal_impl->Set_Uniform(name, val);
 	}
 
 	void SetUniform(const char* name, float x, float y) const
 	{
-		internal_impl->SetUniform(name, x, y);
+		internal_impl->Set_Uniform(name, x, y);
 	}
 
 	void SetUniform(const char* name, float x, float y, float z) const
 	{
-		internal_impl->SetUniform(name, x, y, z);
+		internal_impl->Set_Uniform(name, x, y, z);
 	}
 
 	void SetUniform(const char* name, float x, float y, float z, float w) const
 	{
-		internal_impl->SetUniform(name, x, y, z, w);
+		internal_impl->Set_Uniform(name, x, y, z, w);
 	}
 
 	void SetUniform(const char* name, const ToastBox::Matrix3x3& val) const
 	{
 		
-		internal_impl->SetUniform3fm(name, val.data());
+		internal_impl->Set_Uniform_3f_m(name, val.data());
 	}
 
 	void SetUniform(const char* name, const ToastBox::Matrix4& val) const
 	{
-		internal_impl->SetUniform4fm(name, val.data());
+		internal_impl->Set_Uniform_4f_m(name, val.data());
 	}
 
 };
