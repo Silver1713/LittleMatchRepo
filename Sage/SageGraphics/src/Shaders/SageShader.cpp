@@ -137,7 +137,7 @@ public:
 
 	void SetUniform(const char* name, const ToastBox::Matrix4& val) const
 	{
-		internal_impl->Set_Uniform_4f_m(name, val.data());
+		internal_impl->Set_Uniform_4f_m(name, val.Data());
 	}
 
 };

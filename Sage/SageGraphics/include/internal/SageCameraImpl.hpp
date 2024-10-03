@@ -119,7 +119,6 @@ public:
 		Get the pointer to the camera object.
 	\return
 		(void*) A typeless void pointer to the camera object.
-
 	*******************************************************************************/
 	void* Get_Cam();
 };

@@ -22,7 +22,7 @@
 SageCamera::SageCameraImpl::SageCameraImpl() : camera() {}
 
 SageCamera::SageCameraImpl::SageCameraImpl(ToastBox::Vec2 _position, ToastBox::Vec2 _view_rect_size, float _orientation, int _camera_type) :
-camera({ _position.getX(), _position.getY() }, { _view_rect_size.getX(),_view_rect_size.getY() }, 
+camera({ _position.GetX(), _position.GetY() }, { _view_rect_size.GetX(),_view_rect_size.GetY() }, 
 	{ _orientation,0 }, static_cast<SageCameraInternal2D::InternalSageCameraType>(_camera_type)) {}
 
 
@@ -43,7 +43,7 @@ ToastBox::Vec2 SageCamera::SageCameraImpl::Get_View_Rect_Size() const
 
 void SageCamera::SageCameraImpl::Move_Camera(ToastBox::Vec2 _move_vector, float _speed)
 {
-	camera.Move_Camera({ _move_vector.getX(), _move_vector.getY() }, _speed);
+	camera.Move_Camera({ _move_vector.GetX(), _move_vector.GetY() }, _speed);
 }
 
 void SageCamera::SageCameraImpl::Update()
@@ -54,8 +54,8 @@ void SageCamera::SageCameraImpl::Update()
 
 void SageCamera::SageCameraImpl::Init(ToastBox::Vec2 _position, ToastBox::Vec2 _view_rect_size, ToastBox::Vec2 _orientation, SageCameraInternal2D::InternalSageCameraType _camera_type)
 {
-	camera.Init({ _position.getX(), _position.getY() }, { _view_rect_size.getX(),_view_rect_size.getY() }, 
-		{ _orientation.getX(),_orientation.getY() }, _camera_type);
+	camera.Init({ _position.GetX(), _position.GetY() }, { _view_rect_size.GetX(),_view_rect_size.GetY() }, 
+		{ _orientation.GetX(),_orientation.GetY() }, _camera_type);
 
 }
 

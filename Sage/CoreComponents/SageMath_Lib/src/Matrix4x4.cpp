@@ -267,6 +267,7 @@ namespace ToastBox {
 		The matrix to be transposed
 	*******************************************************************************/
 	void Matrix4::Matrix4_Transpose(const Matrix4& mtx) {
+		mtx;
 		std::swap(Components.b, Components.e);
 		std::swap(Components.c, Components.i);
 		std::swap(Components.d, Components.m);
