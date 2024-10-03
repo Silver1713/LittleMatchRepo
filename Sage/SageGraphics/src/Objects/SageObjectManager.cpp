@@ -21,15 +21,15 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* name, Primiti
 		SageModel& mdl = SageModelManager::models["PRIMITIVE_RECT"];
 
 
-		mdl.setup_gpu_buffer();
+		mdl.Setup_Gpu_Buffer();
 
 		//Create base shader
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end()) {
 			SageShader& shdr = SageShaderManager::search_and_create_shader_program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
-			mdl.AssignShaderProgram(&shdr);
+			mdl.Assign_Shader_Program(&shdr);
 		}
 		else
-			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
+			mdl.Assign_Shader_Program(&SageShaderManager::shaders["BASE_SHADER"]);
 
 		obj.Init(name, &SageModelManager::models["PRIMITIVE_RECT"]);
 
@@ -49,16 +49,16 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* name, Primiti
 
 		SageModel& mdl = SageModelManager::models["PRIMITIVE_CIRCLE"];
 
-		mdl.setup_gpu_buffer();
+		mdl.Setup_Gpu_Buffer();
 
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end())
 		{
 			SageShader& shdr = SageShaderManager::search_and_create_shader_program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
-			mdl.AssignShaderProgram(&shdr);
+			mdl.Assign_Shader_Program(&shdr);
 		}
 		else
 		{
-			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
+			mdl.Assign_Shader_Program(&SageShaderManager::shaders["BASE_SHADER"]);
 		}
 
 		obj.Init(name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
@@ -88,15 +88,15 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* name, Primiti
 		SageModel& mdl = SageModelManager::models["PRIMITIVE_RECT"];
 
 
-		mdl.setup_gpu_buffer();
+		mdl.Setup_Gpu_Buffer();
 
 		//Create base shader
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end()) {
 			SageShader& shdr = SageShaderManager::CreateShaderProgram("BASE_SHADER", "../SageGraphics/shaders/BaseVertexShader.glsl", "../SageGraphics/shaders/BaseFragmentShader.glsl");
-			mdl.AssignShaderProgram(&shdr);
+			mdl.Assign_Shader_Program(&shdr);
 		}
 		else
-			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
+			mdl.Assign_Shader_Program(&SageShaderManager::shaders["BASE_SHADER"]);
 
 		obj.Init(name, &SageModelManager::models["PRIMITIVE_RECT"]);
 
@@ -123,16 +123,16 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* name, Primiti
 
 		SageModel& mdl = SageModelManager::models["PRIMITIVE_CIRCLE"];
 
-		mdl.setup_gpu_buffer();
+		mdl.Setup_Gpu_Buffer();
 
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end())
 		{
 			SageShader& shdr = SageShaderManager::search_and_create_shader_program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
-			mdl.AssignShaderProgram(&shdr);
+			mdl.Assign_Shader_Program(&shdr);
 		}
 		else
 		{
-			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
+			mdl.Assign_Shader_Program(&SageShaderManager::shaders["BASE_SHADER"]);
 		}
 
 		obj.Init(name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
@@ -170,7 +170,7 @@ SageLine SageObjectManager::Create_Line_Object(char const* name, glm::vec2 start
 	if (SageModelManager::models.find("PRIMITIVE_LINE") == SageModelManager::models.end())
 	{
 		SageModelManager::CreatePrimitiveModel("PRIMITIVE_LINE", static_cast<int>(PrimitiveShape::PRIMITIVE_LINE), static_cast<int>(RENDER_TYPE::TYPE_LINES));
-		SageModelManager::models["PRIMITIVE_LINE"].setup_gpu_buffer();
+		SageModelManager::models["PRIMITIVE_LINE"].Setup_Gpu_Buffer();
 	}
 
 	SageLine line(start, end, color, width);

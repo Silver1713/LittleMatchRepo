@@ -1,43 +1,86 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageModel.cpp
+\title		Little Match
+\author		Jay Lim Jun Xiang, jayjunxiang.lim, 2301335 (100%)
+\par		jayjunxiang.lim@digipen.edu
+\date		03 October 2024
+\brief		This file defines the SageModel class, responsible for managing 
+			the graphical model data, including vertex positions, texture 
+			coordinates, colors, and indices. It handles the creation and 
+			management of GPU buffers (VBO, VAO, EBO), and provides functionality 
+			for assigning shaders and updating vertex data on the GPU. The class 
+			also supports primitive shape types and rendering configurations 
+			using OpenGL.
+
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "SageModel.hpp"
 
 #include <iostream>
 
 #include "SageModelManager.hpp"
-
+//increments everytime a new SageModel object is created and decrements each time an object is destroyed. Useful for resource management
 int SageModel::model_count{};
 
-SageModel::SageModel(const char* name, std::vector<glm::vec2>* pos, std::vector<glm::vec2>* texture, std::vector<glm::vec4>* clr, std::vector<GLushort>* idx)
-	: model_id(model_count++), model_name(name), vao_hdl(0), vbo_hdl(0),
+/*!*****************************************************************************
+  \brief
+	Constructor for the SageModel class. Initializes the model with vertex data,
+	texture coordinates, colors, and indices.
+
+  \param _name
+	The name of the model.
+
+  \param _pos
+	The vertex positions for the model. This must be provided for model creation.
+
+  \param _texture
+	The texture coordinates for the model (optional).
+
+  \param _clr
+	The vertex colors for the model (optional).
+
+  \param _idx
+	The vertex indices for the model (optional).
+*******************************************************************************/
+SageModel::SageModel(const char* _name, std::vector<glm::vec2>* _pos, std::vector<glm::vec2>* _texture, std::vector<glm::vec4>* _clr, std::vector<GLushort>* _idx)
+	: model_id(model_count++), model_name(_name), vao_hdl(0), vbo_hdl(0),
 	ebo_hdl(0), tex_hdl(0), base_shader_ptr(nullptr), is_enabled(false), enable_vertex_color(false), enable_vertex_texture(false), enable_vertex_indices(false),
 	shape_type(), mdl_render_type()
 {
 	
-	if (!pos)
+	if (!_pos)
 	{
 		std::cerr << "Error: Vertex position data is required for model creation." << '\n';
 		std::exit(EXIT_FAILURE);
 	}
-	pos_vtx = std::vector{ *pos };
-	if (texture != nullptr)
+	pos_vtx = std::vector{ *_pos };
+	if (_texture != nullptr)
 	{
-		tex_coords = std::vector{ *texture };
+		tex_coords = std::vector{ *_texture };
 		enable_vertex_texture = true;
 	}
-	if (clr != nullptr)
+	if (_clr != nullptr)
 	{
-		clr_vtx = std::vector{ *clr };
+		clr_vtx = std::vector{ *_clr };
 		enable_vertex_color = true;
 	}
-	if (idx != nullptr)
+	if (_idx != nullptr)
 	{
-		idx_vtx = std::vector{ *idx };
+		idx_vtx = std::vector{ *_idx };
 		enable_vertex_indices = true;
 	}
 
 }
 
-
-void SageModel::setup_gpu_buffer()
+/*!*****************************************************************************
+  \brief
+	Sets up the GPU buffer by creating a VAO, VBO, and (if necessary) an EBO,
+	and loading the vertex data into the GPU.
+*******************************************************************************/
+void SageModel::Setup_Gpu_Buffer()
 {
 	// Create VAO VBO and load data
 	glCreateBuffers(1, &vbo_hdl);
@@ -101,7 +144,11 @@ void SageModel::setup_gpu_buffer()
 	is_enabled = true;
 }
 
-
+/*!*****************************************************************************
+  \brief
+	Destructor for the SageModel class. Deletes the GPU buffers and VAO,
+	and decrements the model count.
+*******************************************************************************/
 SageModel::~SageModel()
 {
 	model_count--;
@@ -115,118 +162,255 @@ SageModel::~SageModel()
 }
 
 
-// Assign Shader Program to the model
-void SageModel::AssignShaderProgram(SageShader* shader)
+/*!*****************************************************************************
+  \brief
+	Assigns a shader program to the model for rendering.
+
+  \param _shader
+	The shader program to be assigned.
+*******************************************************************************/
+void SageModel::Assign_Shader_Program(SageShader* _shader)
 {
-	base_shader_ptr = shader;
+	base_shader_ptr = _shader;
 }
 
 // Getters
+/*!*****************************************************************************
+  \brief
+	Gets the EBO handle by reference.
+
+  \return
+	A reference to the EBO handle.
+*******************************************************************************/
 GLuint& SageModel::Get_EBO_Handle()
 {
 	return ebo_hdl;
 }
 
+/*!*****************************************************************************
+  \brief
+	Retrieves the EBO handle.
+
+  \return
+	The EBO handle.
+*******************************************************************************/
 GLuint SageModel::Get_EBO_Handle() const
 {
 	return ebo_hdl;
 }
 
+/*!*****************************************************************************
+  \brief
+	Retrieves the texture handle by reference.
+
+  \return
+	A reference to the texture handle.
+*******************************************************************************/
 GLuint& SageModel::Get_Texture_Handle()
 {
 	return tex_hdl;
 }
 
+/*!*****************************************************************************
+  \brief
+	Retrieves the texture handle.
+
+  \return
+	The texture handle.
+*******************************************************************************/
 GLuint SageModel::Get_Texture_Handle() const
 {
 	return tex_hdl;
 }
+
+/*!*****************************************************************************
+  \brief
+	Retrieves the VAO handle by reference.
+
+  \return
+	A reference to the VAO handle.
+*******************************************************************************/
 GLuint& SageModel::Get_VAO_Handle()
 {
 	return vao_hdl;
 
 }
 
+/*!*****************************************************************************
+  \brief
+	Retrieves the VAO handle.
+
+  \return
+	The VAO handle.
+*******************************************************************************/
 GLuint SageModel::Get_VAO_Handle() const
 {
 	return vao_hdl;
 }
 
+/*!*****************************************************************************
+  \brief
+	Retrieves the VBO handle by reference.
+
+  \return
+	A reference to the VBO handle.
+*******************************************************************************/
 GLuint& SageModel::Get_VBO_Handle()
 {
 	return vbo_hdl;
 }
 
+
+/*!*****************************************************************************
+  \brief
+	Retrieves the VBO handle.
+
+  \return
+	The VBO handle.
+*******************************************************************************/
 GLuint SageModel::Get_VBO_Handle() const
 {
 	return vbo_hdl;
 }
 
-int SageModel::get_shape_type()
+/*!*****************************************************************************
+  \brief
+	Retrieves the shape type of the model.
+
+  \return
+	The shape type as an integer.
+*******************************************************************************/
+int SageModel::Get_Shape_Type()
 {
 	return static_cast<int>(shape_type);
 }
 
+/*!*****************************************************************************
+  \brief
+	Sets the render type for the model.
 
-
-
-void SageModel::Set_Render_Type(int type)
+  \param _type
+	The render type as an integer.
+*******************************************************************************/
+void SageModel::Set_Render_Type(int _type)
 {
-	mdl_render_type = static_cast<RENDER_TYPE>(type);
+	mdl_render_type = static_cast<RENDER_TYPE>(_type);
 
 }
 
-void SageModel::Set_Shape_Type(int shape)
+/*!*****************************************************************************
+  \brief
+	Sets the shape type for the model.
+
+  \param _shape
+	The shape type as an integer.
+*******************************************************************************/
+void SageModel::Set_Shape_Type(int _shape)
 {
-	shape_type = static_cast<PrimitiveShape>(shape);
+	shape_type = static_cast<PrimitiveShape>(_shape);
 
 }
 
+/*!*****************************************************************************
+  \brief
+	Sets the render type for the model.
 
-void SageModel::Set_Render_Type(RENDER_TYPE type)
+  \param _type
+	The render type as an enum.
+*******************************************************************************/
+void SageModel::Set_Render_Type(RENDER_TYPE _type)
 {
-	mdl_render_type = type;
+	mdl_render_type = _type;
 }
 
-void SageModel::Set_Shape_Type(PrimitiveShape shape)
+/*!*****************************************************************************
+  \brief
+	Sets the shape type for the model.
+
+  \param _shape
+	The shape type as an enum.
+*******************************************************************************/
+void SageModel::Set_Shape_Type(PrimitiveShape _shape)
 {
-	shape_type = shape;
+	shape_type = _shape;
 }
 
+/*!*****************************************************************************
+  \brief
+	Retrieves the vertex colors.
 
+  \return
+	A reference to the vector of vertex colors.
+*******************************************************************************/
 std::vector<glm::vec4>& SageModel::Get_Vertex_Colors()
 {
 	return clr_vtx;
 }
 
+/*!*****************************************************************************
+  \brief
+	Retrieves the vertex positions.
+
+  \return
+	A reference to the vector of vertex positions.
+*******************************************************************************/
 std::vector<glm::vec2>& SageModel::Get_Vertex_Positions()
 {
 	return pos_vtx;
 }
 
+/*!*****************************************************************************
+  \brief
+	Retrieves the texture coordinates.
+
+  \return
+	A reference to the vector of texture coordinates.
+*******************************************************************************/
 std::vector<glm::vec2>& SageModel::Get_Vertex_Texture_Coords()
 {
 	return tex_coords;
 }
 
+/*!*****************************************************************************
+  \brief
+	Retrieves the vertex indices.
 
+  \return
+	A reference to the vector of vertex indices.
+*******************************************************************************/
 std::vector<GLushort>& SageModel::Get_Vertex_Indices()
 {
 	return idx_vtx;
 }
 
+/*!*****************************************************************************
+  \brief
+	Retrieves the shader program assigned to the model.
 
+  \return
+	A pointer to the shader program.
+*******************************************************************************/
 SageShader* SageModel::Get_Shader_Program() const
 {
 	return base_shader_ptr;
 }
 
+/*!*****************************************************************************
+  \brief
+	Checks if vertex indices are enabled.
 
+  \return
+	True if vertex indices are enabled, otherwise false.
+*******************************************************************************/
 bool SageModel::Is_Idx_Enabled() const
 {
 	return enable_vertex_indices;
 }
 
+/*!*****************************************************************************
+  \brief
+	Updates the vertex buffer on the GPU with the current vertex positions.
+*******************************************************************************/
 void SageModel::Update_Vtx_Buffer_GPU()
 {
 	glNamedBufferSubData(vbo_hdl, 0, static_cast<GLsizeiptr>(sizeof(glm::vec2) * pos_vtx.size()), pos_vtx.data());

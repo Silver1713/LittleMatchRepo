@@ -376,7 +376,7 @@ namespace Game {
 				}
 				float time = 0.f;
 				//
-					bool collide_cond = collider->CollisionIntersection_RectRect(collider->GetAABB(), phys->Get_Velocity(), other->GetAABB(), {}, time);
+					bool collide_cond = collider->Collision_Intersection_Rect_Rect(collider->Get_AABB(), phys->Get_Velocity(), other->Get_AABB(), {}, time);
 					if (collide_cond)
 					{
 						// Retrieve necessary components
@@ -394,8 +394,8 @@ namespace Game {
 						ToastBox::Vec2& vel = phys->Get_Velocity();
 
 
-						auto& aabb1 = collider->GetAABB();
-						auto& aabb2 = other->GetAABB();
+						auto& aabb1 = collider->Get_AABB();
+						auto& aabb2 = other->Get_AABB();
 
 						float overlapX = std::min(aabb1.max.x, aabb2.max.x) - std::max(aabb1.min.x, aabb2.min.x);
 						float overlapY = std::min(aabb1.max.y, aabb2.max.y) - std::max(aabb1.min.y, aabb2.min.y);

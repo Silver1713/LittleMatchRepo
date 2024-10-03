@@ -126,7 +126,7 @@ void Sprite2D::Draw()
 	if (collider && collider->Get_Debug())
 	{
 		SageRenderer::Set_Option_On(SageRenderer::SAGE_ENABLE_CAMERA);
-		collider->aabb.calculate_model_matrix(Get_Parent());
+		collider->aabb.Calculate_Model_Matrix(Get_Parent());
 		auto& aabb = collider->aabb;
 		SageRenderer::Draw_Line(aabb.min, aabb.min + ToastBox::Vec2{ aabb.scale.x ,0 }, { 0,1,0,1 }, 1.f);
 		SageRenderer::Draw_Line(aabb.min, aabb.min + ToastBox::Vec2{ 0,aabb.scale.y }, { 0,1,0,1 }, 1.f);

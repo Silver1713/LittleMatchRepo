@@ -262,15 +262,15 @@ void SageRendererInternal::init()
 	SageModelManager::CreatePrimitiveModel("PRIMITIVE_POINT", static_cast<int>(PrimitiveShape::PRIMITIVE_POINTS), RENDER_TYPE::TYPE_POINTS);
 
 	// initialize VAO
-	SageModelManager::models["PRIMITIVE_RECT"].setup_gpu_buffer();
-	SageModelManager::models["PRIMITIVE_CIRCLE"].setup_gpu_buffer();
-	SageModelManager::models["PRIMITIVE_LINE"].setup_gpu_buffer();
-	SageModelManager::models["PRIMITIVE_POINT"].setup_gpu_buffer();
+	SageModelManager::models["PRIMITIVE_RECT"].Setup_Gpu_Buffer();
+	SageModelManager::models["PRIMITIVE_CIRCLE"].Setup_Gpu_Buffer();
+	SageModelManager::models["PRIMITIVE_LINE"].Setup_Gpu_Buffer();
+	SageModelManager::models["PRIMITIVE_POINT"].Setup_Gpu_Buffer();
 
-	SageModelManager::models["PRIMITIVE_RECT"].AssignShaderProgram(default_shader);
-	SageModelManager::models["PRIMITIVE_CIRCLE"].AssignShaderProgram(default_shader);
-	SageModelManager::models["PRIMITIVE_LINE"].AssignShaderProgram(default_shader);
-	SageModelManager::models["PRIMITIVE_POINT"].AssignShaderProgram(default_shader);
+	SageModelManager::models["PRIMITIVE_RECT"].Assign_Shader_Program(default_shader);
+	SageModelManager::models["PRIMITIVE_CIRCLE"].Assign_Shader_Program(default_shader);
+	SageModelManager::models["PRIMITIVE_LINE"].Assign_Shader_Program(default_shader);
+	SageModelManager::models["PRIMITIVE_POINT"].Assign_Shader_Program(default_shader);
 
 	SageModelManager::models["PRIMITIVE_RECT"].Set_Render_Type(RENDER_TYPE::TYPE_TRIANGLE);
 	SageModelManager::models["PRIMITIVE_CIRCLE"].Set_Render_Type(RENDER_TYPE::TYPE_TRIANGLE_FAN);
@@ -472,7 +472,7 @@ void SageRendererInternal::Draw_Point(ToastBox::Vec2 position, ToastBox::Vec4 co
 {
 	SagePoint point({ position.getX(), position.getY() }, { color.x,color.y,color.z,color.a }, _s);
 	point.point = &SageModelManager::models["PRIMITIVE_POINT"];
-	point.calculate_transform();
+	point.Calculate_Transform();
 	Draw_Point(point);
 }
 

@@ -169,7 +169,7 @@ void ExampleScene::draw()
 		
 		SageRenderer::Draw_Filled(obj.second);
 		float scale = obj.second.transform.scale.x;
-		if (obj.second.obj_mesh.model_ref->get_shape_type() == static_cast<int>(
+		if (obj.second.obj_mesh.model_ref->Get_Shape_Type() == static_cast<int>(
 			PrimitiveShape::PRIMITIVE_CIRCLE))
 		{
 			scale *= 2;
