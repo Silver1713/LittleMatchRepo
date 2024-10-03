@@ -284,7 +284,18 @@ namespace ToastBox
 		pResult = result / result.Magnitude();
 	}
 
+	/*!*****************************************************************************
+	  \brief
+	   Scalar multiplication operator
 
+	  \param value
+	   Scalar value to multiply with the vector
+	  \param pVec0
+	   Vector to be multiplied
+
+	  \return
+	   New Vec4 object representing the result of the multiplication
+	*******************************************************************************/
 	Vec4 operator*(const float value, const Vector4& pVec0)
 	{
 		Vec4 res{ pVec0 };
@@ -293,6 +304,18 @@ namespace ToastBox
 		return res;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+	   Scalar multiplication operator
+
+	  \param pVec0
+	   Vector to be multiplied
+	  \param value
+	   Scalar value to multiply with the vector
+
+	  \return
+	   New Vec4 object representing the result of the multiplication
+	*******************************************************************************/
 	Vec4 operator*(const Vector4& pVec0, const float value)
 	{
 		Vec4 res{ pVec0 };
@@ -301,7 +324,18 @@ namespace ToastBox
 		return res;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+	   Scalar division operator
 
+	  \param pVec0
+	   Vector to be divided
+	  \param value
+	   Scalar value to divide the vector by
+
+	  \return
+	   New Vec4 object representing the result of the division
+	*******************************************************************************/
 	Vec4 operator/(const Vector4& pVec0, const float value)
 	{
 		Vec4 res{ pVec0 };
@@ -310,7 +344,18 @@ namespace ToastBox
 		return res;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+	   Component-wise vector division operator
 
+	  \param pVec0
+	   Vector to be divided
+	  \param pVec1
+	   Vector to divide by
+
+	  \return
+	   New Vec4 object representing the result of the component-wise division
+	*******************************************************************************/
 	Vec4 operator/(const Vector4& pVec0, const Vector4& pVec1)
 	{
 		Vec4 res{ pVec0 };
@@ -319,7 +364,18 @@ namespace ToastBox
 		return res;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+	   Cross product operator
 
+	  \param pVec0
+	   First vector in the cross product
+	  \param pVec1
+	   Second vector in the cross product
+
+	  \return
+	   New Vec4 object representing the result of the cross product
+	*******************************************************************************/
 	Vector4 operator%(const Vector4& pVec0, const Vector4& pVec1)
 	{
 		Vec4 res{ pVec0 };
@@ -328,7 +384,18 @@ namespace ToastBox
 		return res;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+	   Vector addition operator
 
+	  \param pVec0
+	   First vector to be added
+	  \param pVec1
+	   Second vector to be added
+
+	  \return
+	   New Vec4 object representing the sum of the two vectors
+	*******************************************************************************/
 	Vector4 operator+(const Vector4& pVec0, const Vector4& pVec1)
 	{
 		Vector4 res{ pVec0 };
@@ -336,7 +403,18 @@ namespace ToastBox
 		return res;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+	   Vector subtraction operator
 
+	  \param pVec0
+	   Vector to subtract from
+	  \param pVec1
+	   Vector to be subtracted
+
+	  \return
+	   New Vec4 object representing the result of the subtraction
+	*******************************************************************************/
 	Vector4 operator-(const Vector4& pVec0, const Vector4& pVec1)
 	{
 		Vec4 newVec{ pVec0 };
@@ -347,12 +425,35 @@ namespace ToastBox
 
 	}
 
+	/*!*****************************************************************************
+	  \brief
+	   Dot product operator
+
+	  \param pVec0
+	   First vector in the dot product
+	  \param pVec1
+	   Second vector in the dot product
+
+	  \return
+	   Float value representing the dot product of the two vectors
+	*******************************************************************************/
 	float operator*(const Vector4& pVec0, const Vector4& pVec1)
 	{
 		return pVec0.x * pVec1.x + pVec0.y * pVec1.y + pVec0.z * pVec1.z + pVec0.w * pVec1.w;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+	   Scalar division operator (scalar divided by vector)
 
+	  \param value
+	   Scalar value to be divided
+	  \param pVec0
+	   Vector to divide by
+
+	  \return
+	   New Vec4 object representing the result of the division
+	*******************************************************************************/
 	Vector4 operator/(const float value, const Vector4& pVec0)
 	{
 		Vec4 res{ pVec0 };
