@@ -1,14 +1,15 @@
-/******************************************************************************
-File name	 : Vector2.cpp
-Project		 : Memory's Flame
-Author       : Edwin Lee Zirui
-E-mail		 : edwinzirui.lee@digipen.edu
-Data		 : 09/09/2024
-Brief		 : Vector2 class and class operation defintion
-*
-* \copyright	All content 2024 DigiPen Institute of Technology Singapore. All
-				rights reserved.
-******************************************************************************/
+﻿/* Start Header ************************************************************************/
+/*!
+\file		Vector2.cpp
+\title		Memory's Flame
+\author		Edwin Lee Zirui, edwinzirui.lee, 2301299 (100%)
+\par		edwinzirui.lee@digipen.edu
+\date		07 September 2024
+\brief		Vector2 class and class operation defintion
+
+			All content � 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 
 #include "Vector2.h"
 namespace ToastBox {
