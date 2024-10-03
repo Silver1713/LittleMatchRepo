@@ -1,3 +1,19 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageObjectManager.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		The source file containing the definition of the object manager class
+			that managers object lifetime and allow for creationa nd destruction of
+			objects used by the renderer.
+
+
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include <map>
 #include <iostream>
 

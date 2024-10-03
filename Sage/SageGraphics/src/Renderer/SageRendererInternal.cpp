@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageRendererInternal.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		This source file defines the private/internal renderer class that handles rendering of
+			objects and models to the screen. This class make calls to the OpenGL library
+			to render objects to screen.
+
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "SageLine.hpp"
 #include "SageModelManager.hpp"
 #include "SageShaderManager.hpp"

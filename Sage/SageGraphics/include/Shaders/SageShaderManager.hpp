@@ -1,6 +1,6 @@
 /* Start Header ************************************************************************/
 /*!
-\file		SageCameraImpl.hpp
+\file		SageShaderManager.hpp
 \title		Memory's Flame
 \author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
 \par		jiahao.yeo@digipen.edu

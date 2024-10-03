@@ -1,3 +1,16 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageWindowImpl.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		The PIMPL implementation of the SageWindow class  is used to facilitate calls to the
+			private interface that implements the window.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "SageWindowImpl.hpp"
 #include "SageWindowInternal.hpp"
 

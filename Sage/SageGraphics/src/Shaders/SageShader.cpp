@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageShader.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		This source file defines the public interface containing the SageShader class containing
+			methods and attributes to manage shader programs, compiling and linking of the shader programs.
+			Furthmore, this class expose methods from the internal class allowing calls to be
+			delegated to the private interface.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include <iostream>
 #include <fstream>
 

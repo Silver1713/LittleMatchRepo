@@ -188,7 +188,7 @@ public:
 		(mat3) The view projection matrix of the camera object.
 
 	*******************************************************************************/
-	glm::mat3 Get_View_Projection_Matrix() const;
+	glm::mat3 const& Get_View_Projection_Matrix() const;
 
 	/*!*****************************************************************************
 	\brief

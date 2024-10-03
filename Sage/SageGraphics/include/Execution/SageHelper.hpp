@@ -14,7 +14,6 @@ struct SageHelper
 	static char* WINDOW_TITLE;
 	static SageWindow* sage_ptr_window;
 	static GLFWwindow* ptr_window;
-	static std::map<int, std::byte> key_map;
 
 	static double delta_time;
 	static double fixed_delta_time;

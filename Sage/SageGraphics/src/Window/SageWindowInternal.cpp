@@ -1,3 +1,20 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageWindowInternal.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		Contains the definition for the private interface of the window class. This
+			contain direct calls to OpenGL and GLFW.
+
+			This window interface provide the private interface containing calls to
+			OpenGL and GLFW, allowing window behaviours and attributes to be setup, configured
+			and managed. THis allow the window to be manage by the internal class.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "SageWindowInternal.hpp"
 
 #include <iostream>
@@ -199,6 +216,9 @@ bool SageWindowInternal::Check_Active() const
 
 void SageWindowInternal::Frame_Buffersize_Cb(GLFWwindow* window, int width, int height)
 {
+	window;
+	width;
+	height;
 	return;
 }
 

@@ -1,3 +1,19 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageRenderer.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		This source file defines the public interface that implement the renderer class that
+			handles rendering of objects and models to the screen. This class make calls to the
+			private interface implemented in the internal class.
+
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
+
 #include "SageRendererInternal.hpp"
 #include "SageRenderer.hpp"
 

@@ -21,7 +21,6 @@ double SageHelper::FPS{};
 SageWindow* SageHelper::sage_ptr_window{};
 
 GLFWwindow* SageHelper::ptr_window{};
-std::map<int, std::byte> SageHelper::key_map;
 
 void GLAPIENTRY openglErrorCallback(GLenum _source, GLenum _type, GLuint _id,
 	GLenum severity, GLsizei length, const GLchar* message, const void* userParam)

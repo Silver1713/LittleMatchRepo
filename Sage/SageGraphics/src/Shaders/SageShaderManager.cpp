@@ -1,3 +1,14 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageShaderManager.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		A shader manager that allow multiple shader program to be compiled linked and
+			managed.
+*/
+/* End Header **************************************************************************/
 #include "SageHelper.hpp"
 #include "SageShader.hpp"
 #include "SageShaderManager.hpp"

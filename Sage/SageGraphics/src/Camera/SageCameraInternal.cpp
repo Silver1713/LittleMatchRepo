@@ -1,3 +1,19 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageCameraInternal.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		The source file containing the definition of the internal class that
+			manage the camera, and provide function for creation and manipulation of the view.
+
+			It interact with low level API such as GLFW.
+
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "SageCameraInternal.hpp"
 
 #include <iostream>
@@ -130,7 +146,7 @@ glm::mat3 SageCameraInternal2D::Get_View_Matrix() const
 	return view_matrix;
 }
 
-glm::mat3 SageCameraInternal2D::Get_View_Projection_Matrix() const
+glm::mat3 const& SageCameraInternal2D::Get_View_Projection_Matrix() const
 {
 	return view_projection_matrix;
 }
