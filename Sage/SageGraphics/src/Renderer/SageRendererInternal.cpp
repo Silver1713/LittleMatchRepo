@@ -242,7 +242,7 @@ void SageRendererInternal::init()
 	}
 	else
 	{
-		SageShaderManager::search_and_create_shader_program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
+		SageShaderManager::Search_And_Create_Shader_Program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
 		default_shader = &SageShaderManager::shaders["BASE_SHADER"];
 
 	}

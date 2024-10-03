@@ -24,7 +24,7 @@ SageCamera camera2d;
 
 void ExampleScene::init()
 {
-	SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
+	SageShaderManager::Add_Shader_Include("graphic_lib", "../SageGraphics/shaders/");
 	SageRenderer::Init();
 
 	_p.Load_Texture("../SageIO/image/digipen_splash_screen.png", SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);

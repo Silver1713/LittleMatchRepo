@@ -25,7 +25,7 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* _name, Primit
 
 		//Create base shader
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end()) {
-			SageShader& shdr = SageShaderManager::search_and_create_shader_program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
+			SageShader& shdr = SageShaderManager::Search_And_Create_Shader_Program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
 			mdl.AssignShaderProgram(&shdr);
 		}
 		else
@@ -53,7 +53,7 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* _name, Primit
 
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end())
 		{
-			SageShader& shdr = SageShaderManager::search_and_create_shader_program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
+			SageShader& shdr = SageShaderManager::Search_And_Create_Shader_Program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
 			mdl.AssignShaderProgram(&shdr);
 		}
 		else
@@ -92,7 +92,7 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* _name, Primit
 
 		//Create base shader
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end()) {
-			SageShader& shdr = SageShaderManager::CreateShaderProgram("BASE_SHADER", "../SageGraphics/shaders/BaseVertexShader.glsl", "../SageGraphics/shaders/BaseFragmentShader.glsl");
+			SageShader& shdr = SageShaderManager::Create_Shader_Program("BASE_SHADER", "../SageGraphics/shaders/BaseVertexShader.glsl", "../SageGraphics/shaders/BaseFragmentShader.glsl");
 			mdl.AssignShaderProgram(&shdr);
 		}
 		else
@@ -127,7 +127,7 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* _name, Primit
 
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end())
 		{
-			SageShader& shdr = SageShaderManager::search_and_create_shader_program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
+			SageShader& shdr = SageShaderManager::Search_And_Create_Shader_Program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
 			mdl.AssignShaderProgram(&shdr);
 		}
 		else
