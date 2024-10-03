@@ -65,7 +65,7 @@ void Sprite2D::Init(GameObject* _parent)
 	//create sageobject
 	if (object_shape == "Rect")
 	{
-		SageObjectManager::CreatePrimitiveObject(Get_Parent()->Get_ID().c_str(), PRIMITIVE_OBJECT_RECT,
+		SageObjectManager::Create_Primitive_Object(Get_Parent()->Get_ID().c_str(), PRIMITIVE_OBJECT_RECT,
 			{ transform->Get_Positions()[0],transform->Get_Positions()[1] },
 			{ transform->Get_Scale()[0],transform->Get_Scale()[1] },
 			{ transform->Get_Rotations()[0],transform->Get_Rotations()[1] },
@@ -73,7 +73,7 @@ void Sprite2D::Init(GameObject* _parent)
 	}
 	else if (object_shape == "Circle")
 	{
-		SageObjectManager::CreatePrimitiveObject(Get_Parent()->Get_ID().c_str(), PRIMITIVE_OBJECT_CIRCLE,
+		SageObjectManager::Create_Primitive_Object(Get_Parent()->Get_ID().c_str(), PRIMITIVE_OBJECT_CIRCLE,
 			{ transform->Get_Positions()[0],transform->Get_Positions()[1] },
 			{ transform->Get_Scale()[0],transform->Get_Scale()[1] },
 			{ transform->Get_Rotations()[0],transform->Get_Rotations()[1] },
@@ -89,7 +89,7 @@ void Sprite2D::Init(GameObject* _parent)
 	{
 		obj->GetMaterial().enable_texture = true;
 		SageTexture* texture = &Assets::Textures::Get_Texture(sprite_texture_ID);
-		obj->attach_texture(texture);
+		obj->Attach_Texture(texture);
 	}
 }
 
@@ -106,7 +106,7 @@ void Sprite2D::Update()
 	obj->transform.scale[1] = transform->Get_Scale()[1];
 	obj->transform.orientation[0] = transform->Get_Rotations()[0];
 	obj->transform.orientation[1] = transform->Get_Rotations()[1];
-	obj->update();
+	obj->Update();
 }
 /*!*****************************************************************************
   \brief
@@ -218,6 +218,6 @@ void Sprite2D::Set_Transparency(float _a)
 	colour[3] = _a;
 	if (obj)
 	{
-		obj->set_alpha(_a);
+		obj->Set_Alpha(_a);
 	}
 }

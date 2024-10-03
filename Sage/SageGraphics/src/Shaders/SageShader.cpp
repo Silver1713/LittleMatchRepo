@@ -215,16 +215,7 @@ bool SageShader::IsLinked() const
 	return is_linked;
 }
 
-void SageShader::BindVertexAttribLocation(int index, const char* name)
-{
-	glBindAttribLocation(pgm_handle, index, name);
-}
 
-void SageShader::BindFragAttribLocation(int index, const char* name)
-{
-	glBindFragDataLocation(pgm_handle, index, name);
-
-}
 
 int SageShader::GetUniformLocation(const char* name, bool exit_on_error)
 {
@@ -244,68 +235,68 @@ int SageShader::GetUniformLocation(const char* name, bool exit_on_error)
 
 // Uniform setter - Numerical
 
-void SageShader::SetUniform(const char* name, int val)
+void SageShader::Set_Uniform(const char* name, int val)
 {
 	sage_impl->SetUniform(name, val);
 }
 
 
-void SageShader::SetUniform(const char* name, float val)
+void SageShader::Set_Uniform(const char* name, float val)
 {
 	sage_impl->SetUniform(name, val);
 }
 
-void SageShader::SetUniform(const char* name, double val)
+void SageShader::Set_Uniform(const char* name, double val)
 {
 	sage_impl->SetUniform(name, val);
 }
 
-void SageShader::SetUniform(const char* name, bool val)
+void SageShader::Set_Uniform(const char* name, bool val)
 {
 	sage_impl->SetUniform(name, val);
 }
 // Uniform setter - Vector - Singular
 
-void SageShader::SetUniform(const char* name, float x, float y)
+void SageShader::Set_Uniform(const char* name, float x, float y)
 {
 	sage_impl->SetUniform(name, x, y);
 }
-void SageShader::SetUniform(const char* name, float x, float y, float z)
+void SageShader::Set_Uniform(const char* name, float x, float y, float z)
 {
 	sage_impl->SetUniform(name, x, y, z);
 
 }
 
-void SageShader::SetUniform(const char* name, float x, float y, float z, float w)
+void SageShader::Set_Uniform(const char* name, float x, float y, float z, float w)
 {
 	sage_impl->SetUniform(name, x, y, z, w);
 }
 
 // Uniform setter - Vector - glm
 
-void SageShader::SetUniform(const char* name, const ToastBox::Vec2& val)
+void SageShader::Set_Uniform(const char* name, const ToastBox::Vec2& val)
 {
 	sage_impl->SetUniform(name, val.getX(), val.getY());
 }
 
-void SageShader::SetUniform(const char* name, const ToastBox::Vec3& val)
+void SageShader::Set_Uniform(const char* name, const ToastBox::Vec3& val)
 {
 	sage_impl->SetUniform(name, val.x, val.y, val.z);
 }
 
-void SageShader::SetUniform(const char* name,  ToastBox::Vec4 const& val)
+void SageShader::Set_Uniform(const char* name,  ToastBox::Vec4 const& val)
 {
 	sage_impl->SetUniform(name, val.x, val.y, val.z, val.w);
 }
 
 // Uniform setter - Matrices - glm
 
-void SageShader::SetUniform(const char* name, const glm::mat3& val)
+void SageShader::Set_Uniform(const char* name, const glm::mat3& val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(val));
 }
-void SageShader::SetUniform(const char* name, const glm::mat4& val)
+void SageShader::Set_Uniform(const char* name, const glm::mat4& val)
 {
 	GLint loc = GetUniformLocation(name);
 	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(val));
@@ -335,13 +326,13 @@ void SageShader::PrintActiveUniforms() const
 	sage_impl->PrintActiveUniform();
 }
 
-void SageShader::SetUniform(const char* name, const ToastBox::Matrix3x3& val)
+void SageShader::Set_Uniform(const char* name, const ToastBox::Matrix3x3& val)
 {
 	sage_impl->SetUniform(name, val);
 
 }
 
-void SageShader::SetUniform(const char* name, const ToastBox::Matrix4& val)
+void SageShader::Set_Uniform(const char* name, const ToastBox::Matrix4& val)
 {
 	sage_impl->SetUniform(name, val);
 }

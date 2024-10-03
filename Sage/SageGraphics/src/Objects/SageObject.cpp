@@ -18,16 +18,16 @@ SageObject::SageObject() : object_id(0), object_name("default"), obj_mesh(), tra
 
 }
 
-void SageObject::init(char const* name, SageModel* model)
+void SageObject::Init(char const* name, SageModel* model)
 {
 	//Name, model, vertex count
 	object_name = name;
 	obj_mesh.model_ref = model;
-	obj_mesh.vtx_cnt = model->get_vertex_positions().size();
-	obj_mesh.idx_cnt = model->get_vertex_indices().size();
+	obj_mesh.vtx_cnt = model->Get_Vertex_Positions().size();
+	obj_mesh.idx_cnt = model->Get_Vertex_Indices().size();
 
 
-	material.shader_ref = model->get_shader_program();
+	material.shader_ref = model->Get_Shader_Program();
 
 
 
@@ -39,11 +39,11 @@ void SageObject::init(char const* name, SageModel* model)
 
 	is_enabled = true;
 
-	set_alpha(1.f);
+	Set_Alpha(1.f);
 }
 
 
-void SageObject::attach_texture(SageTexture* texture)
+void SageObject::Attach_Texture(SageTexture* texture)
 {
 	if (texture == nullptr)
 	{
@@ -61,16 +61,16 @@ void SageObject::attach_texture(SageTexture* texture)
 
 
 
-void SageObject::update()
+void SageObject::Update()
 {
-	transform.calculate_model_matrix();
+	transform.Calculate_Model_Matrix();
 	transform.orientation.x += static_cast<float>(transform.orientation.y * SageHelper::delta_time);
 
 }
 
 
 
-glm::mat3x3 SageObject::SageTransform2D::calculate_model_matrix()
+glm::mat3x3 SageObject::SageTransform2D::Calculate_Model_Matrix()
 {
 	glm::mat3  translation = { 1, 0, 0, 0, 1, 0, position.x, position.y, 1 };
 	glm::mat3  rotation = { cos(orientation.x), sin(orientation.x), 0, -sin(orientation.x), cos(orientation.x), 0, 0, 0, 1 };
@@ -83,38 +83,38 @@ glm::mat3x3 SageObject::SageTransform2D::calculate_model_matrix()
 
 
 // Draw with default shader
-void SageObject::draw(SageViewport* vp)
+void SageObject::Draw(SageViewport* vp)
 {
-	SageShader* shader = obj_mesh.model_ref->get_shader_program();
+	SageShader* shader = obj_mesh.model_ref->Get_Shader_Program();
 	SageViewport* viewport = vp;
 
-	glBindVertexArray(obj_mesh.model_ref->get_vao_handle());
+	glBindVertexArray(obj_mesh.model_ref->Get_VAO_Handle());
 
 
 	shader->Activate();
-	shader->SetUniform("uAlpha", material.mat_transparency);
-	shader->SetUniform("uUseColor", !material.enable_vertex_color);
-	shader->SetUniform("uUseBorderColor", material.enable_border_color);
-	shader->SetUniform("uColor", material.color.r, material.color.g, material.color.b, material.color.a);
+	shader->Set_Uniform("uAlpha", material.mat_transparency);
+	shader->Set_Uniform("uUseColor", !material.enable_vertex_color);
+	shader->Set_Uniform("uUseBorderColor", material.enable_border_color);
+	shader->Set_Uniform("uColor", material.color.r, material.color.g, material.color.b, material.color.a);
 	ToastBox::Vector4 color = { material.border_color.r, material.border_color.g, material.border_color.b,material.border_color.a };
-	shader->SetUniform("uBorderColor", color);
+	shader->Set_Uniform("uBorderColor", color);
 
-	shader->SetUniform("uBorderSize", material.border_width);
-	shader->SetUniform("uCornerRadius", material.border_radius);
-	shader->SetUniform("uObjectSize", transform.scale.x, transform.scale.y);
+	shader->Set_Uniform("uBorderSize", material.border_width);
+	shader->Set_Uniform("uCornerRadius", material.border_radius);
+	shader->Set_Uniform("uObjectSize", transform.scale.x, transform.scale.y);
 	glm::mat3 d = viewport->get_viewport_xform() * transform.model_matrix;
 	glm::mat3 m = glm::mat3(1.0f);
 
 	glm::vec2 result = d * glm::vec3(0, 0, 1);
 	ToastBox::Matrix3x3 mtx = glm::value_ptr(viewport->get_viewport_xform() * transform.model_matrix);
-	shader->SetUniform("uModel_xform", mtx);
-	//shader->SetUniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix);
-	shader->SetUniform("uUseTexture", material.enable_texture);
+	shader->Set_Uniform("uModel_xform", mtx);
+	//shader->Set_Uniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix);
+	shader->Set_Uniform("uUseTexture", material.enable_texture);
 	if (material.enable_texture)
 	{
 		material.texture_ref->bind_texture();
 		glActiveTexture(material.texture_ref->get_texture_unit());
-		shader->SetUniform("uTex2D", material.texture_ref->get_texture_unit());
+		shader->Set_Uniform("uTex2D", material.texture_ref->get_texture_unit());
 	}
 
 
@@ -122,7 +122,7 @@ void SageObject::draw(SageViewport* vp)
 
 
 
-	if (obj_mesh.model_ref->is_idx_enabled())
+	if (obj_mesh.model_ref->Is_Idx_Enabled())
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
@@ -147,26 +147,26 @@ void SageObject::draw(SageViewport* vp)
 }
 
 //Draw with default shader
-void SageObject::draw(SageCamera* cam)
+void SageObject::Draw(SageCamera* cam)
 {
 
-	SageShader* shader = obj_mesh.model_ref->get_shader_program();
+	SageShader* shader = obj_mesh.model_ref->Get_Shader_Program();
 	SageCamera* c = cam;
 
-	glBindVertexArray(obj_mesh.model_ref->get_vao_handle());
+	glBindVertexArray(obj_mesh.model_ref->Get_VAO_Handle());
 
 
 	shader->Activate();
-	shader->SetUniform("uAlpha", material.mat_transparency);
-	shader->SetUniform("uUseColor", !material.enable_vertex_color);
-	shader->SetUniform("uUseBorderColor", material.enable_border_color);
-	shader->SetUniform("uColor", material.color.r, material.color.g, material.color.b, material.color.a);
+	shader->Set_Uniform("uAlpha", material.mat_transparency);
+	shader->Set_Uniform("uUseColor", !material.enable_vertex_color);
+	shader->Set_Uniform("uUseBorderColor", material.enable_border_color);
+	shader->Set_Uniform("uColor", material.color.r, material.color.g, material.color.b, material.color.a);
 	ToastBox::Vector4 color = { material.border_color.r, material.border_color.g, material.border_color.b,material.border_color.a };
-	shader->SetUniform("uBorderColor", color);
+	shader->Set_Uniform("uBorderColor", color);
 
-	shader->SetUniform("uBorderSize", material.border_width);
-	shader->SetUniform("uCornerRadius", material.border_radius);
-	shader->SetUniform("uObjectSize", transform.scale.x, transform.scale.y);
+	shader->Set_Uniform("uBorderSize", material.border_width);
+	shader->Set_Uniform("uCornerRadius", material.border_radius);
+	shader->Set_Uniform("uObjectSize", transform.scale.x, transform.scale.y);
 	ToastBox::Matrix3x3 mtx = glm::value_ptr( transform.model_matrix);
 	
 	//glm::mat3 ca = static_cast<SageCameraInternal2D*>(c->Get_Camera())->Get_View_Projection_Matrix() * transform.model_matrix;
@@ -174,14 +174,14 @@ void SageObject::draw(SageCamera* cam)
 	
 	m3.Matrix3Transpose(~c->Get_Projection_View_Matrix() * ~mtx);
 	glm::vec3 r2 = transform.model_matrix * glm::vec3(1, 1, 1);
-	shader->SetUniform("uModel_xform", m3);
-	shader->SetUniform("uUseTexture", material.enable_texture);
+	shader->Set_Uniform("uModel_xform", m3);
+	shader->Set_Uniform("uUseTexture", material.enable_texture);
 	if (material.enable_texture)
 	{
 		
 		material.texture_ref->bind_texture();
 		
-		shader->SetUniform("uTex2D", material.texture_ref->get_texture_unit());
+		shader->Set_Uniform("uTex2D", material.texture_ref->get_texture_unit());
 	}
 
 
@@ -189,7 +189,7 @@ void SageObject::draw(SageCamera* cam)
 
 
 
-	if (obj_mesh.model_ref->is_idx_enabled())
+	if (obj_mesh.model_ref->Is_Idx_Enabled())
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
@@ -221,13 +221,13 @@ SageObject::SageMaterial& SageObject::GetMaterial()
 	return material;
 }
 
-void SageObject::set_alpha(float transparency)
+void SageObject::Set_Alpha(float transparency)
 {
 	material.mat_transparency = transparency;
 }
 
 
-void SageObject::disable_object()
+void SageObject::Disable_Object()
 {
 	is_enabled = false;
 }

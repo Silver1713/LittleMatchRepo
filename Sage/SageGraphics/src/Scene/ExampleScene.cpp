@@ -41,9 +41,9 @@ void ExampleScene::init()
 
 
 
-	SageObjectManager::CreatePrimitiveObject("Rect3", PRIMITIVE_OBJECT_RECT, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,0,1,1 },
+	SageObjectManager::Create_Primitive_Object("Rect3", PRIMITIVE_OBJECT_RECT, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,0,1,1 },
 		{ 0,0,0,1 }, 0.5f);
-	SageObjectManager::CreatePrimitiveObject("Circle3", PRIMITIVE_OBJECT_CIRCLE, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,0,1,1 },
+	SageObjectManager::Create_Primitive_Object("Circle3", PRIMITIVE_OBJECT_CIRCLE, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,0,1,1 },
 		{ 0,0,0,1 }, 0.5f);
 
 
@@ -119,25 +119,25 @@ void ExampleScene::update()
 	if (SageHelper::Get_Key_Pressed(GLFW_KEY_D))
 	{
 		
-		camera2d.MoveCamera({ 1,0 }, camSpeed);
+		camera2d.Move_Camera({ 1,0 }, camSpeed);
 
 	}
 	else if (SageHelper::Get_Key_Pressed(GLFW_KEY_A))
 	{
-		camera2d.MoveCamera({ -1,0 }, camSpeed);
+		camera2d.Move_Camera({ -1,0 }, camSpeed);
 	}
 	else if (SageHelper::Get_Key_Pressed(GLFW_KEY_W))
 	{
-		camera2d.MoveCamera({ 0,1 }, camSpeed);
+		camera2d.Move_Camera({ 0,1 }, camSpeed);
 	}
 	else if (SageHelper::Get_Key_Pressed(GLFW_KEY_S))
 	{
-		camera2d.MoveCamera({ 0,-1 }, camSpeed);
+		camera2d.Move_Camera({ 0,-1 }, camSpeed);
 	}
 
 	for (auto& obj : SageObjectManager::objects)
 	{
-		obj.second.update();
+		obj.second.Update();
 	}
 
 	camera2d.update();

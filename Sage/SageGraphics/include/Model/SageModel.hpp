@@ -1,4 +1,4 @@
-#ifndef SAGEMODEL_HPP
+	#ifndef SAGEMODEL_HPP
 #define SAGEMODEL_HPP
 
 
@@ -37,10 +37,10 @@ class SageModel
 	SageShader* base_shader_ptr;
 
 	// Flags
-	bool Is_Enabled;
-	bool Enable_Vertex_Color;
-	bool Enable_Vertex_Texture;
-	bool Enable_Vertex_Indices;
+	bool is_enabled;
+	bool enable_vertex_color;
+	bool enable_vertex_texture;
+	bool enable_vertex_indices;
 
 	
 
@@ -59,7 +59,7 @@ public:
 
 	// Constructor
 
-	SageModel() : model_id(0), model_name("Default"), vao_hdl(0), vbo_hdl(0), ebo_hdl(0), tex_hdl(0), base_shader_ptr(nullptr), Is_Enabled(false), Enable_Vertex_Color(false), Enable_Vertex_Texture(false), Enable_Vertex_Indices(false), shape_type(), mdl_render_type() {}
+	SageModel() : model_id(0), model_name("Default"), vao_hdl(0), vbo_hdl(0), ebo_hdl(0), tex_hdl(0), base_shader_ptr(nullptr), is_enabled(false), enable_vertex_color(false), enable_vertex_texture(false), enable_vertex_indices(false), shape_type(), mdl_render_type() {}
 	SageModel(const char* name, std::vector<glm::vec2>* pos, std::vector<glm::vec2>* texture=nullptr, std::vector<glm::vec4>* clr=nullptr, std::vector<GLushort>* idx=nullptr);
 	~SageModel();
 
@@ -72,33 +72,33 @@ public:
 
 
 	/// Getters
-	GLuint get_vao_handle() const;
-	GLuint get_vbo_handle() const;
-	GLuint get_ebo_handle() const;
-	GLuint get_texture_handle() const;
+	GLuint Get_VAO_Handle() const;
+	GLuint Get_VBO_Handle() const;
+	GLuint Get_EBO_Handle() const;
+	GLuint Get_Texture_Handle() const;
 
-	GLuint& get_vao_handle();
-	GLuint& get_vbo_handle();
-	GLuint& get_ebo_handle();
-	GLuint& get_texture_handle();
+	GLuint& Get_VAO_Handle();
+	GLuint& Get_VBO_Handle();
+	GLuint& Get_EBO_Handle();
+	GLuint& Get_Texture_Handle();
 
-	std::vector<glm::vec2>& get_vertex_positions();
-	std::vector<glm::vec4>& get_vertex_colors();
-	std::vector<glm::vec2>& get_vertex_texture_coords();
-	std::vector<GLushort>& get_vertex_indices();
+	std::vector<glm::vec2>& Get_Vertex_Positions();
+	std::vector<glm::vec4>& Get_Vertex_Colors();
+	std::vector<glm::vec2>& Get_Vertex_Texture_Coords();
+	std::vector<GLushort>& Get_Vertex_Indices();
 
-	SageShader* get_shader_program() const;
+	SageShader* Get_Shader_Program() const;
 
-	void set_shape_type(PrimitiveShape shape);
+	void Set_Shape_Type(PrimitiveShape shape);
 
-	void set_render_type(RENDER_TYPE type);
-	void set_render_type(int type);
-	void set_shape_type(int shape);
+	void Set_Render_Type(RENDER_TYPE type);
+	void Set_Render_Type(int type);
+	void Set_Shape_Type(int shape);
 
-	bool is_idx_enabled() const;
+	bool Is_Idx_Enabled() const;
 
 
-	void update_vtx_buffer_GPU();
+	void Update_Vtx_Buffer_GPU();
 
 	static int model_count;
 

@@ -7,7 +7,7 @@
 
 std::map<std::string, SageObject> SageObjectManager::objects{};
 
-SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, PrimitiveObject OBJ_SHAPE)
+SageObject& SageObjectManager::Create_Primitive_Object(char const* name, PrimitiveObject OBJ_SHAPE)
 {
 	
 	SageObject obj;
@@ -31,7 +31,7 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 		else
 			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
 
-		obj.init(name, &SageModelManager::models["PRIMITIVE_RECT"]);
+		obj.Init(name, &SageModelManager::models["PRIMITIVE_RECT"]);
 
 		obj.transform = {};
 
@@ -61,7 +61,7 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
 		}
 
-		obj.init(name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
+		obj.Init(name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
 		obj.transform = {};
 
 		objects[name] = obj;
@@ -75,7 +75,7 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 	}
 }
 
-SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, PrimitiveObject OBJ_SHAPE, glm::vec2 position, glm::vec2 scale, glm::vec2 orientation, glm::vec4 color, glm::vec4 borderColor, float borderWidth, float borderRadius)
+SageObject& SageObjectManager::Create_Primitive_Object(char const* name, PrimitiveObject OBJ_SHAPE, glm::vec2 position, glm::vec2 scale, glm::vec2 orientation, glm::vec4 color, glm::vec4 borderColor, float borderWidth, float borderRadius)
 {
 	SageObject obj;
 	if (OBJ_SHAPE == PRIMITIVE_OBJECT_RECT)
@@ -98,7 +98,7 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 		else
 			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
 
-		obj.init(name, &SageModelManager::models["PRIMITIVE_RECT"]);
+		obj.Init(name, &SageModelManager::models["PRIMITIVE_RECT"]);
 
 		obj.transform.position = position;
 		obj.transform.scale = scale;
@@ -135,7 +135,7 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 			mdl.AssignShaderProgram(&SageShaderManager::shaders["BASE_SHADER"]);
 		}
 
-		obj.init(name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
+		obj.Init(name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
 
 		obj.transform.position = position;
 		obj.transform.scale = scale;
@@ -159,12 +159,12 @@ SageObject& SageObjectManager::CreatePrimitiveObject(char const* name, Primitive
 }
 
 
-void SageObjectManager::DestroyAllObjects()
+void SageObjectManager::Destroy_All_Objects()
 {
 	objects.clear();
 }
 
-SageLine SageObjectManager::CreateLineObject(char const* name, glm::vec2 start, glm::vec2 end, glm::vec4 color, float width)
+SageLine SageObjectManager::Create_Line_Object(char const* name, glm::vec2 start, glm::vec2 end, glm::vec4 color, float width)
 {
 	(name);
 	if (SageModelManager::models.find("PRIMITIVE_LINE") == SageModelManager::models.end())
@@ -176,7 +176,7 @@ SageLine SageObjectManager::CreateLineObject(char const* name, glm::vec2 start, 
 	SageLine line(start, end, color, width);
 	line.line = &SageModelManager::models["PRIMITIVE_LINE"];
 	
-	line.calculate_matrix();
+	line.Calculate_Matrix();
 
 
 	return line;

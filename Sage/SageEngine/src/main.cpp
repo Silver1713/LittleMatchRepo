@@ -37,7 +37,7 @@
 #include "SageAudio.hpp"
 #include "SageShaderManager.hpp"
 #include "SageTimer.hpp"
-
+#include "SageJSON.hpp"
 
 // Forward declaration
 void init();
@@ -47,7 +47,7 @@ void draw();
 void exit();
 int loop = 60;
 int window = 3;
-
+ const std::string window_config_path = "../SageEngine/data/configuration/window.json";
 constexpr double physics_update_target = 0.02;
 namespace
 {
@@ -96,7 +96,30 @@ int main()
 *******************************************************************************/
 void init()
 {
-    int status = SageHelper::init(1920, 1080, "Hello World");
+	SageJSON::SageJSON window_config;
+
+	std::ifstream file(window_config_path);
+
+      
+    while (file)
+    {
+		file >> window_config;
+    }
+
+    window_config.print();
+
+    file.close();
+
+	int window_width = static_cast<int>(window_config["Window"]["Width"].as<SageJSON::SageJSON::NumberValue>());
+	int window_height = static_cast<int>(
+		window_config["Window"]["Height"].as<SageJSON::SageJSON::NumberValue>());
+
+	std::string window_title = window_config["Window"]["Title"].as<SageJSON::SageJSON::StringValue>();
+
+
+    window_config.close();
+    
+    int status = SageHelper::Init(window_width, window_height, window_title.c_str());
     SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
 	SageRenderer::init();
     SageTimer::init();
@@ -125,7 +148,7 @@ void init()
 void update()
 {
     SageTimer::Update();
-    SageHelper::update();
+    SageHelper::Update();
 	accumulator += SageTimer::delta_time;
 	if (accumulator >= physics_update_target)
 	{
@@ -153,7 +176,7 @@ void PhysicsUpdate()
 *******************************************************************************/
 void draw()
 {
-    SageHelper::draw();
+    SageHelper::Draw();
     std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS);
     SageHelper::sage_ptr_window->Set_Title(s.c_str());
     SM::Draw();
@@ -170,6 +193,6 @@ void exit()
     SM::Free();
     Assets::Textures::Unload();
     SM::Unload();
-    SageHelper::exit();
+    SageHelper::Exit();
     SageAudio::Exit();
 }

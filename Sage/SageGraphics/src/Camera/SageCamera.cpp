@@ -25,23 +25,23 @@ ToastBox::Matrix3x3 SageCamera::Get_Projection_View_Matrix()
 }
 
 
-ToastBox::Vec2 SageCamera::GetPosition()
+ToastBox::Vec2 SageCamera::Get_Position()
 {
 	position = impl->Get_Position();
 	return position;
 }
 
-ToastBox::Vec2 SageCamera::GetViewRectSize()
+ToastBox::Vec2 SageCamera::Get_View_Rect_Size()
 {
 	rect_size = impl->Get_View_Rect_Size();
 	return rect_size;
 }
 
-void SageCamera::MoveCamera(ToastBox::Vec2 _move_vector, float speed)
+void SageCamera::Move_Camera(ToastBox::Vec2 _move_vector, float speed)
 {
 	impl->MoveCamera(_move_vector, speed);
 
-	position = GetPosition();
+	position = Get_Position();
 }
 
 void SageCamera::update()
@@ -82,7 +82,7 @@ SageCamera::~SageCamera()
 {
 	impl->~SageCameraImpl();
 }
-void* SageCamera::GetCamera()
+void* SageCamera::Get_Camera()
 {
 	return impl->GetCam();
 }

@@ -57,6 +57,7 @@ namespace Game {
 	{
 		game_objects.clear();
 		transform_cache.clear();
+		GameObject* obj = Game_Objects::Get_Game_Object("Player");
 		//caches the player's transforms
 		transform_cache["Player"] = dynamic_cast<Transform*>(Game_Objects::Get_Game_Object("Player")->Get_Component(TRANSFORM));
 
@@ -129,26 +130,27 @@ namespace Game {
 	void Input()
 	{
 		bool movement = false;
+		float move_speed = 250.f;
 		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
 		//tests
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_W))
 		{
-			plrphy->Get_Velocity().y = (float)SageHelper::delta_time * (100.0f);
+			plrphy->Get_Velocity().y = (float)SageHelper::delta_time * move_speed;
 			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_A))
 		{
-			plrphy->Get_Velocity().x = (float)SageHelper::delta_time * (-100.0f);
+			plrphy->Get_Velocity().x = (float)SageHelper::delta_time * -move_speed;
 			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_S))
 		{
-			plrphy->Get_Velocity().y = (float)SageHelper::delta_time * (-100.0f);
+			plrphy->Get_Velocity().y = (float)SageHelper::delta_time * -move_speed;
 			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_D))
 		{
-			plrphy->Get_Velocity().x = (float)SageHelper::delta_time * (100.0f);
+			plrphy->Get_Velocity().x = (float)SageHelper::delta_time * move_speed;
 			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_Q))
@@ -170,19 +172,19 @@ namespace Game {
 
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_I))
 		{
-			SageRenderer::camera->MoveCamera({ 0.f,1.f }, 100.f);
+			SageRenderer::camera->Move_Camera({ 0.f,1.f }, 100.f);
 		}
 		else if (SAGEInputHandler::Get_Key(SAGE_KEY_K))
 		{
-			SageRenderer::camera->MoveCamera({ 0.f,-1.f }, 100.f);
+			SageRenderer::camera->Move_Camera({ 0.f,-1.f }, 100.f);
 		}
 		else if (SAGEInputHandler::Get_Key(SAGE_KEY_J))
 		{
-			SageRenderer::camera->MoveCamera({ -1.f,0.f }, 100.f);
+			SageRenderer::camera->Move_Camera({ -1.f,0.f }, 100.f);
 		}
 		else if (SAGEInputHandler::Get_Key(SAGE_KEY_L))
 		{
-			SageRenderer::camera->MoveCamera({ 1.f,0.f }, 100.f);
+			SageRenderer::camera->Move_Camera({ 1.f,0.f }, 100.f);
 		}
 		else if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_V))
 		{
@@ -246,6 +248,9 @@ namespace Game {
 			GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("SPAWN"), "White_1");
 			transform_cache["White_1"] = dynamic_cast<Transform*>(random->Get_Component(TRANSFORM));
 			collider_cache["White_1"] = random->Get_Component<BoxCollider2D>();
+
+			random->Get_Component<BoxCollider2D>()->Set_Debug(enable_collider_view);
+
 
 			float m_min_scale[3] = { 10.0f,10.0f,0.0f }, m_max_scale[3] = { 100.0f,100.0f,0.0f };
 

@@ -36,7 +36,7 @@ void GLAPIENTRY openglErrorCallback(GLenum _source, GLenum _type, GLuint _id,
 	std::cerr << "Message: " << message << "\n";
 }	
 
-int SageHelper::init(int width, int height, const char* title, int UPS)
+int SageHelper::Init(int width, int height, const char* title, int UPS)
 {
 	
 	fixed_delta_time = 1.0 / UPS;
@@ -46,7 +46,7 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 
 	
 	//Error Callback
-	glfwSetErrorCallback(error_cb);
+	glfwSetErrorCallback(Error_Cb);
 
 
 	if (glfwInit())
@@ -56,7 +56,7 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 	else
 	{
 		std::cerr << "GLFW failed to initialize" << std::endl;
-		exit();
+		Exit();
 		return 1;
 	}
 
@@ -74,7 +74,7 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 	if (!ptr_window && !sage_ptr_window->check_active())
 	{
 		std::cerr << "Failed to create window" << '\n';
-		exit();
+		Exit();
 		return 1;
 	}
 
@@ -84,7 +84,7 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 	{
 		std::cerr << "Error: GLEW failed to initialize" << "\n"
 			<< "Reason: " << glewGetErrorString(err) << '\n';
-		exit();
+		Exit();
 		return 1;
 
 	}
@@ -128,22 +128,22 @@ int SageHelper::init(int width, int height, const char* title, int UPS)
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(openglErrorCallback, nullptr);*/
 
-	glfwSetKeyCallback(glfwGetCurrentContext(), key_cb);
+	glfwSetKeyCallback(glfwGetCurrentContext(), Key_Cb);
 	
 	return 0;
 }
 
 
 
-void SageHelper::update()
+void SageHelper::Update()
 {
-	update_time(1.f);
+	Update_Time(1.f);
 #if _DEBUG
 #endif
 }
 
 
-void SageHelper::update_time(double update_fps_interval)
+void SageHelper::Update_Time(double update_fps_interval)
 {
 	static double last_time = glfwGetTime();
 	double current_time = glfwGetTime();
@@ -169,21 +169,21 @@ void SageHelper::update_time(double update_fps_interval)
 }
 
 
-void SageHelper::draw()
+void SageHelper::Draw()
 {
 #if _DEBUG
 	
 #endif
 }
 
-void SageHelper::exit()
+void SageHelper::Exit()
 {
 	delete sage_ptr_window;
 	glfwTerminate();
 }
 
 
-void SageHelper::key_cb(GLFWwindow* window, int key, int scancode, int action, int mods)
+void SageHelper::Key_Cb(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	mods;
 	scancode;
@@ -258,7 +258,7 @@ bool SageHelper::Get_Key_Pressed(int key)
 
 }
 
-void SageHelper::framebuffer_size_cb(GLFWwindow* window, int width, int height)
+void SageHelper::Framebuffer_Size_Cb(GLFWwindow* window, int width, int height)
 {
 #if _DEBUG
 	std::cout << "Framebuffer Size: width: " << width << ", height: " << height << '\n';
@@ -266,13 +266,13 @@ void SageHelper::framebuffer_size_cb(GLFWwindow* window, int width, int height)
 }
 
 
-void SageHelper::error_cb(int error, const char* description)
+void SageHelper::Error_Cb(int error, const char* description)
 {
 	std::cerr << "Error: " << error << " Description: " << description << '\n';
 }
 
 
-SageShader SageHelper::CompileShadersFromFile(const char* vertex_shader, const char* fragment_shader)
+SageShader SageHelper::Compile_Shaders_From_File(const char* vertex_shader, const char* fragment_shader)
 {
 	SageShader shader{};
 	bool a = shader.CompileFromFile(SageShader::SAGE_SHADER_TYPE::SAGE_VERTEX_SHADER, vertex_shader);

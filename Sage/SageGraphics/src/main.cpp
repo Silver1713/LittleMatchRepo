@@ -48,7 +48,8 @@ int main()
 
 void init()
 {
-	int status = SageHelper::init(1000, 1000, "Hello World");
+
+	int status = SageHelper::Init(1000, 1000, "Hello World");
 
 	if (status)
 	{
@@ -66,20 +67,20 @@ void init()
 
 void update()
 {
-	SageHelper::update();
+	SageHelper::Update();
 	ExampleScene::update();
 }
 
 void draw()
 {
-	SageHelper::draw();
+	SageHelper::Draw();
 	ExampleScene::draw();
 }
 
 
 void exit()
 {
-	SageHelper::exit();
+	SageHelper::Exit();
 	ExampleScene::exit();
 	
 }

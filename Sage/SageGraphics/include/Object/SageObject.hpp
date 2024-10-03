@@ -26,7 +26,7 @@ public:
 		glm::mat3x3 model_matrix;
 
 
-		glm::mat3x3 calculate_model_matrix();
+		glm::mat3x3 Calculate_Model_Matrix();
 
 		
 
@@ -69,11 +69,11 @@ private:
 
 public:
 	SageObject();
-	void init(char const* name, SageModel* model);
-	void update();
-	void draw(SageViewport* vp);
-	void draw(SageCamera* cam);
-	void attach_texture(SageTexture* texture);
+	void Init(char const* name, SageModel* model);
+	void Update();
+	void Draw(SageViewport* vp);
+	void Draw(SageCamera* cam);
+	void Attach_Texture(SageTexture* texture);
 	//Camera;
 
 
@@ -86,9 +86,9 @@ public:
 
 	SageMaterial& GetMaterial();
 
-	void set_alpha(float transparency); // 0: Transparent, 1: Opaque
+	void Set_Alpha(float transparency); // 0: Transparent, 1: Opaque
 
-	void disable_object();
+	void Disable_Object();
 
 	
 

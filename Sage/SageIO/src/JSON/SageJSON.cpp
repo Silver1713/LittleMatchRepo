@@ -596,9 +596,9 @@ namespace SageJSON
 	int SageJSON::construct_ast()
 	{
 		
-		std::string current{};
-		bool inArray{ false };
-		bool inObject{ false };
+		static std::string current{};
+		static bool inArray{ false };
+		static bool inObject{ false };
 		for (Lexer::Token& token : tokens)
 		{
 			if (current.empty() && token.type == Lexer::Token::Type::STRING && (!inArray || (inObject && inArray)) )
@@ -818,6 +818,11 @@ namespace SageJSON
 		lex(line);
 		construct_ast();
 		return *this;
+	}
+
+	void SageJSON::print()
+	{
+		ast.getRoot()->print();
 	}
 
 
