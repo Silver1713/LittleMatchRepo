@@ -177,7 +177,7 @@ void PhysicsUpdate()
 void draw()
 {
     //SageHelper::Draw();
-    std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS);
+    std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS)  + "| Game Objects: " +std::to_string(Game_Objects::Get_Game_Objects().size());
     SageHelper::sage_ptr_window->Set_Title(s.c_str());
     SM::Draw();
 	
