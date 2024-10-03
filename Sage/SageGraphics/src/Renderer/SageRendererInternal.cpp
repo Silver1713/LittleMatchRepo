@@ -41,11 +41,11 @@ void SageRendererInternal::Draw_Filled(SageObject& object, RENDER_CONFIG_INTERNA
 	}
 	if (config.options & I_SAGE_ENABLE_CAMERA)
 	{
-		object.draw(camera);
+		object.Draw(camera);
 	}
 	else
 	{
-		object.draw(&viewport);
+		object.Draw(&viewport);
 	}
 	//object.draw(&viewport);
 }
@@ -87,11 +87,11 @@ void SageRendererInternal::Draw_Filled(SageObject& object)
 	}
 	if (default_config.options & I_SAGE_ENABLE_CAMERA)
 	{
-		object.draw(camera);
+		object.Draw(camera);
 	}
 	else
 	{
-		object.draw(&viewport);
+		object.Draw(&viewport);
 	}
 	//object.draw(&viewport);
 }
@@ -115,7 +115,7 @@ void SageRendererInternal::Draw_Filled(SageModel& model)
 	SageShader* shader = default_shader;
 
 
-	glBindVertexArray(model.get_vao_handle());
+	glBindVertexArray(model.Get_VAO_Handle());
 
 
 	shader->Activate();
@@ -147,21 +147,21 @@ void SageRendererInternal::Draw_Filled(SageModel& model)
 
 
 
-	if (model.is_idx_enabled())
+	if (model.Is_Idx_Enabled())
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//if (this->obj_mesh->model_ref->)
 
-		glDrawElements(GL_TRIANGLES, static_cast<int>(model.get_vertex_indices().size()), GL_UNSIGNED_SHORT, nullptr);
+		glDrawElements(GL_TRIANGLES, static_cast<int>(model.Get_Vertex_Indices().size()), GL_UNSIGNED_SHORT, nullptr);
 		// Check for errors
 
 
 	}
 	else
 	{
-		glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(model.get_vertex_positions().size()));
+		glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(model.Get_Vertex_Positions().size()));
 	}
 
 	glBindVertexArray(0);
@@ -176,7 +176,7 @@ void SageRendererInternal::Draw_Filled(SageModel& model, glm::mat3& matrix, REND
 	SageShader* shader = default_shader;
 
 
-	glBindVertexArray(model.get_vao_handle());
+	glBindVertexArray(model.Get_VAO_Handle());
 
 
 	shader->Activate();
@@ -208,21 +208,21 @@ void SageRendererInternal::Draw_Filled(SageModel& model, glm::mat3& matrix, REND
 
 
 
-	if (model.is_idx_enabled())
+	if (model.Is_Idx_Enabled())
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//if (this->obj_mesh->model_ref->)
 
-		glDrawElements(GL_TRIANGLES, static_cast<int>(model.get_vertex_indices().size()), GL_UNSIGNED_SHORT, nullptr);
+		glDrawElements(GL_TRIANGLES, static_cast<int>(model.Get_Vertex_Indices().size()), GL_UNSIGNED_SHORT, nullptr);
 		// Check for errors
 
 
 	}
 	else
 	{
-		glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(model.get_vertex_positions().size()));
+		glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(model.Get_Vertex_Positions().size()));
 	}
 
 	glBindVertexArray(0);
@@ -272,10 +272,10 @@ void SageRendererInternal::init()
 	SageModelManager::models["PRIMITIVE_LINE"].AssignShaderProgram(default_shader);
 	SageModelManager::models["PRIMITIVE_POINT"].AssignShaderProgram(default_shader);
 
-	SageModelManager::models["PRIMITIVE_RECT"].set_render_type(RENDER_TYPE::TYPE_TRIANGLE);
-	SageModelManager::models["PRIMITIVE_CIRCLE"].set_render_type(RENDER_TYPE::TYPE_TRIANGLE_FAN);
-	SageModelManager::models["PRIMITIVE_LINE"].set_render_type(RENDER_TYPE::TYPE_LINES);
-	SageModelManager::models["PRIMITIVE_POINT"].set_render_type(RENDER_TYPE::TYPE_POINTS);
+	SageModelManager::models["PRIMITIVE_RECT"].Set_Render_Type(RENDER_TYPE::TYPE_TRIANGLE);
+	SageModelManager::models["PRIMITIVE_CIRCLE"].Set_Render_Type(RENDER_TYPE::TYPE_TRIANGLE_FAN);
+	SageModelManager::models["PRIMITIVE_LINE"].Set_Render_Type(RENDER_TYPE::TYPE_LINES);
+	SageModelManager::models["PRIMITIVE_POINT"].Set_Render_Type(RENDER_TYPE::TYPE_POINTS);
 
 
 }
@@ -316,7 +316,7 @@ void SageRendererInternal::Set_Default_Shader(SageShader* shader)
 void SageRendererInternal::Draw_Line(SageLine const& line, float size)
 {
 	SageShader* shader = default_shader;
-	glBindVertexArray(line.line->get_vao_handle());
+	glBindVertexArray(line.line->Get_VAO_Handle());
 	shader->Activate();
 	shader->Set_Uniform("uAlpha", default_config.render_alpha);
 	shader->Set_Uniform("uUseColor", true);
@@ -355,19 +355,19 @@ void SageRendererInternal::Draw_Line(SageLine const& line, float size)
 		shader->Set_Uniform("uTex2D", default_config.current_texture->get_texture_unit());
 	}
 
-	if (line.line->is_idx_enabled())
+	if (line.line->Is_Idx_Enabled())
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//if (this->obj_mesh->model_ref->)
 
-		glDrawElements(GL_LINES, static_cast<int>(line.line->get_vertex_indices().size()), GL_UNSIGNED_SHORT, nullptr);
+		glDrawElements(GL_LINES, static_cast<int>(line.line->Get_Vertex_Indices().size()), GL_UNSIGNED_SHORT, nullptr);
 		// Check for errors
 	}
 	else
 	{
-		glDrawArrays(GL_LINES, 0, static_cast<int>(line.line->get_vertex_positions().size()));
+		glDrawArrays(GL_LINES, 0, static_cast<int>(line.line->Get_Vertex_Positions().size()));
 	}
 
 	glBindVertexArray(0);
@@ -381,7 +381,7 @@ void SageRendererInternal::Draw_Line(ToastBox::Vec2 start, ToastBox::Vec2 end, T
 	SageLine line({ start.getX(), start.getY() }, { end.getX(), end.getY() }, { color.x,color.y,color.z,color.a }, size);
 	line.line = &SageModelManager::models["PRIMITIVE_LINE"];
 
-	line.update_dist(line.start, line.end);
+	line.Update_Dist(line.start, line.end);
 
 	Draw_Line(line, line.width);
 
@@ -391,11 +391,11 @@ void SageRendererInternal::Draw_Line(ToastBox::Vec2 start, ToastBox::Vec2 end, T
 void SageRendererInternal::Draw_Rect(float x, float y, float width, float height, ToastBox::Vec4 color)
 {
 	SageObject obj;
-	obj.init("RECT", &SageModelManager::models["PRIMITIVE_RECT"]);
+	obj.Init("RECT", &SageModelManager::models["PRIMITIVE_RECT"]);
 	obj.transform.position = { x,y };
 	obj.transform.scale = { width,height };
 	obj.GetMaterial().color = { color.x,color.y,color.z,color.a };
-	obj.transform.calculate_model_matrix();
+	obj.transform.Calculate_Model_Matrix();
 	Draw_Filled(obj);
 }
 
@@ -404,7 +404,7 @@ void SageRendererInternal::Draw_Point(SagePoint const& point)
 {
 	SageShader* shader = default_shader;
 	SageModel* model = point.point;
-	glBindVertexArray(model->get_vao_handle());
+	glBindVertexArray(model->Get_VAO_Handle());
 	shader->Activate();
 	shader->Set_Uniform("uAlpha", default_config.render_alpha);
 	shader->Set_Uniform("uUseColor", true);
@@ -448,19 +448,19 @@ void SageRendererInternal::Draw_Point(SagePoint const& point)
 
 	glPointSize(point.size);
 
-	if (point.point->is_idx_enabled())
+	if (point.point->Is_Idx_Enabled())
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//if (this->obj_mesh->model_ref->)
 
-		glDrawElements(GL_POINTS, static_cast<int>(model->get_vertex_indices().size()), GL_UNSIGNED_SHORT, nullptr);
+		glDrawElements(GL_POINTS, static_cast<int>(model->Get_Vertex_Indices().size()), GL_UNSIGNED_SHORT, nullptr);
 		// Check for errors
 	}
 	else
 	{
-		glDrawArrays(GL_POINTS, 0, static_cast<int>(model->get_vertex_positions().size()));
+		glDrawArrays(GL_POINTS, 0, static_cast<int>(model->Get_Vertex_Positions().size()));
 	}
 
 	glBindVertexArray(0);

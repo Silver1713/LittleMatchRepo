@@ -20,17 +20,17 @@ struct SageHelper
 	static double fixed_delta_time;
 	static double FPS;
 
-	static int init(int width, int height, const char* title, int UPS = 60);
-	static void update();
-	static void draw();
-	static void exit();
+	static int Init(int width, int height, const char* title, int UPS = 60);
+	static void Update();
+	static void Draw();
+	static void Exit();
 
 	// Callbacks
-	static void error_cb(int error, const char* description);
+	static void Error_Cb(int error, const char* description);
 
-	static void framebuffer_size_cb(GLFWwindow* window, int width, int height);
+	static void Framebuffer_Size_Cb(GLFWwindow* window, int width, int height);
 	// Input - Keyboard
-	static void key_cb(GLFWwindow* window, int key, int scancode, int action, int mods);
+	static void Key_Cb(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 	// Input - Mouse Button
 	static void mouse_button_cb(GLFWwindow* window, int button, int action, int mods);
@@ -61,9 +61,9 @@ struct SageHelper
 	static bool Get_Key_Pressed(int key);
 
 
-	static SageShader CompileShadersFromFile(const char* _vertex_shader, const char* _fragment_shader);
+	static SageShader Compile_Shaders_From_File(const char* _vertex_shader, const char* _fragment_shader);
 	
-	static void update_time(double update_interval);
+	static void Update_Time(double _update_interval);
 
 
 

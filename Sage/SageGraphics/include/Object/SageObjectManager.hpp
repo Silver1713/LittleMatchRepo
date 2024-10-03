@@ -18,10 +18,10 @@ struct SageObjectManager
 {
 	static std::map<std::string, SageObject> objects;
 
-	static SageObject& CreatePrimitiveObject(char const * name,  PrimitiveObject OBJ_SHAPE);
-	static SageObject& CreatePrimitiveObject(char const* name, PrimitiveObject OBJ_SHAPE, glm::vec2 position, glm::vec2 scale, glm::vec2 orientation, glm::vec4 color = {}, glm::vec4 borderColor = {}, float borderWidth = 0, float borderRadius = 0);
-	static SageLine CreateLineObject(char const* name, glm::vec2 start, glm::vec2 end, glm::vec4 color, float width);
-	static void DestroyAllObjects();
+	static SageObject& Create_Primitive_Object(char const * name,  PrimitiveObject OBJ_SHAPE);
+	static SageObject& Create_Primitive_Object(char const* name, PrimitiveObject OBJ_SHAPE, glm::vec2 position, glm::vec2 scale, glm::vec2 orientation, glm::vec4 color = {}, glm::vec4 borderColor = {}, float borderWidth = 0, float borderRadius = 0);
+	static SageLine Create_Line_Object(char const* name, glm::vec2 start, glm::vec2 end, glm::vec4 color, float width);
+	static void Destroy_All_Objects();
 };
 
 

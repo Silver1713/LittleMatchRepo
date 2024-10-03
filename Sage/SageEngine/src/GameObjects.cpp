@@ -169,7 +169,7 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Clear_Game_Objects()
 	{
-		SageObjectManager::DestroyAllObjects();
+		SageObjectManager::Destroy_All_Objects();
 		g_game_objects.clear();
 	}
 }

@@ -130,26 +130,27 @@ namespace Game {
 	void Input()
 	{
 		bool movement = false;
+		float move_speed = 250.f;
 		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
 		//tests
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_W))
 		{
-			plrphy->Get_Velocity().y = (float)SageHelper::delta_time * (100.0f);
+			plrphy->Get_Velocity().y = (float)SageHelper::delta_time * move_speed;
 			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_A))
 		{
-			plrphy->Get_Velocity().x = (float)SageHelper::delta_time * (-100.0f);
+			plrphy->Get_Velocity().x = (float)SageHelper::delta_time * -move_speed;
 			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_S))
 		{
-			plrphy->Get_Velocity().y = (float)SageHelper::delta_time * (-100.0f);
+			plrphy->Get_Velocity().y = (float)SageHelper::delta_time * -move_speed;
 			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_D))
 		{
-			plrphy->Get_Velocity().x = (float)SageHelper::delta_time * (100.0f);
+			plrphy->Get_Velocity().x = (float)SageHelper::delta_time * move_speed;
 			movement = true;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_Q))

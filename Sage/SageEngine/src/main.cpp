@@ -119,7 +119,7 @@ void init()
 
     window_config.close();
     
-    int status = SageHelper::init(window_width, window_height, window_title.c_str());
+    int status = SageHelper::Init(window_width, window_height, window_title.c_str());
     SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
 	SageRenderer::init();
     SageTimer::init();
@@ -148,7 +148,7 @@ void init()
 void update()
 {
     SageTimer::Update();
-    SageHelper::update();
+    SageHelper::Update();
 	accumulator += SageTimer::delta_time;
 	if (accumulator >= physics_update_target)
 	{
@@ -176,7 +176,7 @@ void PhysicsUpdate()
 *******************************************************************************/
 void draw()
 {
-    SageHelper::draw();
+    SageHelper::Draw();
     std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS);
     SageHelper::sage_ptr_window->Set_Title(s.c_str());
     SM::Draw();
@@ -193,6 +193,6 @@ void exit()
     SM::Free();
     Assets::Textures::Unload();
     SM::Unload();
-    SageHelper::exit();
+    SageHelper::Exit();
     SageAudio::Exit();
 }

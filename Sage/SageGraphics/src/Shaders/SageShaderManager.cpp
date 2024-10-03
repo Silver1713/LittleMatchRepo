@@ -9,7 +9,7 @@ std::string SageShaderManager::prev_found_shader_dir{};
 std::map<std::string, std::string> SageShaderManager::shader_buckets;
 SageShader& SageShaderManager::CreateShaderProgram(std::string name, const char* vertex_shader_path, const char* fragment_shader_path)
 {
-	SageShader shdr = SageHelper::CompileShadersFromFile(vertex_shader_path, fragment_shader_path);
+	SageShader shdr = SageHelper::Compile_Shaders_From_File(vertex_shader_path, fragment_shader_path);
 
 	shaders[name] = std::move(shdr);
 

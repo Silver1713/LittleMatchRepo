@@ -18,16 +18,16 @@ SageObject::SageObject() : object_id(0), object_name("default"), obj_mesh(), tra
 
 }
 
-void SageObject::init(char const* name, SageModel* model)
+void SageObject::Init(char const* name, SageModel* model)
 {
 	//Name, model, vertex count
 	object_name = name;
 	obj_mesh.model_ref = model;
-	obj_mesh.vtx_cnt = model->get_vertex_positions().size();
-	obj_mesh.idx_cnt = model->get_vertex_indices().size();
+	obj_mesh.vtx_cnt = model->Get_Vertex_Positions().size();
+	obj_mesh.idx_cnt = model->Get_Vertex_Indices().size();
 
 
-	material.shader_ref = model->get_shader_program();
+	material.shader_ref = model->Get_Shader_Program();
 
 
 
@@ -39,11 +39,11 @@ void SageObject::init(char const* name, SageModel* model)
 
 	is_enabled = true;
 
-	set_alpha(1.f);
+	Set_Alpha(1.f);
 }
 
 
-void SageObject::attach_texture(SageTexture* texture)
+void SageObject::Attach_Texture(SageTexture* texture)
 {
 	if (texture == nullptr)
 	{
@@ -61,16 +61,16 @@ void SageObject::attach_texture(SageTexture* texture)
 
 
 
-void SageObject::update()
+void SageObject::Update()
 {
-	transform.calculate_model_matrix();
+	transform.Calculate_Model_Matrix();
 	transform.orientation.x += static_cast<float>(transform.orientation.y * SageHelper::delta_time);
 
 }
 
 
 
-glm::mat3x3 SageObject::SageTransform2D::calculate_model_matrix()
+glm::mat3x3 SageObject::SageTransform2D::Calculate_Model_Matrix()
 {
 	glm::mat3  translation = { 1, 0, 0, 0, 1, 0, position.x, position.y, 1 };
 	glm::mat3  rotation = { cos(orientation.x), sin(orientation.x), 0, -sin(orientation.x), cos(orientation.x), 0, 0, 0, 1 };
@@ -83,12 +83,12 @@ glm::mat3x3 SageObject::SageTransform2D::calculate_model_matrix()
 
 
 // Draw with default shader
-void SageObject::draw(SageViewport* vp)
+void SageObject::Draw(SageViewport* vp)
 {
-	SageShader* shader = obj_mesh.model_ref->get_shader_program();
+	SageShader* shader = obj_mesh.model_ref->Get_Shader_Program();
 	SageViewport* viewport = vp;
 
-	glBindVertexArray(obj_mesh.model_ref->get_vao_handle());
+	glBindVertexArray(obj_mesh.model_ref->Get_VAO_Handle());
 
 
 	shader->Activate();
@@ -122,7 +122,7 @@ void SageObject::draw(SageViewport* vp)
 
 
 
-	if (obj_mesh.model_ref->is_idx_enabled())
+	if (obj_mesh.model_ref->Is_Idx_Enabled())
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
@@ -147,13 +147,13 @@ void SageObject::draw(SageViewport* vp)
 }
 
 //Draw with default shader
-void SageObject::draw(SageCamera* cam)
+void SageObject::Draw(SageCamera* cam)
 {
 
-	SageShader* shader = obj_mesh.model_ref->get_shader_program();
+	SageShader* shader = obj_mesh.model_ref->Get_Shader_Program();
 	SageCamera* c = cam;
 
-	glBindVertexArray(obj_mesh.model_ref->get_vao_handle());
+	glBindVertexArray(obj_mesh.model_ref->Get_VAO_Handle());
 
 
 	shader->Activate();
@@ -189,7 +189,7 @@ void SageObject::draw(SageCamera* cam)
 
 
 
-	if (obj_mesh.model_ref->is_idx_enabled())
+	if (obj_mesh.model_ref->Is_Idx_Enabled())
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
@@ -221,13 +221,13 @@ SageObject::SageMaterial& SageObject::GetMaterial()
 	return material;
 }
 
-void SageObject::set_alpha(float transparency)
+void SageObject::Set_Alpha(float transparency)
 {
 	material.mat_transparency = transparency;
 }
 
 
-void SageObject::disable_object()
+void SageObject::Disable_Object()
 {
 	is_enabled = false;
 }

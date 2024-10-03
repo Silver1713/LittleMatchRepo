@@ -67,8 +67,8 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string _name, int _shape,
 		};
 
 		SageModel mdl_square{ _name.c_str(), &pos_vtx, &tex_vtx, &clr_vtx, &idx_vtx };
-		mdl_square.set_render_type(_type);
-		mdl_square.set_shape_type(_shape);
+		mdl_square.Set_Render_Type(_type);
+		mdl_square.Set_Shape_Type(_shape);
 
 		
 
@@ -121,8 +121,8 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string _name, int _shape,
 		idx_vtx.push_back(1); // First perimeter vertex to close the loop
 
 		SageModel mdl_circle(_name.c_str(), &pos_vtx, &tex_vtx, &clr_vtx, &idx_vtx);
-		mdl_circle.set_render_type(_type);
-		mdl_circle.set_shape_type(_shape);
+		mdl_circle.Set_Render_Type(_type);
+		mdl_circle.Set_Shape_Type(_shape);
 
 		models[_name] = mdl_circle;
 		return models[_name];
@@ -152,8 +152,8 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string _name, int _shape,
 		};
 
 		SageModel mdl_line{ _name.c_str(), &pos_vtx, &tex_vtx, &clr_vtx, &idx_vtx };
-		mdl_line.set_render_type(_type);
-		mdl_line.set_shape_type(_shape);
+		mdl_line.Set_Render_Type(_type);
+		mdl_line.Set_Shape_Type(_shape);
 
 		models[_name] = mdl_line;
 		return models[_name];
@@ -167,8 +167,8 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string _name, int _shape,
 		};
 
 		SageModel mdl_points{ _name.c_str(), &pos_vtx};
-		mdl_points.set_render_type(_type);
-		mdl_points.set_shape_type(_shape);
+		mdl_points.Set_Render_Type(_type);
+		mdl_points.Set_Shape_Type(_shape);
 
 		models[_name] = mdl_points;
 		return models[_name];

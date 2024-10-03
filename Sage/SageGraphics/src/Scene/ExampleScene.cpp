@@ -41,9 +41,9 @@ void ExampleScene::init()
 
 
 
-	SageObjectManager::CreatePrimitiveObject("Rect3", PRIMITIVE_OBJECT_RECT, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,0,1,1 },
+	SageObjectManager::Create_Primitive_Object("Rect3", PRIMITIVE_OBJECT_RECT, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,0,1,1 },
 		{ 0,0,0,1 }, 0.5f);
-	SageObjectManager::CreatePrimitiveObject("Circle3", PRIMITIVE_OBJECT_CIRCLE, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,0,1,1 },
+	SageObjectManager::Create_Primitive_Object("Circle3", PRIMITIVE_OBJECT_CIRCLE, { 2000,4000 }, { 1000,500 }, { 0,0 }, { 0,0,1,1 },
 		{ 0,0,0,1 }, 0.5f);
 
 
@@ -137,7 +137,7 @@ void ExampleScene::update()
 
 	for (auto& obj : SageObjectManager::objects)
 	{
-		obj.second.update();
+		obj.second.Update();
 	}
 
 	camera2d.update();

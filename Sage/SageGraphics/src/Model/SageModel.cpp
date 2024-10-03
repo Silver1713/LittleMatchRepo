@@ -8,7 +8,7 @@ int SageModel::model_count{};
 
 SageModel::SageModel(const char* name, std::vector<glm::vec2>* pos, std::vector<glm::vec2>* texture, std::vector<glm::vec4>* clr, std::vector<GLushort>* idx)
 	: model_id(model_count++), model_name(name), vao_hdl(0), vbo_hdl(0),
-	ebo_hdl(0), tex_hdl(0), base_shader_ptr(nullptr), Is_Enabled(false), Enable_Vertex_Color(false), Enable_Vertex_Texture(false), Enable_Vertex_Indices(false),
+	ebo_hdl(0), tex_hdl(0), base_shader_ptr(nullptr), is_enabled(false), enable_vertex_color(false), enable_vertex_texture(false), enable_vertex_indices(false),
 	shape_type(), mdl_render_type()
 {
 	
@@ -21,17 +21,17 @@ SageModel::SageModel(const char* name, std::vector<glm::vec2>* pos, std::vector<
 	if (texture != nullptr)
 	{
 		tex_coords = std::vector{ *texture };
-		Enable_Vertex_Texture = true;
+		enable_vertex_texture = true;
 	}
 	if (clr != nullptr)
 	{
 		clr_vtx = std::vector{ *clr };
-		Enable_Vertex_Color = true;
+		enable_vertex_color = true;
 	}
 	if (idx != nullptr)
 	{
 		idx_vtx = std::vector{ *idx };
-		Enable_Vertex_Indices = true;
+		enable_vertex_indices = true;
 	}
 
 }
@@ -43,9 +43,9 @@ void SageModel::setup_gpu_buffer()
 	glCreateBuffers(1, &vbo_hdl);
 
 	// Check flags
-	size_t vbo_size = (Enable_Vertex_Color) ? (sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec4) * clr_vtx.size()) : (sizeof(glm::vec2) * pos_vtx.size());
+	size_t vbo_size = (enable_vertex_color) ? (sizeof(glm::vec2) * pos_vtx.size() + sizeof(glm::vec4) * clr_vtx.size()) : (sizeof(glm::vec2) * pos_vtx.size());
 
-	if (Enable_Vertex_Texture)
+	if (enable_vertex_texture)
 		vbo_size += sizeof(glm::vec2) * tex_coords.size();
 
 	if (shape_type == PrimitiveShape::PRIMITIVE_LINE || shape_type == PrimitiveShape::PRIMITIVE_POINTS)
@@ -59,11 +59,11 @@ void SageModel::setup_gpu_buffer()
 
 	glNamedBufferSubData(vbo_hdl, 0, static_cast<GLsizeiptr>(sizeof(glm::vec2)) * static_cast<GLsizeiptr>(pos_vtx.size()), pos_vtx.data());
 
-	if (Enable_Vertex_Texture)
+	if (enable_vertex_texture)
 		glNamedBufferSubData(vbo_hdl, static_cast<GLsizeiptr>(sizeof(glm::vec2)) * static_cast<GLsizeiptr>(pos_vtx.size()), static_cast<GLsizeiptr>(sizeof(glm::vec2)) * static_cast<GLsizeiptr>(tex_coords.size()), tex_coords.data());
 
-	if (Enable_Vertex_Color)
-		glNamedBufferSubData(vbo_hdl, sizeof(glm::vec2) * pos_vtx.size() + ((Enable_Vertex_Texture) ? (sizeof glm::vec2 * tex_coords.size()) : 0) , sizeof(glm::vec4) * clr_vtx.size(), clr_vtx.data());
+	if (enable_vertex_color)
+		glNamedBufferSubData(vbo_hdl, sizeof(glm::vec2) * pos_vtx.size() + ((enable_vertex_texture) ? (sizeof glm::vec2 * tex_coords.size()) : 0) , sizeof(glm::vec4) * clr_vtx.size(), clr_vtx.data());
 
 	glCreateVertexArrays(1, &vao_hdl);
 	// Position
@@ -72,7 +72,7 @@ void SageModel::setup_gpu_buffer()
 	glVertexArrayAttribFormat(vao_hdl, 0, 2, GL_FLOAT, GL_FALSE, 0);
 	glVertexArrayAttribBinding(vao_hdl, 0, 0);
 
-	if (Enable_Vertex_Texture)
+	if (enable_vertex_texture)
 	{
 		glEnableVertexArrayAttrib(vao_hdl, 1); // vtx_texture at location 2
 		glVertexArrayVertexBuffer(vao_hdl, 1, vbo_hdl, static_cast<GLsizeiptr>(sizeof(glm::vec2) * pos_vtx.size()), sizeof(glm::vec2)); // data location in VBO
@@ -81,15 +81,15 @@ void SageModel::setup_gpu_buffer()
 
 	}
 
-	if (Enable_Vertex_Color)
+	if (enable_vertex_color)
 	{
 		glEnableVertexArrayAttrib(vao_hdl, 2); // vtx_color at location 1
-		glVertexArrayVertexBuffer(vao_hdl, 2, vbo_hdl, sizeof(glm::vec2) * pos_vtx.size() + ((Enable_Vertex_Texture) ? (sizeof glm::vec2 * tex_coords.size()) : 0), sizeof(glm::vec4)); // data location in VBO
+		glVertexArrayVertexBuffer(vao_hdl, 2, vbo_hdl, sizeof(glm::vec2) * pos_vtx.size() + ((enable_vertex_texture) ? (sizeof glm::vec2 * tex_coords.size()) : 0), sizeof(glm::vec4)); // data location in VBO
 		glVertexArrayAttribFormat(vao_hdl, 2, 4, GL_FLOAT, GL_FALSE, 0);
 		glVertexArrayAttribBinding(vao_hdl, 2, 2);
 	}
 
-	if (Enable_Vertex_Indices)
+	if (enable_vertex_indices)
 	{
 		glCreateBuffers(1, &ebo_hdl);
 		glNamedBufferStorage(ebo_hdl, static_cast<GLsizeiptr>(sizeof(GLushort) * idx_vtx.size()), idx_vtx.data(), GL_DYNAMIC_STORAGE_BIT);
@@ -98,17 +98,17 @@ void SageModel::setup_gpu_buffer()
 	else ebo_hdl = 0;
 
 	glBindVertexArray(0);
-	Is_Enabled = true;
+	is_enabled = true;
 }
 
 
 SageModel::~SageModel()
 {
 	model_count--;
-	if (Is_Enabled)
+	if (is_enabled)
 	{
 		glDeleteBuffers(1, &vbo_hdl);
-		if (Enable_Vertex_Indices)
+		if (enable_vertex_indices)
 			glDeleteBuffers(1, &ebo_hdl);
 		glDeleteVertexArrays(1, &vao_hdl);
 	}
@@ -122,42 +122,42 @@ void SageModel::AssignShaderProgram(SageShader* shader)
 }
 
 // Getters
-GLuint& SageModel::get_ebo_handle()
+GLuint& SageModel::Get_EBO_Handle()
 {
 	return ebo_hdl;
 }
 
-GLuint SageModel::get_ebo_handle() const
+GLuint SageModel::Get_EBO_Handle() const
 {
 	return ebo_hdl;
 }
 
-GLuint& SageModel::get_texture_handle()
+GLuint& SageModel::Get_Texture_Handle()
 {
 	return tex_hdl;
 }
 
-GLuint SageModel::get_texture_handle() const
+GLuint SageModel::Get_Texture_Handle() const
 {
 	return tex_hdl;
 }
-GLuint& SageModel::get_vao_handle()
+GLuint& SageModel::Get_VAO_Handle()
 {
 	return vao_hdl;
 
 }
 
-GLuint SageModel::get_vao_handle() const
+GLuint SageModel::Get_VAO_Handle() const
 {
 	return vao_hdl;
 }
 
-GLuint& SageModel::get_vbo_handle()
+GLuint& SageModel::Get_VBO_Handle()
 {
 	return vbo_hdl;
 }
 
-GLuint SageModel::get_vbo_handle() const
+GLuint SageModel::Get_VBO_Handle() const
 {
 	return vbo_hdl;
 }
@@ -170,64 +170,64 @@ int SageModel::get_shape_type()
 
 
 
-void SageModel::set_render_type(int type)
+void SageModel::Set_Render_Type(int type)
 {
 	mdl_render_type = static_cast<RENDER_TYPE>(type);
 
 }
 
-void SageModel::set_shape_type(int shape)
+void SageModel::Set_Shape_Type(int shape)
 {
 	shape_type = static_cast<PrimitiveShape>(shape);
 
 }
 
 
-void SageModel::set_render_type(RENDER_TYPE type)
+void SageModel::Set_Render_Type(RENDER_TYPE type)
 {
 	mdl_render_type = type;
 }
 
-void SageModel::set_shape_type(PrimitiveShape shape)
+void SageModel::Set_Shape_Type(PrimitiveShape shape)
 {
 	shape_type = shape;
 }
 
 
-std::vector<glm::vec4>& SageModel::get_vertex_colors()
+std::vector<glm::vec4>& SageModel::Get_Vertex_Colors()
 {
 	return clr_vtx;
 }
 
-std::vector<glm::vec2>& SageModel::get_vertex_positions()
+std::vector<glm::vec2>& SageModel::Get_Vertex_Positions()
 {
 	return pos_vtx;
 }
 
-std::vector<glm::vec2>& SageModel::get_vertex_texture_coords()
+std::vector<glm::vec2>& SageModel::Get_Vertex_Texture_Coords()
 {
 	return tex_coords;
 }
 
 
-std::vector<GLushort>& SageModel::get_vertex_indices()
+std::vector<GLushort>& SageModel::Get_Vertex_Indices()
 {
 	return idx_vtx;
 }
 
 
-SageShader* SageModel::get_shader_program() const
+SageShader* SageModel::Get_Shader_Program() const
 {
 	return base_shader_ptr;
 }
 
 
-bool SageModel::is_idx_enabled() const
+bool SageModel::Is_Idx_Enabled() const
 {
-	return Enable_Vertex_Indices;
+	return enable_vertex_indices;
 }
 
-void SageModel::update_vtx_buffer_GPU()
+void SageModel::Update_Vtx_Buffer_GPU()
 {
 	glNamedBufferSubData(vbo_hdl, 0, static_cast<GLsizeiptr>(sizeof(glm::vec2) * pos_vtx.size()), pos_vtx.data());
 }

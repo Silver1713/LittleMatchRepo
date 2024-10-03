@@ -149,7 +149,8 @@ void GLFWInputHandler::Key_Cb(GLFWwindow* _window, int _keycode, int _scancode, 
 *******************************************************************************/
 void GLFWInputHandler::Mouse_Cb(GLFWwindow* _window, int _button, int _action, int _mods)
 {
-
+	(_mods);
+	(_window);
 	switch (_action)
 	{
 	case GLFW_PRESS:

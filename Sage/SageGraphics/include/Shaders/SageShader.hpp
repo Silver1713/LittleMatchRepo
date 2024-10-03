@@ -480,17 +480,5 @@ public:
 		True, if deletion is successful else false.
 	*******************************************************************************/
 	bool DeleteShaderProgram();
-
-
-
-
-
-
-
-
-
 };
-
-
-
 #endif
