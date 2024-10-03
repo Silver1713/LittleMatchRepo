@@ -12,94 +12,366 @@
 /* End Header **************************************************************************/
 #pragma once
 
-
 namespace ToastBox {
 	class Vec3;
 	class Matrix3x3 {
 	private:
 		union {
-			struct {
+			struct Matrix{
 				float m00, m01, m02;
 				float m10, m11, m12;
 				float m20, m21, m22;
-			} ;
+			}matrix;
 			float m[9];
 		};
 
-		
 	public:
-		Matrix3x3() :m00{ 0 }, m01{ 0 }, m02{ 0 }, m10{ 0 }, m11{ 0 }, m12{ 0 }, m20{ 0 }, m21{ 0 }, m22{ 0 }{};
+		/*!*****************************************************************************
+		  \brief
+			Constructor for class matrix.
+		*******************************************************************************/
+		Matrix3x3();
 
+		/*!*****************************************************************************
+		  \brief
+			Constructor for class matrix.
+
+		  \param _arr
+
+		*******************************************************************************/
 		Matrix3x3(const float* arr);
 
+		/*!*****************************************************************************
+		  \brief
+			Constructor for class matrix.
+		*******************************************************************************/
+		Matrix3x3(float _00, float _01, float _02, float _10, float _11, float _12, float _20, float _21, float _22);
 
-		Matrix3x3(float _00, float _01, float _02, float _10, float _11, float _12, float _20, float _21, float _22)
-			:m00{ _00 }, m01{ _01 }, m02{ _02 }, m10{ _10 }, m11{ _11 }, m12{ _12 }, m20{ _20 }, m21{ _21 }, m22{ _22 }{}
+		/*!*****************************************************************************
+		  \brief
+			Copy Assignment for class matrix.
 
+		  \param _rhs
+			The other matrix.
+
+		  \return
+			The current matrix.
+		*******************************************************************************/
 		Matrix3x3 operator=(const Matrix3x3& rhs);
+
+		/*!*****************************************************************************
+		  \brief
+			Operator overload for ~ to transpose a matrix.
+
+		  \return
+			The result of transposing the matrix.
+		*******************************************************************************/
 		Matrix3x3 operator~();
 
-		//Identity matrix
-		void Matrix3Identity(Matrix3x3& pResult);
+		/*!*****************************************************************************
+		  \brief
+			Creates an identity matrix to the current matrix.
+		*******************************************************************************/
+		void Matrix3Identity();
 
-		//Translate matrix
-		void Matrix3Translate(float x, float y);
+		/*!*****************************************************************************
+		  \brief
+			Performs translation transformation to the matrix.
 
-		//Scale matrix
-		void Matrix3Scale(float x, float y);
+		  \param _x
+			The x translation.
 
-		//Rotate (radian) matrix
-		void Matrix3RotRad(float angle);
+		  \param _y
+			The y translation.
+		*******************************************************************************/
+		void Matrix3Translate(float _x, float _y);
 
-		//Rotate (degree) matrix
-		void Matrix3RotDeg(float angle);
+		/*!*****************************************************************************
+		  \brief
+			Performs scaling transformation to the matrix.
 
-		//Transpose matrix
-		void Matrix3Transpose(const Matrix3x3& pMtx);
+		  \param _x
+			The x scale.
 
-		//Inverse matrix
-		void Matrix3SetInverse(const Matrix3x3& mtx);
+		  \param _y
+			The y scale.
+		*******************************************************************************/
+		void Matrix3Scale(float _x, float _y);
+
+		/*!*****************************************************************************
+		  \brief
+			Performs radian rotation transformation to the matrix.
+
+		  \param _angle
+			The angle (in radian) of the rotation.
+		*******************************************************************************/
+		void Matrix3RotRad(float _angle);
+
+		/*!*****************************************************************************
+		  \brief
+			Performs degree rotation transformation to the matrix.
+
+		  \param _angle
+			The angle (in degree) of the rotation.
+		*******************************************************************************/
+		void Matrix3RotDeg(float _angle);
+
+		/*!*****************************************************************************
+		  \brief
+			Transposes a matrix.
+
+		  \param _p_mtx
+			The matrix itself.
+		*******************************************************************************/
+		void Matrix3Transpose(const Matrix3x3& _p_mtx);
+
+		/*!*****************************************************************************
+		  \brief
+			Invereses a matrix.
+
+		  \param _mtx
+			The matrix itself.
+		*******************************************************************************/
+		void Matrix3SetInverse(const Matrix3x3& _mtx);
+
+		/*!*****************************************************************************
+		  \brief
+			Invereses a matrix.
+
+		  \return
+			The copy of the matrix but inversed.
+		*******************************************************************************/
 		Matrix3x3 inverse() const;
+
+		/*!*****************************************************************************
+		  \brief
+			Invereses a matrix.
+
+		  \return
+			The matrix itself.
+		*******************************************************************************/
 		void invert();
 
-		//Matrix Addition
-		void Matrix3Add(const Matrix3x3& rhs);
-		Matrix3x3 Matrix3Add2(const Matrix3x3& lhs, const Matrix3x3& rhs);
+		/*!*****************************************************************************
+		  \brief
+			Performs addition calculation to a matrix
 
-		//Matrix Subtraction
-		void Matrix3Sub(const Matrix3x3& rhs);
-		Matrix3x3 Matrix3Sub2(const Matrix3x3& lhs, const Matrix3x3& rhs);
+		  \param _rhs
+			The other matrix.
+		*******************************************************************************/
+		void Matrix3Add(const Matrix3x3& _rhs);
 
-		//Matrix Multiplication scale
-		void Matrix3Mul(const float scale);
-		Matrix3x3 Matrix3Mul2(const Matrix3x3& lhs, const float scale);
+		/*!*****************************************************************************
+		  \brief
+			Performs addition calculation to 2 matrices
 
-		//Matrix Division scale
-		void Matrix3Div(const float scale);
-		Matrix3x3 Matrix3Div2(const Matrix3x3& lhs, const float scale);
+		  \param _lhs
+			The first matrix.
 
-		//Get elements of matrix
+		  \param _rhs
+			The second matrix.
+
+		  \return
+			The result of both matrices added.
+		*******************************************************************************/
+		Matrix3x3 Matrix3Add2(const Matrix3x3& _lhs, const Matrix3x3& _rhs);
+
+		/*!*****************************************************************************
+		  \brief
+			Performs subtraction calculation to a matrix
+
+		  \param _rhs
+			The other matrix.
+		*******************************************************************************/
+		void Matrix3Sub(const Matrix3x3& _rhs);
+
+		/*!*****************************************************************************
+		  \brief
+			Performs subtraction calculation to 2 matrices
+
+		  \param _lhs
+			The first matrix.
+
+		  \param _rhs
+			The second matrix.
+
+		  \return
+			The result of both matrices subtracted.
+		*******************************************************************************/
+		Matrix3x3 Matrix3Sub2(const Matrix3x3& _lhs, const Matrix3x3& _rhs);
+
+		/*!*****************************************************************************
+		  \brief
+			Performs multiplication calculation to a matrix
+
+		  \param _scale
+			The scalar.
+		*******************************************************************************/
+		void Matrix3Mul(const float _scale);
+
+		/*!*****************************************************************************
+		  \brief
+			Performs multiplication calculation to 2 matrices
+
+		  \param _lhs
+			The matrix itself.
+
+		  \param _scale
+			The scalar.
+
+		  \return
+			The result of multiplying the matrix.
+		*******************************************************************************/
+		Matrix3x3 Matrix3Mul2(const Matrix3x3& _lhs, const float _scale);
+
+		/*!*****************************************************************************
+		  \brief
+			Performs division calculation to a matrix
+
+		  \param _scale
+			The scalar.
+		*******************************************************************************/
+		void Matrix3Div(const float _scale);
+
+		/*!*****************************************************************************
+		  \brief
+			Performs division calculation to 2 matrices
+
+		  \param _lhs
+			The matrix itself.
+
+		  \param _scale
+			The scalar.
+
+		  \return
+			The result of dividing the matrix.
+		*******************************************************************************/
+		Matrix3x3 Matrix3Div2(const Matrix3x3& _lhs, const float _scale);
+
+		/*!*****************************************************************************
+		  \brief
+			Returns the elements of a matrix
+
+		  \return
+			The elements of a matrix.
+		*******************************************************************************/
 		Matrix3x3 getMatrixElements();
 
-		//Get matrix
+		/*!*****************************************************************************
+		  \brief
+			Retrieves a matrix
+
+		  \return
+			A matrix.
+		*******************************************************************************/
 		Matrix3x3 getMatrix();
 
-		//Mutate matrix
+		/*!*****************************************************************************
+		  \brief
+			Sets a matrix to desired values.
+
+		  \return
+			The set matrix.
+		*******************************************************************************/
 		Matrix3x3 setMatrix(float, float, float, float, float, float, float, float, float);
 
-		const float* data() const { return m; }
-		float* data() { return m; }
+		/*!*****************************************************************************
+		  \brief
+			Returns the elements in the matrix.
 
-		friend Vec3 operator*(const Matrix3x3& pMtx0, const Vec3& pVec0);
+		  \return
+			The elements in the matrix.
+		*******************************************************************************/
+		const float* data() const;
 
-		friend Matrix3x3 operator*(const Matrix3x3& lhs, const Matrix3x3& rhs);
+		/*!*****************************************************************************
+		  \brief
+			Returns the elements in the matrix.
 
+		  \return
+			The elements in the matrix.
+		*******************************************************************************/
+		float* data();
 
+		/*!*****************************************************************************
+		  \brief
+			Operator overload for * to multiply 2 matrices.
+
+		  \param _lhs
+			The first matrix.
+
+		  \param _rhs
+			The second matrix.
+
+		  \return
+			The result of multiplying the matrices.
+		*******************************************************************************/
+		friend Matrix3x3 operator*(const Matrix3x3& _lhs, const Matrix3x3& _rhs);
 	};
 
-	Matrix3x3 Matrix3Scaling(Matrix3x3&, float x, float y);
-	Matrix3x3 Matrix3Rotation(Matrix3x3&, float angle);
-	Matrix3x3 Matrix3Translation(Matrix3x3&, float x, float y);
+	/*!*****************************************************************************
+	  \brief
+		Performs scaling calculation to 2 matrices
 
-	Matrix3x3 Matrix3Concat(Matrix3x3 const& lhs, Matrix3x3 const& rhs);
+	  \param _data
+		The matrix itself.
+
+	  \param _x
+		The x scalar.
+
+	  \param _y
+		The y scalar.
+
+	  \return
+		The result of scaling the matrix.
+	*******************************************************************************/
+	Matrix3x3 Matrix3Scaling(Matrix3x3&, float _x, float _y);
+
+	/*!*****************************************************************************
+	  \brief
+		Performs radian rotation calculation to 2 matrices.
+
+	  \param
+		The matrix itself.
+
+	  \param _angle
+		The angle of rotation.
+
+	  \return
+		The result of rotating the matrix.
+	*******************************************************************************/
+	Matrix3x3 Matrix3Rotation(Matrix3x3&, float _angle);
+
+	/*!*****************************************************************************
+	  \brief
+		Translates a matrix.
+
+	  \param
+		The matrix itself.
+
+	  \param _x
+		The x translation.
+
+	  \param _y
+		The y translation.
+
+	  \return
+		The result of translating the matrix.
+	*******************************************************************************/
+	Matrix3x3 Matrix3Translation(Matrix3x3&, float _x, float _y);
+
+	/*!*****************************************************************************
+	  \brief
+		Concatenates 2 matrices.
+
+	  \param
+		The matrix itself.
+
+	  \param _angle
+		The angle of rotation.
+
+	  \return
+		The result of rotating the matrix.
+	*******************************************************************************/
+	Matrix3x3 Matrix3Concat(Matrix3x3 const& _lhs, Matrix3x3 const& _rhs);
 }

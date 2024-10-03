@@ -284,9 +284,11 @@ namespace ToastBox {
 		Matrix3x3 pTrans{};
 		pTrans.Matrix3Transpose(pMtx0);
 		Vec3 result;
-		result.x = pTrans.m00 * pVec0.x + pTrans.m01 * pVec0.y + pTrans.m02 * pVec0.z;
-		result.y = pTrans.m10 * pVec0.x + pTrans.m11 * pVec0.y + pTrans.m12 * pVec0.z;
-		result.z = pTrans.m20 * pVec0.x + pTrans.m21 * pVec0.y + pTrans.m22 * pVec0.z;
+
+		const float* pData = pTrans.data();
+		result.x = pData[0] * pVec0.x + pData[1] * pVec0.y + pData[2] * pVec0.z;
+		result.y = pData[3] * pVec0.x + pData[4] * pVec0.y + pData[5] * pVec0.z;
+		result.z = pData[6] * pVec0.x + pData[7] * pVec0.y + pData[8] * pVec0.z;
 		return result;
 		
 	}

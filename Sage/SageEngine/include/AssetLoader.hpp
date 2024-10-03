@@ -20,7 +20,10 @@
 //forward declaration
 class SageTexture;
 
+//Defines the audio asset folder.
 #define PATH "../SageEngine/data/assets/audio/"
+
+//Defines the available audio extension types.
 #define AUDIO_EXTENSION ".ogg"
 
 //Every file is an asset, which is broken down into categories
