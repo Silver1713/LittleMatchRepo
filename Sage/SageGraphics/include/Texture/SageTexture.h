@@ -105,7 +105,7 @@ public:
 	\return
 		An int object
 	*******************************************************************************/
-	int get_texture_handle() const;
+	int Get_Texture_Handle() const;
 
 	/*!*****************************************************************************
 	\brief
@@ -114,7 +114,7 @@ public:
 	\return
 		Return an int value object
 	*******************************************************************************/
-	int get_texture_unit() const;
+	int Get_Texture_Unit() const;
 
 	// Setters
 
@@ -122,19 +122,19 @@ public:
 	\brief
 		Function to set the texture mode to repeat
 	*******************************************************************************/
-	void setTextureRepeat();
+	void Set_Texture_Repeat();
 
 	/*!*****************************************************************************
 	\brief
 		Function to set the texture mode to clamp
 	*******************************************************************************/
-	void setTextureClamp();
+	void Set_Texture_Clamp();
 
 	/*!*****************************************************************************
 	\brief
 		Function to set the texture mode to mirror repeat
 	*******************************************************************************/
-	void setTextureMirrorRepeat();
+	void Set_Texture_Mirror_Repeat();
 
 	/*!*****************************************************************************
 	\brief
@@ -146,7 +146,7 @@ public:
 	\param _type
 		The type of the texture unit
 	*******************************************************************************/
-	void load_texture(const char* _filepath, TEXTURE_UNIT_TYPE _type);
+	void Load_Texture(const char* _filepath, TEXTURE_UNIT_TYPE _type);
 
 	/*!*****************************************************************************
 	\brief
@@ -155,7 +155,7 @@ public:
 	\return
 		Return a boolean object
 	*******************************************************************************/
-	bool bind_texture();
+	bool Bind_Texture();
 };
 
 

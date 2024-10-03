@@ -1,3 +1,20 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageWindow.hpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		Contains the declaration for the public interface of the window class. This
+			expose the API use to create and manage openGL window.
+
+			The window interface provide the public interface which will be delegated
+			to the internal interface by PIMPL. It provide methods and configuration for
+			OpenGL window. It also manages the window lifecycle.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #ifndef Sage_Window_HPP
 #define Sage_Window_HPP
 #include <memory>
@@ -36,8 +53,6 @@ public:
 		of scope by setting the unique pointer to null, trigger the PIMPL destructor.
 	*******************************************************************************/
 	~SageWindow();
-
-	
 	/*!*****************************************************************************
 	\brief
 		Check if window should close.
@@ -45,8 +60,14 @@ public:
 	\return
 		True, if window should close else false.
 	*******************************************************************************/
-
 	bool Should_Window_Close() const;
+	/*!*****************************************************************************
+	\brief
+		Get the window.
+
+	\return
+		The Window class
+	*******************************************************************************/
 	SageWindow const& Get_Window() const;
 private:
 	class SageWindowImpl; //!< PIMPL implementation for the window.
@@ -119,14 +140,14 @@ public:
 	/*!*****************************************************************************
 	\brief
 		Set window x position in the device screen space.
-	\param mpos_x
+	\param pos_x
 		The X position
 	*******************************************************************************/
 	void Set_Pos_X(int pos_x);
 	/*!*****************************************************************************
 	\brief
 		Set window y position in the device screen space.
-	\param mpos_y
+	\param pos_y
 		The Y position
 	*******************************************************************************/
 	void Set_Pos_Y(int pos_y);

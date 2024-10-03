@@ -1,3 +1,19 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageWindow.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		Defines the public interface of the window class. This
+			expose the API use to create and manage openGL window.
+
+			The window interface provide the public interface which will be delegated
+			to the internal interface by PIMPL. It provide methods and configuration for
+			OpenGL window. It also manages the window lifecycle.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
 #include "SageWindow.hpp"
 #include "SageWindowImpl.hpp"
 #include <memory>

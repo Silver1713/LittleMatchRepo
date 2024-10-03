@@ -6,7 +6,7 @@
 \par		b.muhammadhafiz@digipen.edu
 \date		15 September 2024
 \brief		Contains the definitions of functions handling the game scene. Currently
-			used as testbed for core engine features like user input, instantiation
+			used as testbed for core engine features like user input, instantiation 
 			and stress tests.
 
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
@@ -112,8 +112,9 @@ namespace Game {
 
 		vp.setViewport();
 
-
-
+		SageAudio::Play_Sound("bgm_main_menu", LOOP);
+		SageAudio::Play_Sound("ambient_rain", LOOP);
+		
 
 		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
 		plrphy->Set_Gravity_Disable(false);
@@ -312,7 +313,7 @@ namespace Game {
 
 		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_7))
 		{
-			SageAudio::Play_Sound("sfx_sword",NO_LOOP);
+			SageAudio::Play_Sound("sfx_sword", NO_LOOP);
 		}
 
 		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_8))

@@ -1,3 +1,20 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageWindowInternal.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		Contains the definition for the private interface of the window class. This
+			contain direct calls to OpenGL and GLFW.
+
+			This window interface provide the private interface containing calls to
+			OpenGL and GLFW, allowing window behaviours and attributes to be setup, configured
+			and managed. THis allow the window to be manage by the internal class.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "SageWindowInternal.hpp"
 
 #include <iostream>
@@ -62,7 +79,7 @@ void SageWindowInternal::Deactivate_Context()
 	is_active = false;
 }
 
-void SageWindowInternal::set_dims(int _width, int _height)
+void SageWindowInternal::Set_Dims(int _width, int _height)
 {
 	this->width = _width;
 	this->height = _height;
@@ -103,83 +120,83 @@ void SageWindowInternal::Toggle_Fullscreen()
 
 
 
-void SageWindowInternal::set_resizable(bool resizable)
+void SageWindowInternal::Set_Resizable(bool resizable)
 {
 	is_resizable = resizable;
 	glfwSetWindowAttrib(window, GLFW_RESIZABLE, resizable);
 }
 
-void SageWindowInternal::set_maximize(bool maximize)
+void SageWindowInternal::Set_Maximize(bool maximize)
 {
 	enable_maximize = maximize;
 	glfwSetWindowAttrib(window, GLFW_MAXIMIZED, maximize);
 }
 
 
-void SageWindowInternal::set_should_close(bool close)
+void SageWindowInternal::Set_Should_Close(bool close)
 {
 	this->should_close = close;
 	
 }
 
-bool SageWindowInternal::get_fullscreen() const
+bool SageWindowInternal::Get_Fullscreen() const
 {
 	return is_fullscreen;
 }
 
-bool SageWindowInternal::get_should_close() const
+bool SageWindowInternal::Get_Should_Close() const
 {
 	return glfwWindowShouldClose(window);
 }
 
-bool SageWindowInternal::get_maximize() const
+bool SageWindowInternal::Get_Maximize() const
 {
 	return enable_maximize;
 }
 
-bool SageWindowInternal::get_resizable() const
+bool SageWindowInternal::Get_Resizable() const
 {
 	return is_resizable;
 }
 
 
-void SageWindowInternal::set_pos_x(int pos_x)
+void SageWindowInternal::Set_Pos_X(int _pos_x)
 {
-	posx = pos_x;
-	glfwSetWindowPos(window, pos_x, posy);
+	posx = _pos_x;
+	glfwSetWindowPos(window, _pos_x, posy);
 }
 
-void SageWindowInternal::set_pos_y(int pos_y)
+void SageWindowInternal::Set_Pos_Y(int _pos_y)
 {
-	posy = pos_y;
-	glfwSetWindowPos(window, posx, pos_y);
+	posy = _pos_y;
+	glfwSetWindowPos(window, posx, _pos_y);
 }
 
-int SageWindowInternal::get_pos_x()
+int SageWindowInternal::Get_Pos_X()
 {
 	return posx;
 }
 
 
-int SageWindowInternal::get_pos_y()
+int SageWindowInternal::Get_Pos_Y()
 {
 	return posy;
 }
 
-std::string SageWindowInternal::get_title() const
+std::string SageWindowInternal::Get_Title() const
 {
 	return title;
 }
 
 
 
-void SageWindowInternal::swap_buffers()
+void SageWindowInternal::Swap_Buffers()
 {
 	glfwSwapBuffers(window);
 }
 
 
-void SageWindowInternal::set_fb_callback()
+void SageWindowInternal::Set_Fb_Callback()
 {
 	glfwSetFramebufferSizeCallback(window, [](GLFWwindow* win, int w, int h)
 	{
@@ -190,6 +207,21 @@ void SageWindowInternal::set_fb_callback()
 		
 	});
 }
+
+bool SageWindowInternal::Check_Active() const
+{
+	return  is_active;
+}
+
+
+void SageWindowInternal::Frame_Buffersize_Cb(GLFWwindow* window, int width, int height)
+{
+	window;
+	width;
+	height;
+	return;
+}
+
 
 
 

@@ -21,7 +21,7 @@ SageCamera cp;
 
 void SageMain::init()
 {
-	//SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
+	//SageShaderManager::Add_Shader_Include("graphic_lib", "../SageGraphics/shaders/");
 	//SageRenderer::init();
 
 	

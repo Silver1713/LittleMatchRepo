@@ -3,9 +3,9 @@
 \file		Prefabs.cpp
 \title		Memory's Flame
 \authors	Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (40%)
-            Halis (20%)
+            Halis Ilyasa Bin Amat Sarijan, halisilyasa.b, 2301333 (20%)
             Jia Hao (40%)
-\par		b.muhammadhafiz@digipen.edu, halis digipen, jia hao digipen
+\par		b.muhammadhafiz@digipen.edu, halisilyasa.b@digipen.edu, jia hao digipen
 \date		10 September 2024
 \brief		This is the main entry point for the engine.
             It include libraries and manages life cycle of the engine.
@@ -120,8 +120,8 @@ void init()
     window_config.close();
     
     int status = SageHelper::Init(window_width, window_height, window_title.c_str());
-    SageShaderManager::add_shader_include("graphic_lib", "../SageGraphics/shaders/");
-	SageRenderer::init();
+    SageShaderManager::Add_Shader_Include("graphic_lib", "../SageGraphics/shaders/");
+	SageRenderer::Init();
     SageTimer::init();
 
     if (status)
@@ -176,7 +176,7 @@ void PhysicsUpdate()
 *******************************************************************************/
 void draw()
 {
-    SageHelper::Draw();
+    //SageHelper::Draw();
     std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS);
     SageHelper::sage_ptr_window->Set_Title(s.c_str());
     SM::Draw();

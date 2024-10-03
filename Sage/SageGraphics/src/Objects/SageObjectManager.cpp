@@ -1,3 +1,19 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageObjectManager.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		The source file containing the definition of the object manager class
+			that managers object lifetime and allow for creationa nd destruction of
+			objects used by the renderer.
+
+
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include <map>
 #include <iostream>
 
@@ -7,7 +23,7 @@
 
 std::map<std::string, SageObject> SageObjectManager::objects{};
 
-SageObject& SageObjectManager::Create_Primitive_Object(char const* name, PrimitiveObject OBJ_SHAPE)
+SageObject& SageObjectManager::Create_Primitive_Object(char const* _name, PrimitiveObject OBJ_SHAPE)
 {
 	
 	SageObject obj;
@@ -25,19 +41,19 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* name, Primiti
 
 		//Create base shader
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end()) {
-			SageShader& shdr = SageShaderManager::search_and_create_shader_program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
-			mdl.Assign_Shader_Program(&shdr);
+			SageShader& shdr = SageShaderManager::Search_And_Create_Shader_Program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
+			mdl.AssignShaderProgram(&shdr);
 		}
 		else
 			mdl.Assign_Shader_Program(&SageShaderManager::shaders["BASE_SHADER"]);
 
-		obj.Init(name, &SageModelManager::models["PRIMITIVE_RECT"]);
+		obj.Init(_name, &SageModelManager::models["PRIMITIVE_RECT"]);
 
 		obj.transform = {};
 
-		objects[name] = obj;
+		objects[_name] = obj;
 
-		return objects[name];
+		return objects[_name];
 	}
 
 	if (OBJ_SHAPE == PRIMITIVE_OBJECT_CIRCLE)
@@ -53,20 +69,20 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* name, Primiti
 
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end())
 		{
-			SageShader& shdr = SageShaderManager::search_and_create_shader_program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
-			mdl.Assign_Shader_Program(&shdr);
+			SageShader& shdr = SageShaderManager::Search_And_Create_Shader_Program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
+			mdl.AssignShaderProgram(&shdr);
 		}
 		else
 		{
 			mdl.Assign_Shader_Program(&SageShaderManager::shaders["BASE_SHADER"]);
 		}
 
-		obj.Init(name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
+		obj.Init(_name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
 		obj.transform = {};
 
-		objects[name] = obj;
+		objects[_name] = obj;
 
-		return objects[name];
+		return objects[_name];
 	}
 	else
 	{
@@ -75,10 +91,10 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* name, Primiti
 	}
 }
 
-SageObject& SageObjectManager::Create_Primitive_Object(char const* name, PrimitiveObject OBJ_SHAPE, glm::vec2 position, glm::vec2 scale, glm::vec2 orientation, glm::vec4 color, glm::vec4 borderColor, float borderWidth, float borderRadius)
+SageObject& SageObjectManager::Create_Primitive_Object(char const* _name, PrimitiveObject _OBJ_SHAPE, glm::vec2 position, glm::vec2 _scale, glm::vec2 _orientation, glm::vec4 _color, glm::vec4 _border_color, float _border_width, float _border_radius)
 {
 	SageObject obj;
-	if (OBJ_SHAPE == PRIMITIVE_OBJECT_RECT)
+	if (_OBJ_SHAPE == PRIMITIVE_OBJECT_RECT)
 	{
 		if (SageModelManager::models.find("PRIMITIVE_RECT") == SageModelManager::models.end())
 		{
@@ -92,29 +108,29 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* name, Primiti
 
 		//Create base shader
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end()) {
-			SageShader& shdr = SageShaderManager::CreateShaderProgram("BASE_SHADER", "../SageGraphics/shaders/BaseVertexShader.glsl", "../SageGraphics/shaders/BaseFragmentShader.glsl");
-			mdl.Assign_Shader_Program(&shdr);
+			SageShader& shdr = SageShaderManager::Create_Shader_Program("BASE_SHADER", "../SageGraphics/shaders/BaseVertexShader.glsl", "../SageGraphics/shaders/BaseFragmentShader.glsl");
+			mdl.AssignShaderProgram(&shdr);
 		}
 		else
 			mdl.Assign_Shader_Program(&SageShaderManager::shaders["BASE_SHADER"]);
 
-		obj.Init(name, &SageModelManager::models["PRIMITIVE_RECT"]);
+		obj.Init(_name, &SageModelManager::models["PRIMITIVE_RECT"]);
 
 		obj.transform.position = position;
-		obj.transform.scale = scale;
-		obj.transform.orientation = orientation;
+		obj.transform.scale = _scale;
+		obj.transform.orientation = _orientation;
 
-		obj.GetMaterial().color = color;
-		obj.GetMaterial().border_color = borderColor;
-		obj.GetMaterial().border_width = borderWidth;
-		obj.GetMaterial().border_radius = borderRadius;
+		obj.GetMaterial().color = _color;
+		obj.GetMaterial().border_color = _border_color;
+		obj.GetMaterial().border_width = _border_width;
+		obj.GetMaterial().border_radius = _border_radius;
 
-		objects[name] = obj;
+		objects[_name] = obj;
 
-		return objects[name];
+		return objects[_name];
 	}
 
-	else if (OBJ_SHAPE == PRIMITIVE_OBJECT_CIRCLE)
+	else if (_OBJ_SHAPE == PRIMITIVE_OBJECT_CIRCLE)
 	{
 		if (SageModelManager::models.find("PRIMITIVE_CIRCLE") == SageModelManager::models.end())
 		{
@@ -127,29 +143,29 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* name, Primiti
 
 		if (SageShaderManager::shaders.find("BASE_SHADER") == SageShaderManager::shaders.end())
 		{
-			SageShader& shdr = SageShaderManager::search_and_create_shader_program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
-			mdl.Assign_Shader_Program(&shdr);
+			SageShader& shdr = SageShaderManager::Search_And_Create_Shader_Program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
+			mdl.AssignShaderProgram(&shdr);
 		}
 		else
 		{
 			mdl.Assign_Shader_Program(&SageShaderManager::shaders["BASE_SHADER"]);
 		}
 
-		obj.Init(name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
+		obj.Init(_name, &SageModelManager::models["PRIMITIVE_CIRCLE"]);
 
 		obj.transform.position = position;
-		obj.transform.scale = scale;
-		obj.transform.orientation = orientation;
+		obj.transform.scale = _scale;
+		obj.transform.orientation = _orientation;
 
-		obj.GetMaterial().color = color;
-		obj.GetMaterial().border_color = borderColor;
-		obj.GetMaterial().border_width = borderWidth;
-		obj.GetMaterial().border_radius = borderRadius;
+		obj.GetMaterial().color = _color;
+		obj.GetMaterial().border_color = _border_color;
+		obj.GetMaterial().border_width = _border_width;
+		obj.GetMaterial().border_radius = _border_radius;
 		
 
-		objects[name] = obj;
+		objects[_name] = obj;
 
-		return objects[name];
+		return objects[_name];
 	}
 	else
 	{

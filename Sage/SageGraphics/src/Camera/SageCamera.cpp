@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageCamera.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		The source file containing the definition  of the public interface,
+			SageCamera class that contains methods and data to facilitate creation and
+			manipulation of a camera object.
+
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "SageCamera.hpp"
 #include "SageCameraImpl.hpp"
 #include "SageCameraInternal.hpp"
@@ -39,7 +54,7 @@ ToastBox::Vec2 SageCamera::Get_View_Rect_Size()
 
 void SageCamera::Move_Camera(ToastBox::Vec2 _move_vector, float speed)
 {
-	impl->MoveCamera(_move_vector, speed);
+	impl->Move_Camera(_move_vector, speed);
 
 	position = Get_Position();
 }
@@ -52,13 +67,13 @@ void SageCamera::update()
 
 void SageCamera::init(ToastBox::Vec2 _position, ToastBox::Vec2 _view_rect_size, float _orientation, SageCameraType _camera_type)
 {
-	impl->Init({ _position.getX(), _position.getY() }, { _view_rect_size.getX(),_view_rect_size.getY() }, { _orientation,0 }, static_cast
+	impl->Init({ _position.GetX(), _position.GetY() }, { _view_rect_size.GetX(),_view_rect_size.GetY() }, { _orientation,0 }, static_cast
 		<SageCameraInternal2D::InternalSageCameraType>(_camera_type));
 
 	position = _position;
 	rect_size = _view_rect_size;
 	orientation = _orientation;
-	this->aspect_ratio = static_cast<float>(_view_rect_size.getX()) / static_cast<float>(_view_rect_size.y);
+	this->aspect_ratio = static_cast<float>(_view_rect_size.GetX()) / static_cast<float>(_view_rect_size.y);
 	this->zoom = 1.0f;
 	this->view_projection_matrix = impl->Get_Projection_View();
 
@@ -84,7 +99,7 @@ SageCamera::~SageCamera()
 }
 void* SageCamera::Get_Camera()
 {
-	return impl->GetCam();
+	return impl->Get_Cam();
 }
 
 ToastBox::Vec2 SageCamera::Screen_To_World(ToastBox::Vec2 screen_pos)

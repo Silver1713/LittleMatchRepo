@@ -52,7 +52,7 @@ SageTexture::SageTexture(const SageTexture& _other) : texture_path(_other.textur
 	if (this != &_other)
 	{
 		//To load or not to load
-		texture_id = _other.get_texture_handle();
+		texture_id = _other.Get_Texture_Handle();
 		texture_unit = _other.texture_unit;
 
 	}
@@ -80,7 +80,7 @@ SageTexture& SageTexture::operator=(const SageTexture& _other) {
 \return
 	An int object
 *******************************************************************************/
-int SageTexture::get_texture_handle() const {
+int SageTexture::Get_Texture_Handle() const {
 	return texture_id;
 }
 
@@ -91,7 +91,7 @@ int SageTexture::get_texture_handle() const {
 \return
 	Return an int value object
 *******************************************************************************/
-int SageTexture::get_texture_unit() const {
+int SageTexture::Get_Texture_Unit() const {
 	return texture_unit;
 }
 
@@ -100,7 +100,7 @@ int SageTexture::get_texture_unit() const {
 \brief
 	Function of SageTexture to set the texture mode to repeat (default mode)
 *******************************************************************************/
-void SageTexture::setTextureRepeat() {
+void SageTexture::Set_Texture_Repeat() {
 	sage_internal_impl->set_texture_repeat();
 }
 
@@ -108,7 +108,7 @@ void SageTexture::setTextureRepeat() {
 \brief
 	Function of SageTexture to set the texture mode to clamp
 *******************************************************************************/
-void SageTexture::setTextureClamp() {
+void SageTexture::Set_Texture_Clamp() {
 	sage_internal_impl->set_texture_clamp();
 }
 
@@ -116,7 +116,7 @@ void SageTexture::setTextureClamp() {
 \brief
 	Function of SageTexture to set the texture mode to mirror repeat
 *******************************************************************************/
-void SageTexture::setTextureMirrorRepeat() {
+void SageTexture::Set_Texture_Mirror_Repeat() {
 	sage_internal_impl->set_texture_mirror_repeat();
 }
 
@@ -139,7 +139,7 @@ SageTexture::~SageTexture()
 \param _type
 	The type of the texture unit
 *******************************************************************************/
-void SageTexture::load_texture(const char* _filepath, TEXTURE_UNIT_TYPE _type)
+void SageTexture::Load_Texture(const char* _filepath, TEXTURE_UNIT_TYPE _type)
 {
 	int status = sage_internal_impl->load(_filepath, _type);
 	if (status == -1)
@@ -158,7 +158,7 @@ void SageTexture::load_texture(const char* _filepath, TEXTURE_UNIT_TYPE _type)
 \return
 	Return a boolean object
 *******************************************************************************/
-bool SageTexture::bind_texture()
+bool SageTexture::Bind_Texture()
 {
 	return sage_internal_impl->bind_texture();
 }

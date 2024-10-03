@@ -20,7 +20,10 @@
 //forward declaration
 class SageTexture;
 
+//Defines the audio asset folder.
 #define PATH "../SageEngine/data/assets/audio/"
+
+//Defines the available audio extension types.
 #define AUDIO_EXTENSION ".ogg"
 
 //Every file is an asset, which is broken down into categories
@@ -160,16 +163,34 @@ namespace Assets
 		std::unordered_map<std::string, Prefab>const& Get_Prefabs();
 	}
 	
+	//Audio category
 	namespace Audio
 	{
+		/*!*****************************************************************************
+		  \brief
+			Parses the audio asset folder and stores in a map of audio_files.
+		*******************************************************************************/
 		void Init();
+
+		/*!*****************************************************************************
+		  \brief
+			Gets the map of audio_files that stores audio filenames
+
+		  \return
+			Map of audio filenames
+		*******************************************************************************/
 		std::unordered_map<std::string, std::vector<std::string>> const & Get_Audio();
 	}
-
+	
+	//Font category
 	namespace Font
 	{
+		/*!*****************************************************************************
+		  \brief
+			Parses the font asset folder and loads the typeface into the graphics
+			renderer.
+		*******************************************************************************/
 		void Init();
-		//return_type const& Get_Font();
 	}
 
 	//Levels category

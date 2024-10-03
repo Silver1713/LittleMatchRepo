@@ -1,3 +1,19 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageObject.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		The source file containing the definition of the object class
+			that define the properties of the objects which is to be sued
+			when rendering to the game world.
+
+
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "Vector4.h"
 #include "SageObject.hpp"
 
@@ -18,16 +34,16 @@ SageObject::SageObject() : object_id(0), object_name("default"), obj_mesh(), tra
 
 }
 
-void SageObject::Init(char const* name, SageModel* model)
+void SageObject::Init(char const* _name, SageModel* _model)
 {
 	//Name, model, vertex count
-	object_name = name;
-	obj_mesh.model_ref = model;
-	obj_mesh.vtx_cnt = model->Get_Vertex_Positions().size();
-	obj_mesh.idx_cnt = model->Get_Vertex_Indices().size();
+	object_name = _name;
+	obj_mesh.model_ref = _model;
+	obj_mesh.vtx_cnt = _model->Get_Vertex_Positions().size();
+	obj_mesh.idx_cnt = _model->Get_Vertex_Indices().size();
 
 
-	material.shader_ref = model->Get_Shader_Program();
+	material.shader_ref = _model->Get_Shader_Program();
 
 
 
@@ -43,15 +59,15 @@ void SageObject::Init(char const* name, SageModel* model)
 }
 
 
-void SageObject::Attach_Texture(SageTexture* texture)
+void SageObject::Attach_Texture(SageTexture* _texture)
 {
-	if (texture == nullptr)
+	if (_texture == nullptr)
 	{
 		material.enable_texture = false;
 		return;
 	}
 
-	material.texture_ref = texture;
+	material.texture_ref = _texture;
 }
 
 
@@ -112,9 +128,9 @@ void SageObject::Draw(SageViewport* vp)
 	shader->Set_Uniform("uUseTexture", material.enable_texture);
 	if (material.enable_texture)
 	{
-		material.texture_ref->bind_texture();
-		glActiveTexture(material.texture_ref->get_texture_unit());
-		shader->Set_Uniform("uTex2D", material.texture_ref->get_texture_unit());
+		material.texture_ref->Bind_Texture();
+		glActiveTexture(material.texture_ref->Get_Texture_Unit());
+		shader->Set_Uniform("uTex2D", material.texture_ref->Get_Texture_Unit());
 	}
 
 
@@ -147,11 +163,11 @@ void SageObject::Draw(SageViewport* vp)
 }
 
 //Draw with default shader
-void SageObject::Draw(SageCamera* cam)
+void SageObject::Draw(SageCamera* _cam)
 {
 
 	SageShader* shader = obj_mesh.model_ref->Get_Shader_Program();
-	SageCamera* c = cam;
+	SageCamera* c = _cam;
 
 	glBindVertexArray(obj_mesh.model_ref->Get_VAO_Handle());
 
@@ -179,9 +195,9 @@ void SageObject::Draw(SageCamera* cam)
 	if (material.enable_texture)
 	{
 		
-		material.texture_ref->bind_texture();
+		material.texture_ref->Bind_Texture();
 		
-		shader->Set_Uniform("uTex2D", material.texture_ref->get_texture_unit());
+		shader->Set_Uniform("uTex2D", material.texture_ref->Get_Texture_Unit());
 	}
 
 
@@ -221,9 +237,9 @@ SageObject::SageMaterial& SageObject::GetMaterial()
 	return material;
 }
 
-void SageObject::Set_Alpha(float transparency)
+void SageObject::Set_Alpha(float _transparency)
 {
-	material.mat_transparency = transparency;
+	material.mat_transparency = _transparency;
 }
 
 

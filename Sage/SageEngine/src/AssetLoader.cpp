@@ -86,7 +86,7 @@ namespace Assets
 		{
 			if (!(textures[_ID].is_loaded))
 			{
-				loaded_textures[_ID].load_texture(textures[_ID].filepath.c_str(), SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
+				loaded_textures[_ID].Load_Texture(textures[_ID].filepath.c_str(), SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
 				textures[_ID].is_loaded = true;
 
 				//reserved for sprite sheet support
@@ -136,6 +136,7 @@ namespace Assets
 		}
 	}
 
+	//Prefabs category
 	namespace Prefabs 
 	{
 		Parsed_CSV source;
@@ -231,9 +232,16 @@ namespace Assets
 		}
 	}
 
+	//Audio category
 	namespace Audio
 	{
+		//Stores audio filenames
 		std::unordered_map<std::string, std::vector<std::string>> audio_files;
+
+		/*!*****************************************************************************
+		  \brief
+			Parses the audio asset folder and stores in a map of audio_files.
+		*******************************************************************************/
 		void Init()
 		{
 			audio_files.clear();
@@ -270,12 +278,21 @@ namespace Assets
 				}
 			}
 		}
+
+		/*!*****************************************************************************
+		  \brief
+			Gets the map of audio_files that stores audio filenames
+
+		  \return
+		    Map of audio filenames
+		*******************************************************************************/
 		std::unordered_map<std::string, std::vector<std::string>> const& Get_Audio()
 		{
 			return audio_files;
 		}
 	}
 
+	//Font category
 	namespace Font 
 	{
 		FT_Library library;
@@ -287,6 +304,11 @@ namespace Assets
 		FT_CharMap charmap;
 		FT_Render_Mode render_mode;
 
+		/*!*****************************************************************************
+		  \brief
+			Parses the font asset folder and loads the typeface into the graphics
+			renderer.
+		*******************************************************************************/
 		void Init()
 		{
 			error = FT_Init_FreeType(&library);

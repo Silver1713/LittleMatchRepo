@@ -21,10 +21,9 @@ double SageHelper::FPS{};
 SageWindow* SageHelper::sage_ptr_window{};
 
 GLFWwindow* SageHelper::ptr_window{};
-std::map<int, std::byte> SageHelper::key_map;
 
 void GLAPIENTRY openglErrorCallback(GLenum _source, GLenum _type, GLuint _id,
-	GLenum severity, GLsizei length,const GLchar* message, const void* userParam)
+	GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
 	(length);
 	(userParam);
@@ -34,17 +33,17 @@ void GLAPIENTRY openglErrorCallback(GLenum _source, GLenum _type, GLuint _id,
 	std::cerr << "ID: " << _id << "\n";
 	std::cerr << "Severity: " << severity << "\n";
 	std::cerr << "Message: " << message << "\n";
-}	
+}
 
 int SageHelper::Init(int width, int height, const char* title, int UPS)
 {
-	
+
 	fixed_delta_time = 1.0 / UPS;
 	WINDOW_WIDTH = width;
 	WINDOW_HEIGHT = height;
 	WINDOW_TITLE = const_cast<char*>(title);
 
-	
+
 	//Error Callback
 	glfwSetErrorCallback(Error_Cb);
 
@@ -62,12 +61,10 @@ int SageHelper::Init(int width, int height, const char* title, int UPS)
 
 
 	sage_ptr_window = new SageWindow(WINDOW_WIDTH, WINDOW_HEIGHT, title);
-	//ptr_window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, NULL, NULL);
 
-	//glfwMakeContextCurrent(ptr_window);
 
 	sage_ptr_window->Activate_Context();
-	
+
 	sage_ptr_window->Set_Framebuffer_Callback();
 
 
@@ -94,52 +91,19 @@ int SageHelper::Init(int width, int height, const char* title, int UPS)
 
 	}
 	else {
-#if _DEBUG
-		std::cout << "Current graphic driver do not support GLEW 4.5.." << '\n' <<
-			"It could also be that you're using integrated GPU (cuz laptop)" << '\n'
-			<< "Here's the version FYI: " << glGetString(GL_VERSION) << '\n';
-#endif
-#if NDEBUG
+
+
 		std::cerr << "Warning: The driver may lack full compatibility with OpenGL 4.5, potentially limiting access to advanced features."
 			"\nMake sure that your using a dGPU instead of a iGPU to take advantage of the advanced features of GL 4.5" << '\n';
 
-#endif
 	}
 
-
-
-
-	//Event Callbacks
-	/*glfwSetFramebufferSizeCallback(ptr_window, framebuffer_size_cb);
-	glfwSetKeyCallback(ptr_window, key_cb);
-	glfwSetMouseButtonCallback(ptr_window, mouse_button_cb);
-	glfwSetCursorPosCallback(ptr_window, mouse_pos_cb);
-	glfwSetScrollCallback(ptr_window, mouse_scroll_cb);*/
-
-
-	//Default Cursor
-
-	/*glfwSetInputMode(ptr_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
-
-
-
-
-	glEnable(GL_DEBUG_OUTPUT);
-	glDebugMessageCallback(openglErrorCallback, nullptr);*/
-
-	glfwSetKeyCallback(glfwGetCurrentContext(), Key_Cb);
-	
 	return 0;
 }
-
-
 
 void SageHelper::Update()
 {
 	Update_Time(1.f);
-#if _DEBUG
-#endif
 }
 
 
@@ -159,112 +123,14 @@ void SageHelper::Update_Time(double update_fps_interval)
 		FPS = 1.0 / delta_time;
 		last_fps_time = 0;
 	}
-
-
-
-
-
-
-
 }
 
-
-void SageHelper::Draw()
-{
-#if _DEBUG
-	
-#endif
-}
 
 void SageHelper::Exit()
 {
 	delete sage_ptr_window;
 	glfwTerminate();
 }
-
-
-void SageHelper::Key_Cb(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	mods;
-	scancode;
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-	{
-		glfwSetWindowShouldClose(window, GLFW_TRUE);
-	}
-
-	switch (action)
-	{
-	case GLFW_PRESS:
-		key_map[key] = std::byte{ 1 };
-#if _DEBUG
-		std::cout << "Key is Pressed\n";
-#endif
-		break;
-	case GLFW_RELEASE:
-		key_map[key] = std::byte{ 0 };
-#if _DEBUG
-		std::cout << "Key is Released\n";
-#endif
-		break;
-	case GLFW_REPEAT:
-		key_map[key] = std::byte{ 2 };
-#if _DEBUG
-		std::cout << "Key is Hold\n";
-#endif
-		break;
-	default:
-		break;
-	}
-
-
-	window;
-}
-
-void SageHelper::mouse_button_cb(GLFWwindow* window, int button, int action, int mods)
-{
-	window;
-#if _DEBUG
-	std::cout << "Mouse Button: " << button << " Action: " << action << " Mods: " << mods << '\n';
-#endif
-}
-
-void SageHelper::mouse_pos_cb(GLFWwindow* window, double xpos, double ypos)
-{
-	window;
-#if _DEBUG
-	std::cout << "Mouse Position: x:" << xpos << ", y:" << ypos << '\n';
-#endif
-}
-
-void SageHelper::mouse_scroll_cb(GLFWwindow* window, double xoffset, double yoffset)
-{
-	window;
-#if _DEBUG
-	std::cout << "Mouse Scroll: x:" << xoffset << ", y:" << yoffset << '\n';
-#endif
-
-}
-
-
-bool SageHelper::Get_Key(int key)
-{
-	return key_map[key] == std::byte{ 1 };
-}
-
-bool SageHelper::Get_Key_Pressed(int key)
-{
-
-	return key_map[key] == std::byte{ 2 } || key_map[key] == std::byte{ 1 };
-
-}
-
-void SageHelper::Framebuffer_Size_Cb(GLFWwindow* window, int width, int height)
-{
-#if _DEBUG
-	std::cout << "Framebuffer Size: width: " << width << ", height: " << height << '\n';
-#endif
-}
-
 
 void SageHelper::Error_Cb(int error, const char* description)
 {
@@ -275,9 +141,9 @@ void SageHelper::Error_Cb(int error, const char* description)
 SageShader SageHelper::Compile_Shaders_From_File(const char* vertex_shader, const char* fragment_shader)
 {
 	SageShader shader{};
-	bool a = shader.CompileFromFile(SageShader::SAGE_SHADER_TYPE::SAGE_VERTEX_SHADER, vertex_shader);
+	bool a = shader.Compile_From_File(SageShader::SAGE_SHADER_TYPE::SAGE_VERTEX_SHADER, vertex_shader);
 
-	bool b = shader.CompileFromFile(SageShader::SAGE_SHADER_TYPE::SAGE_FRAGMENT_SHADER, fragment_shader);
+	bool b = shader.Compile_From_File(SageShader::SAGE_SHADER_TYPE::SAGE_FRAGMENT_SHADER, fragment_shader);
 	if (a & b)
 	{
 		std::cout << "Shaders compiled successfully" << '\n';
@@ -309,7 +175,7 @@ SageShader SageHelper::Compile_Shaders_From_File(const char* vertex_shader, cons
 		std::cerr << "Shaders failed to validate" << '\n';
 		std::exit(EXIT_FAILURE);
 	}
-	shader.GetProgramHandle();
+	shader.Get_Program_Handle();
 	return shader;
 }
 
