@@ -50,7 +50,8 @@ public:
 	/*!*****************************************************************************
 		\brief
 			This enums class represent the list of possible shader type that cna
-			be compiled and linked in the rendering engine.
+			be compiled and linked in the rendering engine. This types shadow
+			the private interface.
 	*******************************************************************************/
 	enum class SAGE_SHADER_TYPE
 	{
@@ -60,7 +61,7 @@ public:
 		SAGE_TESS_CONTROL_SHADER, //!< Tessellation control shader
 		SAGE_TESS_EVALUATION_SHADER, //!< Tessellation evaluation shader
 		SAGE_COMPUTE_SHADER,//!< Compute shader
-		SAGE_SHADER_count // number of shader types
+		SAGE_SHADER_count //!< number of shader types
 	};
 	/*!*****************************************************************************
 	\brief

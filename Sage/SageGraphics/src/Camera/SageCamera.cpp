@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageCamera.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+\brief		The source file containing the definition  of the public interface,
+			SageCamera class that contains methods and data to facilitate creation and
+			manipulation of a camera object.
+
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "SageCamera.hpp"
 #include "SageCameraImpl.hpp"
 #include "SageCameraInternal.hpp"

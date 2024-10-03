@@ -11,7 +11,7 @@ SageShaderInternal::~SageShaderInternal()
 {
 	if (pgm_handle > 0)
 	{
-		bool delete_status = DeleteShaderProgram();
+		bool delete_status = Delete_Shader_Program();
 		if (!delete_status)
 		{
 			std::cout << "Error: Failed to delete shader program.";
@@ -22,7 +22,7 @@ SageShaderInternal::~SageShaderInternal()
 
 	}
 }
-GLboolean SageShaderInternal::CompileFromString(SAGE_INTERNAL_SHADER_TYPE shader_type, std::string const& source, std::string const& path)
+GLboolean SageShaderInternal::Compile_From_String(SAGE_INTERNAL_SHADER_TYPE shader_type, std::string const& source, std::string const& path)
 {
 	GLuint shader_handle = 0;
 	GLint status = 0;
@@ -94,7 +94,7 @@ GLboolean SageShaderInternal::CompileFromString(SAGE_INTERNAL_SHADER_TYPE shader
 	return true;
 }
 
-GLboolean SageShaderInternal::CompileFromFile(SAGE_INTERNAL_SHADER_TYPE shader_type, std::string const& file_name)
+GLboolean SageShaderInternal::Compile_From_File(SAGE_INTERNAL_SHADER_TYPE shader_type, std::string const& file_name)
 {
 	std::ifstream file(file_name);
 
@@ -115,7 +115,7 @@ GLboolean SageShaderInternal::CompileFromFile(SAGE_INTERNAL_SHADER_TYPE shader_t
 	}
 
 	std::string source((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-	return CompileFromString(shader_type, source, file_name);
+	return Compile_From_String(shader_type, source, file_name);
 }
 
 
@@ -201,12 +201,12 @@ GLboolean SageShaderInternal::is_loaded() const
 
 
 
-GLuint SageShaderInternal::GetProgramHandle() const
+GLuint SageShaderInternal::Get_Program_Handle() const
 {
 	return pgm_handle;
 }
 
-std::string SageShaderInternal::GetLog() const
+std::string SageShaderInternal::Get_Log() const
 {
 	return log_string;
 }
@@ -216,12 +216,12 @@ GLboolean SageShaderInternal::IsLinked() const
 	return is_linked;
 }
 
-void SageShaderInternal::BindVertexAttribLocation(GLuint index, const char* name)
+void SageShaderInternal::Bind_Vertex_Attrib_Location(GLuint index, const char* name)
 {
 	glBindAttribLocation(pgm_handle, index, name);
 }
 
-void SageShaderInternal::BindFragAttribLocation(GLuint index, const char* name)
+void SageShaderInternal::Bind_Frag_Attrib_Location(GLuint index, const char* name)
 {
 	glBindFragDataLocation(pgm_handle, index, name);
 
@@ -340,13 +340,13 @@ void SageShaderInternal::Set_Uniform(const char* name, const glm::mat4& val)
 }
 
 // Helper Functions
-bool SageShaderInternal::FileExists(const std::string& file_name)
+bool SageShaderInternal::File_Exists(const std::string& file_name)
 {
 	std::ifstream file(file_name);
 	return file.good();
 }
 
-bool SageShaderInternal::DeleteShaderProgram()
+bool SageShaderInternal::Delete_Shader_Program()
 {
 	glDeleteProgram(pgm_handle);
 	return true;
@@ -378,7 +378,7 @@ void SageShaderInternal::Print_Active_Attribs() const
 	}
 }
 
-void SageShaderInternal::Print_Active_Uniforms() const
+void SageShaderInternal::PrintActiveUniforms() const
 {
 	GLint num_uniforms = 0;
 	glGetProgramInterfaceiv(pgm_handle, GL_UNIFORM, GL_ACTIVE_RESOURCES, &num_uniforms);

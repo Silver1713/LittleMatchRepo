@@ -15,12 +15,12 @@ public:
 
 	bool Compile(std::string const& path, SAGE_SHADER_TYPE type)
 	{
-		return internal_impl->CompileFromFile(static_cast<SageShaderInternal::SAGE_INTERNAL_SHADER_TYPE>(type), path);
+		return internal_impl->Compile_From_File(static_cast<SageShaderInternal::SAGE_INTERNAL_SHADER_TYPE>(type), path);
 	}
 
 	bool Compile_Raw_String(std::string const& source, SAGE_SHADER_TYPE type, std::string const& path)
 	{
-		return internal_impl->CompileFromString(static_cast<SageShaderInternal::SAGE_INTERNAL_SHADER_TYPE>(type), source, path);
+		return internal_impl->Compile_From_String(static_cast<SageShaderInternal::SAGE_INTERNAL_SHADER_TYPE>(type), source, path);
 	}
 
 	bool Link()
@@ -49,12 +49,12 @@ public:
 
 	std::string GetLog()
 	{
-		return internal_impl->GetLog();
+		return internal_impl->Get_Log();
 	}
 
 	unsigned int GetProgramID()
 	{
-		return internal_impl->GetProgramHandle();
+		return internal_impl->Get_Program_Handle();
 
 	}
 
@@ -67,13 +67,13 @@ public:
 
 	void PrintActiveUniform()
 	{
-		internal_impl->Print_Active_Uniforms();
+		internal_impl->PrintActiveUniforms();
 
 	}
 
 	bool DeleteShaderProgram()
 	{
-		return internal_impl->DeleteShaderProgram();
+		return internal_impl->Delete_Shader_Program();
 
 	}
 
