@@ -115,7 +115,7 @@ namespace Game {
 
 
 		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
-		plrphy->set_gravity_disable(false);
+		plrphy->Set_Gravity_Disable(false);
 		
 		SageAudio::Play_Sound("bgm_main_menu", LOOP);
 		SageAudio::Play_Sound("ambient_rain", LOOP);
@@ -170,19 +170,19 @@ namespace Game {
 
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_I))
 		{
-			SageRenderer::camera->MoveCamera({ 0.f,1.f }, 100.f);
+			SageRenderer::camera->Move_Camera({ 0.f,1.f }, 100.f);
 		}
 		else if (SAGEInputHandler::Get_Key(SAGE_KEY_K))
 		{
-			SageRenderer::camera->MoveCamera({ 0.f,-1.f }, 100.f);
+			SageRenderer::camera->Move_Camera({ 0.f,-1.f }, 100.f);
 		}
 		else if (SAGEInputHandler::Get_Key(SAGE_KEY_J))
 		{
-			SageRenderer::camera->MoveCamera({ -1.f,0.f }, 100.f);
+			SageRenderer::camera->Move_Camera({ -1.f,0.f }, 100.f);
 		}
 		else if (SAGEInputHandler::Get_Key(SAGE_KEY_L))
 		{
-			SageRenderer::camera->MoveCamera({ 1.f,0.f }, 100.f);
+			SageRenderer::camera->Move_Camera({ 1.f,0.f }, 100.f);
 		}
 		else if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_V))
 		{

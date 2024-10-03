@@ -119,27 +119,27 @@ void SageRendererInternal::Draw_Filled(SageModel& model)
 
 
 	shader->Activate();
-	shader->SetUniform("uAlpha", default_config.render_alpha);
-	shader->SetUniform("uUseColor", static_cast<bool>(default_config.options & I_SAGE_ENABLE_VERTEX_COLOR));
-	shader->SetUniform("uUseBorderColor", static_cast<bool>(default_config.options & I_SAGE_ENABLE_BORDER));
+	shader->Set_Uniform("uAlpha", default_config.render_alpha);
+	shader->Set_Uniform("uUseColor", static_cast<bool>(default_config.options & I_SAGE_ENABLE_VERTEX_COLOR));
+	shader->Set_Uniform("uUseBorderColor", static_cast<bool>(default_config.options & I_SAGE_ENABLE_BORDER));
 
 	ToastBox::Vector4 color = { default_config.border_color.r,default_config.border_color.g,default_config.border_color.b,default_config.border_color.a };
-	shader->SetUniform("uBorderColor", color);
+	shader->Set_Uniform("uBorderColor", color);
 
-	shader->SetUniform("uBorderSize", default_config.border_width);
-	shader->SetUniform("uCornerRadius", default_config.border_radius);
-	//shader->SetUniform("uObjectSize", transform.scale.x, transform.scale.y);
+	shader->Set_Uniform("uBorderSize", default_config.border_width);
+	shader->Set_Uniform("uCornerRadius", default_config.border_radius);
+	//shader->Set_Uniform("uObjectSize", transform.scale.x, transform.scale.y);
 	/*glm::mat3 d = viewport->get_viewport_xform() * transform.model_matrix;
 	glm::mat3 m = glm::mat3(1.0f);*/
 
-	shader->SetUniform("uModel_xform", default_config.matrix);
-	//shader->SetUniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix
+	shader->Set_Uniform("uModel_xform", default_config.matrix);
+	//shader->Set_Uniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix
 	bool use_texture = static_cast<bool>(default_config.options & I_SAGE_ENABLE_TEXTURE);
-	shader->SetUniform("uUseTexture", use_texture);
+	shader->Set_Uniform("uUseTexture", use_texture);
 	if (use_texture)
 	{
 		glActiveTexture(default_config.current_texture->get_texture_unit());
-		shader->SetUniform("uTex2D", default_config.current_texture->get_texture_unit());
+		shader->Set_Uniform("uTex2D", default_config.current_texture->get_texture_unit());
 	}
 
 
@@ -180,27 +180,27 @@ void SageRendererInternal::Draw_Filled(SageModel& model, glm::mat3& matrix, REND
 
 
 	shader->Activate();
-	shader->SetUniform("uAlpha", config.render_alpha);
-	shader->SetUniform("uUseColor", static_cast<bool>(config.options & I_SAGE_ENABLE_VERTEX_COLOR));
-	shader->SetUniform("uUseBorderColor", static_cast<bool>(config.options & I_SAGE_ENABLE_BORDER));
+	shader->Set_Uniform("uAlpha", config.render_alpha);
+	shader->Set_Uniform("uUseColor", static_cast<bool>(config.options & I_SAGE_ENABLE_VERTEX_COLOR));
+	shader->Set_Uniform("uUseBorderColor", static_cast<bool>(config.options & I_SAGE_ENABLE_BORDER));
 
 	ToastBox::Vector4 color = { config.border_color.r,config.border_color.g,config.border_color.b,config.border_color.a };
-	shader->SetUniform("uBorderColor", color);
+	shader->Set_Uniform("uBorderColor", color);
 
-	shader->SetUniform("uBorderSize", config.border_width);
-	shader->SetUniform("uCornerRadius", config.border_radius);
-	//shader->SetUniform("uObjectSize", transform.scale.x, transform.scale.y);
+	shader->Set_Uniform("uBorderSize", config.border_width);
+	shader->Set_Uniform("uCornerRadius", config.border_radius);
+	//shader->Set_Uniform("uObjectSize", transform.scale.x, transform.scale.y);
 	/*glm::mat3 d = viewport->get_viewport_xform() * transform.model_matrix;
 	glm::mat3 m = glm::mat3(1.0f);*/
 
-	shader->SetUniform("uModel_xform", matrix);
-	//shader->SetUniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix
+	shader->Set_Uniform("uModel_xform", matrix);
+	//shader->Set_Uniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix
 	bool use_texture = static_cast<bool>(config.options & I_SAGE_ENABLE_TEXTURE);
-	shader->SetUniform("uUseTexture", use_texture);
+	shader->Set_Uniform("uUseTexture", use_texture);
 	if (use_texture)
 	{
 		glActiveTexture(config.current_texture->get_texture_unit());
-		shader->SetUniform("uTex2D", config.current_texture->get_texture_unit());
+		shader->Set_Uniform("uTex2D", config.current_texture->get_texture_unit());
 	}
 
 
@@ -318,16 +318,16 @@ void SageRendererInternal::Draw_Line(SageLine const& line, float size)
 	SageShader* shader = default_shader;
 	glBindVertexArray(line.line->get_vao_handle());
 	shader->Activate();
-	shader->SetUniform("uAlpha", default_config.render_alpha);
-	shader->SetUniform("uUseColor", true);
-	shader->SetUniform("uUseBorderColor", false);
+	shader->Set_Uniform("uAlpha", default_config.render_alpha);
+	shader->Set_Uniform("uUseColor", true);
+	shader->Set_Uniform("uUseBorderColor", false);
 
 	ToastBox::Vector4 color = { default_config.border_color.r,default_config.border_color.g,default_config.border_color.b,default_config.border_color.a };
-	shader->SetUniform("uBorderColor", color);
-	shader->SetUniform("uColor", ToastBox::Vec4{ line.color.x ,line.color.y,line.color.z, line.color.a });
+	shader->Set_Uniform("uBorderColor", color);
+	shader->Set_Uniform("uColor", ToastBox::Vec4{ line.color.x ,line.color.y,line.color.z, line.color.a });
 
-	shader->SetUniform("uBorderSize", default_config.border_width);
-	shader->SetUniform("uCornerRadius", default_config.border_radius);
+	shader->Set_Uniform("uBorderSize", default_config.border_width);
+	shader->Set_Uniform("uCornerRadius", default_config.border_radius);
 
 	glLineWidth(size);
 
@@ -337,22 +337,22 @@ void SageRendererInternal::Draw_Line(SageLine const& line, float size)
 	if (default_config.options & I_SAGE_ENABLE_CAMERA)
 	{
 
-		shader->SetUniform("uModel_xform", camera->Get_Projection_View_Matrix());
+		shader->Set_Uniform("uModel_xform", camera->Get_Projection_View_Matrix());
 	}
 	else
 	{
 		//ToastBox::Matrix3x3 mtx = { glm::value_ptr(line.transformation_matrix) };
 		ToastBox::Matrix3x3 vp_xf = { glm::value_ptr(viewport.get_viewport_xform()) };
 
-		shader->SetUniform("uModel_xform", vp_xf);
+		shader->Set_Uniform("uModel_xform", vp_xf);
 	}
 
 	bool use_texture = false;
-	shader->SetUniform("uUseTexture", false);
+	shader->Set_Uniform("uUseTexture", false);
 	if (use_texture)
 	{
 		glActiveTexture(default_config.current_texture->get_texture_unit());
-		shader->SetUniform("uTex2D", default_config.current_texture->get_texture_unit());
+		shader->Set_Uniform("uTex2D", default_config.current_texture->get_texture_unit());
 	}
 
 	if (line.line->is_idx_enabled())
@@ -406,16 +406,16 @@ void SageRendererInternal::Draw_Point(SagePoint const& point)
 	SageModel* model = point.point;
 	glBindVertexArray(model->get_vao_handle());
 	shader->Activate();
-	shader->SetUniform("uAlpha", default_config.render_alpha);
-	shader->SetUniform("uUseColor", true);
-	shader->SetUniform("uUseBorderColor", false);
+	shader->Set_Uniform("uAlpha", default_config.render_alpha);
+	shader->Set_Uniform("uUseColor", true);
+	shader->Set_Uniform("uUseBorderColor", false);
 
 	ToastBox::Vector4 color = { default_config.border_color.r,default_config.border_color.g,default_config.border_color.b,default_config.border_color.a };
-	shader->SetUniform("uBorderColor", color);
-	shader->SetUniform("uColor", ToastBox::Vec4{ point.color.x ,point.color.y,point.color.z, point.color.a });
+	shader->Set_Uniform("uBorderColor", color);
+	shader->Set_Uniform("uColor", ToastBox::Vec4{ point.color.x ,point.color.y,point.color.z, point.color.a });
 
-	shader->SetUniform("uBorderSize", default_config.border_width);
-	shader->SetUniform("uCornerRadius", default_config.border_radius);
+	shader->Set_Uniform("uBorderSize", default_config.border_width);
+	shader->Set_Uniform("uCornerRadius", default_config.border_radius);
 
 
 	if (default_config.options & I_SAGE_ENABLE_CAMERA)
@@ -425,7 +425,7 @@ void SageRendererInternal::Draw_Point(SagePoint const& point)
 		ToastBox::Matrix3x3 m3;
 
 		m3.Matrix3Transpose(~camera->Get_Projection_View_Matrix() * ~mtx);
-		shader->SetUniform("uModel_xform", m3);
+		shader->Set_Uniform("uModel_xform", m3);
 	}
 	else
 	{
@@ -435,15 +435,15 @@ void SageRendererInternal::Draw_Point(SagePoint const& point)
 		m1.Matrix3Transpose(mtx);
 		m2.Matrix3Transpose(vp_xf);
 		m3.Matrix3Transpose(m2 * m1);
-		shader->SetUniform("uModel_xform", m3);
+		shader->Set_Uniform("uModel_xform", m3);
 	}
 
 	bool use_texture = false;
-	shader->SetUniform("uUseTexture", false);
+	shader->Set_Uniform("uUseTexture", false);
 	if (use_texture)
 	{
 		glActiveTexture(default_config.current_texture->get_texture_unit());
-		shader->SetUniform("uTex2D", default_config.current_texture->get_texture_unit());
+		shader->Set_Uniform("uTex2D", default_config.current_texture->get_texture_unit());
 	}
 
 	glPointSize(point.size);

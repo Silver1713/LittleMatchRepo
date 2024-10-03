@@ -323,17 +323,20 @@ namespace SageJSON
 			}
 			if (std::holds_alternative<T>(current_node->getKey()))
 			{
-				return std::get<T>(current_node->getKey());
+				T val = std::get<T>(current_node->getKey());
 				current_node = nullptr;
+				return val;
 			}
 			else if (std::holds_alternative<std::reference_wrapper<T>>(current_node->getKey()))
 			{
-				return std::get<std::reference_wrapper<T>>(current_node->getKey()).get();
+				T val = std::get<std::reference_wrapper<T>>(current_node->getKey()).get();
 				current_node = nullptr;
+				return val;
 			}
 			else
 			{
 				throw std::runtime_error("Type mismatch");
+				
 			}
 		}
 		catch (std::runtime_error& e)

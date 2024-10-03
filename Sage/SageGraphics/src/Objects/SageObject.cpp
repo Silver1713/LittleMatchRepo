@@ -92,29 +92,29 @@ void SageObject::draw(SageViewport* vp)
 
 
 	shader->Activate();
-	shader->SetUniform("uAlpha", material.mat_transparency);
-	shader->SetUniform("uUseColor", !material.enable_vertex_color);
-	shader->SetUniform("uUseBorderColor", material.enable_border_color);
-	shader->SetUniform("uColor", material.color.r, material.color.g, material.color.b, material.color.a);
+	shader->Set_Uniform("uAlpha", material.mat_transparency);
+	shader->Set_Uniform("uUseColor", !material.enable_vertex_color);
+	shader->Set_Uniform("uUseBorderColor", material.enable_border_color);
+	shader->Set_Uniform("uColor", material.color.r, material.color.g, material.color.b, material.color.a);
 	ToastBox::Vector4 color = { material.border_color.r, material.border_color.g, material.border_color.b,material.border_color.a };
-	shader->SetUniform("uBorderColor", color);
+	shader->Set_Uniform("uBorderColor", color);
 
-	shader->SetUniform("uBorderSize", material.border_width);
-	shader->SetUniform("uCornerRadius", material.border_radius);
-	shader->SetUniform("uObjectSize", transform.scale.x, transform.scale.y);
+	shader->Set_Uniform("uBorderSize", material.border_width);
+	shader->Set_Uniform("uCornerRadius", material.border_radius);
+	shader->Set_Uniform("uObjectSize", transform.scale.x, transform.scale.y);
 	glm::mat3 d = viewport->get_viewport_xform() * transform.model_matrix;
 	glm::mat3 m = glm::mat3(1.0f);
 
 	glm::vec2 result = d * glm::vec3(0, 0, 1);
 	ToastBox::Matrix3x3 mtx = glm::value_ptr(viewport->get_viewport_xform() * transform.model_matrix);
-	shader->SetUniform("uModel_xform", mtx);
-	//shader->SetUniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix);
-	shader->SetUniform("uUseTexture", material.enable_texture);
+	shader->Set_Uniform("uModel_xform", mtx);
+	//shader->Set_Uniform("uModel_xform",  viewport->get_viewport_xform() * transform.model_matrix);
+	shader->Set_Uniform("uUseTexture", material.enable_texture);
 	if (material.enable_texture)
 	{
 		material.texture_ref->bind_texture();
 		glActiveTexture(material.texture_ref->get_texture_unit());
-		shader->SetUniform("uTex2D", material.texture_ref->get_texture_unit());
+		shader->Set_Uniform("uTex2D", material.texture_ref->get_texture_unit());
 	}
 
 
@@ -157,16 +157,16 @@ void SageObject::draw(SageCamera* cam)
 
 
 	shader->Activate();
-	shader->SetUniform("uAlpha", material.mat_transparency);
-	shader->SetUniform("uUseColor", !material.enable_vertex_color);
-	shader->SetUniform("uUseBorderColor", material.enable_border_color);
-	shader->SetUniform("uColor", material.color.r, material.color.g, material.color.b, material.color.a);
+	shader->Set_Uniform("uAlpha", material.mat_transparency);
+	shader->Set_Uniform("uUseColor", !material.enable_vertex_color);
+	shader->Set_Uniform("uUseBorderColor", material.enable_border_color);
+	shader->Set_Uniform("uColor", material.color.r, material.color.g, material.color.b, material.color.a);
 	ToastBox::Vector4 color = { material.border_color.r, material.border_color.g, material.border_color.b,material.border_color.a };
-	shader->SetUniform("uBorderColor", color);
+	shader->Set_Uniform("uBorderColor", color);
 
-	shader->SetUniform("uBorderSize", material.border_width);
-	shader->SetUniform("uCornerRadius", material.border_radius);
-	shader->SetUniform("uObjectSize", transform.scale.x, transform.scale.y);
+	shader->Set_Uniform("uBorderSize", material.border_width);
+	shader->Set_Uniform("uCornerRadius", material.border_radius);
+	shader->Set_Uniform("uObjectSize", transform.scale.x, transform.scale.y);
 	ToastBox::Matrix3x3 mtx = glm::value_ptr( transform.model_matrix);
 	
 	//glm::mat3 ca = static_cast<SageCameraInternal2D*>(c->Get_Camera())->Get_View_Projection_Matrix() * transform.model_matrix;
@@ -174,14 +174,14 @@ void SageObject::draw(SageCamera* cam)
 	
 	m3.Matrix3Transpose(~c->Get_Projection_View_Matrix() * ~mtx);
 	glm::vec3 r2 = transform.model_matrix * glm::vec3(1, 1, 1);
-	shader->SetUniform("uModel_xform", m3);
-	shader->SetUniform("uUseTexture", material.enable_texture);
+	shader->Set_Uniform("uModel_xform", m3);
+	shader->Set_Uniform("uUseTexture", material.enable_texture);
 	if (material.enable_texture)
 	{
 		
 		material.texture_ref->bind_texture();
 		
-		shader->SetUniform("uTex2D", material.texture_ref->get_texture_unit());
+		shader->Set_Uniform("uTex2D", material.texture_ref->get_texture_unit());
 	}
 
 

@@ -48,6 +48,7 @@ int main()
 
 void init()
 {
+
 	int status = SageHelper::init(1000, 1000, "Hello World");
 
 	if (status)

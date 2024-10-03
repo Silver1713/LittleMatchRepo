@@ -119,20 +119,20 @@ void ExampleScene::update()
 	if (SageHelper::Get_Key_Pressed(GLFW_KEY_D))
 	{
 		
-		camera2d.MoveCamera({ 1,0 }, camSpeed);
+		camera2d.Move_Camera({ 1,0 }, camSpeed);
 
 	}
 	else if (SageHelper::Get_Key_Pressed(GLFW_KEY_A))
 	{
-		camera2d.MoveCamera({ -1,0 }, camSpeed);
+		camera2d.Move_Camera({ -1,0 }, camSpeed);
 	}
 	else if (SageHelper::Get_Key_Pressed(GLFW_KEY_W))
 	{
-		camera2d.MoveCamera({ 0,1 }, camSpeed);
+		camera2d.Move_Camera({ 0,1 }, camSpeed);
 	}
 	else if (SageHelper::Get_Key_Pressed(GLFW_KEY_S))
 	{
-		camera2d.MoveCamera({ 0,-1 }, camSpeed);
+		camera2d.Move_Camera({ 0,-1 }, camSpeed);
 	}
 
 	for (auto& obj : SageObjectManager::objects)

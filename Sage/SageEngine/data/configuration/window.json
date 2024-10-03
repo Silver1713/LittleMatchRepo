@@ -1,0 +1,10 @@
+{
+    "Window": {
+        "Title": "Scene",
+        "Width": 800,
+        "Height": 800
+    },
+    "OtherConfigurations":{
+        "Key": "Value"
+    }
+}
