@@ -96,6 +96,7 @@ int main()
 *******************************************************************************/
 void init()
 {
+    SageTimer::Init();
 	SageJSON::SageJSON window_config;
 
 	std::ifstream file(window_config_path);
@@ -122,7 +123,7 @@ void init()
     int status = SageHelper::Init(window_width, window_height, window_title.c_str());
     SageShaderManager::Add_Shader_Include("graphic_lib", "../SageGraphics/shaders/");
 	SageRenderer::Init();
-    SageTimer::init();
+    SageTimer::Init();
 
     if (status)
     {
