@@ -1,3 +1,43 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageJSON.cpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+
+\brief		This file contain the definition for a generic JSON parser that can both parse and
+			write JSON files. As this interface utilize templates, templated functions are
+			defined in this header files.
+
+			This header comprises of different namespaces that each
+			represent a component that are crucial to serializing and deserializing JSON
+			files format. The namespace are as follows:
+
+			1. SageJSON: Main namespace containing the JSON parser class that contain the
+			function to parse and write JSON files. It also accept stream of input files.
+
+			2. Lexer: Namespace containing classes for purpose of conducting lexical analysis.
+			This tokenizes the raw string into JSON tokens which allow for a Abstract Syntax
+			Tree (AST) to be more easily constructed.
+
+			3. AST: Namespace containing classes that are crucial for a JSON AST. This namespace
+			contain the Base class Node that is inherited by other classes such as StringNode,
+			NumberNode and etc. This node classes represent the element in the AST and it use
+			to preserve the structure of the JSON file. The AST class is also crucial for
+			serialization of C++ objects into the JSON format. It also contain function to
+			build a AST from C++ data, allowing custom data to be serialized into JSON format.
+
+			These namespaces represent the simplified version of how a compiler works. Thus
+			the JSON parser will first pass the data to the Lexer to tokenize the data and
+			then pass the tokenized data to the AST to construct the tree structure of the JSON
+			data.
+
+			\note As of now, the JSON can be used to deserialize JSON data into C++ objects.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "SageJSON.hpp"
 #include <fstream>
 #include<string>
@@ -5,6 +45,8 @@
 #include <stack>
 #define _CRTDBG_MAP_ALLOC
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+
+
 namespace SageJSON::Lexer
 {
 	void Token::print()
@@ -389,12 +431,12 @@ namespace SageJSON::AST
 
 
 
-	bool AST::cleanup(Node* rt)
+	bool AST::cleanup(Node* _root)
 	{
 
-		if (rt->getType() == Node::AST_Type::OBJECT)
+		if (_root->getType() == Node::AST_Type::OBJECT)
 		{
-			ObjectNode* obj = dynamic_cast<ObjectNode*>(rt);
+			ObjectNode* obj = dynamic_cast<ObjectNode*>(_root);
 			Node::JSONType val = obj->getKey();
 			if (std::holds_alternative<std::vector<Node*>>(val))
 			{
@@ -404,12 +446,12 @@ namespace SageJSON::AST
 					cleanup(i);
 				}
 
-				delete rt;
+				delete _root;
 			}
 		}
-		else if (rt->getType() == Node::AST_Type::ARRAY)
+		else if (_root->getType() == Node::AST_Type::ARRAY)
 		{
-			ArrayNode* arr = dynamic_cast<ArrayNode*>(rt);
+			ArrayNode* arr = dynamic_cast<ArrayNode*>(_root);
 			Node::JSONType val = arr->getKey();
 			if (std::holds_alternative<std::vector<Node*>>(val))
 			{
@@ -418,11 +460,11 @@ namespace SageJSON::AST
 				{
 					cleanup(i);
 				}
-				delete rt;
+				delete _root;
 			}
 		}
 		else {
-			delete rt;
+			delete _root;
 		}
 		return true;
 
