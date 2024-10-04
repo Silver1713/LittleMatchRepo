@@ -11,9 +11,12 @@ if(IS_LIB_COMPILED_CORE_GEN)
         target_link_libraries(SageEngine_Core
             ${ALL_LIBS}
         )
+        message("LIB_LIST: ${LIB_LIST}")
         target_include_directories(SageEngine_Core INTERFACE
             ${INCLUDES_LIST}
         )
+
+        message("INCLUDES_LIST: ${INCLUDES_LIST}")
 
         set_property(TARGET SageEngine_Core PROPERTY CXX_STANDARD 20)
 
@@ -31,9 +34,12 @@ if(IS_LIB_COMPILED_CORE_GEN)
         target_link_libraries(SageEngine_Core INTERFACE
             ${LIB_LIST}
         )
+
+        message("${LIB_LIST}")
         target_include_directories(SageEngine_Core INTERFACE
             ${INCLUDES_LIST}
         )
+        message("${INCLUDES_LIST}")
     ENDIF()
 endif()
 

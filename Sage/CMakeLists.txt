@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8...3.13)
 
 project(Sage)
-
+set(IS_LIBS_ONLY ON)
 add_definitions(-DGLEW_STATIC)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
@@ -31,7 +31,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
     get_filename_component(DIR_NAME ${dir} NAME)
     set(INERNAL_H_FILE_NAME "Internal Header Files")
 
-    if(IS_DIRECTORY ${dir} AND NOT DIR_NAME STREQUAL "SageEngine" AND NOT DIR_NAME STREQUAL "Sage" AND NOT DIR_NAME STREQUAL "SageInputUnit")
+    if(IS_DIRECTORY ${dir} AND NOT DIR_NAME STREQUAL "SageEngine" AND NOT DIR_NAME STREQUAL "Sage" AND NOT DIR_NAME STREQUAL "SageInputUnit" AND NOT IS_LIBS_ONLY)
         set(SAGE_SHADER_FILES)
 
         if(DIR_NAME STREQUAL "SageGraphics")
@@ -170,6 +170,9 @@ foreach(dir ${PROJECT_DIRECTORIES})
                 target_include_directories(${DIR_NAME}_lib PUBLIC
                     ${SUB_DIR_LIB}
                 )
+                IF (IS_LIBS_ONLY)
+                    list(APPEND ADDITION_INCLUDE ${SUB_DIR_LIB})
+                ENDIF()
             ENDIF()
         ENDFOREACH()
 
@@ -179,6 +182,10 @@ foreach(dir ${PROJECT_DIRECTORIES})
         target_include_directories(${DIR_NAME}_lib
             PRIVATE ${dir}/include/internal
         )
+        
+        IF (IS_LIBS_ONLY)
+        list(APPEND INCLUDES_LIST ${dir}/include ${ADDITION_INCLUDE})
+        ENDIF()
         list(APPEND LIB_LIST "${DIR_NAME}_lib")
         list(APPEND OBJECT_LIST "$<TARGET_OBJECTS:${DIR_NAME}_lib>")
     endif()
