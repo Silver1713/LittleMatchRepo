@@ -1,3 +1,41 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageJSON.hpp
+\title		Memory's Flame
+\author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
+\par		jiahao.yeo@digipen.edu
+\date		02 October 2024
+
+\brief		This file contain the declaration for a generic JSON parser that can both parse and
+			write JSON files. As this interface utilize templates, templated functions are
+			defined in this header files.
+
+			This header comprises of different namespaces that each
+			represent a component that are crucial to serializing and deserializing JSON
+			files format. The namespace are as follows:
+
+			1. SageJSON: Main namespace containing the JSON parser class that contain the
+			function to parse and write JSON files. It also accept stream of input files.
+
+			2. Lexer: Namespace containing classes for purpose of conducting lexical analysis.
+			This tokenizes the raw sstring into JSON tokens which allow for a Abstract Syntax
+			Tree (AST) to be more easily constructed.
+
+			3. AST: Namespace containing classes that are crucial for a JSON AST. This namespace
+			contain the Base class Node that is inherited by other classes such as StringNode,
+			NumberNode and etc. This node classes represent the element in the AST and it use
+			to preserve the structure of the JSON file. The AST class is also crucial for
+			serialization of C++ objects into the JSON format. It also contain function to
+			build a AST from C++ data, allowing custom data to be serialized into JSON format.
+
+			These namespaces represent the simplified version of how a compiler works. Thus
+			the JSON parser will first pass the data to the Lexer to tokenize the data and
+			then pass the tokenized data to the AST to construct the tree structure of the JSON
+			data.
+
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+*/
+/* End Header **************************************************************************/
 #include <string>
 #include <vector>
 #include <iostream>
@@ -5,9 +43,20 @@
 #include <variant>
 #ifndef SAGE_JSON_HPP
 
+
+/*!*****************************************************************************
+\brief
+	Main namespace containing the JSON parser class that contain the
+	function to parse and write JSON files. It also accept stream of input files.
+*******************************************************************************/
 namespace SageJSON
 {
-
+	/*!*****************************************************************************
+	\brief
+		This class allow messages from the JSON parser to be displayed in the console.
+		It add a prefix to the message to indicate that the output originated from
+		the custom JSON parser.
+	*******************************************************************************/
 	class SageJSONCout
 	{
 	public:
@@ -20,7 +69,12 @@ namespace SageJSON
 		
 	};
 
-
+	/*!*****************************************************************************
+	\brief
+		This class allow error from the JSON parser to be displayed in the console.
+		It add a prefix to the message to indicate that the output originated from
+		the custom JSON parser.
+	*******************************************************************************/
 	 class SageJSONCerr
 	{
 	public:
@@ -32,12 +86,21 @@ namespace SageJSON
 		}
 	};
 
-
+	 /*!*****************************************************************************
+	 \brief
+		 Overloaded operator (`<<`) to allow the SageJSONCout class to be used in
+		 the output stream with the `std::cout` object.
+	 *******************************************************************************/
 	inline SageJSONCout& operator<< (SageJSONCout& out, std::ostream& (*pf)(std::ostream&))
 	{
 		std::cout << pf;
 		return out;
 	}
+	/*!*****************************************************************************
+	\brief
+		Overloaded operator (`<<`) to allow the SageJSONCout class to be used in
+		the error stream with the `std::cerr` object.
+	*******************************************************************************/
 	inline SageJSONCerr& operator<< (SageJSONCerr& out, std::ostream& (*pf)(std::ostream&))
 	{
 		std::cerr << pf;
@@ -45,15 +108,30 @@ namespace SageJSON
 	}
 
 	
-	static SageJSONCout SageJSONCout{};
-	static SageJSONCerr SageJSONCerr{};
+	static SageJSONCout SageJSONCout{}; //!< Object of SageJSONCout class
+	static SageJSONCerr SageJSONCerr{}; //!< Object of SageJSONCerr class
 
+	/*!*****************************************************************************
+	\brief
+		Namespace containing classes for purpose of conducting lexical analysis.
+		This tokenizes the raw sstring into JSON tokens which allow for an
+		Abstract Syntax Tree (AST) to be more easily constructed.
 
+		
+	*******************************************************************************/
 	namespace Lexer
 	{
-		enum class LEXER_STATE
+	/*!*****************************************************************************
+	\brief
+		The different state that the lexer can be in. This enum represent the
+		current state of the lexer and it is used to determine the next action
+		of the lexer. The lexer is implemented as a finite state machine.
+
+
+	*******************************************************************************/
+		enum class LEXER_STATE 
 		{
-			START,
+			START, 
 			BEGIN_STRING,
 			END_STRING,
 			BEGIN_NUMBER,
