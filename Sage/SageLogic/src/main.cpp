@@ -2,36 +2,41 @@
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/debug-helpers.h>
 #include <iostream>
+
+#include "SageAssembler.hpp"
 MonoDomain* domain;
 char const* code = R"(
 	using System;
 
 class Program
 {
+	public static int number =1;
     static void Main(string[] args)
     {
-        string delimitedString = "H,e,l,l,o";
-        char delimiter = ',';
-
-        // Split the string by the delimiter
-        string[] splitString = delimitedString.Split(delimiter);
-
-        // Join the characters back into a single string without the delimiter
-        string result = string.Join("", splitString);
-
-        // Output the result
-        Console.WriteLine(result); // Output: Hello
+       for (int i =1;i < 1000;i++){
+		   number += i;
+		   Console.WriteLine($"Number: {number}");
+		}
     }
 }
 )";
 char const* domain_name = "HelloWorld.exe";
 int main(){
+
+	SageAssembler assembler{};
+	assembler.Init("..\\MONO\\bin\\", "..\\SageLogic\\programs");
+
+	assembler.Set_Command("csc");
+	assembler.Set_Compile_Flags("/target:exe");
+	assembler.Compile("dynamic_hello", code);
+
+	std::cout << "C# code compiled successfully\n";
+
 	mono_set_dirs("../MONO/lib", "../MONO/etc");
 	// RUn a mono HelloWorld.exe
 	domain = mono_jit_init(domain_name);
 	//load assembly
-	MonoAssembly* assembly = mono_domain_assembly_open(domain, "../SageLogic/programs/hello.exe");
-	
+	MonoAssembly* assembly = mono_domain_assembly_open(domain, "../SageLogic/programs/dynamic_hello.dll");
 	if (!assembly) {
 		printf("Failed to open assembly\n");
 		return 1;

@@ -42,6 +42,14 @@ foreach(dir ${PROJECT_DIRECTORIES})
             source_group("Shader Files" FILES ${SAGE_SHADER_FILES})
         endif()
 
+        if(DIR_NAME STREQUAL "SageLogic")
+            set(SAGE_LOGIC_SCRIPTS)
+            file(GLOB_RECURSE SAGE_LOGIC_SCRIPTS
+                ${dir}/scripts/*.cs
+            )
+            source_group("C# Scripts" FILES ${SAGE_LOGIC_SCRIPTS})
+        endif()
+
         file(GLOB_RECURSE SAGE_SOURCE_FILE
             ${dir}/src/*.[ch]pp
             ${dir}/src/*/*.[ch]pp
@@ -93,8 +101,10 @@ foreach(dir ${PROJECT_DIRECTORIES})
             ${DIR_NAME}
             ${SAGE_SOURCE_FILE}
             ${SAGE_INTERNALS_H_FILES}
-            ${SAGE_SHADER_FILES})
+            ${SAGE_SHADER_FILES}
+            ${SAGE_LOGIC_SCRIPTS})
         set(SAGE_SHADER_FILES "")
+        set(SAGE_LOGIC_SCRIPTS "")
         target_link_libraries(${DIR_NAME} ${ALL_LIBS})
         set_property(TARGET ${DIR_NAME} PROPERTY CXX_STANDARD 20)
 

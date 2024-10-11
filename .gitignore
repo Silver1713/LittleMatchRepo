@@ -34,6 +34,7 @@ Sage/FMOD/api/*/examples
 Sage/build
 Sage/mark-for-delete
 Sage/MONO/*
+Sage/MONO
 
 
 # Ignore logs, temporary files, and other system files
