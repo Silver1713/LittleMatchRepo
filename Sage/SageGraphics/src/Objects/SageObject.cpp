@@ -29,6 +29,7 @@
 
 long int SageObject::object_count{};
 long int SageObject::current_object_count{};
+long int SageObject::instance_count{};
 SageObject::SageObject() : object_id(0), object_name("default"), obj_mesh(), transform(), material()
 {
 
@@ -42,16 +43,12 @@ void SageObject::Init(char const* _name, SageModel* _model)
 	obj_mesh.vtx_cnt = _model->Get_Vertex_Positions().size();
 	obj_mesh.idx_cnt = _model->Get_Vertex_Indices().size();
 
-
 	material.shader_ref = _model->Get_Shader_Program();
-
-
-
-
 
 	object_id = object_count++;
 
 	current_object_count++;
+	instance_count++;
 
 	is_enabled = true;
 
@@ -145,6 +142,9 @@ void SageObject::Draw(SageViewport* vp)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		//if (this->obj_mesh->model_ref->)
 		glDrawElements(GL_TRIANGLE_FAN, static_cast<GLsizei>(obj_mesh.idx_cnt), GL_UNSIGNED_SHORT, nullptr);
+
+		// BATCH RENDERING TEST - WRONG
+		//glDrawElementsInstanced(GL_TRIANGLE_FAN, static_cast<GLsizei>(obj_mesh.idx_cnt), GL_UNSIGNED_SHORT, nullptr, instance_count);
 		// Check for errors
 		
 
