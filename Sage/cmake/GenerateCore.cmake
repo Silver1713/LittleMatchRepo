@@ -11,16 +11,19 @@ if(IS_LIB_COMPILED_CORE_GEN)
         target_link_libraries(SageEngine_Core
             ${ALL_LIBS}
         )
+        message("LIB_LIST: ${LIB_LIST}")
         target_include_directories(SageEngine_Core INTERFACE
             ${INCLUDES_LIST}
         )
+
+        message("INCLUDES_LIST: ${INCLUDES_LIST}")
 
         set_property(TARGET SageEngine_Core PROPERTY CXX_STANDARD 20)
 
         IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(SageEngine_Core PRIVATE -Wall ${DisableWarnings})
         elseif(MSVC)
-            target_compile_options(SageEngine_Core PRIVATE /W3 /WX-)
+            target_compile_options(SageEngine_Core PRIVATE /W4 /WX-)
         endif()
 
         add_dependencies(SageEngine_Core
@@ -31,9 +34,12 @@ if(IS_LIB_COMPILED_CORE_GEN)
         target_link_libraries(SageEngine_Core INTERFACE
             ${LIB_LIST}
         )
+
+        message("${LIB_LIST}")
         target_include_directories(SageEngine_Core INTERFACE
             ${INCLUDES_LIST}
         )
+        message("${INCLUDES_LIST}")
     ENDIF()
 endif()
 
@@ -141,7 +147,7 @@ set_property(TARGET SageEngine PROPERTY CXX_STANDARD 20)
 IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(SageEngine PRIVATE -Wall ${DisableWarnings})
 elseif(MSVC)
-    target_compile_options(SageEngine PRIVATE /W3 /WX-)
+    target_compile_options(SageEngine PRIVATE /W4 /WX-)
 endif()
 
 if(WIN32 AND FMOD_IMPORT_SUCCESS)

@@ -1,42 +1,47 @@
 /* Start Header ************************************************************************/
 /*!
 \file		SceneManager.cpp
-\title		
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
 \date		08 September 2024
-\brief		Contains the definitions of functions relating to scene management
+\brief		Contains the definitions of functions that defines the scene management aspect
+			of the engine. Stores the function pointers to determine which scene is being
+			loaded, including the fadescreen used to transition between scenes.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content Â© 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #include "AssetLoader.hpp"
 #include "Prefabs.hpp"
-#include "SageMain.hpp"
+
+#include "SageRenderer.hpp"
 #include "SageHelper.hpp"
-#include "Key_Inputs.h"
+#include "KeyInputs.h"
 #include "SplashScreen.hpp"
 #include "SceneManager.hpp"
-
 #include "GameObjects.hpp"
 
 #include <iostream>
 
-static bool scene_has_loaded{ false };
-static bool scene_has_initialized{ false };
-
-static bool scene_faded_in{ false };
-static bool scene_faded_out{ true };
-
-static bool game_running{ true };
-static bool ignore_safety_bools{ false };
-
-const float fade_time{ 1.f };
-
-static GameObject fade_screen;
+#include "SageMain.hpp"
 
 #pragma region Public Functions
 namespace SM {	
+	static bool scene_has_loaded{ false };
+	static bool scene_has_initialized{ false };
+
+	static bool scene_faded_in{ false };
+	static bool scene_faded_out{ true };
+
+	static bool game_running{ true };
+	static bool ignore_safety_bools{ false };
+
+	const float fade_time{ 0.5f };
+
+	static GameObject* fade_screen{ nullptr };
+	static Assets::Levels::Level current_level;
+
 	static Function_Ptr fp_load = Splash_Screen::Load;
 	static Function_Ptr fp_init = Splash_Screen::Init;
 	static Function_Ptr fp_input = Splash_Screen::Input;
@@ -53,83 +58,193 @@ namespace SM {
 	static Function_Ptr fp_free_tmp;
 	static Function_Ptr fp_unload_tmp;
 
+	/*!*****************************************************************************
+	  \brief
+		This function specifies if the scene should ignore safety checks just in case
+		some systems havent fully loaded before accepting inputs
+
+	  \param _is_ignoring
+		Whether the scene manager should accept inputs
+	*******************************************************************************/
 	void Ignore_Safety_Bools(bool _is_ignoring)
 	{
 		ignore_safety_bools = _is_ignoring;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Begins the fading in animation
+	*******************************************************************************/
 	void Start_Fade_In()
 	{
 		scene_faded_in = false;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Begins the fading out animation
+	*******************************************************************************/
 	void Start_Fade_Out()
 	{
 		scene_faded_out = false;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Gets the state of the faded_in flag
+	  \return
+		the faded_in flag
+	*******************************************************************************/
 	bool const& Has_Faded_In()
 	{
 		return scene_faded_in;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Gets the state of the faded_out flag
+	  \return
+		the faded_out flag
+	*******************************************************************************/
 	bool const& Has_Faded_Out()
 	{
 		return scene_faded_out;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Loads the Scene Manager
+	*******************************************************************************/
 	void Load()
 	{
-		SM::fp_load();
+		//Creates all prefabs that are supposed to exist in current level scene
+		for (unsigned int i{}; i < current_level.prefabs.size(); i++)
+		{
+			GameObject* g;
+			Transform* t;
+			Sprite2D* s;
+			g = Game_Objects::Instantiate(current_level.prefabs[i], current_level.identifier[i],current_level.z_orders[i]);
+			t = dynamic_cast<Transform*>(g->Get_Component(TRANSFORM));
+			t->Set_Positions({ current_level.positions[i][0],current_level.positions[i][1],current_level.positions[i][2] });
+			t->Set_Rotations({ current_level.rotations[i][0],current_level.rotations[i][1],current_level.rotations[i][2] });
+			t->Set_Scale({ current_level.scale[i][0],current_level.scale[i][1],current_level.scale[i][2] });
 
-		Transform t({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f }, { 1000.f,1000.f, 0.0f });
-		fade_screen.Add_Component(std::make_unique<Transform>(t));
-		Sprite2D s({ "" }, { 0.f,0.f,0.f,1.f });
-		fade_screen.Add_Component(std::make_unique<Sprite2D>(s));
-		Game_Objects::Add_Game_Object(&fade_screen);
+			s = dynamic_cast<Sprite2D*>(g->Get_Component(SPRITE2D));
+			if (s)
+			{
+				s->Set_Colour({ current_level.color[i][0],current_level.color[i][1],current_level.color[i][2],current_level.color[i][3] });
+			}
+		}
+
+		SM::fp_load();
+		fade_screen = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen");
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Initializes the Scene Manager
+	*******************************************************************************/
 	void Init()
 	{
-		SageMain::init();
-		SAGE_Input_Handler::init();
+		SAGEInputHandler::init();
 
+		Game_Objects::Init();
 		SM::fp_init();
-		Game_Objects::Init();		
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Input Checks for the Scene Manager
+	*******************************************************************************/
 	void Input()
 	{
-		SAGE_Input_Handler::update();
+		
+		SM::fp_input();
+		SAGEInputHandler::update();
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Updates the Scene Manager
+	*******************************************************************************/
 	void Update()
 	{
 		Fade_In();
 		Fade_Out();
-		SageMain::update();
-		Game_Objects::Update();
 		SM::fp_update();
+		Game_Objects::Update();
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Draws the current scene
+	*******************************************************************************/
 	void Draw()
 	{
-		SageMain::draw();
+		
+		Game_Objects::Draw();
 		SM::fp_draw();
+
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Frees the current scene
+	*******************************************************************************/
 	void Free()
 	{
 		SM::fp_free();
-		SageMain::exit();		
+	
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Unloads the current scene
+	*******************************************************************************/
 	void Unload()
 	{
 		SM::fp_unload();
 		Game_Objects::Exit();
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Set which level the game scene should load
+
+	  \param _level_identifier
+		The string key to set the current level to
+	*******************************************************************************/
+	void Set_Current_Level(std::string const& _level_identifier)
+	{
+		current_level = Assets::Levels::Get_Level(_level_identifier);
+	}
+
+	/*!*****************************************************************************
+	  \brief
+		Sets what function pointers to turn the current scene's one into when
+		Go_To_Next_Scene is called
+
+	  \param _load
+		the load function that the scene manager will use
+
+	  \param _init
+		the init function that the scene manager will use
+
+	  \param _input
+		the input function that the scene manager will use
+
+	  \param _update
+		the update function that the scene manager will use
+
+	  \param _draw
+		the draw function that the scene manager will use
+
+	  \param _free
+		the free function that the scene manager will use
+
+	  \param _unload
+		the unload function that the scene manager will use
+	*******************************************************************************/
 	void Set_Next_Scene(void(*_load)(), void(*_init)(), void (*_input)(), void(*_update)(), void (*_draw)(), void (*_free)(), void (*_unload)())
 	{
 		SM::fp_load_tmp = _load;
@@ -141,8 +256,16 @@ namespace SM {
 		SM::fp_unload_tmp = _unload;
 	}
 
-	void Go_To_Next_Scene()
+	/*!*****************************************************************************
+	  \brief
+		Goes to the next scene as specified by Set_Next_Scene
+
+	  \param _level_identifier
+		The string key for what level should be next scene
+	*******************************************************************************/
+	void Go_To_Next_Scene(std::string const& _level_identifier)
 	{
+		current_level = Assets::Levels::Get_Level(_level_identifier);
 		SM::Free();
 		SM::Unload();
 		SM::fp_load = fp_load_tmp;
@@ -152,16 +275,25 @@ namespace SM {
 		SM::fp_draw = fp_draw_tmp;
 		SM::fp_free = fp_free_tmp;
 		SM::fp_unload = fp_unload_tmp;
-		Load();
-		Init();
+		SM::Load();
+		SM::Init();
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Restarts the scene
+	*******************************************************************************/
 	void Restart_Scene()
 	{
 		SM::fp_free();
 		scene_has_initialized = false;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Calculates the current alpha for the transition screen depending on time that
+		has passed
+	*******************************************************************************/
 	void Fade_In()
 	{
 		static float alpha{ 1.f };
@@ -174,10 +306,10 @@ namespace SM {
 		float dt = (float)SageHelper::delta_time;
 
 		if (alpha > 0.0f)
-		{			
+		{
 			alpha -= dt * (1.0f / fade_time);
-			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D)->get());
-			s->Set_Transparency(alpha);			
+			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen->Get_Component(SPRITE2D));
+			s->Set_Transparency(alpha);
 			return;
 		}
 		else
@@ -188,6 +320,11 @@ namespace SM {
 		}
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Calculates the current alpha for the transition screen depending on time that
+		has passed
+	*******************************************************************************/
 	void Fade_Out()
 	{
 		static float alpha{ 0.f };
@@ -202,7 +339,7 @@ namespace SM {
 		if (alpha < 1.0f)
 		{
 			alpha += dt * (1.0f / fade_time);
-			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen.Get_Component(SPRITE2D)->get());
+			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen->Get_Component(SPRITE2D));
 			s->Set_Transparency(alpha);
 			return;
 		}
@@ -214,12 +351,19 @@ namespace SM {
 		}
 	}
 
-
+	/*!*****************************************************************************
+	  \brief
+		Exits the loop
+	*******************************************************************************/
 	void Exit_Game()
 	{
 		game_running = false;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Gets the game running flag
+	*******************************************************************************/
 	bool* Get_Game_Running()
 	{
 		return &game_running;

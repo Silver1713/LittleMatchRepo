@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 2.8...3.13)
 
 project(Sage)
-
-
+set(IS_LIBS_ONLY OFF)
 add_definitions(-DGLEW_STATIC)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
@@ -17,11 +16,12 @@ set(ALL_LIBS
 
 importDependencies()
 include(GenerateCoreComponents)
-message(STATUS "All Libraries: ${ALL_LIBS}")
+ # message(STATUS "All Libraries: ${ALL_LIBS}")
 option(GENERATE_ENGINE_CORE "Generate Engine Core" ON)
 option(COMPILE_USING_OBJECT "Compile using object" ON)
 
-file(GLOB PROJECT_DIRECTORIES ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/Sage*/)
+file(GLOB PROJECT_DIRECTORIES ${CMAKE_SOURCE_DIR}/Sage*/)
+message(STATUS "Project Directories: ${PROJECT_DIRECTORIES}")
 set(LIB_LIST)
 set(INCLUDES_LIST)
 set(OBJECT_LIST)
@@ -32,7 +32,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
     get_filename_component(DIR_NAME ${dir} NAME)
     set(INERNAL_H_FILE_NAME "Internal Header Files")
 
-    if(IS_DIRECTORY ${dir} AND NOT DIR_NAME STREQUAL "SageEngine" AND NOT DIR_NAME STREQUAL "Sage" AND NOT DIR_NAME STREQUAL "SageInputUnit")
+    if(IS_DIRECTORY ${dir} AND NOT DIR_NAME STREQUAL "SageEngine" AND NOT DIR_NAME STREQUAL "Sage" AND NOT DIR_NAME STREQUAL "SageInputUnit" AND NOT IS_LIBS_ONLY)
         set(SAGE_SHADER_FILES)
 
         if(DIR_NAME STREQUAL "SageGraphics")
@@ -99,16 +99,33 @@ foreach(dir ${PROJECT_DIRECTORIES})
         set_property(TARGET ${DIR_NAME} PROPERTY CXX_STANDARD 20)
 
         if(WIN32 AND FMOD_IMPORT_SUCCESS)
-            add_custom_command(TARGET ${DIR_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "$<$<CONFIG:Debug>:${FMOD_LIB_DIR}/fmodL.dll>$<$<NOT:$<CONFIG:Debug>>:${FMOD_LIB_DIR}/fmod.dll>"
-                $<TARGET_FILE_DIR:${DIR_NAME}>)
-        endif()
+        add_custom_command(TARGET ${DIR_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different 
+                "$<$<CONFIG:Debug>:${FMOD_LIB_DIR}/fmodL.dll>$<$<NOT:$<CONFIG:Debug>>:${FMOD_LIB_DIR}/fmod.dll>" 
+                "$<TARGET_FILE_DIR:${DIR_NAME}>"
+        )
+    endif()
+    
+
+    if(WIN32 AND MONO_IMPORT_SUCCESS)
+    add_custom_command(TARGET ${DIR_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different 
+            "$<$<CONFIG:Debug>:${MONO_DLL_PATH}>$<$<NOT:$<CONFIG:Debug>>:${MONO_DLL_PATH}>" 
+            "$<TARGET_FILE_DIR:${DIR_NAME}>"
+    )
+    add_custom_command(TARGET ${DIR_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different 
+            "${MONO_DLL_POSIX}" 
+            "$<TARGET_FILE_DIR:${DIR_NAME}>"
+    )
+endif()
+
+
 
         IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(${DIR_NAME} PRIVATE -Wall ${DisableWarnings})
         elseif(MSVC)
-            target_compile_options(${DIR_NAME} PRIVATE /W3 /WX-)
+            target_compile_options(${DIR_NAME} PRIVATE /W4 /WX-)
         endif()
 
         target_include_directories(${DIR_NAME} PRIVATE
@@ -154,7 +171,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
         IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(${DIR_NAME}_lib PRIVATE -Wall ${DisableWarnings})
         elseif(MSVC)
-            target_compile_options(${DIR_NAME}_lib PRIVATE /W3 /WX-)
+            target_compile_options(${DIR_NAME}_lib PRIVATE /W4 /WX-)
         endif()
 
         file(GLOB PROJECT_LIB_SUBDIRECTORIES_HEADER ${dir}/include/*/)
@@ -173,6 +190,9 @@ foreach(dir ${PROJECT_DIRECTORIES})
                 target_include_directories(${DIR_NAME}_lib PUBLIC
                     ${SUB_DIR_LIB}
                 )
+                IF (IS_LIBS_ONLY)
+                    list(APPEND ADDITION_INCLUDE ${SUB_DIR_LIB})
+                ENDIF()
             ENDIF()
         ENDFOREACH()
 
@@ -182,12 +202,16 @@ foreach(dir ${PROJECT_DIRECTORIES})
         target_include_directories(${DIR_NAME}_lib
             PRIVATE ${dir}/include/internal
         )
+        
+        IF (IS_LIBS_ONLY)
+        list(APPEND INCLUDES_LIST ${dir}/include ${ADDITION_INCLUDE})
+        ENDIF()
         list(APPEND LIB_LIST "${DIR_NAME}_lib")
         list(APPEND OBJECT_LIST "$<TARGET_OBJECTS:${DIR_NAME}_lib>")
     endif()
 endforeach()
 
-message("List of Libraries: ${LIB_LIST}")
+#  message("List of Libraries: ${LIB_LIST}")
 
 # Generate Core Libraries and Engine
 IF(GENERATE_ENGINE_CORE)
@@ -196,27 +220,6 @@ ENDIF()
 
 include(UnitTest)
 
-# # Gather source files for the single executable
-# file(GLOB_RECURSE SageLite_source_files
-# ${CMAKE_SOURCE_DIR}/SageLite/src/*.[c]pp
-# ${CMAKE_SOURCE_DIR}/SageLite/include/*.h
-# ${CMAKE_SOURCE_DIR}/SageLite/include/*.hpp
-# )
-
-# file(GLOB_RECURSE SageInput_source_files
-# ${CMAKE_SOURCE_DIR}/SageInput/src/*.[ch]pp
-# ${CMAKE_SOURCE_DIR}/SageInput/include/*.[h]
-# ${CMAKE_SOURCE_DIR}/SageInput/include/*.[h]pp
-# )
-# file(GLOB_RECURSE INternal_SAGELITE_H_FILES
-# ${CMAKE_SOURCE_DIR}/SageLite/include/internal/*.h
-# ${CMAKE_SOURCE_DIR}/SageLite/include/internal/*.hpp
-# )
-
-# file(GLOB_RECURSE INternal_SAGEINPUT_H_FILES
-# ${CMAKE_SOURCE_DIR}/SageInput/include/internal/*.h
-# ${CMAKE_SOURCE_DIR}/SageInput/include/internal/*.hpp
-# )
 if(${IS_UNIT_TEST_ENABLED})
     enable_testing()
 endif()

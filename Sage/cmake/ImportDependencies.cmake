@@ -69,18 +69,18 @@ macro(import_glfw)
     endif()
 endmacro()
 
-macro(import_fmod)
-    if(NOT TARGET fmod)
-        FetchContent_Declare(
-            fmod
-            GIT_REPOSITORY https://github.com/rosshoyt/FMOD-Audio-Engine
-            GIT_TAG master
-            SOURCE_DIR ${DEP_DIR}/fmod
-        )
-        FetchContent_MakeAvailable(fmod)
-        include_directories(${fmod_SOURCE_DIR}/Include)
-    endif()
-endmacro()
+# macro(import_fmod)
+#     if(NOT TARGET fmod) 
+#         FetchContent_Declare(
+#             fmod
+#             GIT_REPOSITORY https://github.com/rosshoyt/FMOD-Audio-Engine
+#             GIT_TAG master
+#             SOURCE_DIR ${DEP_DIR}/fmod
+#         )
+#         FetchContent_MakeAvailable(fmod)
+#         include_directories(${fmod_SOURCE_DIR}/Include)
+#     endif()
+# endmacro()
 
 macro(import_soil)
     if(NOT TARGET soil)
@@ -126,34 +126,49 @@ macro(import_backward_stacktrace)
     endif()
 endmacro()
 
+macro(import_json)
+    if(NOT TARGET json)
+        FetchContent_Declare(
+            json
+            GIT_REPOSITORY https://github.com/nlohmann/json
+            GIT_TAG b36f4c477c40356a0ae1204b567cca3c2a57d201
+            SOURCE_DIR ${DEP_DIR}/json
+        )
+        FetchContent_MakeAvailable(json)
+        include_directories(${json_SOURCE_DIR})
+    endif()
+endmacro()
+
 macro(import_fmod)
     # import LOCAL version of fmod in FMOD/ folder
-    set(FMOD_IMPORT_SUCCESS TRUE)
-    set(FMOD_API_INSTALL_DIR "${CMAKE_SOURCE_DIR}/FMOD")
-    set(FMOD_INCL_DIR "${FMOD_API_INSTALL_DIR}/api/core/inc")
-    set(FMOD_LIB_DIR "${FMOD_API_INSTALL_DIR}/api/core/lib/x64")
-    set(FMOD_DLL)
-
-    if(NOT EXISTS "${FMOD_API_INSTALL_DIR}")
+    set(FMOD_IMPORT_SUCCESS TRUE) # Set flag to test for import if successful
+    set(FMOD_API_INSTALL_DIR "${CMAKE_SOURCE_DIR}/FMOD") # Location of FMOD Folder
+    message(STATUS "${CMAKE_SOURCE_DIR}/FMOD") 
+    set(FMOD_INCL_DIR "${FMOD_API_INSTALL_DIR}/api/core/inc") #FMOD API include directory
+    set(FMOD_LIB_DIR "${FMOD_API_INSTALL_DIR}/api/core/lib/x64") #FMOD API library directory
+    #set(FMOD_LIB_DIR_RELATIVE "../FMOD/api/core/lib/x64") 
+    if(NOT EXISTS "${FMOD_API_INSTALL_DIR}") # Check if FMOD folder exists
         message(STATUS "FMOD API not found in FMOD/ folder")
-        set(FMOD_IMPORT_SUCCESS FALSE)
+        set(FMOD_IMPORT_SUCCESS FALSE) # SET flag to false if FMOD folder not found
     endif()
 
-    if(NOT EXISTS "${FMOD_INCL_DIR}")
+    if(NOT EXISTS "${FMOD_INCL_DIR}") # Check if FMOD API include directory exists
         message(STATUS "FMOD API include directory not found in FMOD/ folder but FMOD API found check FMOD/api/core/inc")
-        set(FMOD_IMPORT_SUCCESS FALSE)
+        set(FMOD_IMPORT_SUCCESS FALSE) # Set to false
     endif()
 
-    IF(${FMOD_IMPORT_SUCCESS})
-        find_library(FMOD_LIBRARY_DEBUG fmodL_vc PATHS ${FMOD_LIB_DIR})
-        find_library(FMOD_LIBRARY_RELEASE fmod_vc PATHS ${FMOD_LIB_DIR})
-
+    IF(${FMOD_IMPORT_SUCCESS}) # IF Everything is found import FMOD API
+    # Find the .lib file in the lib dir, this is for both debug and release
+        find_library(FMOD_LIBRARY_DEBUG fmodL_vc PATHS ${FMOD_LIB_DIR}) # Find the .lib fiile in the lib dir
+        find_library(FMOD_LIBRARY_RELEASE fmod_vc PATHS ${FMOD_LIB_DIR}) # Find the .lib file in the lib dir
+    # IF no library is found in the lib dir, set flag to false
         if(NOT FMOD_LIBRARY_DEBUG OR NOT FMOD_LIBRARY_RELEASE)
             message(STATUS "FMOD API library not found in FMOD/ folder")
             set(FMOD_IMPORT_SUCCESS FALSE)
         endif()
 
-        add_library(fmod SHARED IMPORTED)
+        add_library(fmod SHARED IMPORTED) # Add FMOD as a shared library
+        # Configure the properties of the FMOD library
         set_target_properties(fmod PROPERTIES
 
             # Debug configuration
@@ -175,6 +190,7 @@ macro(import_fmod)
             INTERFACE_INCLUDE_DIRECTORIES ${FMOD_INCL_DIR}
         )
 
+        # Add the library to the list of dependencies
         add_deps_all_targets(PUBLIC fmod)
 
     ELSE()
@@ -195,9 +211,98 @@ if (NOT TARGET freetype)
     include_directories(${freetype_SOURCE_DIR}/include)
     add_deps_all_targets(PUBLIC freetype)
 endif()
-
 endmacro()
 
+macro (import_imgui)
+    if (NOT TARGET imgui)
+        FetchContent_Declare(
+            imgui
+            GIT_REPOSITORY https://github.com/ocornut/imgui
+            GIT_TAG master
+            SOURCE_DIR ${DEP_DIR}/imgui
+        )
+        FetchContent_MakeAvailable(imgui)
+        add_library(
+            imgui
+            ${imgui_SOURCE_DIR}/imgui.cpp
+            ${imgui_SOURCE_DIR}/imgui_demo.cpp
+            ${imgui_SOURCE_DIR}/imgui_draw.cpp
+            ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+            
+        )
+        add_library(
+            imgui_backends
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+        )
+        include_directories(${imgui_SOURCE_DIR})
+        include_directories(${imgui_SOURCE_DIR}/backends)
+        add_deps_all_targets(PUBLIC imgui imgui_backends)
+    endif()
+endmacro()
+
+macro(import_mono)
+set(MONO_IMPORT_DIR "${CMAKE_SOURCE_DIR}/MONO")
+set(MONO_IMPORT_INCLUDE_DIR "${MONO_IMPORT_DIR}/include/mono-2.0")
+set(MONO_IMPORT_LIB_DIR "${MONO_IMPORT_DIR}/lib")
+set(MONO_IMPORT_SUCCESS TRUE)
+if(NOT EXISTS "${MONO_IMPORT_DIR}")
+    message(STATUS "MONO not found in MONO/ folder")
+    set(MONO_IMPORT_SUCCESS FALSE)
+endif()
+if (NOT EXISTS "${MONO_IMPORT_INCLUDE_DIR}")
+    message(STATUS "MONO include directory not found in MONO/ folder")
+    set(MONO_IMPORT_SUCCESS FALSE)
+endif()
+if (NOT EXISTS "${MONO_IMPORT_LIB_DIR}")
+    message(STATUS "MONO lib directory not found in MONO/ folder")
+    set(MONO_IMPORT_SUCCESS FALSE)
+endif()
+
+IF (${MONO_IMPORT_SUCCESS})
+    message(STATUS "${MONO_IMPORT_LIB_DIR} HERE")
+    find_library(MONO_LIBRARY libmono-static-sgen PATHS ${MONO_IMPORT_LIB_DIR})
+    find_library(MONO_LIBRARY_2 mono-2.0-sgen PATHS ${MONO_IMPORT_LIB_DIR})
+    find_library(MONO_POSIX_LIBRARY MonoPosixHelper PATHS ${MONO_IMPORT_LIB_DIR})
+
+    # Collect necessary bin files
+    set(MONO_DLL_PATH "${MONO_IMPORT_DIR}/bin/mono-2.0-sgen.dll")
+    set(MONO_DLL_STATIC "${MONO_IMPORT_DIR}/bin/libmono-btls-shared")
+    set(MONO_DLL_POSIX "${MONO_IMPORT_DIR}/bin/MonoPosixHelper.dll")
+
+    if (NOT MONO_LIBRARY OR NOT MONO_LIB_IMPORTED)
+        message(STATUS "MONO library not found in MONO/ folder")
+        set(MONO_IMPORT_SUCCESS FALSE)
+    endif()
+
+    add_library(mono STATIC IMPORTED)
+    message(STATUS "Mono: ${MONO_LIBRARY}")
+    set_target_properties(mono PROPERTIES
+        IMPORTED_LOCATION_RELEASE "${MONO_LIBRARY}"
+        
+
+        IMPORTED_LOCATION_DEBUG "${MONO_LIBRARY}"
+        
+        IMPORTED_LOCATION_MINSIZEREL "${MONO_LIBRARY}"
+       
+
+        IMPORTED_LOCATION_RELWITHDEBINFO "${MONO_LIBRARY}"
+        
+        INTERFACE_INCLUDE_DIRECTORIES ${MONO_IMPORT_INCLUDE_DIR}
+    )
+    target_link_libraries(mono INTERFACE 
+    ${MONO_POSIX_LIBRARY} 
+    ${MONO_LIBRARY_2}
+    ${MONO_POSIX_LIBRARY}
+    )
+    add_deps_all_targets(PUBLIC mono)
+ELSE()
+    message(STATUS "MONO Import Failed.")
+ENDIF()
+
+
+
+endmacro()
 macro(add_deps_all_targets ...)
     list(APPEND ALL_LIBS ${ARGN})
 endmacro()
@@ -214,4 +319,7 @@ macro(importDependencies)
     import_backward_stacktrace()
     import_fmod()
     import_freetype()
+    import_json()
+    import_imgui()
+    import_mono()
 endmacro()

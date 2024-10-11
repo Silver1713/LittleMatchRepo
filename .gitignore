@@ -17,14 +17,7 @@
 *.exp
 *.iobj
 *.ipdb
-*.o
-*.exe
-*.out
-*.a
-*.lib
-*.dll
-*.so
-*.dylib
+*.orig
 bin
 Debug
 Release
@@ -37,10 +30,11 @@ Sage/CMakeFiles/
 Sage/CMakeCache.txt
 Sage/cmake_install.cmake
 Sage/Makefile
-
+Sage/FMOD/api/*/examples
 Sage/build
 Sage/mark-for-delete
-Sage/FMOD/api
+Sage/MONO/*
+
 
 # Ignore logs, temporary files, and other system files
 *.log

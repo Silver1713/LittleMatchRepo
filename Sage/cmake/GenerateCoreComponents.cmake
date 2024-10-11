@@ -40,6 +40,7 @@ foreach(CORE_LIB_SUBDIR ${CORE_LIB_DIR})
     endforeach()
 
     # add the program
+    IF (NOT IS_LIBS_ONLY)
     add_executable(
         ${CORE_LIB_NAME}
         ${CORE_LIB_SRC_FILES}
@@ -47,6 +48,7 @@ foreach(CORE_LIB_SUBDIR ${CORE_LIB_DIR})
         ${CORE_LIP_TOP_SRC}
         ${CORE_LIP_TOP_HEADER}
     )
+    ENDIF()
 
     # remove the main.cpp file
     list(REMOVE_ITEM CORE_LIB_SRC_FILES ${CORE_LIB_SRC}/main.cpp)
@@ -68,7 +70,7 @@ foreach(CORE_LIB_SUBDIR ${CORE_LIB_DIR})
         PUBLIC
         ${CORE_LIB_SUBDIR}/include/
     )
-
+    IF (NOT IS_LIBS_ONLY)
     target_include_directories(
         ${CORE_LIB_NAME}
         PUBLIC
@@ -76,21 +78,27 @@ foreach(CORE_LIB_SUBDIR ${CORE_LIB_DIR})
         PUBLIC
         ${CORE_LIB_SUBDIR}/include/
     )
+    ENDIF()
 
     IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+       IF (NOT IS_LIBS_ONLY)
         target_compile_options(${CORE_LIB_NAME} PRIVATE -Wall ${DisableWarnings})
+        ENDIF()
         target_compile_options(${CORE_LIB_NAME}_lib PRIVATE -Wall ${DisableWarnings})
     elseif(MSVC)
-        target_compile_options(${CORE_LIB_NAME} PRIVATE /W3 /WX-)
-        target_compile_options(${CORE_LIB_NAME}_lib PRIVATE /W3 /WX-)
+    IF (NOT IS_LIBS_ONLY)
+        target_compile_options(${CORE_LIB_NAME} PRIVATE /W4 /WX-)
+    ENDIF()
+        target_compile_options(${CORE_LIB_NAME}_lib PRIVATE /W4 /WX-)
     endif()
-
+    IF (NOT IS_LIBS_ONLY)
     target_link_libraries(
         ${CORE_LIB_NAME}
 
         PRIVATE ${CORE_LIB_NAME}_lib
         ${ALL_LIBS}
     )
+    ENDIF()
 
     target_link_libraries(
         ${CORE_LIB_NAME}_lib
@@ -98,8 +106,9 @@ foreach(CORE_LIB_SUBDIR ${CORE_LIB_DIR})
     )
 
     set_property(TARGET ${CORE_LIB_NAME}_lib PROPERTY CXX_STANDARD 20)
+    IF (NOT IS_LIBS_ONLY)
     set_property(TARGET ${CORE_LIB_NAME} PROPERTY CXX_STANDARD 20)
-
+    ENDIF()
     # append to the list of all libraries
     list(APPEND ALL_LIBS ${CORE_LIB_NAME}_lib)
 endforeach()

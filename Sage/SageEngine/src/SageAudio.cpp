@@ -1,51 +1,197 @@
-/* Start Header ************************************************************************/
+ï»¿/* Start Header ************************************************************************/
 /*!
-\file		Game.cpp
-\title		
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
-\par		b.muhammadhafiz@digipen.edu
-\date		15 September 2024
-\brief		Contains the declarations of functions handling the game scene.
+\file		SageAudio.cpp
+\title		Memory's Flame
+\author		Halis Ilyasa Bin Amat Sarijan, halisilyasa.b, 2301333 (100%)
+\par		halisilyasa.b@digipen.edu
+\date		08 September 2024
+\brief		Contains the functions for creating, managing and playing audio.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.						
+			All content ï¿½ 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
-#include "SageAudio.hpp"
 
-FMOD_RESULT result;
-FMOD::System* p_system;
-FMOD::Sound* p_sound[g_maxAudio]; // WARNING: This design creates an additional array index to avoid NUM_AUDIO_BGM enum
-FMOD::Channel* p_channel[g_maxAudio];
-FMOD::ChannelGroup* master_audio_group, * audio_bgm_group, * audio_sfx_group, * audio_ui_group, * audio_ambient_group;
+#include "SageAudio.hpp"
+#include <backward.hpp>
+#include <cassert>
 
 namespace SageAudio
 {
+	FMOD_RESULT result;
+	FMOD::System* p_system;
+	FMOD::ChannelGroup* audio_bgm_group, * audio_sfx_group, * audio_ui_group, * audio_ambient_group, * master_audio_group;
+	std::vector<FMOD::ChannelGroup*> channel_group = { audio_bgm_group, audio_sfx_group, audio_ui_group, audio_ambient_group, master_audio_group };
+	std::vector<FMOD::Sound*> p_sound;
+	size_t p_sound_index{};
+	bool paused{ false };
+
 #pragma region Helper Functions
+	/*!*****************************************************************************
+	  \brief
+		Prints the type of error in FMOD.
+
+	  \param _result
+	    The enum type FMOD_RESULT.
+	*******************************************************************************/
 	void FMOD_ErrorCheck(FMOD_RESULT _result)
 	{
 		if (_result != FMOD_OK)
 		{
-			std::cout << "FMOD error! " << FMOD_ErrorString(_result);
+			
+			std::cerr << "FMOD ERROR! " << FMOD_ErrorString(_result);
+			assert(false);
 			exit(-1);
 		}
 	}
 
-	void Filesystem_Implementation()
+	/*!*****************************************************************************
+	  \brief
+		Prints the sound mode that will be set from FMOD.
+
+	  \param _mode
+		The enum type Sound_Mode.
+
+	  \return
+	    The name of the mode.
+	*******************************************************************************/
+	static const char* Mode_Getter(Sound_Mode _mode)
 	{
-		std::string path = PATH;
-		for (const auto &entry : std::filesystem::directory_iterator(path))
+		switch (_mode)
 		{
-			if(entry.is_directory())
+		case LOOP:      return "LOOP";
+		case NO_LOOP:	return "NO LOOP";
+		default:        return "FMOD_DEFAULT";
+		};
+	}
+#pragma endregion
+
+#pragma region Private Functions
+	/*!*****************************************************************************
+	  \brief
+		Plays a sound from the audio assets folder and sets the mode that it will
+		play at. The function also funnels which channel goup the sound will play at.
+
+	  \param _filename
+		The name of the audio file.
+
+	  \param _mode
+		The mode that the audio will at. Either LOOP or NO_LOOP.
+	*******************************************************************************/
+	void Play_Sound(const std::string& _filename, Sound_Mode _mode)
+	{
+		size_t i{ 0 };
+		for (const auto& [category, filenames] : Assets::Audio::Get_Audio())
+		{
+			for (const auto& filename : filenames)
 			{
-				std::cout << "Folder: " << entry.path() << std::endl;
+				if (filename == _filename)
+				{
+					result = p_sound[i]->setMode(Mode_Selector(_mode));
+					FMOD_ErrorCheck(result);
+					if (_filename.starts_with("bgm_"))
+					{
+						result = p_system->playSound(p_sound[i], channel_group[0], false, nullptr);
+						FMOD_ErrorCheck(result);
+						std::cout << "Playing BGM: " << _filename << " with " << Mode_Getter(_mode) << std::endl;
+						return;
+					}
+					else if (_filename.starts_with("sfx_"))
+					{
+						result = p_system->playSound(p_sound[i], channel_group[1], false, nullptr);
+						FMOD_ErrorCheck(result);
+						std::cout << "Playing SFX: " << _filename << " with " << Mode_Getter(_mode) << std::endl;
+						return;
+					}
+					else if (_filename.starts_with("ui_"))
+					{
+						result = p_system->playSound(p_sound[i], channel_group[2], false, nullptr);
+						FMOD_ErrorCheck(result);
+						std::cout << "Playing UI sound: " << _filename << " with " << Mode_Getter(_mode) << std::endl;
+						return;
+					}
+					else if (_filename.starts_with("ambient_"))
+					{
+						result = p_system->playSound(p_sound[i], channel_group[3], false, nullptr);
+						FMOD_ErrorCheck(result);
+						std::cout << "Playing Ambient sound: " << _filename << " with " << Mode_Getter(_mode) << std::endl;
+						return;
+					}
+				}
+				++i;
+			}
+		}
+		std::cerr << "ERROR: " << _filename << " doesn't exist!" << std::endl;
+	}
+
+	/*!*****************************************************************************
+	  \brief
+		Pauses all game audio excluding user interface sounds.
+
+	  \param _is_paused
+		Boolean to set if pause is true or false.
+	*******************************************************************************/
+	void Set_Pause(bool _is_paused)
+	{
+		channel_group[0]->setPaused(_is_paused);
+		channel_group[1]->setPaused(_is_paused);
+		channel_group[3]->setPaused(_is_paused);
+	}
+
+	/*!*****************************************************************************
+	  \brief
+		Retrieves the channel group to allow control of it.
+
+	  \param _channel
+		The name of the channel.
+
+	  \return
+		The channel group.
+	*******************************************************************************/
+	FMOD::ChannelGroup* Get_Channel(std::string _channel)
+	{
+		char name[4];
+		for (size_t i{ 0 }; i < Assets::Audio::Get_Audio().size(); ++i)
+		{
+			result = channel_group[i]->getName(name, sizeof(name));
+			FMOD_ErrorCheck(result);
+			if (std::string(name) == _channel)
+			{
+				return channel_group[i];
 			}
 			else
 			{
-				std::cout << "File: " << entry.path() << std::endl;
+				std::cerr << "ERROR: Channel " << _channel << " doesn't exist!" << std::endl;
+				exit(-1);
 			}
 		}
+		return nullptr;
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Sets the volume of the specified channel to the desired volume.
+
+	  \param _channel
+		The name of the channel. Used with Get_Channel().
+
+	  \param _volume
+		The desired volume from 0.0f to 1.0f
+	*******************************************************************************/
+	void Set_Volume(FMOD::ChannelGroup* _channel, float _volume)
+	{
+		_channel->setVolume(_volume);
+	}
+
+	/*!*****************************************************************************
+	  \brief
+		Sets the mode of how the audio will be played.
+
+	  \param _mode
+		The desired mode to set. Either LOOP or NO_LOOP.
+
+	  \return
+	    The defined FMOD_MODE.
+	*******************************************************************************/
 	FMOD_MODE Mode_Selector(Sound_Mode _mode)
 	{
 		switch (_mode)
@@ -55,32 +201,19 @@ namespace SageAudio
 		default:		return FMOD_DEFAULT;
 		}
 	}
-
-	static const char* Mode_Getter(Sound_Mode _index)
-	{
-		switch (_index)
-		{
-		case LOOP:      return "FMOD_LOOP_NORMAL";
-		case NO_LOOP:	return "FMOD_LOOP_OFF";
-		default:        return "FMOD_DEFAULT";
-		};
-	}
-#pragma endregion
-
-#pragma region Private Functions
-
-	void Play_Sound(size_t _audio_name, Sound_Mode _mode)
-	{
-		result = p_sound[_audio_name]->setMode(Mode_Selector(_mode));
-		FMOD_ErrorCheck(result);
-		std::cout << "Setting mode to " << Mode_Getter(_mode) << " for " << Filepath_Getter(_audio_name) << '\n';
-		result = p_system->playSound(p_sound[_audio_name], nullptr, false, nullptr);
-		FMOD_ErrorCheck(result);
-		std::cout << "Playing " << Filepath_Getter(_audio_name) << '\n';
-	}
 #pragma endregion
 
 #pragma region Public Functions
+
+	/*!*****************************************************************************
+	  \brief
+		Initializes the FMOD System (set at 512 playable audio at a time) and creates
+		4 channel groups for Background Music (bgm), Sound Effects (sfx), User
+		Interface (ui) and Ambience (ambient). It also sets the Master Channel for
+		the 4 channel groups to balance the Game Audio. The function also processes
+		a map of audio filenames generated from AssetLoader.cpp and turns them into
+		a FMOD Sound that can be played using Play_Sound().
+	*******************************************************************************/
 	void Init()
 	{
 		std::cout << "Creating audio system\n";
@@ -88,37 +221,82 @@ namespace SageAudio
 		FMOD_ErrorCheck(result);
 
 		std::cout << "Initializing FMOD\n";
-		result = p_system->init(g_maxAudio, FMOD_INIT_NORMAL, 0);
+		result = p_system->init(512, FMOD_INIT_NORMAL, 0);
 		FMOD_ErrorCheck(result);
 
-		for (size_t i{ 0 }; i < g_maxAudio; i++)
+		result = p_system->createChannelGroup("bgm", &channel_group[0]);
+		FMOD_ErrorCheck(result);
+		result = p_system->createChannelGroup("sfx", &channel_group[1]);
+		FMOD_ErrorCheck(result);
+		result = p_system->createChannelGroup("ui", &channel_group[2]);
+		FMOD_ErrorCheck(result);
+		result = p_system->createChannelGroup("ambient", &channel_group[3]);
+		FMOD_ErrorCheck(result);
+
+		result = p_system->getMasterChannelGroup(&channel_group.back());
+		FMOD_ErrorCheck(result);
+		for (size_t i{ 0 }; i < Assets::Audio::Get_Audio().size(); i++)
 		{
-			if (i == NUM_AUDIO_BGM || i == NUM_AUDIO_SFX || i == NUM_AUDIO_UI || i == NUM_AUDIO_AMBIENT)
-			{
-				continue;
-			}
-			std::cout << "Creating sound from " << Filepath_Getter(i) << '\n';
-			result = p_system->createSound(Filepath_Getter(i), FMOD_DEFAULT, nullptr, &p_sound[i]);
+			result = channel_group.back()->addGroup(channel_group[i]);
 			FMOD_ErrorCheck(result);
+		}
+
+		result = channel_group[4]->setVolume(1.f);
+		FMOD_ErrorCheck(result);
+		result = channel_group[0]->setVolume(.75f);
+		FMOD_ErrorCheck(result);
+		result = channel_group[1]->setVolume(1.f);
+		FMOD_ErrorCheck(result);
+		result = channel_group[2]->setVolume(.1f);
+		FMOD_ErrorCheck(result);
+		result = channel_group[3]->setVolume(.4f);
+		FMOD_ErrorCheck(result);
+
+
+		for (const auto& [channel, filenames] : Assets::Audio::Get_Audio())
+		{
+			p_sound_index += filenames.size();
+		}
+		p_sound.resize(p_sound_index);
+		p_sound_index = 0;
+
+		for (const auto& [channel, filenames] : Assets::Audio::Get_Audio())
+		{
+			for (const auto& filename : filenames)
+			{
+				std::string full_path = PATH + filename + AUDIO_EXTENSION;
+				std::cout << "Creating sound from " << full_path << '\n';
+				result = p_system->createSound(full_path.c_str(), FMOD_DEFAULT, nullptr, &p_sound[p_sound_index++]);
+				FMOD_ErrorCheck(result);
+			}
 		}
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Updates the FMOD system to handle audio playback.
+	*******************************************************************************/
 	void Update()
 	{
 		result = p_system->update();
 		FMOD_ErrorCheck(result);
 	}
 
+	/*!*****************************************************************************
+	  \brief
+		Releases all generated sound files, audio channel groups and the FMOD system.
+	*******************************************************************************/
 	void Exit()
 	{
-		std::cout << "Exiting";
-		for (size_t i{ 0 }; i < g_maxAudio; i++)
+		std::cout << "Exiting" << std::endl;
+		for (size_t i{ 0 }; i < p_sound.size(); i++)
 		{
-			if (i == NUM_AUDIO_BGM)
-			{
-				continue;
-			}
 			result = p_sound[i]->release();
+			FMOD_ErrorCheck(result);
+		}
+		for (size_t i{ 0 }; i < Assets::Audio::Get_Audio().size(); i++)
+		{
+			result = channel_group[i]->release();
 			FMOD_ErrorCheck(result);
 		}
 		result = p_system->release();

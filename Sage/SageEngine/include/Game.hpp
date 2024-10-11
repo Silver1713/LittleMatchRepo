@@ -1,22 +1,51 @@
 /* Start Header ************************************************************************/
 /*!
-\file		Splash_Screen.h
-\title		
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
+\file		Game.hpp
+\title		Memory's Flame
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
-\date		15 September 2024
-\brief		Contains the declarations of functions handling the game scene.
+\date		12 September 2024
+\brief		Contains the declarations of functions that defines the game scene.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.						
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #pragma once
+//Game Scene serving as testbed for level implementation
 namespace Game {
+	/*!*****************************************************************************
+	  \brief
+		Loads data the scene may need
+	*******************************************************************************/
 	void Load();
+	/*!*****************************************************************************
+	  \brief
+		Initializes the scene
+	*******************************************************************************/
 	void Init();
+	/*!*****************************************************************************
+	  \brief
+		Handles input checks in the scene
+	*******************************************************************************/
 	void Input();
+	/*!*****************************************************************************
+	  \brief
+		Updates the game scene
+	*******************************************************************************/
 	void Update();
+	/*!*****************************************************************************
+	  \brief
+		Draws the game scene
+	*******************************************************************************/
 	void Draw();
+	/*!*****************************************************************************
+	  \brief
+		Frees the game scene
+	*******************************************************************************/
 	void Free();
+	/*!*****************************************************************************
+	  \brief
+		Unloads the game scene
+	*******************************************************************************/
 	void Unload();
 }

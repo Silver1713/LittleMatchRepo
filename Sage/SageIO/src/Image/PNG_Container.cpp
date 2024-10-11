@@ -72,7 +72,7 @@ PNG_Container::byte_8 PNG_Container::pack8ByteLE(unsigned char data[])
 	return container;
 }
 
-PNG_Container::byte_4 PNG_Container::read4ByteLE(std::ifstream& file)
+PNG_Container::byte_4 PNG_Container::read4ByteLE()
 {
 	byte_4 value{};
 	image_file.read(reinterpret_cast<char*>(&value), 4);
@@ -80,7 +80,7 @@ PNG_Container::byte_4 PNG_Container::read4ByteLE(std::ifstream& file)
 	return value;
 }
 
-PNG_Container::byte_8 PNG_Container::read8ByteLE(std::ifstream& file)
+PNG_Container::byte_8 PNG_Container::read8ByteLE()
 {
 	byte_8 value{};
 	image_file.read(reinterpret_cast<char*>(&value), 8);
@@ -105,9 +105,9 @@ std::streampos PNG_Container::get_image_file_size()
 PNG_Container::byte_4 PNG_Container::getIDHRLen()
 {
 	byte_4 idhrlen{};
-	image_file.seekg(signature_byte, std::ios::beg);
+	image_file.seekg(static_cast<std::istream::off_type>(signature_byte), std::ios::beg);
 
-	idhrlen = read4ByteLE(image_file);
+	idhrlen = read4ByteLE();
 
 	image_file.seekg(0, std::ios::beg);
 
@@ -119,7 +119,7 @@ bool PNG_Container::isPNG(std::ifstream& file)
 {
 	byte_8 singature{ pack8ByteLE(PNG_Signature) };
 
-	byte_8 content = { read8ByteLE(file) };
+	byte_8 content = { read8ByteLE() };
 
 	if (content == singature) {
 		file.seekg(0, file.beg);
@@ -136,14 +136,14 @@ void PNG_Container::load_data()
 	byte_4 idhrlen = getIDHRLen();
 	image_file.seekg(idhrlen+3, std::ios::beg);
 
-	byte_4 width = read4ByteLE(image_file);
-	byte_4 height = read4ByteLE(image_file);
+	byte_4 width = read4ByteLE();
+	byte_4 height = read4ByteLE();
 	bit_depth = image_file.get();
 	color_type = image_file.get();
 	compression_method = image_file.get();
 	filter_method = image_file.get();
 	interlace_method = image_file.get();
-	CRC = read4ByteLE(image_file);
+	CRC = read4ByteLE();
 
 	// Next 4 byte will be the height
 	image_width = static_cast<size_t>(width);
@@ -152,7 +152,7 @@ void PNG_Container::load_data()
 	image_file.seekg(0, std::ios::beg);
 
 	char reader{};
-	bool isInIDAT{ false }, isInIEND{ false },isInHeader{false};
+	bool isInIDAT{ false }, isInIEND{ false };
 	image_data.reserve(height * width);
 	while (image_file)
 	{
