@@ -41,14 +41,15 @@ class SageAssembler
 	std::thread worker; //!< The thread that will compile the scripts
 
 
-	struct SageAssembly {
-		std::string name;
-		std::string path_to_assembly;
-	};
+	
 
 	
 
 public:
+	struct SageAssembly {
+		std::string name;
+		std::string path_to_assembly;
+	};
 	SageAssembler(size_t script_to_tread_ratio = 1); //!< Constructor
 	SageAssembler(std::string& name, std::string& content); //!< Constructor
 	
@@ -92,10 +93,10 @@ public:
 
 
 	void CompileGroup(); //!< Compile the scripts that are in the list of scripts that are to be compiled
-	void Compile(std::string const& name, std::string const& content); //!< Compile a script
-	void Compile(std::pair<std::string, std::string> const& script); //!< Compile a script
+	SageAssembly Compile(std::string const& name, std::string const& content); //!< Compile a script
+	SageAssembly Compile(std::pair<std::string, std::string> const& script); //!< Compile a script
 
-	void CompileFile(std::string const& path); //!< Compile a script from a file
+	SageAssembly CompileFile(std::string const& path); //!< Compile a script from a file
 	
 
 

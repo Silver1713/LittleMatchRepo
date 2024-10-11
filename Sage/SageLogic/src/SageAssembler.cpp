@@ -81,7 +81,7 @@ std::thread::id SageAssembler::Get_Thread_ID() const
 	return thread_id;
 }
 
-void SageAssembler::Compile(std::string const& name, std::string const& content)
+SageAssembler::SageAssembly SageAssembler::Compile(std::string const& name, std::string const& content)
 {
 	std::string compile_command = path_to_compiler_dir  + command;
 
@@ -90,7 +90,7 @@ void SageAssembler::Compile(std::string const& name, std::string const& content)
 	if (!file.is_open())
 	{
 		log = "Failed to open compiler";
-		return;
+		return{};
 	}
 
 	file.close();
@@ -123,7 +123,7 @@ void SageAssembler::Compile(std::string const& name, std::string const& content)
 	{
 		log = "Failed to compile";
 		std::cout << "Failed to compile" << std::endl;
-		return;
+		return {};
 	}
 	else {
 		log = "Compiled successfully";
@@ -139,26 +139,31 @@ void SageAssembler::Compile(std::string const& name, std::string const& content)
 
 	std::cout << "Compiled " << name << " into " << output_path << std::endl;
 
+	return { name, output_path };
+
 }
 
 
-void SageAssembler::CompileFile(std::string const& path)
+SageAssembler::SageAssembly SageAssembler::CompileFile(std::string const& path)
 {
 	std::ifstream file{ path };
 
 	if (!file.is_open())
 	{
 		log = "Failed to open file";
-		return;
+		return {};
 	}
 
 	std::string content{ std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>() };
 
 	file.close();
 
-	std::string name = path.substr(path.find_last_of("\\") + 1, path.find_last_of(".") - path.find_last_of("\\") - 1);
+	std::string name = path.substr(path.find_last_of("/")+1, path.find_last_of("s")-3 - path.find_last_of("/"));
+	std::cout << "Name: " << name << std::endl;
+	return Compile(name, content);
 
-	Compile(name, content);
+	
+
 
 
 }
