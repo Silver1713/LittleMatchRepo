@@ -94,6 +94,8 @@ public:
 	void CompileGroup(); //!< Compile the scripts that are in the list of scripts that are to be compiled
 	void Compile(std::string const& name, std::string const& content); //!< Compile a script
 	void Compile(std::pair<std::string, std::string> const& script); //!< Compile a script
+
+	void CompileFile(std::string const& path); //!< Compile a script from a file
 	
 
 

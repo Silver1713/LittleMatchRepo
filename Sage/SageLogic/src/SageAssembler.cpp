@@ -116,7 +116,8 @@ void SageAssembler::Compile(std::string const& name, std::string const& content)
 	std::string actual_command = compile_command + " " + flags + " " + temp_file_path + " -out:" + output_path;
 
 	int syscall_status = system(actual_command.c_str());
-	system("echo %CD%");
+
+	
 
 	if (syscall_status)
 	{
@@ -139,6 +140,30 @@ void SageAssembler::Compile(std::string const& name, std::string const& content)
 	std::cout << "Compiled " << name << " into " << output_path << std::endl;
 
 }
+
+
+void SageAssembler::CompileFile(std::string const& path)
+{
+	std::ifstream file{ path };
+
+	if (!file.is_open())
+	{
+		log = "Failed to open file";
+		return;
+	}
+
+	std::string content{ std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>() };
+
+	file.close();
+
+	std::string name = path.substr(path.find_last_of("\\") + 1, path.find_last_of(".") - path.find_last_of("\\") - 1);
+
+	Compile(name, content);
+
+
+}
+
+
 
 
 

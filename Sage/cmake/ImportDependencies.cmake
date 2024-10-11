@@ -218,17 +218,15 @@ macro (import_imgui)
         FetchContent_Declare(
             imgui
             GIT_REPOSITORY https://github.com/ocornut/imgui
-            GIT_TAG master
+            GIT_TAG docking
             SOURCE_DIR ${DEP_DIR}/imgui
         )
         FetchContent_MakeAvailable(imgui)
+        file(GLOB IMGUI_SOURCES ${imgui_SOURCE_DIR}/*.cpp)
         add_library(
             imgui
-            ${imgui_SOURCE_DIR}/imgui.cpp
-            ${imgui_SOURCE_DIR}/imgui_demo.cpp
-            ${imgui_SOURCE_DIR}/imgui_draw.cpp
-            ${imgui_SOURCE_DIR}/imgui_widgets.cpp
-            
+            ${IMGUI_SOURCES}
+            ${imgui_SOURCE_DIR}/imgui_internal.h
         )
         add_library(
             imgui_backends
