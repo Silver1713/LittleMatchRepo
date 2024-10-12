@@ -198,3 +198,8 @@ void SageRenderer::Clear_Color(ToastBox::Vec4 clr)
 
 }
 
+void SageRenderer::Draw_Filled_Instance(SageInstance& object)
+{
+	SageRendererInternal::Draw_Filled(object);
+}
+

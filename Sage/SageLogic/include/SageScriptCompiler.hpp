@@ -19,9 +19,16 @@
 #ifndef SAGE_ASSEMBLER_HPP
 #define SAGE_ASSEMBLER_HPP
 
+#include <map>
+#include <mutex>
 #include <thread>
 #include <vector>
 #include <string>
+
+struct SageAssembly {
+	std::string name;
+	std::string path_to_assembly;
+};
 class SageAssembler
 {
 	size_t script_to_tread_ratio; //!< How many scripts that the assembler can accept to compile per thread
@@ -41,15 +48,18 @@ class SageAssembler
 	std::thread worker; //!< The thread that will compile the scripts
 
 
+	std::map<std::string, SageAssembly> assemblies;
+
+
+	static std::mutex mutex; //!< Mutex to lock the assembler
+
 	
 
 	
 
 public:
-	struct SageAssembly {
-		std::string name;
-		std::string path_to_assembly;
-	};
+	static std::string const FILE_MODE;
+	
 	SageAssembler(size_t script_to_tread_ratio = 1); //!< Constructor
 	SageAssembler(std::string& name, std::string& content); //!< Constructor
 	
@@ -79,9 +89,7 @@ public:
 
 	// Threading functions
 	std::thread::id Get_Thread_ID() const; //!< Get the thread id of the current thread that is compiling the scripts.
-	bool Check_Running() const; //!< Check if the current thread that is compiling the scripts is running.
-	void Join(); //!< Join the current thread that is compiling the scripts.
-	void Detach(); //!< Detach the current thread that is compiling the scripts.
+	
 
 	// Script functions
 	void Add_Script(std::string const& name, std::string const& content); //!< Add a script to the list of scripts that are to be compiled
@@ -97,9 +105,15 @@ public:
 	SageAssembly Compile(std::pair<std::string, std::string> const& script); //!< Compile a script
 
 	SageAssembly CompileFile(std::string const& path); //!< Compile a script from a file
+
+	void CompileFileAsync(std::string const& path); //!< Compile a script from a file asynchronously - this is a non-blocking call
+	void CompileScriptAsync(std::string const& name, std::string const& content); //!< Compile a script from a file asynchronously - this is a non-blocking call
 	
+	void CompileGroupAsync(); // Threaded process that spawns threads to compile the scripts
+	void StartCompilation(); //!< Start the a asynchronous compilation process
+	void Wait_For_Compile(); //!< Wait for the thread to finish compiling the scripts
 
-
+	SageAssembly Get_Assembly(std::string const& name); //!< Get the assembly that was compiled
 
 
 };

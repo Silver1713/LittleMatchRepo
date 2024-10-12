@@ -2,26 +2,36 @@
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/debug-helpers.h>
 #include <iostream>
-
-#include "SageAssembler.hpp"
+#include <chrono>
+#include "SageScriptCompiler.hpp"
 MonoDomain* domain;
 char const* domain_name = "Environment.exe";
 int main(){
-
+	// Get Start time
+	auto start = std::chrono::high_resolution_clock::now();
+	
 	SageAssembler assembler{};
 	assembler.Init("..\\MONO\\bin\\", "..\\SageLogic\\programs");
 
-	assembler.Set_Command("csc");
+	assembler.Set_Command("mcs");
 	assembler.Set_Compile_Flags("/target:exe");
-	
-	SageAssembler::SageAssembly  assembly_o = assembler.CompileFile("../SageLogic/scripts/abc.cs");
-	std::cout << "C# code compiled successfully\n";
 
+	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/abc.cs");
+	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/hello.cs");
+	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/abc1.cs");
+	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/hello1.cs");
+	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/abc2.cs");
+	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/hello2.cs");
+	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/abc3.cs");
+	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/hello3.cs");
+	assembler.StartCompilation();
+	std::cout << "Compiling C# Code...\n";
+	assembler.Wait_For_Compile();
+	std::cout << "C# code compiled successfully\n";
 	mono_set_dirs("../MONO/lib", "../MONO/etc");
-	// RUn a mono HelloWorld.exe
 	domain = mono_jit_init(domain_name);
 	//load assembly
-	MonoAssembly* assembly = mono_domain_assembly_open(domain, assembly_o.path_to_assembly.c_str());
+	MonoAssembly* assembly = mono_domain_assembly_open(domain, assembler.Get_Assembly("abc").path_to_assembly.c_str());
 	if (!assembly) {
 		printf("Failed to open assembly\n");
 		return 1;
@@ -48,6 +58,11 @@ int main(){
 	std::cout << "C# code executed successfully\n";
 	mono_jit_cleanup(domain);
 	delete[] argv[0];
+
+	// get elapsed time
+	auto end = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	std::cout << "Elapsed time: " << elapsed.count() << "s\n";
 	return 0;
 
 	
