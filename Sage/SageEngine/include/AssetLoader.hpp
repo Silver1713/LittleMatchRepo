@@ -98,6 +98,7 @@ namespace Assets
 		struct Prefab
 		{
 			std::string prefab_ID{};
+			std::string transform_type{};
 			ToastBox::Vec3 positions{};
 			ToastBox::Vec3 rotations{};
 			ToastBox::Vec3 scale{};
@@ -204,10 +205,10 @@ namespace Assets
 		{
 			std::vector<Prefabs::Prefab> prefabs;
 			std::vector<std::string> identifier;
-			std::vector<std::array<float, 3>> positions;
-			std::vector<std::array<float, 3>> rotations;
-			std::vector<std::array<float, 3>> scale;
-			std::vector<std::array<float, 4>> color;
+			std::vector<ToastBox::Vec3> positions;
+			std::vector<ToastBox::Vec3> rotations;
+			std::vector<ToastBox::Vec3> scale;
+			std::vector<ToastBox::Vec4> color;
 			std::vector<unsigned int> z_orders;
 		};
 		//the label for each type of information in a deserialized Level

@@ -29,6 +29,10 @@ namespace Game_Objects
 	const unsigned int max_z_orders{3};
 	static std::unordered_map<std::string, std::unique_ptr<GameObject>> g_game_objects;
 
+	static std::vector<std::unique_ptr<GameObject>*> screen_space_game_objects;
+	static std::vector<std::unique_ptr<GameObject>*> world_space_game_objects;
+
+
 	/*!*****************************************************************************
 	  \brief
 		Initializes all components of all gameobjects
@@ -68,17 +72,26 @@ namespace Game_Objects
 
 		for (unsigned int current_z{}; current_z <= max_z_orders; ++current_z)
 		{
-			for (auto& _g : g_game_objects)
+			for (auto& go : world_space_game_objects)
 			{
-				if (_g.second)
+				if (go->get()->Get_Z_Order() == current_z)
 				{
-					if (_g.second->Get_Z_Order() == current_z)
-					{
-						_g.second->Draw();
-					}
+					go->get()->Draw();
+				}
+			}			
+		}
+
+		for (unsigned int current_z{}; current_z <= max_z_orders; ++current_z)
+		{
+			for (auto& go : screen_space_game_objects)
+			{
+				if (go->get()->Get_Z_Order() == current_z)
+				{
+					go->get()->Draw();
 				}
 			}
 		}
+
 	}
 
 	/*!*****************************************************************************
@@ -118,6 +131,14 @@ namespace Game_Objects
 		}
 
 		g_game_objects[_identifier] = std::move(_g);
+		if (g_game_objects[_identifier].get()->Get_Component(UITRANSFORM))
+		{
+			screen_space_game_objects.push_back(&g_game_objects[_identifier]);
+		}
+		else 
+		{
+			world_space_game_objects.push_back(&g_game_objects[_identifier]);
+		}
 		return &g_game_objects[_identifier];
 	}
 
@@ -171,6 +192,8 @@ namespace Game_Objects
 	{
 		SageObjectManager::Destroy_All_Objects();
 		g_game_objects.clear();
+		world_space_game_objects.clear();
+		screen_space_game_objects.clear();
 	}
 }
 
@@ -195,26 +218,41 @@ GameObject::GameObject(){}
 *******************************************************************************/
 GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _identifier, unsigned int _z_order) : identifier{_identifier}, z_order{_z_order}
 {
-	Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
-	if (!(_p.sprite_texture_ID == "Nil"))
+	if (_p.transform_type == "Screen")
 	{
-		Add_Component(std::make_unique<Sprite2D>(_p.sprite_texture_ID, _p.colour,_p.object_shape));
+		Add_Component(std::make_unique<UITransform>(_p.positions, _p.rotations, _p.scale));
+		if (!(_p.sprite_texture_ID == "Nil"))
+		{
+			Add_Component(std::make_unique<Image>(_p.sprite_texture_ID, _p.colour, _p.object_shape));
+		}
+		else
+		{
+			Add_Component(std::make_unique<Image>("", _p.colour, _p.object_shape));
+		}
 	}
 	else
 	{
-		Add_Component(std::make_unique<Sprite2D>("", _p.colour, _p.object_shape));
-	}
-	if (!(_p.collision_data == "Nil"))
-	{
-		Add_Component(std::make_unique<BoxCollider2D>());
-	}
-	if (!(_p.has_physics == "Nil"))
-	{
-		Add_Component(std::make_unique<Physics>(ToastBox::Vec2{ _p.velocity ,_p.velocity }));
-	}
-	if (!(_p.audio_data == "Nil"))
-	{
-		Add_Component(std::make_unique<Audio>());
+		Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
+		if (!(_p.sprite_texture_ID == "Nil"))
+		{
+			Add_Component(std::make_unique<Sprite2D>(_p.sprite_texture_ID, _p.colour, _p.object_shape));
+		}
+		else
+		{
+			Add_Component(std::make_unique<Sprite2D>("", _p.colour, _p.object_shape));
+		}
+		if (!(_p.collision_data == "Nil"))
+		{
+			Add_Component(std::make_unique<BoxCollider2D>());
+		}
+		if (!(_p.has_physics == "Nil"))
+		{
+			Add_Component(std::make_unique<Physics>(ToastBox::Vec2{ _p.velocity ,_p.velocity }));
+		}
+		if (!(_p.audio_data == "Nil"))
+		{
+			Add_Component(std::make_unique<Audio>());
+		}
 	}
 
 	Init();

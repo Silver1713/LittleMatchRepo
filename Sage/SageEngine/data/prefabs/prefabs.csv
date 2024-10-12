@@ -1,12 +1,13 @@
 Prefab ID,Transform Type,Position X,Position Y,Position Z,Rotation X,Rotation Y,Rotation Z,Scale X ,Scale Y,Scale Z,R,G ,B,A,Sprite Texture ID,Collision Data,Has Physics,Velocity,Audio Data,Object Shape
-DIGIPEN_SPLASH_SCREEN,WORLD_SPACE,0,0,0,0,0,0,1920,1080,0,1,1,1,1,DIGIPEN_SPLASH_SCREEN,Nil,Nil,0,Nil,Rect
-BLUE_SKY,WORLD_SPACE,0,0,0,0,0,0,1920,1080,0,1,1,1,1,BLUE_SKY,Nil,Nil,0,Nil,Rect
-FADE_SCREEN,WORLD_SPACE,0,0,0,0,0,0,1920,1080,0,0,0,0,1,Nil,Nil,Nil,0,Nil,Rect
-BLACK,WORLD_SPACE,0,0,0,0,0,0,100,100,0,0,0,0,1,Nil,Nil,Nil,0,Nil,Rect
-WHITE,WORLD_SPACE,0,0,0,0,0,0,100,100,0,1,1,1,1,Nil,Nil,Nil,0,Nil,Rect
-RED,WORLD_SPACE,0,0,0,0,0,0,100,100,0,1,1,0,1,Nil,Yes,Yes,0,Nil,Rect
-GREEN,WORLD_SPACE,0,0,0,0,0,0,100,100,0,0,1,0,1,Nil,Nil,Nil,0,Nil,Rect
-BLUE,WORLD_SPACE,0,0,0,0,0,0,100,100,0,0,0,1,1,Nil,Yes,Nil,0,Nil,Rect
-CIRCLE,WORLD_SPACE,0,0,0,0,0,0,100,100,0,1,1,0,1,Nil,Nil,Nil,0,Nil,Circle
-SPAWN,WORLD_SPACE,0,0,0,0,0,0,100,100,0,1,0,1,1,Nil,Yes,Nil,0,Nil,Rect
-GUI_TEST,SCREEN_SPACE,0,0,0,0,0,0,100,100,0,1,0,1,1,Nil,Nil,Nil,0,Nil,Rect
+DIGIPEN_SPLASH_SCREEN,World,0,0,0,0,0,0,1920,1080,0,1,1,1,1,DIGIPEN_SPLASH_SCREEN,Nil,Nil,0,Nil,Rect
+BLUE_SKY,World,0,0,0,0,0,0,1920,1080,0,1,1,1,1,BLUE_SKY,Nil,Nil,0,Nil,Rect
+FADE_SCREEN,World,0,0,0,0,0,0,1920,1080,0,0,0,0,1,Nil,Nil,Nil,0,Nil,Rect
+BLACK,World,0,0,0,0,0,0,100,100,0,0,0,0,1,Nil,Nil,Nil,0,Nil,Rect
+WHITE,World,0,0,0,0,0,0,100,100,0,1,1,1,1,Nil,Nil,Nil,0,Nil,Rect
+RED,World,0,0,0,0,0,0,100,100,0,1,1,0,1,Nil,Yes,Yes,0,Nil,Rect
+GREEN,World,0,0,0,0,0,0,100,100,0,0,1,0,1,Nil,Nil,Nil,0,Nil,Rect
+BLUE,World,0,0,0,0,0,0,100,100,0,0,0,1,1,Nil,Yes,Nil,0,Nil,Rect
+CIRCLE,World,0,0,0,0,0,0,100,100,0,1,1,0,1,Nil,Nil,Nil,0,Nil,Circle
+SPAWN,World,0,0,0,0,0,0,100,100,0,1,0,1,1,Nil,Yes,Nil,0,Nil,Rect
+GUI_TEST,Screen,0,0,0,0,0,0,100,100,0,0.75,0,0,1,Nil,Nil,Nil,0,Nil,Rect
+GUI_TEST_TEXTURE,Screen,0,0,0,0,0,0,100,100,0,1,1,1,1,WASD,Nil,Nil,0,Nil,Rect

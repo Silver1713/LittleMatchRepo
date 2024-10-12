@@ -56,7 +56,7 @@ namespace Assets
 				Texture t;
 				try
 				{
-					t.filepath = source.comma_seperated_data[i].associated_data[FILEPATH];
+					t.filepath = source.comma_seperated_data[i].associated_data[FILEPATH];					
 					t.width = std::stof(source.comma_seperated_data[i].associated_data[WIDTH]);
 					t.height = std::stof(source.comma_seperated_data[i].associated_data[HEIGHT]);
 					t.sprites_per_row = std::stoul(source.comma_seperated_data[i].associated_data[SPRITES_PER_ROW]);
@@ -158,6 +158,7 @@ namespace Assets
 				try
 				{
 					p.prefab_ID = source.comma_seperated_data[i].associated_data[PREFAB_ID];
+					p.transform_type = source.comma_seperated_data[i].associated_data[TRANSFORM_TYPE];
 					p.positions.x = std::stof(source.comma_seperated_data[i].associated_data[POS_X]);
 					p.positions.y = std::stof(source.comma_seperated_data[i].associated_data[POS_Y]);
 					p.positions.z = std::stof(source.comma_seperated_data[i].associated_data[POS_Z]);
@@ -365,7 +366,7 @@ namespace Assets
 						l.prefabs.push_back(Prefabs::generated_prefabs[sources[i].comma_seperated_data[j].associated_data[PREFAB_ID]]);
 						l.identifier.push_back(sources[i].comma_seperated_data[j].associated_data[IDENTIFIER]);
 
-						std::array<float, 3> position
+						ToastBox::Vec3 position
 						{
 							std::stof(sources[i].comma_seperated_data[j].associated_data[POS_X]),
 							std::stof(sources[i].comma_seperated_data[j].associated_data[POS_Y]),
@@ -374,7 +375,7 @@ namespace Assets
 
 						l.positions.push_back(position);
 
-						std::array<float, 3> rotation
+						ToastBox::Vec3 rotation
 						{
 							std::stof(sources[i].comma_seperated_data[j].associated_data[ROT_X]),
 							std::stof(sources[i].comma_seperated_data[j].associated_data[ROT_Y]),
@@ -383,7 +384,7 @@ namespace Assets
 
 						l.rotations.push_back(rotation);
 
-						std::array<float, 3> scale
+						ToastBox::Vec3 scale
 						{
 							std::stof(sources[i].comma_seperated_data[j].associated_data[SCALE_X]),
 							std::stof(sources[i].comma_seperated_data[j].associated_data[SCALE_Y]),
@@ -392,7 +393,7 @@ namespace Assets
 
 						l.scale.push_back(scale);
 
-						std::array<float, 4> color
+						ToastBox::Vec4 color
 						{
 							std::stof(sources[i].comma_seperated_data[j].associated_data[COLOR_R]),
 							std::stof(sources[i].comma_seperated_data[j].associated_data[COLOR_G]),
