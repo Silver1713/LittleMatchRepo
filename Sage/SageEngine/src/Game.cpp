@@ -34,10 +34,10 @@
 namespace Game {
 	//TESTS
 	static unsigned int const game_objects_to_create{ 2500 };
-	static float const min_pos[3]{ -960.0f,-540.0f,0.0f }, max_pos[3]{ 1920.0f,1080.0f,0.0f };
-	static float const min_rot[3]{ 0.0f,0.0f,0.0f }, max_rot[3]{ 360.0f,360.0f,0.0f };
-	static float const min_scale[3]{ 1.0f,1.0f,0.0f }, max_scale[3]{ 10.0f,10.0f,0.0f };
-	static float const min_col[3]{ 0.0f,0.0f,0.0f }, max_col[3]{ 100.0f,100.0f,100.0f };
+	static ToastBox::Vec3 const min_pos{ -960.0f,-540.0f,0.0f }, max_pos{ 1920.0f,1080.0f,0.0f };
+	static ToastBox::Vec3 const min_rot{ 0.0f,0.0f,0.0f }, max_rot{ 360.0f,360.0f,0.0f };
+	static ToastBox::Vec3 const min_scale{ 1.0f,1.0f,0.0f }, max_scale{ 10.0f,10.0f,0.0f };
+	static ToastBox::Vec3 const min_col{ 0.0f,0.0f,0.0f }, max_col{ 100.0f,100.0f,100.0f };
 
 	static std::unordered_map<std::string, GameObject*> game_objects;
 	static std::unordered_map<std::string, Transform*> transform_cache;
@@ -77,22 +77,20 @@ namespace Game {
 			transform_cache[std::to_string(i)] = dynamic_cast<Transform*>(game_objects[std::to_string(i)]->Get_Component(TRANSFORM));
 
 			//randomize properties
-			float pos[3]{ (float)(std::rand() % (int)max_pos[0] + (int)min_pos[0]), (float)(std::rand() % (int)max_pos[1] + (int)min_pos[1]),0.0f };
-			float rot[3]{ (float)(std::rand() % (int)max_rot[0] + (int)min_rot[0]), (float)(std::rand() % (int)max_rot[1] + (int)min_rot[1]),0.0f };
-			float scale[3]{ (float)(std::rand() % (int)max_scale[0] + (int)min_scale[0]), (float)(std::rand() % (int)max_scale[1] + (int)min_scale[1]),0.0f };
-			float col[3]{ (float)(std::rand() % (int)max_col[0] + (int)min_col[0]) / 100.0f, (float)(std::rand() % (int)max_col[1] + (int)min_col[1]) / 100.0f,(float)(std::rand() % (int)max_col[2] + (int)min_col[2]) / 100.0f };
+			ToastBox::Vec3 pos{ (float)(std::rand() % (int)max_pos.x + (int)min_pos.x), (float)(std::rand() % (int)max_pos.y + (int)min_pos.y),0.0f };
+			ToastBox::Vec3 rot{ (float)(std::rand() % (int)max_rot.x + (int)min_rot.x), (float)(std::rand() % (int)max_rot.y + (int)min_rot.y),0.0f };
+			ToastBox::Vec3 scale{ (float)(std::rand() % (int)max_scale.x + (int)min_scale.x), (float)(std::rand() % (int)max_scale.y + (int)min_scale.y),0.0f };
+			ToastBox::Vec3 col{ (float)(std::rand() % (int)max_col.x + (int)min_col.x) / 100.0f, (float)(std::rand() % (int)max_col.y + (int)min_col.y) / 100.0f,(float)(std::rand() % (int)max_col.z + (int)min_col.z) / 100.0f };
 
-			transform_cache[std::to_string(i)]->Set_Positions({ pos[0],pos[1],pos[2] });
-			transform_cache[std::to_string(i)]->Set_Rotations({ rot[0],rot[1],rot[2] });
-			transform_cache[std::to_string(i)]->Set_Scale({ scale[0],scale[1],scale[2] });
+			transform_cache[std::to_string(i)]->Set_Position(pos);
+			transform_cache[std::to_string(i)]->Set_Rotation(rot);
+			transform_cache[std::to_string(i)]->Set_Scale(scale);
 
 			Sprite2D* s = dynamic_cast<Sprite2D*>(game_objects[std::to_string(i)]->Get_Component(SPRITE2D));
 			s->Set_Colour({ col[0],col[1],col[2] });
 
 			game_objects[std::to_string(i)]->Disable();
 		}
-		//Game_Objects::Get_Game_Object("Player")->Add_Component(std::make_unique<BoxCollider2D>());
-
 	}
 
 	/*!*****************************************************************************
@@ -257,17 +255,14 @@ namespace Game {
 			
 
 
-			float pos[3]{ world.x,world.y,0.f };
-			float rot[3]{ (float)(std::rand() % (int)max_rot[0] + (int)min_rot[0]), (float)(std::rand() % (int)max_rot[1] + (int)min_rot[1]),0.0f };
-			float scale[3]{ (float)(std::rand() % (int)m_max_scale[0] + (int)m_min_scale[0]), (float)(std::rand() % (int)m_max_scale[1] + (int)m_min_scale[1]),0.0f };
-			float col[3]{ (float)(std::rand() % (int)max_col[0] + (int)min_col[0]) / 100.0f, (float)(std::rand() % (int)max_col[1] + (int)min_col[1]) / 100.0f,(float)(std::rand() % (int)max_col[2] + (int)min_col[2]) / 100.0f };
+			ToastBox::Vec3 pos{ (float)(std::rand() % (int)max_pos.x + (int)min_pos.x), (float)(std::rand() % (int)max_pos.y + (int)min_pos.y),0.0f };
+			ToastBox::Vec3 rot{ (float)(std::rand() % (int)max_rot.x + (int)min_rot.x), (float)(std::rand() % (int)max_rot.y + (int)min_rot.y),0.0f };
+			ToastBox::Vec3 scale{ (float)(std::rand() % (int)max_scale.x + (int)min_scale.x), (float)(std::rand() % (int)max_scale.y + (int)min_scale.y),0.0f };
+			ToastBox::Vec3 col{ (float)(std::rand() % (int)max_col.x + (int)min_col.x) / 100.0f, (float)(std::rand() % (int)max_col.y + (int)min_col.y) / 100.0f,(float)(std::rand() % (int)max_col.z + (int)min_col.z) / 100.0f };
 
-			transform_cache["White_1"]->Set_Positions({ pos[0],pos[1],pos[2] });
-			transform_cache["White_1"]->Set_Rotations({ rot[0],rot[1],rot[2] });
-			transform_cache["White_1"]->Set_Scale({ scale[0],scale[1],scale[2] });
-
-
-
+			transform_cache["White 1"]->Set_Position(pos);
+			transform_cache["White 1"]->Set_Rotation(rot);
+			transform_cache["White 1"]->Set_Scale(scale);
 
 		}
 		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_RIGHT))
@@ -286,14 +281,14 @@ namespace Game {
 			{
 				for (unsigned int i{}; i < 3; i++)
 				{
-					float pos[3]{ (float)(std::rand() % (int)max_pos[0] + (int)min_pos[0]), (float)(std::rand() % (int)max_pos[1] + (int)min_pos[1]),0.0f };
-					float rot[3]{ (float)(std::rand() % (int)max_rot[0] + (int)min_rot[0]), (float)(std::rand() % (int)max_rot[1] + (int)min_rot[1]),0.0f };
+					ToastBox::Vec3 pos{ (float)(std::rand() % (int)max_pos.x + (int)min_pos.x), (float)(std::rand() % (int)max_pos.y + (int)min_pos.y),0.0f };
+					ToastBox::Vec3 rot{ (float)(std::rand() % (int)max_rot.x + (int)min_rot.x), (float)(std::rand() % (int)max_rot.y + (int)min_rot.y),0.0f };
 
 					game_objects["Green" + std::to_string(i)] = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("GREEN"), "Green" + std::to_string(i));
 					transform_cache["Green" + std::to_string(i)] = dynamic_cast<Transform*>(game_objects["Green" + std::to_string(i)]->Get_Component(TRANSFORM));
 
-					transform_cache["Green" + std::to_string(i)]->Set_Positions({ pos[0],pos[1],pos[2] });
-					transform_cache["Green" + std::to_string(i)]->Set_Rotations({ rot[0],rot[1],rot[2] });
+					transform_cache["Green" + std::to_string(i)]->Set_Position(pos);
+					transform_cache["Green" + std::to_string(i)]->Set_Rotation(rot);
 				}
 			}
 		}
@@ -382,11 +377,11 @@ namespace Game {
 						// Retrieve necessary components
 						GameObject* parent = collider->Get_Parent();
 						Transform* transform = parent->Get_Component<Transform>();
-						ToastBox::Vec3 prevPos = transform->previous_position;
+						ToastBox::Vec3 prevPos = transform->Get_Prev_Position();
 
 						// Get the current velocity
 						ToastBox::Vec2 curr_vel = phys->Get_Velocity();
-						ToastBox::Vec3 pos = { transform->Get_Positions()[0], transform->Get_Positions()[1], transform->Get_Positions()[2] };
+						ToastBox::Vec3 pos = { transform->Get_Position()[0], transform->Get_Position()[1], transform->Get_Position()[2] };
 
 						ToastBox::Vec3 dir = pos - prevPos; // Direction of movement
 
@@ -415,7 +410,7 @@ namespace Game {
 								vel.x = 0;
 							}
 
-							transform->Set_Positions({ curr_vel.x * time + prevPos.x,pos.y, 1.f });
+							transform->Set_Position({ curr_vel.x * time + prevPos.x,pos.y, 1.f });
 						}
 						else
 						{
@@ -430,7 +425,7 @@ namespace Game {
 								vel.y = 0;
 							}
 
-							transform->Set_Positions({ pos.x, curr_vel.y * time + prevPos.y, 1.f });
+							transform->Set_Position({ pos.x, curr_vel.y * time + prevPos.y, 1.f });
 						}
 
 

@@ -13,6 +13,8 @@
 */
 /* End Header **************************************************************************/
 #pragma once
+#include "Vector3.h"
+#include "Vector4.h"
 #include <unordered_map>
 #include <array>
 #include <string>
@@ -96,10 +98,10 @@ namespace Assets
 		struct Prefab
 		{
 			std::string prefab_ID{};
-			float positions[3]{};
-			float rotations[3]{};
-			float scale[3]{};
-			float colour[4]{};
+			ToastBox::Vec3 positions{};
+			ToastBox::Vec3 rotations{};
+			ToastBox::Vec3 scale{};
+			ToastBox::Vec4 colour{};
 			std::string sprite_texture_ID{};
 			std::string collision_data{};
 			std::string has_physics{};
@@ -112,6 +114,7 @@ namespace Assets
 		typedef enum
 		{
 			PREFAB_ID,
+			TRANSFORM_TYPE,
 			POS_X,
 			POS_Y,
 			POS_Z,

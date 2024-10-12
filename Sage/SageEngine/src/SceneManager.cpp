@@ -125,8 +125,8 @@ namespace SM {
 			Sprite2D* s;
 			g = Game_Objects::Instantiate(current_level.prefabs[i], current_level.identifier[i],current_level.z_orders[i]);
 			t = dynamic_cast<Transform*>(g->Get_Component(TRANSFORM));
-			t->Set_Positions({ current_level.positions[i][0],current_level.positions[i][1],current_level.positions[i][2] });
-			t->Set_Rotations({ current_level.rotations[i][0],current_level.rotations[i][1],current_level.rotations[i][2] });
+			t->Set_Position({ current_level.positions[i][0],current_level.positions[i][1],current_level.positions[i][2] });
+			t->Set_Rotation({ current_level.rotations[i][0],current_level.rotations[i][1],current_level.rotations[i][2] });
 			t->Set_Scale({ current_level.scale[i][0],current_level.scale[i][1],current_level.scale[i][2] });
 
 			s = dynamic_cast<Sprite2D*>(g->Get_Component(SPRITE2D));

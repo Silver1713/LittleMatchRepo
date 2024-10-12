@@ -357,6 +357,70 @@ namespace ToastBox {
 	}
 
 	/*!*****************************************************************************
+	  \brief
+	  Overloads subscript operator to access x, y or z in the Vec3
+	
+	  \param _index
+	  Index to return
+
+	  \return
+	  float in x, y or z
+	*******************************************************************************/
+	float& Vec3::operator[](unsigned int const _index)
+	{
+		switch (_index)
+		{
+		case 0:
+			return x;
+			break;
+
+		case 1:
+			return y;
+			break;
+
+		case 2:
+			return z;
+			break;
+
+		default:
+			return z;
+			break;
+		}
+	}
+
+	/*!*****************************************************************************
+	  \brief
+	  Overloads subscript operator to access x, y or z in the Vec3
+
+	  \param _index
+	  Index to return
+
+	  \return
+	  float in x, y or z
+	*******************************************************************************/
+	float const& Vec3::operator[](unsigned int const _index) const
+	{
+		switch (_index)
+		{
+		case 0:
+			return x;
+			break;
+
+		case 1:
+			return y;
+			break;
+
+		case 2:
+			return z;
+			break;
+
+		default:
+			return z;
+			break;
+		}
+	}
+
+	/*!*****************************************************************************
 	 \brief
 	  Compute the cross product with another vector and return the result
 
@@ -425,6 +489,4 @@ namespace ToastBox {
 	bool operator==(Vec3 const& lhs, Vec3 const& rhs) {
 		return (lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z);
 	}
-
-
 }

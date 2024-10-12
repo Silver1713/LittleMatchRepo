@@ -1,12 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
-\file		Transform.hpp
+\file		UITransform.hpp
 \title		Little Match
 \author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
-\date		10 September 2024
-\brief		Contains the derived class Transform that overrides the virtual functions of the
-			base class Component to do transform specific tasks.
+\date		12 October 2024
+\brief		Contains the derived class UITransform that overrides the virtual functions of the
+			base class Component to do transform specific tasks. Uses screen space instead
+			of Transform's world space.
 
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
@@ -16,28 +17,32 @@
 #include "Vector3.h"
 #include "Matrix3x3.h"
 
-//derived component class Transform that handles object transforms including positions, rotations and scales
-class Transform : public Component
+//derived component class UITransform that handles object transforms including positions, rotations and scales
+class UITransform : public Component
 {
 private:
-	ToastBox::Vec3 previous_position{};
-
-	ToastBox::Vec3 position{};
-	ToastBox::Vec3 rotation{};
-	ToastBox::Vec3 scale{};
+	float positions[3]{};
+	float rotations[3]{};
+	float scale[3]{};
+	bool is_UI_Element{ false };
 
 	ToastBox::Matrix3x3 model_matrix{};
 
 public:
-	/*!*****************************************************************************
-	  \brief
-		Default constructor for Transform
-	*******************************************************************************/
-	Transform();
+	ToastBox::Vec3 previous_position{};
+	ToastBox::Vec3 position{};
+	ToastBox::Vec3 rotation{};
+	ToastBox::Vec3 scaling{};
 
 	/*!*****************************************************************************
 	  \brief
-		Constructor for Transform that has values for initial positions, rotations and scales
+		Default constructor for UITransform
+	*******************************************************************************/
+	UITransform();
+
+	/*!*****************************************************************************
+	  \brief
+		Constructor for UITransform that has values for initial positions, rotations and scales
 
 	  \param _pos
 		initial positions for the transform
@@ -51,11 +56,11 @@ public:
 	  \param _is_UI_element
 		whether this gameobject is a UI element.
 	*******************************************************************************/
-	Transform(ToastBox::Vec3 const& _pos, ToastBox::Vec3 const& _rot, ToastBox::Vec3 const& _scale);
+	UITransform(float const* _pos, float const* _rot, float const* _scale, bool _is_UI_element = false);
 
 	/*!*****************************************************************************
 	  \brief
-		Override constructor for Transform that has values for initial positions, rotations and scales
+		Override constructor for UITransform that has values for initial positions, rotations and scales
 
 	  \param _pos
 		initial positions for the transform
@@ -66,11 +71,11 @@ public:
 	  \param _scale
 		initial scales for the transform
 	*******************************************************************************/
-	Transform(std::initializer_list<float> const& _pos, std::initializer_list<float> const& _rot, std::initializer_list<float> const& _scale);
+	UITransform(std::initializer_list<float> const& _pos, std::initializer_list<float> const& _rot, std::initializer_list<float> const& _scale);
 
 	/*!*****************************************************************************
 	  \brief
-		This function initializes the component along with any Transform specific
+		This function initializes the component along with any UITransform specific
 		members that need initializing
 
 	  \param _parent
@@ -80,7 +85,7 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
-		Updates members of Transform separately from the set functions
+		Updates members of UITransform separately from the set functions
 	*******************************************************************************/
 	void Update() override;
 
@@ -107,7 +112,7 @@ public:
 	  \param _new_pos
 		new positions for the transform
 	*******************************************************************************/
-	void Set_Position(ToastBox::Vec3 const& _new_pos);
+	void Set_Positions(float const* _new_pos);
 
 	/*!*****************************************************************************
 	  \brief
@@ -116,7 +121,7 @@ public:
 	  \param _new_pos
 		new positions for the transform
 	*******************************************************************************/
-	void Set_Position(std::initializer_list<float> const& _new_pos);
+	void Set_Positions(std::initializer_list<float> const& _new_pos);
 	/*!*****************************************************************************
 	  \brief
 		Gets the position member
@@ -124,32 +129,7 @@ public:
 	  \return
 		the position member
 	*******************************************************************************/
-	ToastBox::Vec3 const& Get_Position();
-	/*!*****************************************************************************
-	  \brief
-		Sets the prev position member to the _new_prev_pos
-
-	  \param _new_pos
-		new positions for the transform
-	*******************************************************************************/
-	void Set_Prev_Position(ToastBox::Vec3 const& _new_prev_pos);
-	/*!*****************************************************************************
-	  \brief
-		Sets the prev position member to the _new_prev_pos
-
-	  \param _new_pos
-		new positions for the transform
-	*******************************************************************************/
-	void Set_Prev_Position(std::initializer_list<float> const& _new_prev_pos);
-	/*!*****************************************************************************
-	  \brief
-		Gets the previous position member
-
-	  \return
-		the previous position member
-	*******************************************************************************/
-	ToastBox::Vec3 const& Get_Prev_Position();
-
+	float const* Get_Position();
 
 	/*!*****************************************************************************
 	  \brief
@@ -158,7 +138,7 @@ public:
 	  \param _new_rot
 		new rotation for the transform
 	*******************************************************************************/
-	void Set_Rotation(ToastBox::Vec3 const& _new_rot);
+	void Set_Rotations(float const* _new_rot);
 	/*!*****************************************************************************
 	  \brief
 		Sets the rotation member to the _new_rot
@@ -166,7 +146,7 @@ public:
 	  \param _new_rot
 		new rotation for the transform
 	*******************************************************************************/
-	void Set_Rotation(std::initializer_list<float> const& _new_rot);
+	void Set_Rotations(std::initializer_list<float> const& _new_rot);
 	/*!*****************************************************************************
 	  \brief
 		Gets the rotation member
@@ -174,7 +154,7 @@ public:
 	  \return
 		the rotation member
 	*******************************************************************************/
-	ToastBox::Vec3 const& Get_Rotation();
+	float const* Get_Rotation();
 
 	/*!*****************************************************************************
 	  \brief
@@ -183,7 +163,7 @@ public:
 	  \param _new_scale
 		new scale for the transform
 	*******************************************************************************/
-	void Set_Scale(ToastBox::Vec3 const& _new_scale);
+	void Set_Scale(float const* _new_scale);
 	/*!*****************************************************************************
 	  \brief
 		Sets the scale member to the _new_scale
@@ -199,7 +179,7 @@ public:
 	  \return
 		the scale member
 	*******************************************************************************/
-	ToastBox::Vec3 const& Get_Scale();
+	float const* Get_Scale();
 	
 	/*!*****************************************************************************
 	  \brief
@@ -208,7 +188,7 @@ public:
 	  \param _delta_pos
 		the position to add to the current position
 	*******************************************************************************/
-	void Translate(ToastBox::Vec3 const& _delta_pos);
+	void Translate(float const* _delta_pos);
 	/*!*****************************************************************************
 	  \brief
 		Adds _delta_pos to the current position
@@ -224,7 +204,7 @@ public:
 	  \param _delta_pos
 		the change in rotation
 	*******************************************************************************/
-	void Rotate(ToastBox::Vec3 const& _delta_rot);
+	void Rotate(float const* _delta_rot);
 	/*!*****************************************************************************
 	  \brief
 		Adds _delta_rot to the current rotation
@@ -240,7 +220,7 @@ public:
 	  \param _delta_pos
 		the change in scale
 	*******************************************************************************/
-	void Scale(ToastBox::Vec3 const& _delta_scale);
+	void Scale(float const* _delta_scale);
 	/*!*****************************************************************************
 	  \brief
 		Adds _delta_scale to the current scale
@@ -252,10 +232,13 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
-		Gets the 3x3 Model Matrix
+		Adds _delta_scale to the current scale
 
-	  \return
-		the 3x3 Model Matrix
+	  \return 
+		whether this component is for a UI element
 	*******************************************************************************/
+	bool& Is_UI_Element();
+
+
 	ToastBox::Matrix3x3& Get_Model_Matrix();
 };

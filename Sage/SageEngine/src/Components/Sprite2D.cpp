@@ -34,7 +34,7 @@ Sprite2D::Sprite2D() {}
   \param _colour
 	what color the sprite should be
 *******************************************************************************/
-Sprite2D::Sprite2D(std::string const& _texture_ID, float const* _colour, std::string const& _object_shape) : sprite_texture_ID{ _texture_ID }, colour{ *_colour, *(_colour + 1),*(_colour + 2),*(_colour + 3) }, object_shape{ _object_shape } {}
+Sprite2D::Sprite2D(std::string const& _texture_ID, ToastBox::Vec4 const& _colour, std::string const& _object_shape) : sprite_texture_ID{ _texture_ID }, colour{ _colour }, object_shape{ _object_shape } {}
 /*!*****************************************************************************
   \brief
 	Override for the constructor for Sprite2D that takes in what texture you want the sprite to have
@@ -46,7 +46,9 @@ Sprite2D::Sprite2D(std::string const& _texture_ID, float const* _colour, std::st
   \param _colour
 	what color the sprite should be
 *******************************************************************************/
-Sprite2D::Sprite2D(std::string const& _texture_ID, std::initializer_list<float> const& _colour, std::string const& _object_shape) : Sprite2D(_texture_ID, _colour.begin(), _object_shape) {}
+Sprite2D::Sprite2D(std::string const& _texture_ID, std::initializer_list<float> const& _colour, std::string const& _object_shape) : Sprite2D(_texture_ID,
+	ToastBox::Vec4(*(_colour.begin()), *(_colour.begin() + 1), *(_colour.begin() + 2), *(_colour.begin() + 3)),
+	_object_shape) {}
 
 /*!*****************************************************************************
   \brief
@@ -63,22 +65,17 @@ void Sprite2D::Init(GameObject* _parent)
 	transform = dynamic_cast<Transform*>(_parent->Get_Component(TRANSFORM));
 
 	//create sageobject
-	if (object_shape == "Rect")
+	PrimitiveObject p = PRIMITIVE_OBJECT_RECT;
+	if (object_shape == "Circle")
 	{
-		SageObjectManager::Create_Primitive_Object(Get_Parent()->Get_ID().c_str(), PRIMITIVE_OBJECT_RECT,
-			{ transform->Get_Positions()[0],transform->Get_Positions()[1] },
-			{ transform->Get_Scale()[0],transform->Get_Scale()[1] },
-			{ transform->Get_Rotations()[0],transform->Get_Rotations()[1] },
-			{ colour[0],colour[1],colour[2],colour[3] });
+		p = PRIMITIVE_OBJECT_CIRCLE;
 	}
-	else if (object_shape == "Circle")
-	{
-		SageObjectManager::Create_Primitive_Object(Get_Parent()->Get_ID().c_str(), PRIMITIVE_OBJECT_CIRCLE,
-			{ transform->Get_Positions()[0],transform->Get_Positions()[1] },
-			{ transform->Get_Scale()[0],transform->Get_Scale()[1] },
-			{ transform->Get_Rotations()[0],transform->Get_Rotations()[1] },
-			{ colour[0],colour[1],colour[2],colour[3] });
-	}
+
+	SageObjectManager::Create_Primitive_Object(Get_Parent()->Get_ID().c_str(), p,
+		{ transform->Get_Position().x,transform->Get_Position().y },
+		{ transform->Get_Scale().x,transform->Get_Scale().y },
+		{ transform->Get_Rotation().x,transform->Get_Rotation().y },
+		{ colour[0],colour[1],colour[2],colour[3] });
 
 
 	//keep track of create sageobject
@@ -100,12 +97,12 @@ void Sprite2D::Init(GameObject* _parent)
 void Sprite2D::Update()
 {
 	//updates the sageobject with the current transforms of the Transform component
-	obj->transform.position[0] = transform->Get_Positions()[0];
-	obj->transform.position[1] = transform->Get_Positions()[1];
-	obj->transform.scale[0] = transform->Get_Scale()[0];
-	obj->transform.scale[1] = transform->Get_Scale()[1];
-	obj->transform.orientation[0] = transform->Get_Rotations()[0];
-	obj->transform.orientation[1] = transform->Get_Rotations()[1];
+	obj->transform.position.x = transform->Get_Position().x;
+	obj->transform.position.y = transform->Get_Position().y;
+	obj->transform.scale.x = transform->Get_Scale().x;
+	obj->transform.scale.y = transform->Get_Scale().y;
+	obj->transform.orientation.x = transform->Get_Rotation().x;
+	obj->transform.orientation.y = transform->Get_Rotation().y;
 	obj->Update();
 }
 /*!*****************************************************************************
@@ -173,10 +170,9 @@ void Sprite2D::Set_Texture_ID(std::string const& _ID)
   \param _new_col
 	the ID of the replacing texture
 *******************************************************************************/
-void Sprite2D::Set_Colour(float const* _new_col)
+void Sprite2D::Set_Colour(ToastBox::Vec4 const& _new_col)
 {
-
-	*colour = *_new_col;
+	colour = _new_col;
 	for (unsigned int i{}; i < 3; i++)
 	{
 		if (obj)

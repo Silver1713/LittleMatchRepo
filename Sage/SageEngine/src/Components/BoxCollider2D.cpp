@@ -45,11 +45,11 @@ void BoxCollider2D::Init(GameObject* _parent)
 	Component::Init(_parent);
 	Transform* transform = dynamic_cast<Transform*>(_parent->Get_Component(ComponentType::TRANSFORM));
 
-	float const* scale = transform->Get_Scale();
-	aabb.min.x = -scale[0] / 2;
-	aabb.max.x = scale[0] / 2;
-	aabb.min.y = -scale[1] / 2;
-	aabb.max.y = scale[1] / 2;
+	ToastBox::Vec3 scale = transform->Get_Scale();
+	aabb.min.x = -scale.x / 2;
+	aabb.max.x = scale.x / 2;
+	aabb.min.y = -scale.y / 2;
+	aabb.max.y = scale.y / 2;
 }
 
 // Update Function
@@ -345,16 +345,16 @@ void BoxCollider2D::Transform_AABB()
 {
     Transform* transform = static_cast<Transform*>(Get_Parent()->Get_Component(TRANSFORM));
 
-    const float* pos = transform->Get_Positions();
-    const float* scale = transform->Get_Scale();
+    ToastBox::Vec3 pos = transform->Get_Position();
+    ToastBox::Vec3 scale = transform->Get_Scale();
 
-	aabb.center.x = pos[0];
-	aabb.center.y = pos[1];
+	aabb.center.x = pos.x;
+	aabb.center.y = pos.y;
 
     
     // Calculate min and max based on position and scale
-    ToastBox::Vec2 min = { pos[0] - scale[0] / 2.0f, pos[1] - scale[1] / 2.0f};
-    ToastBox::Vec2 max = { pos[0] + scale[0] / 2.0f, pos[1] + scale[1] / 2.0f};
+    ToastBox::Vec2 min = { pos.x - scale.x / 2.0f, pos.y - scale.y / 2.0f};
+    ToastBox::Vec2 max = { pos.x + scale.x / 2.0f, pos.y + scale.y / 2.0f};
 
     aabb.scale = max - min;
 
