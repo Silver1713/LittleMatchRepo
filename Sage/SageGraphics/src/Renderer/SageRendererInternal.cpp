@@ -586,7 +586,7 @@ void SageRendererInternal::Draw_Filled(SageInstance& instances)
 	glBindVertexArray(instances.Get_Model()->Get_VAO_Handle());
 	shader->Activate();
 
-	shader->Set_Uniform("uMatrix", instances[0].ndc_xform_mat);
+	
 	glDrawElementsInstanced(GL_TRIANGLES, static_cast<int>(instances.Get_Model()->Get_Vertex_Indices().size()), GL_UNSIGNED_SHORT, nullptr, instances.Get_Instance_Count());
 	shader->Deactivate();
 	glBindVertexArray(0);

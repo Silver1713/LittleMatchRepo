@@ -19,7 +19,6 @@ struct InstanceData
 {
 	mat4 uModel_Matrix;
 	mat4 uNDC_Xform;
-
 	vec2 position;
 	vec2 scale;
 	vec2 orientation;

@@ -4,8 +4,8 @@
 #include <iostream>
 #include <chrono>
 #include "SageScriptCompiler.hpp"
-MonoDomain* domain;
-char const* domain_name = "Environment.exe";
+#include "SageScriptLoader.hpp"
+SageLoader loader{};
 int main(){
 	// Get Start time
 	auto start = std::chrono::high_resolution_clock::now();
@@ -28,41 +28,21 @@ int main(){
 	std::cout << "Compiling C# Code...\n";
 	assembler.Wait_For_Compile();
 	std::cout << "C# code compiled successfully\n";
-	mono_set_dirs("../MONO/lib", "../MONO/etc");
-	domain = mono_jit_init(domain_name);
-	//load assembly
-	MonoAssembly* assembly = mono_domain_assembly_open(domain, assembler.Get_Assembly("abc").path_to_assembly.c_str());
-	if (!assembly) {
-		printf("Failed to open assembly\n");
-		return 1;
-	}
-	MonoImage* image = mono_assembly_get_image(assembly);
-	MonoMethodDesc* desc = mono_method_desc_new("Program:Main(string[])", 0);
-	MonoMethod* method = mono_method_desc_search_in_image(desc, image);
-	
-	if (!method) {
-		printf("Failed to find method\n");
-		return 1;
-	}
+	loader.Init("../MONO/lib", "../MONO/etc");
 
-	MonoClass* string_class = mono_get_string_class();
-	MonoArray* args_array = mono_array_new(domain, string_class, 0);
+	loader.Load_Assembly("abc", "../SageLogic/programs/abc.dll");
+	loader.Load_Assembly("hello", "../SageLogic/programs/hello.dll");
 
-	
-	char* argv[1] = { new char[] {"Hello"}};
+	std::cout << "Running Main @ abc.cs ...\n";
+	std::cout << "---------------------\n";
+	loader.Run_Main("abc");
+	std::cout << "---------FIN----------\n";
+	std::cout << "Running Main @ hello.cs ...\n";
+	std::cout << "---------------------\n";
+	loader.Run_Main("hello");
+	std::cout << "---------FIN----------\n";
 
-	mono_runtime_invoke(method, nullptr, (void**) args_array, nullptr);
-
-	mono_method_desc_free(desc);
-
-	std::cout << "C# code executed successfully\n";
-	mono_jit_cleanup(domain);
-	delete[] argv[0];
-
-	// get elapsed time
-	auto end = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<double> elapsed = end - start;
-	std::cout << "Elapsed time: " << elapsed.count() << "s\n";
+	loader.Exit();
 	return 0;
 
 	

@@ -45,8 +45,11 @@ void ExampleScene::init()
 		
 		int randx = rand() % SageHelper::WINDOW_WIDTH;
 		int randy = rand() % SageHelper::WINDOW_HEIGHT;
+
+		float rand_sizex = (rand() % 50) + 10;
+		float rand_sizey = (rand() % 50) + 10;
 		glm::vec4 randomColor = { (float)rand() / RAND_MAX, (float)rand() / RAND_MAX, (float)rand() / RAND_MAX, 1 };
-		instance.Append_Instance({ randx,randy }, { 500,500 }, { 0,0 }, randomColor, 1);
+		instance.Append_Instance({ randx,randy }, { rand_sizex, rand_sizey }, { 0,0 }, randomColor, 1);
 	}
 
 
@@ -231,7 +234,7 @@ void ExampleScene::draw()
 	//		}
 	//	}
 	//}
-
+	std::cout << SageHelper::FPS << std::endl;
 
 	//ToastBox::Vec2 start = { 0,0 };
 	//ToastBox::Vec2 end = { 100,0 };
