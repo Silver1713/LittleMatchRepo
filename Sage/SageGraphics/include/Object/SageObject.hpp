@@ -145,6 +145,8 @@ public:
 	SageMesh obj_mesh; //!< Mesh of the object
 	static long int object_count; //!< Object count
 	static long int current_object_count; //!< Current object count
+	static long int instance_count; // Instance count of objects to be rendered
+
 
 	/*!*****************************************************************************
 	\brief Get the material of the object.

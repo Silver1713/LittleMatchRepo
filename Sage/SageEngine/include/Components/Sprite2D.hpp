@@ -19,7 +19,7 @@ class Sprite2D : public Component
 private:
 	std::string sprite_texture_ID{ "" };
 	std::string object_shape{"Rect"};
-	float colour[4]{};
+	ToastBox::Vec4 colour{};
 	Transform* transform{ nullptr };
 	SageObject* obj{ nullptr };
 
@@ -42,7 +42,7 @@ public:
 	  \param _colour
 		what color the sprite should be
 	*******************************************************************************/
-	Sprite2D(std::string const& _texture_ID, float const* _colour, std::string const& _object_shape = "Rect");
+	Sprite2D(std::string const& _texture_ID, ToastBox::Vec4 const& _colour, std::string const& _object_shape = "Rect");
 
 	/*!*****************************************************************************
 	  \brief
@@ -111,7 +111,7 @@ public:
 	  \param _new_col
 		the ID of the replacing texture
 	*******************************************************************************/
-	void Set_Colour(float const* _new_col);
+	void Set_Colour(ToastBox::Vec4 const& _new_col);
 
 	/*!*****************************************************************************
 	  \brief
@@ -130,4 +130,13 @@ public:
 		the replacing alpha
 	*******************************************************************************/
 	void Set_Transparency(float _a);
+
+	/*!*****************************************************************************
+	  \brief
+		Gets the sageobject
+
+	  \return
+		pointer to the pointer to the sageobject
+	*******************************************************************************/
+	SageObject** Get_Object();
 };

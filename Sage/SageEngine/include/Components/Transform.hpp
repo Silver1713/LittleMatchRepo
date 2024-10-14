@@ -20,19 +20,15 @@
 class Transform : public Component
 {
 private:
-	float positions[3]{};
-	float rotations[3]{};
-	float scale[3]{};
-	bool is_UI_Element{ false };
+	ToastBox::Vec3 previous_position{};
+
+	ToastBox::Vec3 position{};
+	ToastBox::Vec3 rotation{};
+	ToastBox::Vec3 scale{};
 
 	ToastBox::Matrix3x3 model_matrix{};
 
 public:
-	ToastBox::Vec3 previous_position{};
-	ToastBox::Vec3 position{};
-	ToastBox::Vec3 rotation{};
-	ToastBox::Vec3 scaling{};
-
 	/*!*****************************************************************************
 	  \brief
 		Default constructor for Transform
@@ -55,7 +51,7 @@ public:
 	  \param _is_UI_element
 		whether this gameobject is a UI element.
 	*******************************************************************************/
-	Transform(float const* _pos, float const* _rot, float const* _scale, bool _is_UI_element = false);
+	Transform(ToastBox::Vec3 const& _pos, ToastBox::Vec3 const& _rot, ToastBox::Vec3 const& _scale);
 
 	/*!*****************************************************************************
 	  \brief
@@ -111,7 +107,7 @@ public:
 	  \param _new_pos
 		new positions for the transform
 	*******************************************************************************/
-	void Set_Positions(float const* _new_pos);
+	void Set_Position(ToastBox::Vec3 const& _new_pos);
 
 	/*!*****************************************************************************
 	  \brief
@@ -120,7 +116,7 @@ public:
 	  \param _new_pos
 		new positions for the transform
 	*******************************************************************************/
-	void Set_Positions(std::initializer_list<float> const& _new_pos);
+	void Set_Position(std::initializer_list<float> const& _new_pos);
 	/*!*****************************************************************************
 	  \brief
 		Gets the position member
@@ -128,7 +124,32 @@ public:
 	  \return
 		the position member
 	*******************************************************************************/
-	float const* Get_Positions();
+	ToastBox::Vec3 const& Get_Position();
+	/*!*****************************************************************************
+	  \brief
+		Sets the prev position member to the _new_prev_pos
+
+	  \param _new_pos
+		new positions for the transform
+	*******************************************************************************/
+	void Set_Prev_Position(ToastBox::Vec3 const& _new_prev_pos);
+	/*!*****************************************************************************
+	  \brief
+		Sets the prev position member to the _new_prev_pos
+
+	  \param _new_pos
+		new positions for the transform
+	*******************************************************************************/
+	void Set_Prev_Position(std::initializer_list<float> const& _new_prev_pos);
+	/*!*****************************************************************************
+	  \brief
+		Gets the previous position member
+
+	  \return
+		the previous position member
+	*******************************************************************************/
+	ToastBox::Vec3 const& Get_Prev_Position();
+
 
 	/*!*****************************************************************************
 	  \brief
@@ -137,7 +158,7 @@ public:
 	  \param _new_rot
 		new rotation for the transform
 	*******************************************************************************/
-	void Set_Rotations(float const* _new_rot);
+	void Set_Rotation(ToastBox::Vec3 const& _new_rot);
 	/*!*****************************************************************************
 	  \brief
 		Sets the rotation member to the _new_rot
@@ -145,7 +166,7 @@ public:
 	  \param _new_rot
 		new rotation for the transform
 	*******************************************************************************/
-	void Set_Rotations(std::initializer_list<float> const& _new_rot);
+	void Set_Rotation(std::initializer_list<float> const& _new_rot);
 	/*!*****************************************************************************
 	  \brief
 		Gets the rotation member
@@ -153,7 +174,7 @@ public:
 	  \return
 		the rotation member
 	*******************************************************************************/
-	float const* Get_Rotations();
+	ToastBox::Vec3 const& Get_Rotation();
 
 	/*!*****************************************************************************
 	  \brief
@@ -162,7 +183,7 @@ public:
 	  \param _new_scale
 		new scale for the transform
 	*******************************************************************************/
-	void Set_Scale(float const* _new_scale);
+	void Set_Scale(ToastBox::Vec3 const& _new_scale);
 	/*!*****************************************************************************
 	  \brief
 		Sets the scale member to the _new_scale
@@ -178,7 +199,7 @@ public:
 	  \return
 		the scale member
 	*******************************************************************************/
-	float const* Get_Scale();
+	ToastBox::Vec3 const& Get_Scale();
 	
 	/*!*****************************************************************************
 	  \brief
@@ -187,7 +208,7 @@ public:
 	  \param _delta_pos
 		the position to add to the current position
 	*******************************************************************************/
-	void Translate(float const* _delta_pos);
+	void Translate(ToastBox::Vec3 const& _delta_pos);
 	/*!*****************************************************************************
 	  \brief
 		Adds _delta_pos to the current position
@@ -203,7 +224,7 @@ public:
 	  \param _delta_pos
 		the change in rotation
 	*******************************************************************************/
-	void Rotate(float const* _delta_rot);
+	void Rotate(ToastBox::Vec3 const& _delta_rot);
 	/*!*****************************************************************************
 	  \brief
 		Adds _delta_rot to the current rotation
@@ -219,7 +240,7 @@ public:
 	  \param _delta_pos
 		the change in scale
 	*******************************************************************************/
-	void Scale(float const* _delta_scale);
+	void Scale(ToastBox::Vec3 const& _delta_scale);
 	/*!*****************************************************************************
 	  \brief
 		Adds _delta_scale to the current scale
@@ -231,13 +252,10 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
-		Adds _delta_scale to the current scale
+		Gets the 3x3 Model Matrix
 
-	  \return 
-		whether this component is for a UI element
+	  \return
+		the 3x3 Model Matrix
 	*******************************************************************************/
-	bool& Is_UI_Element();
-
-
 	ToastBox::Matrix3x3& Get_Model_Matrix();
 };

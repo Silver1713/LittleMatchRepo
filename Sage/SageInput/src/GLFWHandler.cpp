@@ -15,6 +15,11 @@
 #include "GLFWHandler.h"
 #include <unordered_map>
 
+// Mono headers
+#include <mono/jit/jit.h>
+#include <mono/metadata/assembly.h>
+#include <mono/metadata/debug-helpers.h>
+
 std::unordered_map<int, std::byte> GLFWInputHandler::key_map{};
 double GLFWInputHandler::g_mouse_pos_x = 0;
 double GLFWInputHandler::g_mouse_pos_y = 0;
@@ -209,7 +214,12 @@ void GLFWInputHandler::Mouse_Pos_Cb(GLFWwindow* _window, double _xpos, double _y
 	std::cout << "Mouse X: " << g_mouse_pos_x << " Mouse Y: " << g_mouse_pos_y << std::endl;
 }
 
-
+// Set binding for get key and get key pressed
+void GLFWInputHandler::Set_Bindings()
+{
+	mono_add_internal_call("SageEngine.Input::Get_Key", GLFWInputHandler::Get_Key);
+	mono_add_internal_call("SageEngine.Input::Get_Key_Pressed", GLFWInputHandler::Get_Key_Pressed);
+}
 
  
 

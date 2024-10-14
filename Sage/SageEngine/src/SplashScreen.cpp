@@ -91,7 +91,7 @@ namespace Splash_Screen {
 			if (SM::Has_Faded_Out())
 			{
 				is_triggered = false;
-				SM::Go_To_Next_Scene("Level_1");
+				SM::Go_To_Next_Scene();
 				SM::Start_Fade_In();
 			}
 		}

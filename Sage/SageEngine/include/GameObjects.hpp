@@ -114,17 +114,12 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
-		Adds component to the gameobject
-	  \param _component
-		Component to be added
+		Gets the component of the specified type T belonging to the gameobject
 	  \return
-	    pointer to the component
+	    pointer to the component or nullptr if not found
 	*******************************************************************************/
-	Component* Get_Component(ComponentType _component);
-
 	template <typename T, typename = std::enable_if_t<std::is_base_of_v<Component, T>>>
 	T* Get_Component();
-	
 
 };
 
@@ -189,7 +184,6 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Clear_Game_Objects();
 }
-
 
 template <typename T, typename>
 T* GameObject::Get_Component()
