@@ -23,7 +23,7 @@ void SageLoader::Init(std::string const& mono_assembly_dir, std::string const& m
 	SageLoader::mono_config_dir = mono_config_dir;
 	mono_set_dirs(mono_assembly_dir.c_str(), mono_config_dir.c_str());
 	//Initialize runtime domain;
-	runtime_domain = mono_jit_init("Environment.exe");
+	runtime_domain = mono_jit_init("Runtime.exe");
 	
 
 
@@ -76,8 +76,7 @@ void SageLoader::Exit()
 
 	mono_jit_cleanup(runtime_domain);
 
-	// No need to call mono_jit_cleanup() unless you're shutting down Mono
-	// mono_jit_cleanup(root);  <-- Remove this, unless you're shutting down the entire runtime
+	
 }
 
 

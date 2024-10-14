@@ -44,7 +44,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
 
         if(DIR_NAME STREQUAL "SageLogic")
             set(SAGE_LOGIC_SCRIPTS)
-            file(GLOB_RECURSE SAGE_LOGIC_SCRIPTS
+            file(GLOB SAGE_LOGIC_SCRIPTS
                 ${dir}/scripts/*.cs
             )
             source_group("C# Scripts" FILES ${SAGE_LOGIC_SCRIPTS})

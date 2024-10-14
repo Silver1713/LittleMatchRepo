@@ -257,21 +257,83 @@ void SageAssembler::CompileFileAsync(std::string const& path)
 }
 
 
-void SageAssembler::CompileGroupAsync()
+void SageAssembler::CompileLibraryAsync()
 {
+	// Compile all the scripts into a library
+	std::string compile_command = path_to_compiler_dir + command;
 
-	std::vector<std::thread> threads;
+	std::ifstream file{ compile_command };
 
-	for (auto& script : scripts)
+	if (!file.is_open())
+	{
+		log = "Failed to open compiler";
+		return;
+	}
+
+	file.close();
+
+	std::string output_path = output_directory + "\\SageLibrary.dll";
+	std::string files;
+
+	std::vector<std::string> temp_files;
+	for (std::pair<std::string, std::string> const& script : scripts)
 	{
 		if (script.first == "__FILE_PATH__")
 		{
-			threads.push_back(std::thread{ &SageAssembler::CompileFileAsync, this, script.second });
+			files += script.second + " ";
 		}
 		else
 		{
-			threads.push_back(std::thread{ (&SageAssembler::CompileScriptAsync), this, script.first, script.second });
+			std::string temp_file_path = output_directory + "\\" + script.first + "T00.cs";
+
+			std::ofstream temp_file{ temp_file_path };
+
+			temp_file.write(script.second.c_str(), script.second.size());
+
+			temp_file.close();
+
+			files += temp_file_path + " ";
+			temp_files.push_back(temp_file_path);
 		}
+
+		
+	}
+
+	std::string actual_command = compile_command + " " + flags + " " + files + " -out:" + output_path;
+	std::system(actual_command.c_str());
+
+	for (std::string const& f : temp_files)
+	{
+		// delete the temp files
+		if (remove(f.c_str())) {
+			std::cout << "Failed to delete " << f << '\n';
+		}
+	}
+}
+
+
+
+void SageAssembler::CompileGroupAsync(bool _make_lib)
+{
+
+	std::vector<std::thread> threads;
+	std::cout << _make_lib <<"\n";
+	if (!_make_lib) {
+		for (auto& script : scripts)
+		{
+			if (script.first == "__FILE_PATH__")
+			{
+				threads.push_back(std::thread{ &SageAssembler::CompileFileAsync, this, script.second });
+			}
+			else
+			{
+				threads.push_back(std::thread{ (&SageAssembler::CompileScriptAsync), this, script.first, script.second });
+			}
+		}
+	}
+	else
+	{
+		threads.push_back(std::thread{ &SageAssembler::CompileLibraryAsync, this });
 	}
 
 
@@ -352,12 +414,13 @@ void SageAssembler::CompileScriptAsync(std::string const& name, std::string cons
 }
 
 
-void SageAssembler::StartCompilation()
+void SageAssembler::StartCompilation(bool into_one)
 {
-	worker = std::thread{ &SageAssembler::CompileGroupAsync, this };
+	worker = std::thread{ &SageAssembler::CompileGroupAsync, this, into_one };
 	thread_id = worker.get_id();
 
 }
+
 
 void SageAssembler::Wait_For_Compile()
 {

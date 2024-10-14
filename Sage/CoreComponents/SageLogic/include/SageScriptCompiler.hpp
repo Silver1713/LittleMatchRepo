@@ -110,8 +110,11 @@ public:
 	void CompileFileAsync(std::string const& path); //!< Compile a script from a file asynchronously - this is a non-blocking call
 	void CompileScriptAsync(std::string const& name, std::string const& content); //!< Compile a script from a file asynchronously - this is a non-blocking call
 	
-	void CompileGroupAsync(); // Threaded process that spawns threads to compile the scripts
-	void StartCompilation(); //!< Start the a asynchronous compilation process
+	void CompileGroupAsync(bool _make_lib=false); // Threaded process that spawns threads to compile the scripts
+
+	void CompileLibraryAsync(); // Compile all the scripts in the list of scripts that are to be compiled into one dll file
+
+	void StartCompilation(bool into_one = false); //!< Start the a asynchronous compilation process
 	void Wait_For_Compile(); //!< Wait for the thread to finish compiling the scripts
 
 	SageAssembly Get_Assembly(std::string const& name); //!< Get the assembly that was compiled

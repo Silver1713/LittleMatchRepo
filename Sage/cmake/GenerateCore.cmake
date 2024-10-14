@@ -110,6 +110,7 @@ file(GLOB SAGEENGINE_SRC_SUBDIR
     ${CMAKE_SOURCE_DIR}/SageEngine/src/*/
 )
 set(ENGINE_SUB_INC_FILES)
+
 foreach(SAGEENGINE_INC_SUBDIRS ${SAGEENGINE_INC_SUBDIR})
     get_filename_component(SAGEENGINE_INC_SUBDIR_NAME ${SAGEENGINE_INC_SUBDIRS} NAME)
     file(GLOB SAGEENGINE_INC_SUBDIR_FILES
@@ -119,7 +120,9 @@ foreach(SAGEENGINE_INC_SUBDIRS ${SAGEENGINE_INC_SUBDIR})
 
     list(APPEND ENGINE_SUB_INC_FILES ${SAGEENGINE_INC_SUBDIR_FILES})
 endforeach()
+
 set(ENGINE_SUB_SRC_FILES)
+
 foreach(SAGEENGINE_SRC_SUBDIRS ${SAGEENGINE_SRC_SUBDIR})
     get_filename_component(SAGEENGINE_SRC_SUBDIR_NAME ${SAGEENGINE_SRC_SUBDIRS} NAME)
     file(GLOB SAGEENGINE_SRC_SUBDIR_FILES
@@ -129,7 +132,6 @@ foreach(SAGEENGINE_SRC_SUBDIRS ${SAGEENGINE_SRC_SUBDIR})
     source_group("Source Files/${SAGEENGINE_SRC_SUBDIR_NAME}" FILES ${SAGEENGINE_SRC_SUBDIR_FILES})
     list(APPEND ENGINE_SUB_SRC_FILES ${SAGEENGINE_SRC_SUBDIR_FILES})
 endforeach()
-
 
 add_executable(SageEngine
     ${SageEngine_source_files}
@@ -151,11 +153,26 @@ elseif(MSVC)
 endif()
 
 if(WIN32 AND FMOD_IMPORT_SUCCESS)
-            add_custom_command(TARGET SageEngine POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "$<$<CONFIG:Debug>:${FMOD_LIB_DIR}/fmodL.dll>$<$<NOT:$<CONFIG:Debug>>:${FMOD_LIB_DIR}/fmod.dll>"
-                $<TARGET_FILE_DIR:SageEngine>)
-        endif()
+    add_custom_command(TARGET SageEngine POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "$<$<CONFIG:Debug>:${FMOD_LIB_DIR}/fmodL.dll>$<$<NOT:$<CONFIG:Debug>>:${FMOD_LIB_DIR}/fmod.dll>"
+        $<TARGET_FILE_DIR:SageEngine>)
+endif()
+
+if(WIN32 AND MONO_IMPORT_SUCCESS)
+    add_custom_command(TARGET SageEngine POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different 
+            "$<$<CONFIG:Debug>:${MONO_DLL_PATH}>$<$<NOT:$<CONFIG:Debug>>:${MONO_DLL_PATH}>" 
+            $<TARGET_FILE_DIR:SageEngine>
+    )
+    add_custom_command(TARGET SageEngine POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different 
+            "${MONO_DLL_POSIX}" 
+            $<TARGET_FILE_DIR:SageEngine>
+    )
+endif()
+
+
 
 target_include_directories(SageEngine PRIVATE
     ${CMAKE_SOURCE_DIR}/SageEngine/include

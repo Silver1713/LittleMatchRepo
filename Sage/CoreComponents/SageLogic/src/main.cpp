@@ -11,27 +11,28 @@ int main(){
 	auto start = std::chrono::high_resolution_clock::now();
 	
 	SageAssembler assembler{};
-	assembler.Init("..\\MONO\\bin\\", "..\\SageLogic\\programs");
+	assembler.Init("..\\MONO\\bin\\", "..\\CoreComponents\\SageLogic\\programs");
 
 	assembler.Set_Command("mcs");
-	assembler.Set_Compile_Flags("/target:exe");
+	assembler.Set_Compile_Flags("/target:library");
 
-	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/abc.cs");
-	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/hello.cs");
+	assembler.Add_Script(SageAssembler::FILE_MODE, "../CoreComponents/SageLogic/scripts/abc.cs");
+	/*assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/hello.cs");
 	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/abc1.cs");
 	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/hello1.cs");
 	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/abc2.cs");
 	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/hello2.cs");
 	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/abc3.cs");
-	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/hello3.cs");
-	assembler.StartCompilation();
+	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/hello3.cs");*/
+	assembler.Add_Script(SageAssembler::FILE_MODE, "../CoreComponents/SageLogic/scripts/SageBehaviour.cs");
+	assembler.StartCompilation(true);
 	std::cout << "Compiling C# Code...\n";
 	assembler.Wait_For_Compile();
 	std::cout << "C# code compiled successfully\n";
 	loader.Init("../MONO/lib", "../MONO/etc");
 
-	loader.Load_Assembly("abc", "../SageLogic/programs/abc.dll");
-	loader.Load_Assembly("hello", "../SageLogic/programs/hello.dll");
+	loader.Load_Assembly("abc", "../CoreComponents/SageLogic/programs/SageLibrary.dll");
+	
 
 	std::cout << "Running Main @ abc.cs ...\n";
 	std::cout << "---------------------\n";
