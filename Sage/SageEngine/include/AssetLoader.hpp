@@ -7,7 +7,8 @@
 \par		b.muhammadhafiz@digipen.edu, halisilyasa.b@digipen.edu
 \date		08 September 2024
 \brief		Contains the data structures and functions for managing game assets, 
-			including textures and prefabs.
+			including textures and prefabs. Handles deserialization and serialization of
+			data.
 
 			All content � 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
@@ -31,6 +32,18 @@ class SageTexture;
 //Every file is an asset, which is broken down into categories
 namespace Assets
 {
+	/*!*****************************************************************************
+	  \brief
+		Initializes all asset categories
+	*******************************************************************************/
+	void Init();
+
+	/*!*****************************************************************************
+	  \brief
+		Unloads any asset category that uses allocated resources
+	*******************************************************************************/
+	void Unload();
+
 	//Texture category
 	namespace Textures 
 	{
@@ -49,8 +62,6 @@ namespace Assets
 			FILEPATH,
 			WIDTH,
 			HEIGHT,
-			SPRITES_PER_ROW,
-			SPRITES_PER_COL,
 			SPRITES_NUM,
 			NUM_DATA_TYPES
 		} Data_Type;
@@ -89,6 +100,112 @@ namespace Assets
 			by subsequent interation of this component
 		*******************************************************************************/
 		void Unload();
+	}
+
+	//Animation category
+	namespace Animations
+	{
+		//what defines an animation
+		struct Animation
+		{
+			std::string animation_ID{};
+			std::string parent_texture_ID{};
+			std::string path_to_folder{};
+			unsigned int num_frames{};
+			float frame_time{};
+		};
+		//the label of each data type in an animation when deserializing
+		typedef enum
+		{
+			ANIMATION_ID,
+			PARENT_TEXTURE_ID,
+			PATH_TO_FOLDER,			
+			NUM_DATA_TYPES
+		} Data_Type;
+		/*!*****************************************************************************
+		  \brief
+			Deserializes the animations.csv file
+		*******************************************************************************/
+		void Init();
+
+		/*!*****************************************************************************
+		  \brief
+			Gets the Animation with the provided ID
+
+		  \param _anim_ID_key
+			The key to look for
+
+		  \return
+			The Animation in the map with the _anim_ID_key key
+		*******************************************************************************/
+		Animation Get_Animation(std::string const& _anim_ID);
+	}
+
+	//Animation Set category
+	namespace Animation_Set
+	{
+		struct Condition {
+			std::string parameter;
+			std::string type; // Greater, Less, Equals
+			float value;
+		};
+
+		// Represents an animation state
+		struct State {
+			std::string name;
+			std::string animation_ID;
+			bool looping;
+			bool is_starting_state;
+		};
+
+		// Represents a transition between states
+		struct Transition {
+			std::string from_state;
+			std::string to_state;
+			std::vector<Condition> conditions;
+			float duration;
+		};
+
+		// Represents a parameter in the animation system
+		struct Parameter {
+			std::string name;
+			float default_value;
+		};
+
+		//what defines an animation set
+		struct Animation_Set
+		{
+			std::string animation_set_ID{};
+			std::vector<State> states;
+			std::vector<Transition> transitions;
+			std::vector<Parameter> parameters;
+		};
+		//the label of each data type in an animation set
+		typedef enum
+		{
+			ANIMATION_SET_ID,			
+			ANIMATION_IDS,
+			FLAGS,
+			NUM_DATA_TYPES
+		} Data_Type;
+
+		/*!*****************************************************************************
+		  \brief
+			Deserializes all csv files in animations folder
+		*******************************************************************************/
+		void Init();
+
+		/*!*****************************************************************************
+		  \brief
+			Gets a copy of the Animation Set with the provided ID
+
+		  \param _anim_set_ID
+			The key to look for
+
+		  \return
+			The Animation Set in the map with the _anim_set_ID key
+		*******************************************************************************/
+		Animation_Set Get_Animation_Set(std::string const& _anim_set_ID);
 	}
 
 	//Prefabs category
@@ -133,7 +250,6 @@ namespace Assets
 			COL_D,
 			HAS_PHYSICS,
 			PHYSICS_VELOCITY,
-			AUDIO_D,
 			OBJ_SHAPE,
 			NUM_DATA_TYPES
 		} Data_Type;

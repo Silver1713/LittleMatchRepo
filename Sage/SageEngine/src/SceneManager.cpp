@@ -128,8 +128,8 @@ namespace SM {
 			UITransform* ut;
 			Sprite2D* s;
 			g = Game_Objects::Instantiate(current_level.prefabs[i], current_level.identifier[i],current_level.z_orders[i]);
-			t = dynamic_cast<Transform*>(g->Get_Component(TRANSFORM));
-			ut = dynamic_cast<UITransform*>(g->Get_Component(UITRANSFORM));
+			t = static_cast<Transform*>(g->Get_Component<Transform>());
+			ut = static_cast<UITransform*>(g->Get_Component<UITransform>());
 			if (ut)
 			{
 				ut->Set_Position(current_level.positions[i]);
@@ -143,7 +143,7 @@ namespace SM {
 				t->Set_Scale(current_level.scale[i]);
 			}
 
-			s = dynamic_cast<Sprite2D*>(g->Get_Component(SPRITE2D));
+			s = static_cast<Sprite2D*>(g->Get_Component<Sprite2D>());
 			if (s)
 			{
 				s->Set_Colour(current_level.color[i]);
@@ -302,7 +302,7 @@ namespace SM {
 	*******************************************************************************/
 	void Startup_Scene(std::string const& new_level_ID)
 	{
-		if (new_level_ID == "Splash_Screen")
+		if (new_level_ID == "splash_Screen")
 		{
 			SM::fp_load = Splash_Screen::Load;
 			SM::fp_init = Splash_Screen::Init;
@@ -360,7 +360,7 @@ namespace SM {
 		if (alpha > 0.0f)
 		{
 			alpha -= dt * (1.0f / fade_time);
-			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen->Get_Component(SPRITE2D));
+			Sprite2D* s = static_cast<Sprite2D*>(fade_screen->Get_Component<Sprite2D>());
 			s->Set_Transparency(alpha);
 			return;
 		}
@@ -391,7 +391,7 @@ namespace SM {
 		if (alpha < 1.0f)
 		{
 			alpha += dt * (1.0f / fade_time);
-			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen->Get_Component(SPRITE2D));
+			Sprite2D* s = static_cast<Sprite2D*>(fade_screen->Get_Component<Sprite2D>());
 			s->Set_Transparency(alpha);
 			return;
 		}

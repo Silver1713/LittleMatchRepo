@@ -133,11 +133,8 @@ void init()
         std::cerr << "Sage failed to create OpenGL context.";
 
         std::exit(EXIT_FAILURE);
-    }    
-    Assets::Textures::Init();
-    Assets::Prefabs::Init();
-    Assets::Audio::Init();
-    Assets::Levels::Init();
+    }
+    Assets::Init();
     Prefabs::Init();
     SageAudio::Init();
     if (1) // to be changed with some sort of flag to detect if running through editor or as built game
@@ -200,7 +197,7 @@ void exit()
 {
     Game_Objects::Exit();
     SM::Free();
-    Assets::Textures::Unload();
+    Assets::Unload();
     SM::Unload();
     SageHelper::Exit();
     SageAudio::Exit();

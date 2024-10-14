@@ -130,4 +130,13 @@ public:
 		the replacing alpha
 	*******************************************************************************/
 	void Set_Transparency(float _a);
+
+	/*!*****************************************************************************
+	  \brief
+		Gets the sageobject
+
+	  \return
+		pointer to the pointer to the sageobject
+	*******************************************************************************/
+	SageObject** Get_Object();
 };

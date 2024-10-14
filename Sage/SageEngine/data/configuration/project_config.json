@@ -5,7 +5,7 @@
         "Height": 1080
     },
     "Other_Configurations":{
-        "Editor_Startup_Scene": "Level_1",
-        "Game_Startup_Scene": "Splash_Screen"
+        "Editor_Startup_Scene": "level_1",
+        "Game_Startup_Scene": "splash_screen"
     }
 }

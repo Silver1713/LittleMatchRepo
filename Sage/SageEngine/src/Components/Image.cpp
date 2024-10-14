@@ -62,7 +62,7 @@ void Image::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
 	//gets transform component
-	transform = dynamic_cast<UITransform*>(_parent->Get_Component(UITRANSFORM));
+	transform = static_cast<UITransform*>(_parent->Get_Component<UITransform>());
 
 	//create sageobject
 	PrimitiveObject p = PRIMITIVE_OBJECT_RECT;
@@ -202,4 +202,16 @@ void Image::Set_Transparency(float _a)
 	{
 		obj->Set_Alpha(_a);
 	}
+}
+
+/*!*****************************************************************************
+  \brief
+	Gets the sageobject
+
+  \return
+	pointer to the pointer to the sageobject
+*******************************************************************************/
+SageObject** Image::Get_Object()
+{
+	return &obj;
 }

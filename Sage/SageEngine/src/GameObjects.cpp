@@ -131,7 +131,7 @@ namespace Game_Objects
 		}
 
 		g_game_objects[_identifier] = std::move(_g);
-		if (g_game_objects[_identifier].get()->Get_Component(UITRANSFORM))
+		if (g_game_objects[_identifier].get()->Get_Component<UITransform>())
 		{
 			screen_space_game_objects.push_back(&g_game_objects[_identifier]);
 		}
@@ -386,24 +386,4 @@ void GameObject::Disable()
 void GameObject::Add_Component(std::unique_ptr<Component> _c)
 {
 	components.push_back(std::move(_c));
-}
-
-/*!*****************************************************************************
-  \brief
-	Adds component to the gameobject
-  \param _component
-	Component to be added
-  \return
-	pointer to the component
-*******************************************************************************/
-Component* GameObject::Get_Component(ComponentType _type)
-{
-	for (auto& c : components)
-	{
-		if (c->Get_Component_Type() == _type)
-		{
-			return c.get();
-		}
-	}
-	return nullptr;
 }

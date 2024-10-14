@@ -43,7 +43,7 @@
 void BoxCollider2D::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
-	Transform* transform = dynamic_cast<Transform*>(_parent->Get_Component(ComponentType::TRANSFORM));
+    Transform* transform = static_cast<Transform*>(_parent->Get_Component<Transform>());
 
 	ToastBox::Vec3 scale = transform->Get_Scale();
 	aabb.min.x = -scale.x / 2;
@@ -62,7 +62,7 @@ void BoxCollider2D::Init(GameObject* _parent)
 *******************************************************************************/
 void BoxCollider2D::Update(float _delta_time)
 {
-    Transform* transform = static_cast<Transform*>(Get_Parent()->Get_Component(TRANSFORM));
+    Transform* transform = static_cast<Transform*>(Get_Parent()->Get_Component<Transform>());
     if (!transform) return;
 
     // Transform the AABB
@@ -114,12 +114,12 @@ ComponentType BoxCollider2D::Get_Component_Type()
 *******************************************************************************/
 void BoxCollider2D::Check_Collisions(float _delta_time)
 {
-    Transform* transform = static_cast<Transform*>(Get_Parent()->Get_Component(TRANSFORM));
-    Physics* physics = static_cast<Physics*>(parent->Get_Component(PHYSICS));
+    Transform* transform = static_cast<Transform*>(Get_Parent()->Get_Component<Transform>());
+    Physics* physics = static_cast<Physics*>(Get_Parent()->Get_Component<Physics>());
 
     if (!transform || !physics) return;
 
-    ToastBox::Vec2 velocity = physics->Get_Velocity();
+    ToastBox::Vec2 velocity = physics->Get_Current_Velocity();
     AABB swept_AABB;
 
 	swept_AABB.min = aabb.min + velocity * _delta_time;
@@ -130,7 +130,7 @@ void BoxCollider2D::Check_Collisions(float _delta_time)
         GameObject* other = pair.second.get();
         if (other == parent) continue;
 
-        BoxCollider2D* other_collider = static_cast<BoxCollider2D*>(other->Get_Component(BOXCOLLIDER2D));
+        BoxCollider2D* other_collider = static_cast<BoxCollider2D*>(other->Get_Component<BoxCollider2D>());
         if (!other_collider) continue;
 
         // Check for collision with the swept AABB
@@ -304,11 +304,11 @@ void BoxCollider2D::Handle_Collision(GameObject* _other)
         << typeid(*_other).name() << std::endl;
 
     // Stop movement if there's a physics component
-    Physics* physics = static_cast<Physics*>(parent->Get_Component(PHYSICS));
+    Physics* physics = static_cast<Physics*>(parent->Get_Component<Physics>());
     if (physics)
     {
-        physics->Get_Velocity().x = 0;
-        physics->Get_Velocity().y = 0;
+        physics->Get_Current_Velocity().x = 0;
+        physics->Get_Current_Velocity().y = 0;
     }
 }
 
@@ -343,7 +343,7 @@ bool BoxCollider2D::Check_Swept_Collision(const BoxCollider2D::AABB& _swept_AABB
 *******************************************************************************/
 void BoxCollider2D::Transform_AABB()
 {
-    Transform* transform = static_cast<Transform*>(Get_Parent()->Get_Component(TRANSFORM));
+    Transform* transform = static_cast<Transform*>(Get_Parent()->Get_Component<Transform>());
 
     ToastBox::Vec3 pos = transform->Get_Position();
     ToastBox::Vec3 scale = transform->Get_Scale();
@@ -443,7 +443,7 @@ void BoxCollider2D::AABB::Calculate_Model_Matrix(GameObject* _parent)
 	
 
 	ToastBox::Matrix3x3 model = ~translation_matrix * ~scale_matrix;
-	Transform* transform = dynamic_cast<Transform*>(_parent->Get_Component(ComponentType::TRANSFORM));
+	Transform* transform = static_cast<Transform*>(_parent->Get_Component<Transform>());
 	
 	if (transform)
 	{

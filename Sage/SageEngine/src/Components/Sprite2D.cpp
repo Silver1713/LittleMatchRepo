@@ -62,7 +62,7 @@ void Sprite2D::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
 	//gets transform component
-	transform = dynamic_cast<Transform*>(_parent->Get_Component(TRANSFORM));
+	transform = static_cast<Transform*>(_parent->Get_Component<Transform>());
 
 	//create sageobject
 	PrimitiveObject p = PRIMITIVE_OBJECT_RECT;
@@ -119,7 +119,7 @@ void Sprite2D::Draw()
 		});
 	}
 
-	BoxCollider2D* collider = dynamic_cast<BoxCollider2D*>(Get_Parent()->Get_Component(BOXCOLLIDER2D));
+	BoxCollider2D* collider = static_cast<BoxCollider2D*>(Get_Parent()->Get_Component<BoxCollider2D>());
 	if (collider && collider->Get_Debug())
 	{
 		SageRenderer::Set_Option_On(SageRenderer::SAGE_ENABLE_CAMERA);
@@ -216,4 +216,16 @@ void Sprite2D::Set_Transparency(float _a)
 	{
 		obj->Set_Alpha(_a);
 	}
+}
+
+/*!*****************************************************************************
+  \brief
+	Gets the sageobject
+
+  \return
+	pointer to the pointer to the sageobject
+*******************************************************************************/
+SageObject** Sprite2D::Get_Object()
+{
+	return &obj;
 }

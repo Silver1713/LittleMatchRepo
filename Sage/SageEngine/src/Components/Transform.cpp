@@ -78,13 +78,6 @@ void Transform::Init(GameObject* _parent)
 *******************************************************************************/
 void Transform::Update()
 {
-	Physics* phy = dynamic_cast<Physics*>(Get_Parent()->Get_Component(PHYSICS));
-	
-	if (phy)
-	{		
-		Set_Position({ position.x +phy->Get_Velocity().x,position.y + phy->Get_Velocity().y, position.z});
-	}
-
 	// update model matrix
 
 	ToastBox::Matrix3x3 translation_matrix{};
