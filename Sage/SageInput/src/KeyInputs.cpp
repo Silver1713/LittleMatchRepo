@@ -116,6 +116,7 @@ void SAGEInputHandler::update()
 void SAGEInputHandler::init()
 {
 	SageInputPIML::Set_Callback();
+	GLFWInputHandler::Set_Bindings();
 }
 
 /*!*****************************************************************************
