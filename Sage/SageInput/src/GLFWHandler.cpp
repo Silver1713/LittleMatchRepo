@@ -14,6 +14,7 @@
 #include <iostream>
 #include "GLFWHandler.h"
 #include <unordered_map>
+#include "SageBindings.hpp"
 
 // Mono headers
 #include <mono/jit/jit.h>
@@ -226,9 +227,9 @@ void GLFWInputHandler::Get_Mouse_Pos(double& _xmouse, double& _ymouse)
 // Set binding for get key and get key pressed
 void GLFWInputHandler::Set_Bindings()
 {
-	//mono_add_internal_call("SageEngine.Input::Get_Key", GLFWInputHandler::Get_Key);
-	//mono_add_internal_call("SageEngine.Input::Get_Key_Pressed", GLFWInputHandler::Get_Key_Pressed);
-	//mono_add_internal_call("SageEngine.Input::Get_Mouse_Pos", GLFWInputHandler::Get_Mouse_Pos);
+	SageBindings::Add_Internal_Call("SageEngine.Input::Get_Key", GLFWInputHandler::Get_Key);
+	SageBindings::Add_Internal_Call("SageEngine.Input::Get_Key_Pressed", GLFWInputHandler::Get_Key_Pressed);
+	SageBindings::Add_Internal_Call("SageEngine.Input::Get_Mouse_Pos", GLFWInputHandler::Get_Mouse_Pos);
 }
 
  
