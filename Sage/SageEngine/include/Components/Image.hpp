@@ -1,11 +1,11 @@
 /* Start Header ************************************************************************/
 /*!
-\file		Sprite2D.hpp
+\file		Image.hpp
 \title		Little Match
 \author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
 \date		11 September 2024
-\brief		Contains the derived class Sprite2D that overrides the virtual functions of the
+\brief		Contains the derived class Image that overrides the virtual functions of the
 			base class Component to do sprite specific tasks.
 
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
@@ -14,26 +14,26 @@
 #pragma once
 #include "Components/Component.hpp"
 
-class Sprite2D : public Component
+class Image : public Component
 {
 private:
 	std::string sprite_texture_ID{ "" };
 	std::string object_shape{"Rect"};
 	ToastBox::Vec4 colour{};
-	Transform* transform{ nullptr };
+	UITransform* transform{ nullptr };
 	SageObject* obj{ nullptr };
 
 public:
 
 	/*!*****************************************************************************
 	  \brief
-		Default constructor for Sprite2D
+		Default constructor for Image
 	*******************************************************************************/
-	Sprite2D();
+	Image();
 
 	/*!*****************************************************************************
 	  \brief
-		Constructor for Sprite2D that takes in what texture you want the sprite to have
+		Constructor for Image that takes in what texture you want the sprite to have
 		along with what color to add on top of it
 
 	  \param _texture_ID
@@ -42,11 +42,11 @@ public:
 	  \param _colour
 		what color the sprite should be
 	*******************************************************************************/
-	Sprite2D(std::string const& _texture_ID, ToastBox::Vec4 const& _colour, std::string const& _object_shape = "Rect");
+	Image(std::string const& _texture_ID, ToastBox::Vec4 const& _colour, std::string const& _object_shape = "Rect");
 
 	/*!*****************************************************************************
 	  \brief
-		Override for the constructor for Sprite2D that takes in what texture you want the sprite to have
+		Override for the constructor for Image that takes in what texture you want the sprite to have
 		along with what color to add on top of it
 
 	  \param _texture_ID
@@ -55,11 +55,11 @@ public:
 	  \param _colour
 		what color the sprite should be
 	*******************************************************************************/
-	Sprite2D(std::string const& _texture_ID, std::initializer_list<float> const& _colour, std::string const& _object_shape = "Rect");
+	Image(std::string const& _texture_ID, std::initializer_list<float> const& _colour, std::string const& _object_shape = "Rect");
 
 	/*!*****************************************************************************
 	  \brief
-		This function initializes the component along with any Sprite2D specific
+		This function initializes the component along with any Image specific
 		members that need initializing
 
 	  \param _parent

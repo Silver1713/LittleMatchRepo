@@ -34,10 +34,10 @@
 namespace Game {
 	//TESTS
 	static unsigned int const game_objects_to_create{ 2500 };
-	static float const min_pos[3]{ -960.0f,-540.0f,0.0f }, max_pos[3]{ 1920.0f,1080.0f,0.0f };
-	static float const min_rot[3]{ 0.0f,0.0f,0.0f }, max_rot[3]{ 360.0f,360.0f,0.0f };
-	static float const min_scale[3]{ 1.0f,1.0f,0.0f }, max_scale[3]{ 10.0f,10.0f,0.0f };
-	static float const min_col[3]{ 0.0f,0.0f,0.0f }, max_col[3]{ 100.0f,100.0f,100.0f };
+	static ToastBox::Vec3 const min_pos{ -960.0f,-540.0f,0.0f }, max_pos{ 1920.0f,1080.0f,0.0f };
+	static ToastBox::Vec3 const min_rot{ 0.0f,0.0f,0.0f }, max_rot{ 360.0f,360.0f,0.0f };
+	static ToastBox::Vec3 const min_scale{ 1.0f,1.0f,0.0f }, max_scale{ 10.0f,10.0f,0.0f };
+	static ToastBox::Vec3 const min_col{ 0.0f,0.0f,0.0f }, max_col{ 100.0f,100.0f,100.0f };
 
 	static std::unordered_map<std::string, GameObject*> game_objects;
 	static std::unordered_map<std::string, Transform*> transform_cache;
@@ -58,12 +58,12 @@ namespace Game {
 		game_objects.clear();
 		transform_cache.clear();
 
-		transform_cache["Player"] = dynamic_cast<Transform*>(Game_Objects::Get_Game_Object("Player")->Get_Component(TRANSFORM));
+		transform_cache["Player"] = static_cast<Transform*>(Game_Objects::Get_Game_Object("Player")->Get_Component<Transform>());
 
 		auto& objects = Game_Objects::Get_Game_Objects();
 		for (auto& object : objects)
 		{
-			BoxCollider2D* collider = dynamic_cast<BoxCollider2D*>(object.second->Get_Component(BOXCOLLIDER2D));
+			BoxCollider2D* collider = static_cast<BoxCollider2D*>(object.second->Get_Component<BoxCollider2D>());
 			if (collider)
 			{
 				collider_cache[object.first] = collider;
@@ -74,25 +74,23 @@ namespace Game {
 		for (unsigned int i{}; i < game_objects_to_create; ++i)
 		{
 			game_objects[std::to_string(i)] = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("WHITE"), "White_" + std::to_string(i));
-			transform_cache[std::to_string(i)] = dynamic_cast<Transform*>(game_objects[std::to_string(i)]->Get_Component(TRANSFORM));
+			transform_cache[std::to_string(i)] = static_cast<Transform*>(game_objects[std::to_string(i)]->Get_Component<Transform>());
 
 			//randomize properties
-			float pos[3]{ (float)(std::rand() % (int)max_pos[0] + (int)min_pos[0]), (float)(std::rand() % (int)max_pos[1] + (int)min_pos[1]),0.0f };
-			float rot[3]{ (float)(std::rand() % (int)max_rot[0] + (int)min_rot[0]), (float)(std::rand() % (int)max_rot[1] + (int)min_rot[1]),0.0f };
-			float scale[3]{ (float)(std::rand() % (int)max_scale[0] + (int)min_scale[0]), (float)(std::rand() % (int)max_scale[1] + (int)min_scale[1]),0.0f };
-			float col[3]{ (float)(std::rand() % (int)max_col[0] + (int)min_col[0]) / 100.0f, (float)(std::rand() % (int)max_col[1] + (int)min_col[1]) / 100.0f,(float)(std::rand() % (int)max_col[2] + (int)min_col[2]) / 100.0f };
+			ToastBox::Vec3 pos{ (float)(std::rand() % (int)max_pos.x + (int)min_pos.x), (float)(std::rand() % (int)max_pos.y + (int)min_pos.y),0.0f };
+			ToastBox::Vec3 rot{ (float)(std::rand() % (int)max_rot.x + (int)min_rot.x), (float)(std::rand() % (int)max_rot.y + (int)min_rot.y),0.0f };
+			ToastBox::Vec3 scale{ (float)(std::rand() % (int)max_scale.x + (int)min_scale.x), (float)(std::rand() % (int)max_scale.y + (int)min_scale.y),0.0f };
+			ToastBox::Vec3 col{ (float)(std::rand() % (int)max_col.x + (int)min_col.x) / 100.0f, (float)(std::rand() % (int)max_col.y + (int)min_col.y) / 100.0f,(float)(std::rand() % (int)max_col.z + (int)min_col.z) / 100.0f };
 
-			transform_cache[std::to_string(i)]->Set_Positions({ pos[0],pos[1],pos[2] });
-			transform_cache[std::to_string(i)]->Set_Rotations({ rot[0],rot[1],rot[2] });
-			transform_cache[std::to_string(i)]->Set_Scale({ scale[0],scale[1],scale[2] });
+			transform_cache[std::to_string(i)]->Set_Position(pos);
+			transform_cache[std::to_string(i)]->Set_Rotation(rot);
+			transform_cache[std::to_string(i)]->Set_Scale(scale);
 
-			Sprite2D* s = dynamic_cast<Sprite2D*>(game_objects[std::to_string(i)]->Get_Component(SPRITE2D));
+			Sprite2D* s = static_cast<Sprite2D*>(game_objects[std::to_string(i)]->Get_Component<Sprite2D>());
 			s->Set_Colour({ col[0],col[1],col[2] });
 
 			game_objects[std::to_string(i)]->Disable();
 		}
-		//Game_Objects::Get_Game_Object("Player")->Add_Component(std::make_unique<BoxCollider2D>());
-
 	}
 
 	/*!*****************************************************************************
@@ -108,14 +106,13 @@ namespace Game {
 		SageRenderer::Set_Current_View(&camera);
 		SageRenderer::Set_Current_View(vp);
 
-
 		vp.setViewport();
 
 		SageAudio::Play_Sound("bgm_main_menu", LOOP);
 		SageAudio::Play_Sound("ambient_rain", LOOP);
 		
 
-		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
+		Physics* plrphy = static_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component<Physics>());
 		plrphy->Set_Gravity_Disable(false);
 		
 		SageAudio::Play_Sound("bgm_main_menu", LOOP);
@@ -129,29 +126,26 @@ namespace Game {
 	*******************************************************************************/
 	void Input()
 	{
-		bool movement = false;
-		float move_speed = 250.f;
-		Physics* plrphy = dynamic_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component(PHYSICS));
+		float move_speed = 300.f;
+		Physics* plrphy = static_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component<Physics>());
 		//tests
+
+		ToastBox::Vec2& curr_velocity = plrphy->Get_Current_Velocity();
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_W))
 		{
-			plrphy->Get_Velocity().y = (float)SageHelper::delta_time * move_speed;
-			movement = true;
+			curr_velocity.y = move_speed;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_A))
 		{
-			plrphy->Get_Velocity().x = (float)SageHelper::delta_time * -move_speed;
-			movement = true;
+			curr_velocity.x = -move_speed;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_S))
 		{
-			plrphy->Get_Velocity().y = (float)SageHelper::delta_time * -move_speed;
-			movement = true;
+			curr_velocity.y = -move_speed;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_D))
 		{
-			plrphy->Get_Velocity().x = (float)SageHelper::delta_time * move_speed;
-			movement = true;
+			curr_velocity.x = move_speed;
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_Q))
 		{
@@ -232,8 +226,6 @@ namespace Game {
 		}
 		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
 		{
-
-			//GameObject* random;
 			double x, y;
 			SAGEInputHandler::Get_Mouse_Position(x, y);
 			ToastBox::Vec2 mouse_pos{ static_cast<float>(x), static_cast<float>(y) };
@@ -243,31 +235,21 @@ namespace Game {
 
 			std::cout << "World: " << world.x << " " << world.y << std::endl;
 
-
-
 			GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("SPAWN"), "White_1");
-			transform_cache["White_1"] = dynamic_cast<Transform*>(random->Get_Component(TRANSFORM));
+			transform_cache["White_1"] = static_cast<Transform*>(random->Get_Component<Transform>());
 			collider_cache["White_1"] = random->Get_Component<BoxCollider2D>();
 
 			random->Get_Component<BoxCollider2D>()->Set_Debug(enable_collider_view);
 
-
 			float m_min_scale[3] = { 10.0f,10.0f,0.0f }, m_max_scale[3] = { 100.0f,100.0f,0.0f };
 
-			
+			ToastBox::Vec3 pos{ (float)(std::rand() % (int)max_pos.x + (int)min_pos.x), (float)(std::rand() % (int)max_pos.y + (int)min_pos.y),0.0f };
+			ToastBox::Vec3 rot{ (float)(std::rand() % (int)max_rot.x + (int)min_rot.x), (float)(std::rand() % (int)max_rot.y + (int)min_rot.y),0.0f };
+			ToastBox::Vec3 scale{ (float)(std::rand() % (int)m_max_scale[0] + (int)m_min_scale[0]), (float)(std::rand() % (int)m_max_scale[1] + (int)m_min_scale[1]),0.0f};
 
-
-			float pos[3]{ world.x,world.y,0.f };
-			float rot[3]{ (float)(std::rand() % (int)max_rot[0] + (int)min_rot[0]), (float)(std::rand() % (int)max_rot[1] + (int)min_rot[1]),0.0f };
-			float scale[3]{ (float)(std::rand() % (int)m_max_scale[0] + (int)m_min_scale[0]), (float)(std::rand() % (int)m_max_scale[1] + (int)m_min_scale[1]),0.0f };
-			float col[3]{ (float)(std::rand() % (int)max_col[0] + (int)min_col[0]) / 100.0f, (float)(std::rand() % (int)max_col[1] + (int)min_col[1]) / 100.0f,(float)(std::rand() % (int)max_col[2] + (int)min_col[2]) / 100.0f };
-
-			transform_cache["White_1"]->Set_Positions({ pos[0],pos[1],pos[2] });
-			transform_cache["White_1"]->Set_Rotations({ rot[0],rot[1],rot[2] });
-			transform_cache["White_1"]->Set_Scale({ scale[0],scale[1],scale[2] });
-
-
-
+			transform_cache["White_1"]->Set_Position(pos);
+			transform_cache["White_1"]->Set_Rotation(rot);
+			transform_cache["White_1"]->Set_Scale(scale);
 
 		}
 		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_RIGHT))
@@ -286,14 +268,14 @@ namespace Game {
 			{
 				for (unsigned int i{}; i < 3; i++)
 				{
-					float pos[3]{ (float)(std::rand() % (int)max_pos[0] + (int)min_pos[0]), (float)(std::rand() % (int)max_pos[1] + (int)min_pos[1]),0.0f };
-					float rot[3]{ (float)(std::rand() % (int)max_rot[0] + (int)min_rot[0]), (float)(std::rand() % (int)max_rot[1] + (int)min_rot[1]),0.0f };
+					ToastBox::Vec3 pos{ (float)(std::rand() % (int)max_pos.x + (int)min_pos.x), (float)(std::rand() % (int)max_pos.y + (int)min_pos.y),0.0f };
+					ToastBox::Vec3 rot{ (float)(std::rand() % (int)max_rot.x + (int)min_rot.x), (float)(std::rand() % (int)max_rot.y + (int)min_rot.y),0.0f };
 
 					game_objects["Green" + std::to_string(i)] = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("GREEN"), "Green" + std::to_string(i));
-					transform_cache["Green" + std::to_string(i)] = dynamic_cast<Transform*>(game_objects["Green" + std::to_string(i)]->Get_Component(TRANSFORM));
+					transform_cache["Green" + std::to_string(i)] = static_cast<Transform*>(game_objects["Green" + std::to_string(i)]->Get_Component<Transform>());
 
-					transform_cache["Green" + std::to_string(i)]->Set_Positions({ pos[0],pos[1],pos[2] });
-					transform_cache["Green" + std::to_string(i)]->Set_Rotations({ rot[0],rot[1],rot[2] });
+					transform_cache["Green" + std::to_string(i)]->Set_Position(pos);
+					transform_cache["Green" + std::to_string(i)]->Set_Rotation(rot);
 				}
 			}
 		}
@@ -326,7 +308,7 @@ namespace Game {
 		}
 
 
-		plrphy->Get_Velocity() *= 0.99f;
+		plrphy->Get_Current_Velocity() *= 0.99f;
 
 	}
 
@@ -344,16 +326,16 @@ namespace Game {
 		{
 			if (!obj.second)
 				continue;
-			BoxCollider2D* collider = dynamic_cast<BoxCollider2D*>(obj.second->Get_Component(BOXCOLLIDER2D));
+			BoxCollider2D* collider = static_cast<BoxCollider2D*>(obj.second->Get_Component<BoxCollider2D>());
 			if (collider)
 			{
 				collider->Register_Collision_Callback([collider](GameObject* _obj) {
 					if (!_obj) {
 						return;
 					}
-					Physics* phy = dynamic_cast<Physics*>(collider->Get_Parent()->Get_Component(PHYSICS));
+					Physics* phy = static_cast<Physics*>(collider->Get_Parent()->Get_Component<Physics>());
 					if (phy) {
-						phy->Get_Velocity() = { 0,0 };
+						phy->Get_Current_Velocity() = { 0,0 };
 						std::cout << _obj->Get_ID() << "collided with " << collider->Get_Parent()->Get_ID() << '\n';
 					}
 				});
@@ -365,7 +347,7 @@ namespace Game {
 		// AABB Here
 		for (auto& collider : colliders)
 		{
-			Physics* phys = dynamic_cast<Physics*>(collider->Get_Parent()->Get_Component(PHYSICS));
+			Physics* phys = static_cast<Physics*>(collider->Get_Parent()->Get_Component<Physics>());
 			if (!phys)
 				continue;
 			for (auto& other : colliders)
@@ -376,22 +358,22 @@ namespace Game {
 				}
 				float time = 0.f;
 				//
-					bool collide_cond = collider->Collision_Intersection_Rect_Rect(collider->Get_AABB(), phys->Get_Velocity(), other->Get_AABB(), {}, time);
+					bool collide_cond = collider->Collision_Intersection_Rect_Rect(collider->Get_AABB(), phys->Get_Current_Velocity(), other->Get_AABB(), {}, time);
 					if (collide_cond)
 					{
 						// Retrieve necessary components
 						GameObject* parent = collider->Get_Parent();
 						Transform* transform = parent->Get_Component<Transform>();
-						ToastBox::Vec3 prevPos = transform->previous_position;
+						ToastBox::Vec3 prevPos = transform->Get_Prev_Position();
 
 						// Get the current velocity
-						ToastBox::Vec2 curr_vel = phys->Get_Velocity();
-						ToastBox::Vec3 pos = { transform->Get_Positions()[0], transform->Get_Positions()[1], transform->Get_Positions()[2] };
+						ToastBox::Vec2 curr_vel = phys->Get_Current_Velocity();
+						ToastBox::Vec3 pos = transform->Get_Position();
 
 						ToastBox::Vec3 dir = pos - prevPos; // Direction of movement
 
 						// Get reference to the velocity for easier access
-						ToastBox::Vec2& vel = phys->Get_Velocity();
+						ToastBox::Vec2& vel = phys->Get_Current_Velocity();
 
 
 						auto& aabb1 = collider->Get_AABB();
@@ -415,22 +397,21 @@ namespace Game {
 								vel.x = 0;
 							}
 
-							transform->Set_Positions({ curr_vel.x * time + prevPos.x,pos.y, 1.f });
+							transform->Set_Position({ curr_vel.x * time + prevPos.x,pos.y, pos.z });
 						}
 						else
 						{
 							if (dir.y > 0 && !(vel.y < 0))
 							{
-								std::cout << "Enter bottom;\n";
-								vel.y = 0; // Stop upward movement
-							}
-							else if (dir.y < 0 && !(vel.y > 0))
-							{
 								std::cout << "Enter top;\n";
 								vel.y = 0;
 							}
-
-							transform->Set_Positions({ pos.x, curr_vel.y * time + prevPos.y, 1.f });
+							else if (dir.y < 0 && !(vel.y > 0))
+							{
+								std::cout << "Enter bottom;\n";
+								vel.y = 0;								
+							}
+							transform->Set_Position({ pos.x, curr_vel.y * time + prevPos.y, pos.z });
 						}
 
 

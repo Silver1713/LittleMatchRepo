@@ -39,6 +39,8 @@
 #include "SageTimer.hpp"
 #include "SageJSON.hpp"
 
+#include "Game.hpp"
+
 // Forward declaration
 void init();
 void update();
@@ -47,7 +49,7 @@ void draw();
 void exit();
 int loop = 60;
 int window = 3;
- const std::string window_config_path = "../SageEngine/data/configuration/window.json";
+ const std::string window_config_path = "../SageEngine/data/configuration/project_config.json";
 constexpr double physics_update_target = 0.02;
 namespace
 {
@@ -97,28 +99,29 @@ int main()
 void init()
 {
     SageTimer::Init();
-	SageJSON::SageJSON window_config;
+	SageJSON::SageJSON config;
 
 	std::ifstream file(window_config_path);
 
       
     while (file)
     {
-		file >> window_config;
+		file >> config;
     }
 
-    window_config.print();
+    config.print();
 
     file.close();
 
-	int window_width = static_cast<int>(window_config["Window"]["Width"].as<SageJSON::SageJSON::NumberValue>());
+	int window_width = static_cast<int>(config["Window"]["Width"].as<SageJSON::SageJSON::NumberValue>());
 	int window_height = static_cast<int>(
-		window_config["Window"]["Height"].as<SageJSON::SageJSON::NumberValue>());
+        config["Window"]["Height"].as<SageJSON::SageJSON::NumberValue>());
 
-	std::string window_title = window_config["Window"]["Title"].as<SageJSON::SageJSON::StringValue>();
+	std::string window_title = config["Window"]["Title"].as<SageJSON::SageJSON::StringValue>();
+    std::string editor_startup_scene = config["Other_Configurations"]["Editor_Startup_Scene"].as<SageJSON::SageJSON::StringValue>();
+    std::string game_startup_scene = config["Other_Configurations"]["Game_Startup_Scene"].as<SageJSON::SageJSON::StringValue>();
 
-
-    window_config.close();
+    config.close();
     
     int status = SageHelper::Init(window_width, window_height, window_title.c_str());
     SageShaderManager::Add_Shader_Include("graphic_lib", "../SageGraphics/shaders/");
@@ -130,16 +133,18 @@ void init()
         std::cerr << "Sage failed to create OpenGL context.";
 
         std::exit(EXIT_FAILURE);
-    }    
-    Assets::Textures::Init();
-    Assets::Prefabs::Init();
-    Assets::Audio::Init();
-    Assets::Levels::Init();
+    }
+    Assets::Init();
     Prefabs::Init();
-    SM::Load();
-    SM::Init();
     SageAudio::Init();
-
+    if (1) // to be changed with some sort of flag to detect if running through editor or as built game
+    {
+        SM::Startup_Scene(editor_startup_scene);
+    }
+    else 
+    {
+        SM::Startup_Scene(game_startup_scene);
+    }
 }
 
 /*!*****************************************************************************
@@ -192,7 +197,7 @@ void exit()
 {
     Game_Objects::Exit();
     SM::Free();
-    Assets::Textures::Unload();
+    Assets::Unload();
     SM::Unload();
     SageHelper::Exit();
     SageAudio::Exit();

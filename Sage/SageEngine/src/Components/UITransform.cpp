@@ -1,31 +1,31 @@
 /* Start Header ************************************************************************/
 /*!
-\file		Transform.cpp
+\file		UITransform.cpp
 \title		Little Match
 \author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
 \date		10 September 2024
-\brief		Contains the derived class Transform that overrides the virtual functions of the
+\brief		Contains the derived class UITransform that overrides the virtual functions of the
 			base class Component to do transform specific tasks.
 
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #include "Components/Component.hpp"
-#include "Components/Transform.hpp"
+#include "Components/UITransform.hpp"
 
 #include "Components/Physics.hpp"
 #include "GameObjects.hpp"
 
 /*!*****************************************************************************
   \brief
-	Default constructor for Transform
+	Default constructor for UITransform
 *******************************************************************************/
-Transform::Transform() {}
+UITransform::UITransform() {}
 
 /*!*****************************************************************************
   \brief
-	Constructor for Transform that has values for initial positions, rotations and scales
+	Constructor for UITransform that has values for initial positions, rotations and scales
 
   \param _pos
 	initial positions for the transform
@@ -39,11 +39,11 @@ Transform::Transform() {}
   \param _is_UI_element
 	whether this gameobject is a UI element.
 *******************************************************************************/
-Transform::Transform(ToastBox::Vec3 const& _pos, ToastBox::Vec3 const& _rot, ToastBox::Vec3 const& _scale) : position{ _pos }, rotation{ _rot }, scale{ _scale }, previous_position{ _pos } {}
+UITransform::UITransform(ToastBox::Vec3 const& _pos, ToastBox::Vec3 const& _rot, ToastBox::Vec3 const& _scale) : position{ _pos }, rotation{ _rot }, scale{ _scale }, previous_position{ _pos } {}
 
 /*!*****************************************************************************
   \brief
-	Override constructor for Transform that has values for initial positions, rotations and scales
+	Override constructor for UITransform that has values for initial positions, rotations and scales
 
   \param _pos
 	initial positions for the transform
@@ -54,29 +54,29 @@ Transform::Transform(ToastBox::Vec3 const& _pos, ToastBox::Vec3 const& _rot, Toa
   \param _scale
 	initial scales for the transform
 *******************************************************************************/
-Transform::Transform(std::initializer_list<float> const& _pos, std::initializer_list<float> const& _rot, std::initializer_list<float> const& _scale) : Transform(
+UITransform::UITransform(std::initializer_list<float> const& _pos, std::initializer_list<float> const& _rot, std::initializer_list<float> const& _scale) : UITransform(
 	ToastBox::Vec3(*(_pos.begin()), *(_pos.begin() + 1), *(_pos.begin() + 2)),
 	ToastBox::Vec3(*(_rot.begin()), *(_rot.begin() + 1), *(_rot.begin() + 2)),
 	ToastBox::Vec3(*(_scale.begin()), *(_scale.begin() + 1), *(_scale.begin() + 2))) {}
 
 /*!*****************************************************************************
   \brief
-	This function initializes the component along with any Transform specific
+	This function initializes the component along with any UITransform specific
 	members that need initializing
 
   \param _parent
 	The gameobject that created this component
 *******************************************************************************/
-void Transform::Init(GameObject* _parent)
+void UITransform::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
 }
 
 /*!*****************************************************************************
   \brief
-	Updates members of Transform separately from the set functions
+	Updates members of UITransform separately from the set functions
 *******************************************************************************/
-void Transform::Update()
+void UITransform::Update()
 {
 	// update model matrix
 
@@ -90,13 +90,11 @@ void Transform::Update()
 
 	model_matrix = ~translation_matrix * ~rotation_matrix * ~scale_matrix;
 
-
 	if (!(position == previous_position)) {
 		previous_position = position;
 	}
-	
 }
-void Transform::Exit()
+void UITransform::Exit()
 {
 
 }
@@ -108,7 +106,7 @@ void Transform::Exit()
   \return
 	the enum representating what component this is
 *******************************************************************************/
-ComponentType Transform::Get_Component_Type() { return TRANSFORM; }
+ComponentType UITransform::Get_Component_Type() { return UITRANSFORM; }
 
 /*!*****************************************************************************
   \brief
@@ -117,7 +115,7 @@ ComponentType Transform::Get_Component_Type() { return TRANSFORM; }
   \param _new_pos
 	new positions for the transform
 *******************************************************************************/
-void Transform::Set_Position(ToastBox::Vec3 const& _new_pos)
+void UITransform::Set_Position(ToastBox::Vec3 const& _new_pos)
 {
 	position = _new_pos;
 }
@@ -129,7 +127,7 @@ void Transform::Set_Position(ToastBox::Vec3 const& _new_pos)
   \param _new_pos
 	new positions for the transform
 *******************************************************************************/
-void Transform::Set_Position(std::initializer_list<float> const& _new_pos)
+void UITransform::Set_Position(std::initializer_list<float> const& _new_pos)
 {
 	for (unsigned int i{}; i < 3; i++)
 	{
@@ -144,7 +142,7 @@ void Transform::Set_Position(std::initializer_list<float> const& _new_pos)
   \return
 	the position member
 *******************************************************************************/
-ToastBox::Vec3 const& Transform::Get_Position()
+ToastBox::Vec3 const& UITransform::Get_Position()
 {
 	return position;
 }
@@ -156,7 +154,7 @@ ToastBox::Vec3 const& Transform::Get_Position()
   \param _new_pos
 	new positions for the transform
 *******************************************************************************/
-void Transform::Set_Prev_Position(ToastBox::Vec3 const& _new_prev_pos)
+void UITransform::Set_Prev_Position(ToastBox::Vec3 const& _new_prev_pos)
 {
 	previous_position = _new_prev_pos;
 }
@@ -168,7 +166,7 @@ void Transform::Set_Prev_Position(ToastBox::Vec3 const& _new_prev_pos)
   \param _new_pos
 	new positions for the transform
 *******************************************************************************/
-void Transform::Set_Prev_Position(std::initializer_list<float> const& _new_prev_pos)
+void UITransform::Set_Prev_Position(std::initializer_list<float> const& _new_prev_pos)
 {
 	for (unsigned int i{}; i < 3; i++)
 	{
@@ -183,7 +181,7 @@ void Transform::Set_Prev_Position(std::initializer_list<float> const& _new_prev_
   \return
 	the position member
 *******************************************************************************/
-ToastBox::Vec3 const& Transform::Get_Prev_Position()
+ToastBox::Vec3 const& UITransform::Get_Prev_Position()
 {
 	return previous_position;
 }
@@ -195,7 +193,7 @@ ToastBox::Vec3 const& Transform::Get_Prev_Position()
   \param _new_rot
 	new rotation for the transform
 *******************************************************************************/
-void Transform::Set_Rotation(ToastBox::Vec3 const& _new_rot)
+void UITransform::Set_Rotation(ToastBox::Vec3 const& _new_rot)
 {
 	rotation = _new_rot;
 }
@@ -207,7 +205,7 @@ void Transform::Set_Rotation(ToastBox::Vec3 const& _new_rot)
   \param _new_rot
 	new rotation for the transform
 *******************************************************************************/
-void Transform::Set_Rotation(std::initializer_list<float> const& _new_rot)
+void UITransform::Set_Rotation(std::initializer_list<float> const& _new_rot)
 {
 	for (unsigned int i{}; i < 3; i++)
 	{
@@ -222,7 +220,7 @@ void Transform::Set_Rotation(std::initializer_list<float> const& _new_rot)
   \return
 	the rotation member
 *******************************************************************************/
-ToastBox::Vec3 const& Transform::Get_Rotation()
+ToastBox::Vec3 const& UITransform::Get_Rotation()
 {
 	return rotation;
 }
@@ -234,7 +232,7 @@ ToastBox::Vec3 const& Transform::Get_Rotation()
   \param _new_scale
 	new scale for the transform
 *******************************************************************************/
-void Transform::Set_Scale(ToastBox::Vec3 const& _new_scale)
+void UITransform::Set_Scale(ToastBox::Vec3 const& _new_scale)
 {
 	scale = _new_scale;
 }
@@ -246,7 +244,7 @@ void Transform::Set_Scale(ToastBox::Vec3 const& _new_scale)
   \param _new_scale
 	new scale for the transform
 *******************************************************************************/
-void Transform::Set_Scale(std::initializer_list<float> const& _new_scale)
+void UITransform::Set_Scale(std::initializer_list<float> const& _new_scale)
 {
 	for (unsigned int i{}; i < 3; i++)
 	{
@@ -261,7 +259,7 @@ void Transform::Set_Scale(std::initializer_list<float> const& _new_scale)
   \return
 	the scale member
 *******************************************************************************/
-ToastBox::Vec3 const& Transform::Get_Scale()
+ToastBox::Vec3 const& UITransform::Get_Scale()
 {
 	return scale;
 }
@@ -273,7 +271,7 @@ ToastBox::Vec3 const& Transform::Get_Scale()
   \param _delta_pos
 	the position to add to the current position
 *******************************************************************************/
-void Transform::Translate(ToastBox::Vec3 const& _delta_pos)
+void UITransform::Translate(ToastBox::Vec3 const& _delta_pos)
 {
 	position += _delta_pos;
 }
@@ -285,7 +283,7 @@ void Transform::Translate(ToastBox::Vec3 const& _delta_pos)
   \param _delta_pos
 	the position to add to the current position
 *******************************************************************************/
-void Transform::Translate(std::initializer_list<float> const& _delta_pos)
+void UITransform::Translate(std::initializer_list<float> const& _delta_pos)
 {
 	for (unsigned int i{}; i < 3; i++)
 	{
@@ -300,7 +298,7 @@ void Transform::Translate(std::initializer_list<float> const& _delta_pos)
   \param _delta_pos
 	the change in rotation
 *******************************************************************************/
-void Transform::Rotate(ToastBox::Vec3 const& _delta_rot)
+void UITransform::Rotate(ToastBox::Vec3 const& _delta_rot)
 {
 	rotation += _delta_rot;
 }
@@ -312,7 +310,7 @@ void Transform::Rotate(ToastBox::Vec3 const& _delta_rot)
   \param _delta_pos
 	the change in rotation
 *******************************************************************************/
-void Transform::Rotate(std::initializer_list<float> const& _delta_rot)
+void UITransform::Rotate(std::initializer_list<float> const& _delta_rot)
 {
 	for (unsigned int i{}; i < 3; i++)
 	{
@@ -327,7 +325,7 @@ void Transform::Rotate(std::initializer_list<float> const& _delta_rot)
   \param _delta_pos
 	the change in scale
 *******************************************************************************/
-void Transform::Scale(ToastBox::Vec3 const& _delta_scale)
+void UITransform::Scale(ToastBox::Vec3 const& _delta_scale)
 {
 	scale += _delta_scale;
 }
@@ -339,7 +337,7 @@ void Transform::Scale(ToastBox::Vec3 const& _delta_scale)
   \param _delta_pos
 	the change in scale
 *******************************************************************************/
-void Transform::Scale(std::initializer_list<float> const& _delta_scale)
+void UITransform::Scale(std::initializer_list<float> const& _delta_scale)
 {
 	for (unsigned int i{}; i < 3; i++)
 	{
@@ -354,7 +352,7 @@ void Transform::Scale(std::initializer_list<float> const& _delta_scale)
   \return
 	the 3x3 Model Matrix
 *******************************************************************************/
-ToastBox::Matrix3x3& Transform::Get_Model_Matrix()
+ToastBox::Matrix3x3& UITransform::Get_Model_Matrix()
 {
 	return model_matrix;
 }

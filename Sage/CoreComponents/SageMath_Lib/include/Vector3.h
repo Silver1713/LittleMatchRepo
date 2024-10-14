@@ -283,6 +283,30 @@ namespace ToastBox {
 
 		/*!*****************************************************************************
 		  \brief
+		  Overloads subscript operator to access x, y or z in the Vec3
+
+		  \param _index
+		  Index to return
+
+		  \return
+		  float in x, y or z
+		*******************************************************************************/
+		float& operator[](unsigned int const index);
+
+		/*!*****************************************************************************
+		  \brief
+		  Overloads subscript operator to access x, y or z in the Vec3
+
+		  \param _index
+		  Index to return
+
+		  \return
+		  float in x, y or z
+		*******************************************************************************/
+		float const& operator[](unsigned int const index) const;
+
+		/*!*****************************************************************************
+		  \brief
 		   Reset the vector to zero
 		*******************************************************************************/
 		void Clear();
@@ -319,5 +343,5 @@ namespace ToastBox {
 	   True if vectors are equal, false otherwise
 	*******************************************************************************/
 	bool operator==(Vec3 const& lhs, Vec3 const& rhs);
-
+	
 }

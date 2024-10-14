@@ -13,18 +13,20 @@
 /* End Header **************************************************************************/
 #pragma once
 #include "Components/Component.hpp"
+#include "Components/Transform.hpp"
 #include "Vector2.h"
 
 class Physics : public Component
 {
 private:
-	ToastBox::Vec2 velocity;
-	ToastBox::Vec2 curr_velocity;
+	ToastBox::Vec2 velocity{};
+	ToastBox::Vec2 curr_velocity{};
 
-	//add whatever member properties u want for physics
-	bool enable_gravity; // disable physics
-	float mass;
-	float gravity;
+	Transform* transform{};
+
+	bool enable_gravity{ true }; // disable physics
+	float mass{ 1.0f };
+	float gravity{ 200.f };
 
 
 public:
@@ -35,10 +37,9 @@ public:
 	
 	void Update() override;
 	void Exit() override;
-	ToastBox::Vec2& Get_Velocity();
+	ToastBox::Vec2 const& Get_Velocity();
+	ToastBox::Vec2& Get_Current_Velocity();
 	ComponentType Get_Component_Type() override;
-
-	//add whatever declarations of getters/setters u need for physics
 
 	// getters/setters for physics
 	void Set_Gravity_Disable(bool _is_static);

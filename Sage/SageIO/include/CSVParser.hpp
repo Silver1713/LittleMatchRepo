@@ -30,7 +30,30 @@ struct Parsed_CSV
 	int num_cols{};
 	std::vector<Parsed_CSV_Row_Data> comma_seperated_data{};
 
-	Parsed_CSV_Row_Data* Find_Row_With_ID(std::string const& search_string, unsigned int const col = 0);
+	/*!*****************************************************************************
+	  \brief
+		Gets the map of prefabs
+
+	  \param _search_string
+		the string to look for
+
+	  \param _col
+		column to search for
+
+	  \return
+		Pointer to the row's data
+	*******************************************************************************/
+	Parsed_CSV_Row_Data* Find_Row_With_ID(std::string const& _search_string, unsigned int const _col = 0);
 };
 
-Parsed_CSV Parse_CSV(std::string const& path);
+/*!*****************************************************************************
+  \brief
+	Parses the csv in the path
+
+  \param _path
+	the path to parse
+
+  \return
+	The parsed csv
+*******************************************************************************/
+Parsed_CSV Parse_CSV(std::string const& _path);

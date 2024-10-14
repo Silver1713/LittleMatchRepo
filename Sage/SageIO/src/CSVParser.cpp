@@ -18,6 +18,19 @@
 #include <algorithm>
 #include "CSVParser.hpp"
 
+/*!*****************************************************************************
+  \brief
+	Gets the map of prefabs
+
+  \param _search_string
+	the string to look for
+
+  \param _col
+	column to search for
+
+  \return
+	Pointer to the row's data
+*******************************************************************************/
 Parsed_CSV_Row_Data* Parsed_CSV::Find_Row_With_ID(std::string const& search_string, unsigned int col)
 {
 	for (Parsed_CSV_Row_Data m_pd : comma_seperated_data)
@@ -30,6 +43,16 @@ Parsed_CSV_Row_Data* Parsed_CSV::Find_Row_With_ID(std::string const& search_stri
 	return nullptr;
 }
 
+/*!*****************************************************************************
+  \brief
+	Parses the csv in the path
+
+  \param _path
+	the path to parse
+
+  \return
+	The parsed csv
+*******************************************************************************/
 Parsed_CSV Parse_CSV(std::string const& path)
 {
 
