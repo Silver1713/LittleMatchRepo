@@ -1,13 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
-\file		SageAssembler.hpp
+\file		SageScriptCompiler.hpp
 \title		Memory's Flame
 \author		Yeo Jia Hao, jiahao.yeo, 2301325 (100%)
 \par		jiahao.yeo@digipen.edu
 \date		02 October 2024
 \brief		This file contains the declaration for the SageAssembler class.
 
-			SageAssembler is a middle man class that will calls the external CS assembler
+			SageScriptCompiler is a middle man class that will calls the external CS assembler
 			to compile the c sharp scripts into a dll/exe file. It contain declaration of
 			functions that takes in a C# script in both string and file format and compile
 			it into a C# assembly file. The assembly file will be loaded into the mono
@@ -29,6 +29,7 @@ struct SageAssembly {
 	std::string name;
 	std::string path_to_assembly;
 };
+
 class SageAssembler
 {
 	size_t script_to_tread_ratio; //!< How many scripts that the assembler can accept to compile per thread
