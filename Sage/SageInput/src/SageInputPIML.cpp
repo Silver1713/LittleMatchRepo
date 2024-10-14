@@ -89,6 +89,8 @@ void SageInputPIML::Set_Callback()
 	glfwSetMouseButtonCallback(glfwGetCurrentContext(), GLFWInputHandler::Mouse_Cb);
 	glfwSetCursorPosCallback(glfwGetCurrentContext(), GLFWInputHandler::Mouse_Pos_Cb);
 
+	
+
 }
 
 /*!*****************************************************************************
