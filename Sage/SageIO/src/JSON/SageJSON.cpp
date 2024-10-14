@@ -92,14 +92,14 @@ namespace SageJSON::AST
 
 	}
 
-	
+
 
 	std::string StringNode::toString()
 	{
 		if (key.empty())
 			return "\"" + value + "\"";
 		else
-			return  "\"" + key + "\"" + " : " + "\""+ value + "\"";
+			return  "\"" + key + "\"" + " : " + "\"" + value + "\"";
 
 	}
 
@@ -279,7 +279,7 @@ namespace SageJSON::AST
 
 	std::string ArrayNode::toString()
 	{
-		
+
 
 		std::string str;
 		if (key.empty())
@@ -482,10 +482,10 @@ namespace SageJSON
 {
 	SageJSON::SageJSON() : lexer_state(Lexer::LEXER_STATE::START), file_path{ "" }, tokens{}, node_stack{}, read_size(8096), size(0)
 	{
-		
+
 	}
 
-	SageJSON::SageJSON(std::string filepath) : lexer_state(Lexer::LEXER_STATE::START), file_path{ filepath }, tokens{},node_stack{}
+	SageJSON::SageJSON(std::string filepath) : lexer_state(Lexer::LEXER_STATE::START), file_path{ filepath }, tokens{}, node_stack{}
 	{
 
 		std::string line;
@@ -503,7 +503,7 @@ namespace SageJSON
 
 
 
-		
+
 
 		ast.getRoot()->print();
 
@@ -516,7 +516,7 @@ namespace SageJSON
 
 	}
 
-	
+
 
 
 	int SageJSON::lex(std::string& JSONLine) //lexical analysis line by line.
@@ -532,7 +532,7 @@ namespace SageJSON
 			char const& symbol = *begin;
 
 
-			if (*begin > 255  || *begin <= -1)
+			if (*begin > 255 || *begin <= -1)
 			{
 				begin++;
 				continue;
@@ -618,31 +618,37 @@ namespace SageJSON
 			else if (lexer_state == Lexer::LEXER_STATE::END_NUMBER)
 			{
 
+				/*if (symbol == ']' || symbol == '[' || symbol == '}' || symbol == '{')
+				{
+					Lexer::Token token{ Lexer::Token::Type::SYMBOL, std::string{symbol} };
+					tokens.emplace_back(token);
+				}*/
 				Lexer::Token token(Lexer::Token::Type::NUMBER, container);
 				tokens.emplace_back(token);
 				container.clear();
-				if (begin < JSONLine.end() - 1 && begin > JSONLine.begin())
+				if (begin <= JSONLine.end() - 1 && begin > JSONLine.begin())
 					begin--;
 				decimal_count = 0;
+
 			}
 
 			begin++;
 		}
 
-
+		
 		return 0;
 	}
 
 
 	int SageJSON::construct_ast()
 	{
-		
+
 		static std::string current{};
 		static bool inArray{ false };
 		static bool inObject{ false };
 		for (Lexer::Token& token : tokens)
 		{
-			if (current.empty() && token.type == Lexer::Token::Type::STRING && (!inArray || (inObject && inArray)) )
+			if (current.empty() && token.type == Lexer::Token::Type::STRING && (!inArray || (inObject && inArray)))
 			{
 				current = token.value;
 				continue;
@@ -674,8 +680,22 @@ namespace SageJSON
 				else if (token.value == "}")
 				{
 					// pop object
-					inObject = false;
 					node_stack.pop();
+					if (node_stack.empty())
+					{
+						inObject = false;
+					}
+					else
+					{
+						if (node_stack.top()->getType() == AST::Node::AST_Type::OBJECT)
+						{
+							inObject = true;
+						}
+						else inObject = false;
+					}
+
+
+					inObject = false;
 				}
 
 			}
@@ -704,8 +724,21 @@ namespace SageJSON
 				else if (token.value == "]")
 				{
 					// pop array
+
 					node_stack.pop();
-					inArray = false;
+
+					if (node_stack.empty())
+					{
+						inArray = false;
+					}
+					else
+					{
+						if (node_stack.top()->getType() == AST::Node::AST_Type::ARRAY)
+						{
+							inArray = true;
+						}
+						else inArray = false;
+					}
 				}
 			}
 
@@ -742,7 +775,7 @@ namespace SageJSON
 	void SageJSON::close()
 	{
 
-		
+
 		cleanup();
 		while (!node_stack.empty())
 		{
@@ -754,7 +787,7 @@ namespace SageJSON
 
 	SageJSON& SageJSON::operator[](std::string key)
 	{
-		
+
 		try
 		{
 			if (current_node == nullptr)
@@ -773,11 +806,11 @@ namespace SageJSON
 
 					for (auto i : *values)
 					{
-						
+
 
 						if (i->getName() == key)
 						{
-							
+
 							current_node = i;
 							return *this;
 						}
@@ -807,16 +840,17 @@ namespace SageJSON
 
 
 			throw std::out_of_range("Key '" + key + "' not found in JSON object or array");
-		} catch (std::out_of_range err)
+		}
+		catch (std::out_of_range err)
 		{
 			SageJSONCerr << "Warning: Key is not found.An nullptr is returned.\n";
 			current_node = nullptr;
 			return *this;
-			
-		} 
+
+		}
 	}
 
-	
+
 	SageJSON& SageJSON::operator[](int key)
 	{
 
@@ -828,9 +862,9 @@ namespace SageJSON
 			}
 
 
-		
 
-			
+
+
 			AST::ArrayNode* arr = dynamic_cast<AST::ArrayNode*>(current_node);
 			if (arr)
 			{
@@ -840,7 +874,7 @@ namespace SageJSON
 				{
 					current_node = (*values)[key];
 					return *this;
-					
+
 				}
 			}
 			throw std::out_of_range("index out of range in JSON array");
@@ -881,13 +915,15 @@ namespace SageJSON
 
 		if (json.size < json.read_size)
 		{
-			
-			if (std::getline(is,line))
+
+			if (std::getline(is, line))
 			{
 				json.lex(line);
+
 				json.construct_ast();
 			}
-		} else
+		}
+		else
 		{
 			line.resize(json.read_size);
 			if (is.read(&line[0], json.read_size))
@@ -896,12 +932,12 @@ namespace SageJSON
 				json.construct_ast();
 			}
 		}
-		
-		
-		
 
-		
-		
+
+
+
+
+
 		return is;
 	}
 
@@ -922,6 +958,6 @@ namespace SageJSON
 	}
 
 
-	
+
 
 }

@@ -20,7 +20,6 @@ int main()
 	SageJSON::SageJSON json{};
 
 	std::ifstream file(data);
-	std::ofstream lol(output);
 
 	if (!file)
 		return 1;
@@ -37,11 +36,11 @@ int main()
 	}
 
 
-	auto v = json["MODIFY_ME"] = 9820.0;
-	auto v2 = json["MODIFY_ME_NAME"] = std::string("JOHN DOE");
+	for (int i =0; i < 13; i++)
+	{
+		std::cout << json["Prefabs"][i]["ID"].as<SageJSON::SageJSON::StringValue>() << std::endl;
+	}
 
-	lol.clear();
-	lol << json;
 	
 
 
