@@ -7,13 +7,13 @@ namespace SageEngine
     {   
         // Mono to call cpp
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static  bool Get_Key(int keycode);
+        public extern static bool Get_Key(int keycode);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static  bool Get_Key_Pressed(int keycode);
+        public extern static bool Get_Key_Pressed(int keycode);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static  void Get_Mouse_Pos(out float mouse_x, out float mouse_y);
+        public extern static void Get_Mouse_Pos(out float mouse_x, out float mouse_y);
     }
 
     
