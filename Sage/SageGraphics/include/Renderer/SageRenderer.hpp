@@ -21,6 +21,7 @@
 
 #include "SageCamera.hpp"
 #include "SageViewport.hpp"
+#include "SageInstance.hpp"
 #include "SagePoint.hpp"
 #include "Vector4.h"
 
@@ -163,6 +164,7 @@ struct SageRenderer
 		SAGE_ENABLE_VERTEX_COLOR = 4, //!< Use vertex color
 		SAGE_ENABLE_TEXTURE = 8, //!< Use texture
 		SAGE_ENABLE_CAMERA = 16,//!< Enable camera when rendering, when disable renderer will use screen space else it will use world space.
+		SAGE_ENABLE_INSTANCING = 32, //!< Enable instancing
 	};
 
 	static RENDER_CONFIG default_config; //!< The default configuration used when no configuration are specified
@@ -235,6 +237,17 @@ struct SageRenderer
 		The object to be drawn to the screen.
 	*******************************************************************************/
 	static void Draw_Filled(SageObject& object);
+
+	/*!*****************************************************************************
+	\brief
+		Draw the given object to the screen with the given render configuration.
+
+		This function only take in a reference to a SageObject and draw the object to
+		the screen. It will use the default configuration when drawing the object.
+	\param object
+		The object to be drawn to the screen.
+	*******************************************************************************/
+	static void Draw_Filled_Instance(SageInstance& object);
 	/*!*****************************************************************************
 	\brief
 		Draw the given object to the screen with the given render configuration. 

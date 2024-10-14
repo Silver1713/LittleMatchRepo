@@ -20,7 +20,13 @@
 #include "SageTexture.h"
 #include "SagePoint.hpp"
 #include "SageRendererInternal.hpp"
+
+#include <iostream>
+#include <ostream>
+
 #include "SageCamera.hpp"
+#include "SageCameraInternal.hpp"
+#include "glm/ext/matrix_clip_space.hpp"
 #include "glm/gtc/type_ptr.inl"
 
 
@@ -258,9 +264,12 @@ void SageRendererInternal::Init()
 	else
 	{
 		SageShaderManager::Search_And_Create_Shader_Program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
+		SageShaderManager::Search_And_Create_Shader_Program("RECT_INSTANCE_SHADER", "RectVertexShaderInstance", "RectFragmentShaderInstance");
+
 		default_shader = &SageShaderManager::shaders["BASE_SHADER"];
 
 	}
+
 
 	Set_Option_On(I_SAGE_ENABLE_ALPHA | I_SAGE_ENABLE_BORDER);
 
@@ -520,4 +529,69 @@ void SageRendererInternal::Clear_Color(ToastBox::Vec4 clr)
 	glClearColor(clr.x, clr.y, clr.z, clr.a);
 
 }
+
+void SageRendererInternal::Draw_Filled(SageInstance& instances)
+{
+	// Calculate using the camera or screen
+
+		ToastBox::Matrix3x3 view_proj = camera->Get_Projection_View_Matrix();
+		glm::mat4 view_proj_mat = glm::mat4(1.f);
+		if (default_config.options & I_SAGE_ENABLE_CAMERA)
+		{
+			glm::mat4 view_proj_mat = {
+			view_proj.data()[0], view_proj.data()[1], view_proj.data()[2],0,
+			view_proj.data()[3], view_proj.data()[4], view_proj.data()[5],0,
+			0,0,1,0,
+			view_proj.data()[6], view_proj.data()[7], 0,1,
+			};
+		}
+		else
+		{
+			view_proj_mat[0] = glm::vec4(viewport.get_viewport_xform()[0][0], viewport.get_viewport_xform()[0][1],0, viewport.get_viewport_xform()[0][2]);
+			view_proj_mat[1] = glm::vec4(viewport.get_viewport_xform()[1][0], viewport.get_viewport_xform()[1][1], 0, viewport.get_viewport_xform()[1][2]);
+			view_proj_mat[2] = glm::vec4(0, 0, 1, 0);
+			view_proj_mat[3] = glm::vec4(viewport.get_viewport_xform()[2][0], viewport.get_viewport_xform()[2][1], 0, 1);
+			
+		}
+
+	for (InstanceData& data : instances)
+	{
+		if (default_config.options & I_SAGE_ENABLE_CAMERA)
+		{
+			data.ndc_xform_mat = view_proj_mat * data.model_matrix;
+			
+
+			
+			
+		}
+		else
+		{
+			
+			
+			data.ndc_xform_mat = view_proj_mat * data.model_matrix;
+			glm::vec4 test = data.ndc_xform_mat * glm::vec4(0, 0, 1, 1);
+
+			float a = test.x;
+		}
+
+		
+
+
+
+	}
+
+	instances.Load_Instance_To_GPU();
+
+	SageShader* shader = &SageShaderManager::shaders["RECT_INSTANCE_SHADER"];
+	glBindVertexArray(instances.Get_Model()->Get_VAO_Handle());
+	shader->Activate();
+
+	
+	glDrawElementsInstanced(GL_TRIANGLES, static_cast<int>(instances.Get_Model()->Get_Vertex_Indices().size()), GL_UNSIGNED_SHORT, nullptr, instances.Get_Instance_Count());
+	shader->Deactivate();
+	glBindVertexArray(0);
+	
+	
+}
+
 

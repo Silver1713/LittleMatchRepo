@@ -14,30 +14,58 @@
 //#include "SageCameraInternal.hpp"
 
 //
-//SageViewport v_p;
-//SageTexture _p;
-//
-//SageCamera camera2d;
+SageViewport v_p;
 
 
+SageCamera camera2d;
 
+SageInstance instance;
+
+//OpenGL err callback
+void APIENTRY SageOpenGLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+{
+	std::cout << "GL ERROR: " << message << std::endl;
+}
 
 void ExampleScene::init()
 {
-	//SageShaderManager::Add_Shader_Include("graphic_lib", "../SageGraphics/shaders/");
+	// Set callback
+	
+	glDebugMessageCallback(SageOpenGLDebugCallback, nullptr);
+	// Enable
+	glEnable(GL_DEBUG_OUTPUT);
+	SageShaderManager::Add_Shader_Include("graphic_lib", "../SageGraphics/shaders/");
+	SageRenderer::Init();
+	SageModel* mdl = &SageModelManager::models["PRIMITIVE_RECT"];
+	instance.Init(&SageModelManager::models["PRIMITIVE_RECT"]);
+	/*glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+	glPointSize(15.f);*/
+	for (int i=0; i < 10000;i++)
+	{
+		
+		int randx = rand() % SageHelper::WINDOW_WIDTH;
+		int randy = rand() % SageHelper::WINDOW_HEIGHT;
+
+		float rand_sizex = (rand() % 50) + 10;
+		float rand_sizey = (rand() % 50) + 10;
+		glm::vec4 randomColor = { (float)rand() / RAND_MAX, (float)rand() / RAND_MAX, (float)rand() / RAND_MAX, 1 };
+		instance.Append_Instance({ randx,randy }, { rand_sizex, rand_sizey }, { 0,0 }, randomColor, 1);
+	}
+
+
 	//SageRenderer::Init();
 
 	//_p.Load_Texture("../SageIO/image/digipen_splash_screen.png", SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
-	//v_p = { glm::vec2{0,0}, {SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT} };
-	//v_p.calculate_viewport_xform();
-	//camera2d.init({ 0,0 }, { static_cast<float>(SageHelper::WINDOW_WIDTH), static_cast<float>(
-	//		              SageHelper::WINDOW_HEIGHT)
-	//              }, 0.f);
+	v_p = { glm::vec2{0,0}, {SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT} };
+	v_p.calculate_viewport_xform();
+	camera2d.init({ 0,0 }, { static_cast<float>(SageHelper::WINDOW_WIDTH), static_cast<float>(
+			              SageHelper::WINDOW_HEIGHT)
+	              }, 0.f);
 
 
 
 
-	//SageRenderer::Set_Current_View(v_p);
+	SageRenderer::Set_Current_View(v_p);
 
 
 
@@ -105,15 +133,17 @@ void ExampleScene::init()
 	//	//}
 
 
-	//v_p.setViewport();
+	v_p.setViewport();
 
-	//SageRenderer::Set_Current_View(&camera2d);
+	SageRenderer::Set_Current_View(&camera2d);
 	
 
 }
 
 void ExampleScene::update()
 {
+	camera2d.update();
+	instance.Update();
 	 
 	/*float camSpeed = 100.f;
 	if (SageHelper::Get_Key_Pressed(GLFW_KEY_D))
@@ -145,16 +175,27 @@ void ExampleScene::update()
 
 void ExampleScene::draw()
 {
+	
 
+	glClearColor(1, 1, 1, 1);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SageRenderer::Set_Option_Off(SageRenderer::SAGE_ENABLE_BORDER);
+	SageRenderer::Set_Option_On(SageRenderer::SAGE_ENABLE_CAMERA);
+	SageRenderer::Set_Alpha(1.f);
+	SageRenderer::Set_Option_Off(SageRenderer::SAGE_ENABLE_CAMERA);
+	SageRenderer::Draw_Filled_Instance(instance);
+	//Check for GLERR
+	
 
+	//SageRenderer::Draw_Rect(0, 0, 500, 1000, { 0,1,0,1 });
 
-	//glClearColor(0, 0, 0, 1);
-	//glClear(GL_COLOR_BUFFER_BIT);
-	//std::ostringstream ss{ "Scene 1" };
+	//glclearcolor(0, 0, 0, 1);
+	//glclear(gl_color_buffer_bit);
+	//std::ostringstream ss{ "scene 1" };
 
-	//ss << "Scene 1 | " << "FPS: " << std::fixed << SageHelper::FPS;
-	////glfwSetWindowTitle(SageHelper::ptr_window, ss.str().c_str());
-	//SageHelper::sage_ptr_window->Set_Title(ss.str().c_str());
+	//ss << "scene 1 | " << "fps: " << std::fixed << sagehelper::fps;
+	////glfwsetwindowtitle(sagehelper::ptr_window, ss.str().c_str());
+	//sagehelper::sage_ptr_window->set_title(ss.str().c_str());
 
 
 
@@ -193,7 +234,7 @@ void ExampleScene::draw()
 	//		}
 	//	}
 	//}
-
+	std::cout << SageHelper::FPS << std::endl;
 
 	//ToastBox::Vec2 start = { 0,0 };
 	//ToastBox::Vec2 end = { 100,0 };

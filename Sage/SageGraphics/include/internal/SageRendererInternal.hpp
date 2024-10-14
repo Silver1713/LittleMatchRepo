@@ -18,6 +18,7 @@
 #include <map>
 
 #include "SageCamera.hpp"
+#include "SageInstance.hpp"
 #include "SageObject.hpp"
 #include "SagePoint.hpp"
 #include "SageViewport.hpp"
@@ -117,7 +118,7 @@ struct SageRendererInternal
 		I_SAGE_ENABLE_VERTEX_COLOR = 4, //!< Use vertex color
 		I_SAGE_ENABLE_TEXTURE = 8, //!< Use texture
 		I_SAGE_ENABLE_CAMERA = 16, //!< Enable camera when rendering, when disable renderer will use screen space else it will use world space.
-
+		I_SAGE_ENABLE_INSTANCING = 32, //!< Enable instancing
 	};
 	/*!*****************************************************************************
 	\brief
@@ -235,6 +236,15 @@ struct SageRendererInternal
 		The object to be drawn to the screen.
 	*******************************************************************************/
 	static void Draw_Filled(SageObject& object);
+	/*!*****************************************************************************
+	\brief
+		Draw the given instances using instances
+
+		This function only take in an group of instances and draw using instancing.
+	\param object
+		The object to be drawn to the screen.
+	*******************************************************************************/
+	static void Draw_Filled(SageInstance& instances);
 	/*!*****************************************************************************
 	\brief
 		Draw the given object to the screen with the given render configuration.
