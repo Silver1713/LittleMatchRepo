@@ -7,12 +7,26 @@ namespace SageEngine
     {   
         // Mono to call cpp
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern bool Get_Key();
+        public extern static  bool Get_Key(int keycode);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern bool Get_Key_Pressed();
+        public extern static  bool Get_Key_Pressed(int keycode);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern void Get_Mouse_Pos(out float mouse_x, out float mouse_y);
+        public extern static  void Get_Mouse_Pos(out float mouse_x, out float mouse_y);
+    }
+
+    
+}
+
+
+public class Program {
+    public static void Main(string[] args) {
+        // This is a test harness for the Input class
+        float x = 0, y =0;
+        SageEngine.Input.Get_Mouse_Pos(out x, out y);
+        Console.WriteLine("Mouse position: " + x + ", " + y);
+
+        
     }
 }

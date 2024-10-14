@@ -62,6 +62,7 @@ bool GLFWInputHandler::Get_Key_Pressed(int _keycode)
 *******************************************************************************/
 bool GLFWInputHandler::Get_Key(int _keycode)
 {
+
 	// If it is pressed down once or held down, return true
 	if (key_map[_keycode] == std::byte{ 1 } || key_map[_keycode] == std::byte{2})
 	{
