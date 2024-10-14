@@ -65,17 +65,13 @@ int main(){
 		// Swap front and back buffers
 		glfwSwapBuffers(window);
 		loader.Run_Main("Input");
+		
 		// Poll for and process events
 		glfwPollEvents();
 
 	}
 
 	loader.Exit();
-	
-
-
-
-	
 	return 0;
 }
 

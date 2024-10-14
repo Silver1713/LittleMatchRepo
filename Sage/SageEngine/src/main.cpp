@@ -38,7 +38,7 @@
 #include "SageShaderManager.hpp"
 #include "SageTimer.hpp"
 #include "SageJSON.hpp"
-
+#include "Systems/SageScripting.hpp"
 #include "Game.hpp"
 
 // Forward declaration
@@ -98,6 +98,7 @@ int main()
 *******************************************************************************/
 void init()
 {
+	SageScriptSystem::Init("../MONO/lib", "../MONO/etc");
     SageTimer::Init();
 	SageJSON::SageJSON config;
 
@@ -137,6 +138,7 @@ void init()
     Assets::Init();
     Prefabs::Init();
     SageAudio::Init();
+    
     if (1) // to be changed with some sort of flag to detect if running through editor or as built game
     {
         SM::Startup_Scene(editor_startup_scene);
