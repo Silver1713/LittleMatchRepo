@@ -44,7 +44,7 @@ void SageLoader::Load_Assembly(const char * name, const char*  assembly_path)
 }
 
 
-void SageLoader::	Run_Main(const char* assembly_name)
+void SageLoader::Run_Main(const char* assembly_name)
 {
 	MonoAssembly* assembly = assemblies[assembly_name];
 	if (!assembly) {

@@ -259,8 +259,7 @@ endif()
 
 IF (${MONO_IMPORT_SUCCESS})
     message(STATUS "${MONO_IMPORT_LIB_DIR} HERE")
-    find_library(MONO_LIBRARY libmono-static-sgen PATHS ${MONO_IMPORT_LIB_DIR})
-    find_library(MONO_LIBRARY_2 mono-2.0-sgen PATHS ${MONO_IMPORT_LIB_DIR})
+    find_library(MONO_LIBRARY mono-2.0-sgen PATHS ${MONO_IMPORT_LIB_DIR})
     find_library(MONO_POSIX_LIBRARY MonoPosixHelper PATHS ${MONO_IMPORT_LIB_DIR})
 
     # Collect necessary bin files
@@ -268,31 +267,29 @@ IF (${MONO_IMPORT_SUCCESS})
     set(MONO_DLL_STATIC "${MONO_IMPORT_DIR}/bin/libmono-btls-shared")
     set(MONO_DLL_POSIX "${MONO_IMPORT_DIR}/bin/MonoPosixHelper.dll")
 
-    if (NOT MONO_LIBRARY )
+    if (NOT MONO_LIBRARY)
         message(STATUS "MONO library not found in MONO/ folder")
         set(MONO_IMPORT_SUCCESS FALSE)
     endif()
 
-    add_library(mono STATIC IMPORTED)
+    add_library(mono SHARED IMPORTED)
     message(STATUS "Mono: ${MONO_LIBRARY}")
     set_target_properties(mono PROPERTIES
-        IMPORTED_LOCATION_RELEASE "${MONO_LIBRARY}"
-        
-
-        IMPORTED_LOCATION_DEBUG "${MONO_LIBRARY}"
-        
-        IMPORTED_LOCATION_MINSIZEREL "${MONO_LIBRARY}"
-       
-
-        IMPORTED_LOCATION_RELWITHDEBINFO "${MONO_LIBRARY}"
-        
+        IMPORTED_IMPLIB_RELEASE "${MONO_LIBRARY}"
+        IMPORTED_IMPLIB_DEBUG "${MONO_LIBRARY}"
+        IMPORTED_IMPLIB_MINSIZEREL "${MONO_LIBRARY}"
+        IMPORTED_IMPLIB_RELWITHDEBINFO "${MONO_LIBRARY}"
         INTERFACE_INCLUDE_DIRECTORIES ${MONO_IMPORT_INCLUDE_DIR}
     )
-    target_link_libraries(mono INTERFACE  
-    ${MONO_LIBRARY_2}
+
+
+    add_library(mono_interface INTERFACE)
+
+    target_link_libraries(mono_interface 
+    INTERFACE mono
     ${MONO_POSIX_LIBRARY}
     )
-    add_deps_all_targets(PUBLIC mono)
+    add_deps_all_targets(PUBLIC mono_interface)
 ELSE()
     message(STATUS "MONO Import Failed.")
 ENDIF()
