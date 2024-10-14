@@ -36,9 +36,19 @@ foreach(CORE_LIB_SUBDIR ${CORE_LIB_DIR})
         ${CORE_LIB_SRC}/*.h
         
         )
+
+
         source_group("Source Files/${CORE_LIB_SRC_NAME}" FILES ${CORE_LIB_SRC_FILES})
     endforeach()
 
+
+    if(CORE_LIB_NAME STREQUAL "SageLogic")
+    set(SAGE_LOGIC_SCRIPTS)
+    file(GLOB SAGE_LOGIC_SCRIPTS
+        ${CORE_LIB_SUBDIR}/scripts/*.cs
+    )
+    source_group("C# Scripts" FILES ${SAGE_LOGIC_SCRIPTS})
+endif()
     # add the program
     IF (NOT IS_LIBS_ONLY)
     add_executable(
@@ -47,6 +57,7 @@ foreach(CORE_LIB_SUBDIR ${CORE_LIB_DIR})
         ${CORE_LIB_INCLUDES_FILES}
         ${CORE_LIP_TOP_SRC}
         ${CORE_LIP_TOP_HEADER}
+        ${SAGE_LOGIC_SCRIPTS}
     )
     ENDIF()
 
@@ -60,6 +71,7 @@ foreach(CORE_LIB_SUBDIR ${CORE_LIB_DIR})
         ${CORE_LIB_INCLUDES_FILES}
         ${CORE_LIP_TOP_SRC}
         ${CORE_LIP_TOP_HEADER}
+        
     )
 
     # include directories
@@ -79,6 +91,11 @@ foreach(CORE_LIB_SUBDIR ${CORE_LIB_DIR})
         ${CORE_LIB_SUBDIR}/include/
     )
     ENDIF()
+
+    # clear  logics
+    set(SAGE_LOGIC_SCRIPTS)
+
+    
 
     IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
        IF (NOT IS_LIBS_ONLY)
