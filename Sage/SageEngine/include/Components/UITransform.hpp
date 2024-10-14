@@ -1,11 +1,11 @@
 /* Start Header ************************************************************************/
 /*!
-\file		Transform.hpp
+\file		UITransform.hpp
 \title		Little Match
 \author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
 \date		10 September 2024
-\brief		Contains the derived class Transform that overrides the virtual functions of the
+\brief		Contains the derived class UITransform that overrides the virtual functions of the
 			base class Component to do transform specific tasks.
 
 			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
@@ -16,8 +16,8 @@
 #include "Vector3.h"
 #include "Matrix3x3.h"
 
-//derived component class Transform that handles object transforms including positions, rotations and scales
-class Transform : public Component
+//derived component class UITransform that handles object transforms including positions, rotations and scales
+class UITransform : public Component
 {
 private:
 	ToastBox::Vec3 previous_position{};
@@ -31,13 +31,13 @@ private:
 public:
 	/*!*****************************************************************************
 	  \brief
-		Default constructor for Transform
+		Default constructor for UITransform
 	*******************************************************************************/
-	Transform();
+	UITransform();
 
 	/*!*****************************************************************************
 	  \brief
-		Constructor for Transform that has values for initial positions, rotations and scales
+		Constructor for UITransform that has values for initial positions, rotations and scales
 
 	  \param _pos
 		initial positions for the transform
@@ -51,11 +51,11 @@ public:
 	  \param _is_UI_element
 		whether this gameobject is a UI element.
 	*******************************************************************************/
-	Transform(ToastBox::Vec3 const& _pos, ToastBox::Vec3 const& _rot, ToastBox::Vec3 const& _scale);
+	UITransform(ToastBox::Vec3 const& _pos, ToastBox::Vec3 const& _rot, ToastBox::Vec3 const& _scale);
 
 	/*!*****************************************************************************
 	  \brief
-		Override constructor for Transform that has values for initial positions, rotations and scales
+		Override constructor for UITransform that has values for initial positions, rotations and scales
 
 	  \param _pos
 		initial positions for the transform
@@ -66,11 +66,11 @@ public:
 	  \param _scale
 		initial scales for the transform
 	*******************************************************************************/
-	Transform(std::initializer_list<float> const& _pos, std::initializer_list<float> const& _rot, std::initializer_list<float> const& _scale);
+	UITransform(std::initializer_list<float> const& _pos, std::initializer_list<float> const& _rot, std::initializer_list<float> const& _scale);
 
 	/*!*****************************************************************************
 	  \brief
-		This function initializes the component along with any Transform specific
+		This function initializes the component along with any UITransform specific
 		members that need initializing
 
 	  \param _parent
@@ -80,7 +80,7 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
-		Updates members of Transform separately from the set functions
+		Updates members of UITransform separately from the set functions
 	*******************************************************************************/
 	void Update() override;
 
@@ -200,7 +200,7 @@ public:
 		the scale member
 	*******************************************************************************/
 	ToastBox::Vec3 const& Get_Scale();
-	
+
 	/*!*****************************************************************************
 	  \brief
 		Adds _delta_pos to the current position

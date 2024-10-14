@@ -2,12 +2,13 @@
 /*!
 \file		AssetLoader.hpp
 \title		Memory's Flame
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (75%)
-\author		Halis Ilyasa Bin Amat Sarijan, halisilyasa.b, 2301333 (25%)
+\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (80%)
+\author		Halis Ilyasa Bin Amat Sarijan, halisilyasa.b, 2301333 (20%)
 \par		b.muhammadhafiz@digipen.edu, halisilyasa.b@digipen.edu
 \date		08 September 2024
 \brief		Contains the data structures and functions for managing game assets,
-			including textures and prefabs.
+			including textures and prefabs. Handles deserialization and serialization of
+			data.
 
 			All content � 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
@@ -23,7 +24,7 @@
 #include <vector>
 #include <array>
 #include <filesystem>
-
+#include "SageJSON.hpp"
 
 #include "fmod.hpp"
 #include "fmod_errors.h"
@@ -35,10 +36,33 @@
 //Every file is an asset, which is broken down into categories
 namespace Assets
 {
+	/*!*****************************************************************************
+	  \brief
+		Initializes all asset categories
+	*******************************************************************************/
+	void Init()
+	{
+		Textures::Init();
+		Prefabs::Init();
+		Animations::Init();
+		Animation_Set::Init();
+		Audio::Init();
+		Font::Init();
+		Levels::Init();
+	}
+
+	/*!*****************************************************************************
+	  \brief
+		Unloads any asset category that uses allocated resources
+	*******************************************************************************/
+	void Unload()
+	{
+		Textures::Unload();
+	}
+
 	//Texture category
 	namespace Textures
 	{		
-		Parsed_CSV source;
 		std::unordered_map<std::string, Texture> textures;
 		std::unordered_map<std::string, SageTexture> loaded_textures;
 
@@ -50,19 +74,47 @@ namespace Assets
 		void Init()
 		{
 			//data from the csv is stored into the textures map
-			source = Parse_CSV("../SageEngine/data/assets/textures.csv");
+			Parsed_CSV source = Parse_CSV("../SageEngine/data/serialization/textures.csv");
 			for (int i{1}; i < source.num_rows; i++)
 			{
 				Texture t;
 				try
 				{
-					t.filepath = source.comma_seperated_data[i].associated_data[FILEPATH];
-					t.width = std::stof(source.comma_seperated_data[i].associated_data[WIDTH]);
-					t.height = std::stof(source.comma_seperated_data[i].associated_data[HEIGHT]);
-					t.sprites_per_row = std::stoul(source.comma_seperated_data[i].associated_data[SPRITES_PER_ROW]);
-					t.sprites_per_col = std::stoul(source.comma_seperated_data[i].associated_data[SPRITES_PER_COL]);
-					t.sprites_num = std::stoul(source.comma_seperated_data[i].associated_data[SPRITES_NUM]);
-					textures[source.comma_seperated_data[i].associated_data[ID]] = t;
+					//Parsing a folder of textures
+					if (std::stoul(source.comma_seperated_data[i].associated_data[SPRITES_NUM]) > 1)
+					{
+						if (std::filesystem::exists(source.comma_seperated_data[i].associated_data[FILEPATH]) && 
+							std::filesystem::is_directory(source.comma_seperated_data[i].associated_data[FILEPATH])) 
+						{
+							// Iterate through the directory
+							for (const auto& entry : std::filesystem::directory_iterator(source.comma_seperated_data[i].associated_data[FILEPATH]))
+							{
+								if (std::filesystem::is_regular_file(entry.status()))
+								{
+									// Check if the file has a .png extension
+									if (entry.path().extension() == ".png") 
+									{
+										t.filepath = source.comma_seperated_data[i].associated_data[FILEPATH] + entry.path().filename().string();
+										t.width = std::stof(source.comma_seperated_data[i].associated_data[WIDTH]);
+										t.height = std::stof(source.comma_seperated_data[i].associated_data[HEIGHT]);
+										textures[source.comma_seperated_data[i].associated_data[ID] + '_' + entry.path().stem().string()] = t;
+									}
+								}
+							}
+						}
+						else 
+						{
+							std::cerr << source.comma_seperated_data[i].associated_data[FILEPATH] << "is an invalid directory path!" << std::endl;
+						}
+
+					}
+					else 
+					{
+						t.filepath = source.comma_seperated_data[i].associated_data[FILEPATH];
+						t.width = std::stof(source.comma_seperated_data[i].associated_data[WIDTH]);
+						t.height = std::stof(source.comma_seperated_data[i].associated_data[HEIGHT]);
+						textures[source.comma_seperated_data[i].associated_data[ID]] = t;
+					}					
 				}
 				catch (const std::invalid_argument& e)
 				{
@@ -151,31 +203,31 @@ namespace Assets
 		*******************************************************************************/
 		void Init()
 		{
-			source = Parse_CSV("../SageEngine/data/prefabs/prefabs.csv");
+			source = Parse_CSV("../SageEngine/data/serialization/prefabs.csv");
 			for (int i{ 1 }; i < source.num_rows; i++)
 			{
 				Prefab p;
 				try
 				{
 					p.prefab_ID = source.comma_seperated_data[i].associated_data[PREFAB_ID];
-					p.positions[0] = std::stof(source.comma_seperated_data[i].associated_data[POS_X]);
-					p.positions[1] = std::stof(source.comma_seperated_data[i].associated_data[POS_Y]);
-					p.positions[2] = std::stof(source.comma_seperated_data[i].associated_data[POS_Z]);
-					p.rotations[0] = std::stof(source.comma_seperated_data[i].associated_data[ROT_X]);
-					p.rotations[1] = std::stof(source.comma_seperated_data[i].associated_data[ROT_Y]);
-					p.rotations[2] = std::stof(source.comma_seperated_data[i].associated_data[ROT_Z]);
-					p.scale[0] = std::stof(source.comma_seperated_data[i].associated_data[SCALE_X]);
-					p.scale[1] = std::stof(source.comma_seperated_data[i].associated_data[SCALE_Y]);
-					p.scale[2] = std::stof(source.comma_seperated_data[i].associated_data[SCALE_Z]);
-					p.colour[0] = std::stof(source.comma_seperated_data[i].associated_data[COLOR_R]);
-					p.colour[1] = std::stof(source.comma_seperated_data[i].associated_data[COLOR_G]);
-					p.colour[2] = std::stof(source.comma_seperated_data[i].associated_data[COLOR_B]);
-					p.colour[3] = std::stof(source.comma_seperated_data[i].associated_data[COLOR_A]);
+					p.transform_type = source.comma_seperated_data[i].associated_data[TRANSFORM_TYPE];
+					p.positions.x = std::stof(source.comma_seperated_data[i].associated_data[POS_X]);
+					p.positions.y = std::stof(source.comma_seperated_data[i].associated_data[POS_Y]);
+					p.positions.z = std::stof(source.comma_seperated_data[i].associated_data[POS_Z]);
+					p.rotations.x = std::stof(source.comma_seperated_data[i].associated_data[ROT_X]);
+					p.rotations.y = std::stof(source.comma_seperated_data[i].associated_data[ROT_Y]);
+					p.rotations.z = std::stof(source.comma_seperated_data[i].associated_data[ROT_Z]);
+					p.scale.x = std::stof(source.comma_seperated_data[i].associated_data[SCALE_X]);
+					p.scale.y = std::stof(source.comma_seperated_data[i].associated_data[SCALE_Y]);
+					p.scale.z = std::stof(source.comma_seperated_data[i].associated_data[SCALE_Z]);
+					p.colour.x = std::stof(source.comma_seperated_data[i].associated_data[COLOR_R]);
+					p.colour.y = std::stof(source.comma_seperated_data[i].associated_data[COLOR_G]);
+					p.colour.z = std::stof(source.comma_seperated_data[i].associated_data[COLOR_B]);
+					p.colour.w = std::stof(source.comma_seperated_data[i].associated_data[COLOR_A]);
 					p.sprite_texture_ID = source.comma_seperated_data[i].associated_data[SPRITE_TEXTURE_ID];
 					p.collision_data = source.comma_seperated_data[i].associated_data[COL_D];
 					p.has_physics = source.comma_seperated_data[i].associated_data[HAS_PHYSICS];
 					p.velocity = std::stof(source.comma_seperated_data[i].associated_data[PHYSICS_VELOCITY]);
-					p.audio_data = source.comma_seperated_data[i].associated_data[AUDIO_D];
 					p.object_shape = source.comma_seperated_data[i].associated_data[OBJ_SHAPE];
 					generated_prefabs[p.prefab_ID] = p;
 				}
@@ -211,7 +263,7 @@ namespace Assets
 			{
 				return generated_prefabs[_prefab_ID];
 			}
-			std::cout << "Prefab Does not exist\n";
+			std::cout << "Prefab: " + _prefab_ID + " Does not exist\n";
 			return sentinel;
 		}
 
@@ -229,6 +281,222 @@ namespace Assets
 				Init();
 			}
 			return generated_prefabs;
+		}
+	}
+
+	//Animation category
+	namespace Animations
+	{
+		Parsed_CSV source;
+		std::unordered_map<std::string, Animation> animations;
+		Animation sentinel;
+
+		/*!*****************************************************************************
+		  \brief
+			Deserializes the animations.csv file
+		*******************************************************************************/
+		void Init()
+		{
+			source = Parse_CSV("../SageEngine/data/serialization/animations.csv");
+			for (int i{ 1 }; i < source.num_rows; i++)
+			{
+				Animation a;
+				try 
+				{
+					a.animation_ID = source.comma_seperated_data[i].associated_data[ANIMATION_ID];
+					a.parent_texture_ID = source.comma_seperated_data[i].associated_data[PARENT_TEXTURE_ID];
+					a.path_to_folder = source.comma_seperated_data[i].associated_data[PATH_TO_FOLDER];
+
+					//count how many images are there in the folder
+					if (std::filesystem::exists(a.path_to_folder) &&
+						std::filesystem::is_directory(a.path_to_folder))
+					{
+						// Iterate through the directory
+						for (const auto& entry : std::filesystem::directory_iterator(a.path_to_folder))
+						{
+							if (std::filesystem::is_regular_file(entry.status()))
+							{
+								// Check if the file has a .csv extension
+								if (entry.path().extension() == ".png")
+								{
+									a.num_frames++;
+								}
+							}
+						}
+					}
+
+					animations[a.animation_ID] = a;
+				}
+				catch (const std::invalid_argument& e)
+				{
+					std::cerr << "Invalid argument: " << e.what() << " at index " << i << std::endl;
+				}
+				catch (const std::out_of_range& e)
+				{
+					std::cerr << "Out of range: " << e.what() << " at index " << i << std::endl;
+				}
+			}
+		}
+
+		/*!*****************************************************************************
+		  \brief
+			Creates a copy of the Animation with the provided ID
+
+		  \param _anim_ID_key
+			The key to look for
+
+		  \return
+			The Animation in the map with the _anim_ID_key key
+		*******************************************************************************/
+		Animation Get_Animation(std::string const& _anim_ID)
+		{
+			if (animations.find(_anim_ID) != animations.end())
+			{
+				return animations[_anim_ID];
+			}
+			else
+			{
+				std::cout << "Animation: " + _anim_ID + " Does Not Exist\n";
+				return sentinel;
+			}
+		}
+	}
+
+	//Animation Set category
+	namespace Animation_Set 
+	{		
+		std::unordered_map<std::string, Animation_Set> animation_sets;
+		Animation_Set sentinel;
+
+		/*!*****************************************************************************
+		  \brief
+			Deserializes all json files in animations folder
+		*******************************************************************************/
+		void Init()
+		{
+			std::string path{ "../SageEngine/data/serialization/animations/" };
+			if (std::filesystem::exists(path) &&
+				std::filesystem::is_directory(path))
+			{
+				// Iterate through the directory
+				for (const auto& entry : std::filesystem::directory_iterator(path))
+				{
+					if (std::filesystem::is_regular_file(entry.status()))
+					{
+						// Check if the file has a .json extension
+						if (entry.path().extension() == ".json")
+						{
+							SageJSON::SageJSON current_animation_set;
+							std::ifstream file(entry.path());
+							while (file)
+							{
+								file >> current_animation_set;
+							}
+							file.close();
+
+							Animation_Set as;
+
+							as.animation_set_ID = current_animation_set["Animation_Set_ID"].as<SageJSON::SageJSON::StringValue>();
+
+							//Parse Transitions
+							for (unsigned int i{}; i < current_animation_set["Num_Transitions"].as<SageJSON::SageJSON::NumberValue>(); ++i)
+							{
+								Transition t;
+								try 
+								{
+									t.from_state = current_animation_set["Transitions"][i]["From_State"].as<SageJSON::SageJSON::StringValue>();
+									t.to_state = current_animation_set["Transitions"][i]["To_State"].as<SageJSON::SageJSON::StringValue>();
+								}								
+								catch (const std::out_of_range& e)
+								{
+									std::cerr << "Animation_Set: Out of range " << e.what() << " at index " << i << std::endl;
+								}
+								catch (...)
+								{
+									std::cerr << "Animation_Set: Invalid argument at index " << i << std::endl;
+								}
+
+								for (unsigned int j{}; j < current_animation_set["Transitions"][i]["Num_Conditions"].as<SageJSON::SageJSON::NumberValue>(); ++j)
+								{
+									Condition c;
+									c.parameter = current_animation_set["Transitions"][i]["Conditions"][j]["Parameter"].as<SageJSON::SageJSON::StringValue>();
+									c.type = current_animation_set["Transitions"][i]["Conditions"][j]["Type"].as<SageJSON::SageJSON::StringValue>();
+									c.value = static_cast<float>(current_animation_set["Transitions"][i]["Conditions"][j]["Value"].as<SageJSON::SageJSON::NumberValue>());
+									t.conditions.push_back(c);
+								}
+								as.transitions.push_back(t);
+							}
+							
+							//Parse States
+							for (unsigned int i{}; i < current_animation_set["Num_States"].as<SageJSON::SageJSON::NumberValue>(); ++i)
+							{
+								State s;
+								try
+								{
+									s.name = current_animation_set["States"][i]["Name"].as<SageJSON::SageJSON::StringValue>();
+									s.animation_ID = current_animation_set["States"][i]["Animation_ID"].as<SageJSON::SageJSON::StringValue>();
+									s.looping = (bool)(current_animation_set["States"][i]["Is_Looping"].as<SageJSON::SageJSON::NumberValue>());
+									try
+									{
+										s.is_starting_state = (bool)current_animation_set["States"][i]["Is_Starting_State"].as<SageJSON::SageJSON::NumberValue>();
+									}
+									catch (...){}
+								}
+								catch (const std::out_of_range& e)
+								{
+									std::cerr << "Animation_Set: Out of range " << e.what() << " at index " << i << std::endl;
+								}
+								catch (...)
+								{
+									std::cerr << "Animation_Set: Invalid argument at index " << i << std::endl;
+								}
+								as.states.push_back(s);
+							}
+
+							//Parse Parameters
+							for (unsigned int i{}; i < current_animation_set["Num_Parameters"].as<SageJSON::SageJSON::NumberValue>(); ++i)
+							{
+								Parameter p;
+								p.name = current_animation_set["Parameters"][i]["Name"].as<SageJSON::SageJSON::StringValue>();
+								p.default_value = static_cast<float>(current_animation_set["Parameters"][i]["Default_Value"].as<SageJSON::SageJSON::NumberValue>());
+
+								as.parameters.push_back(p);
+							}
+
+							animation_sets[as.animation_set_ID] = as;
+							current_animation_set.close();
+						}
+					}
+				}
+				std::cout << "hi" << std::endl;
+			}
+			else
+			{
+				std::cerr << path << "is an invalid directory path!" << std::endl;
+			}
+		}
+
+		/*!*****************************************************************************
+		  \brief
+			Gets a copy of the Animation Set with the provided ID
+
+		  \param _anim_set_ID
+			The key to look for
+
+		  \return
+			The Animation Set in the map with the _anim_set_ID key
+		*******************************************************************************/
+		Animation_Set Get_Animation_Set(std::string const& _anim_set_ID)
+		{
+			if (animation_sets.find(_anim_set_ID) != animation_sets.end())
+			{
+				return animation_sets[_anim_set_ID];
+			}
+			else
+			{
+				std::cout << "Animation: " + _anim_set_ID + " Does Not Exist\n";
+				return sentinel;
+			}
 		}
 	}
 
@@ -325,9 +593,9 @@ namespace Assets
 		}
 	}
 
+	//Level namespace
 	namespace Levels 
-	{
-		std::vector<Parsed_CSV>sources;
+	{		
 		std::unordered_map<std::string, Level> levels;
 		Level sentinel;
 
@@ -338,80 +606,73 @@ namespace Assets
 		*******************************************************************************/
 		void Init()
 		{
-			unsigned int num_levels{};
+			std::string path{ "../SageEngine/data/serialization/levels/" };
 
 			// Iterate through the levels directory
-			for (const auto& entry : std::filesystem::directory_iterator("../SageEngine/data/levels")) 
+			for (auto const& entry : std::filesystem::directory_iterator(path))
 			{
 				if (std::filesystem::is_regular_file(entry.status())) 
 				{
-					++num_levels;
-				}
-			}
-
-			for (unsigned int i{}; i < num_levels; i++)
-			{
-				sources.push_back(Parse_CSV("../SageEngine/data/levels/level_" + std::to_string(i+1) + ".csv"));
-			}
-
-			//for each level_x.csv, maps the level's details to a Level and adds it to the levels map
-			for (unsigned int i{}; i < num_levels; i++)
-			{
-				try
-				{
-					Level l;
-					for (int j{1}; j < sources[i].num_rows; j++)
+					if (entry.path().extension() == ".csv")
 					{
-						l.prefabs.push_back(Prefabs::generated_prefabs[sources[i].comma_seperated_data[j].associated_data[PREFAB_ID]]);
-						l.identifier.push_back(sources[i].comma_seperated_data[j].associated_data[IDENTIFIER]);
-
-						std::array<float, 3> position
+						Parsed_CSV p = Parse_CSV(entry.path().string());
+						Level l;
+						for (int i{ 1 }; i < p.num_rows; ++i)
 						{
-							std::stof(sources[i].comma_seperated_data[j].associated_data[POS_X]),
-							std::stof(sources[i].comma_seperated_data[j].associated_data[POS_Y]),
-							std::stof(sources[i].comma_seperated_data[j].associated_data[POS_Z])
-						};
+							try
+							{
+								l.prefabs.push_back(Prefabs::generated_prefabs[p.comma_seperated_data[i].associated_data[PREFAB_ID]]);
+								l.identifier.push_back(p.comma_seperated_data[i].associated_data[IDENTIFIER]);
 
-						l.positions.push_back(position);
+								ToastBox::Vec3 position
+								{
+									std::stof(p.comma_seperated_data[i].associated_data[POS_X]),
+									std::stof(p.comma_seperated_data[i].associated_data[POS_Y]),
+									std::stof(p.comma_seperated_data[i].associated_data[POS_Z])
+								};
 
-						std::array<float, 3> rotation
-						{
-							std::stof(sources[i].comma_seperated_data[j].associated_data[ROT_X]),
-							std::stof(sources[i].comma_seperated_data[j].associated_data[ROT_Y]),
-							std::stof(sources[i].comma_seperated_data[j].associated_data[ROT_Z])
-						};
+								l.positions.push_back(position);
 
-						l.rotations.push_back(rotation);
+								ToastBox::Vec3 rotation
+								{
+									std::stof(p.comma_seperated_data[i].associated_data[ROT_X]),
+									std::stof(p.comma_seperated_data[i].associated_data[ROT_Y]),
+									std::stof(p.comma_seperated_data[i].associated_data[ROT_Z])
+								};
 
-						std::array<float, 3> scale
-						{
-							std::stof(sources[i].comma_seperated_data[j].associated_data[SCALE_X]),
-							std::stof(sources[i].comma_seperated_data[j].associated_data[SCALE_Y]),
-							std::stof(sources[i].comma_seperated_data[j].associated_data[SCALE_Z])
-						};
+								l.rotations.push_back(rotation);
 
-						l.scale.push_back(scale);
+								ToastBox::Vec3 scale
+								{
+									std::stof(p.comma_seperated_data[i].associated_data[SCALE_X]),
+									std::stof(p.comma_seperated_data[i].associated_data[SCALE_Y]),
+									std::stof(p.comma_seperated_data[i].associated_data[SCALE_Z])
+								};
 
-						std::array<float, 4> color
-						{
-							std::stof(sources[i].comma_seperated_data[j].associated_data[COLOR_R]),
-							std::stof(sources[i].comma_seperated_data[j].associated_data[COLOR_G]),
-							std::stof(sources[i].comma_seperated_data[j].associated_data[COLOR_B]),
-							std::stof(sources[i].comma_seperated_data[j].associated_data[COLOR_A])
-						};
+								l.scale.push_back(scale);
 
-						l.color.push_back(color);
-						l.z_orders.push_back(std::stoul(sources[i].comma_seperated_data[j].associated_data[Z_ORDER]));
+								ToastBox::Vec4 color
+								{
+									std::stof(p.comma_seperated_data[i].associated_data[COLOR_R]),
+									std::stof(p.comma_seperated_data[i].associated_data[COLOR_G]),
+									std::stof(p.comma_seperated_data[i].associated_data[COLOR_B]),
+									std::stof(p.comma_seperated_data[i].associated_data[COLOR_A])
+								};
+
+								l.color.push_back(color);
+								l.z_orders.push_back(std::stoul(p.comma_seperated_data[i].associated_data[Z_ORDER]));
+								levels[entry.path().stem().string()] = l;
+							}
+							catch (const std::invalid_argument& e)
+							{
+								std::cerr << "Invalid argument: " << e.what() << " at index " << i << std::endl;
+							}
+							catch (const std::out_of_range& e)
+							{
+								std::cerr << "Out of range: " << e.what() << " at index " << i << std::endl;
+							}
+						}
 					}
-					levels["Level_" + std::to_string(i+1)] = l;
-				}
-				catch (const std::invalid_argument& e)
-				{
-					std::cerr << "Invalid argument: " << e.what() << " at index " << i << std::endl;
-				}
-				catch (const std::out_of_range& e)
-				{
-					std::cerr << "Out of range: " << e.what() << " at index " << i << std::endl;
 				}
 			}
 		}
@@ -434,7 +695,7 @@ namespace Assets
 			}
 			else 
 			{
-				std::cout << "Level Does Not Exist\n";
+				std::cout << "Level: " + _level_ID + " Does Not Exist" << std::endl;
 				return sentinel;				
 			}
 		}

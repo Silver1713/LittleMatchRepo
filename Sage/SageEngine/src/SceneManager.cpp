@@ -18,11 +18,13 @@
 #include "SageRenderer.hpp"
 #include "SageHelper.hpp"
 #include "KeyInputs.h"
-#include "SplashScreen.hpp"
 #include "SceneManager.hpp"
 #include "GameObjects.hpp"
 
 #include <iostream>
+
+#include "SplashScreen.hpp"
+#include "Game.hpp"
 
 #include "SageMain.hpp"
 
@@ -40,15 +42,16 @@ namespace SM {
 	const float fade_time{ 0.5f };
 
 	static GameObject* fade_screen{ nullptr };
-	static Assets::Levels::Level current_level;
+	static std::string level_ID{};
+	static Assets::Levels::Level current_level;	
 
-	static Function_Ptr fp_load = Splash_Screen::Load;
-	static Function_Ptr fp_init = Splash_Screen::Init;
-	static Function_Ptr fp_input = Splash_Screen::Input;
-	static Function_Ptr fp_update = Splash_Screen::Update;
-	static Function_Ptr fp_draw = Splash_Screen::Draw;
-	static Function_Ptr fp_free = Splash_Screen::Free;
-	static Function_Ptr fp_unload = Splash_Screen::Unload;
+	static Function_Ptr fp_load;
+	static Function_Ptr fp_init;
+	static Function_Ptr fp_input;
+	static Function_Ptr fp_update;
+	static Function_Ptr fp_draw;
+	static Function_Ptr fp_free;
+	static Function_Ptr fp_unload;
 
 	static Function_Ptr fp_load_tmp;
 	static Function_Ptr fp_init_tmp;
@@ -122,17 +125,28 @@ namespace SM {
 		{
 			GameObject* g;
 			Transform* t;
+			UITransform* ut;
 			Sprite2D* s;
 			g = Game_Objects::Instantiate(current_level.prefabs[i], current_level.identifier[i],current_level.z_orders[i]);
-			t = dynamic_cast<Transform*>(g->Get_Component(TRANSFORM));
-			t->Set_Positions({ current_level.positions[i][0],current_level.positions[i][1],current_level.positions[i][2] });
-			t->Set_Rotations({ current_level.rotations[i][0],current_level.rotations[i][1],current_level.rotations[i][2] });
-			t->Set_Scale({ current_level.scale[i][0],current_level.scale[i][1],current_level.scale[i][2] });
+			t = static_cast<Transform*>(g->Get_Component<Transform>());
+			ut = static_cast<UITransform*>(g->Get_Component<UITransform>());
+			if (ut)
+			{
+				ut->Set_Position(current_level.positions[i]);
+				ut->Set_Rotation(current_level.rotations[i]);
+				ut->Set_Scale(current_level.scale[i]);
+			}
+			else if (t)
+			{
+				t->Set_Position(current_level.positions[i]);
+				t->Set_Rotation(current_level.rotations[i]);
+				t->Set_Scale(current_level.scale[i]);
+			}
 
-			s = dynamic_cast<Sprite2D*>(g->Get_Component(SPRITE2D));
+			s = static_cast<Sprite2D*>(g->Get_Component<Sprite2D>());
 			if (s)
 			{
-				s->Set_Colour({ current_level.color[i][0],current_level.color[i][1],current_level.color[i][2],current_level.color[i][3] });
+				s->Set_Colour(current_level.color[i]);
 			}
 		}
 
@@ -245,8 +259,9 @@ namespace SM {
 	  \param _unload
 		the unload function that the scene manager will use
 	*******************************************************************************/
-	void Set_Next_Scene(void(*_load)(), void(*_init)(), void (*_input)(), void(*_update)(), void (*_draw)(), void (*_free)(), void (*_unload)())
+	void Set_Next_Scene(void(*_load)(), void(*_init)(), void (*_input)(), void(*_update)(), void (*_draw)(), void (*_free)(), void (*_unload)(), std::string const& new_level_ID)
 	{
+		level_ID = new_level_ID;
 		SM::fp_load_tmp = _load;
 		SM::fp_init_tmp = _init;
 		SM::fp_input_tmp = _input;
@@ -263,9 +278,9 @@ namespace SM {
 	  \param _level_identifier
 		The string key for what level should be next scene
 	*******************************************************************************/
-	void Go_To_Next_Scene(std::string const& _level_identifier)
+	void Go_To_Next_Scene()
 	{
-		current_level = Assets::Levels::Get_Level(_level_identifier);
+		current_level = Assets::Levels::Get_Level(level_ID);
 		SM::Free();
 		SM::Unload();
 		SM::fp_load = fp_load_tmp;
@@ -277,6 +292,43 @@ namespace SM {
 		SM::fp_unload = fp_unload_tmp;
 		SM::Load();
 		SM::Init();
+	}
+	/*!*****************************************************************************
+	  \brief
+		Sets up startup scene for when the engine is run
+
+	  \param _level_identifier
+		The string key for what level should be next scene
+	*******************************************************************************/
+	void Startup_Scene(std::string const& new_level_ID)
+	{
+		if (new_level_ID == "splash_Screen")
+		{
+			SM::fp_load = Splash_Screen::Load;
+			SM::fp_init = Splash_Screen::Init;
+			SM::fp_draw = Splash_Screen::Draw;
+			SM::fp_input = Splash_Screen::Input;
+			SM::fp_update = Splash_Screen::Update;
+			SM::fp_draw = Splash_Screen::Draw;
+			SM::fp_free = Splash_Screen::Free;
+			SM::fp_unload = Splash_Screen::Unload;
+			SM::Load();
+			SM::Init();
+		}
+		else 
+		{
+			current_level = Assets::Levels::Get_Level(new_level_ID);
+			SM::fp_load = Game::Load;
+			SM::fp_init = Game::Init;
+			SM::fp_draw = Game::Draw;
+			SM::fp_input = Game::Input;
+			SM::fp_update = Game::Update;
+			SM::fp_draw = Game::Draw;
+			SM::fp_free = Game::Free;
+			SM::fp_unload = Game::Unload;
+			SM::Load();
+			SM::Init();
+		}	
 	}
 
 	/*!*****************************************************************************
@@ -308,7 +360,7 @@ namespace SM {
 		if (alpha > 0.0f)
 		{
 			alpha -= dt * (1.0f / fade_time);
-			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen->Get_Component(SPRITE2D));
+			Sprite2D* s = static_cast<Sprite2D*>(fade_screen->Get_Component<Sprite2D>());
 			s->Set_Transparency(alpha);
 			return;
 		}
@@ -339,7 +391,7 @@ namespace SM {
 		if (alpha < 1.0f)
 		{
 			alpha += dt * (1.0f / fade_time);
-			Sprite2D* s = dynamic_cast<Sprite2D*>(fade_screen->Get_Component(SPRITE2D));
+			Sprite2D* s = static_cast<Sprite2D*>(fade_screen->Get_Component<Sprite2D>());
 			s->Set_Transparency(alpha);
 			return;
 		}
