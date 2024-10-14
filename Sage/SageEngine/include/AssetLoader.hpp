@@ -63,6 +63,7 @@ namespace Assets
 			WIDTH,
 			HEIGHT,
 			SPRITES_NUM,
+			IS_FOLDER,
 			NUM_DATA_TYPES
 		} Data_Type;
 
@@ -119,7 +120,8 @@ namespace Assets
 		{
 			ANIMATION_ID,
 			PARENT_TEXTURE_ID,
-			PATH_TO_FOLDER,			
+			PATH_TO_FOLDER,
+			FRAME_TIME,
 			NUM_DATA_TYPES
 		} Data_Type;
 		/*!*****************************************************************************
@@ -144,22 +146,26 @@ namespace Assets
 	//Animation Set category
 	namespace Animation_Set
 	{
-		struct Condition {
+		struct Condition 
+		{
 			std::string parameter;
 			std::string type; // Greater, Less, Equals
 			float value;
 		};
 
 		// Represents an animation state
-		struct State {
+		struct State 
+		{
 			std::string name;
-			std::string animation_ID;
+			Assets::Animations::Animation animation;
+			float speed_multiplier;
 			bool looping;
 			bool is_starting_state;
 		};
 
 		// Represents a transition between states
-		struct Transition {
+		struct Transition 
+		{
 			std::string from_state;
 			std::string to_state;
 			std::vector<Condition> conditions;
@@ -167,7 +173,8 @@ namespace Assets
 		};
 
 		// Represents a parameter in the animation system
-		struct Parameter {
+		struct Parameter 
+		{
 			std::string name;
 			float default_value;
 		};

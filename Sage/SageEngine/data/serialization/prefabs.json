@@ -1,0 +1,95 @@
+{
+    "Example of all currently supported keys and their default values if unspecified":
+    [
+      {
+        "ID": "ALL_CAPS_ID",
+        "Transform_Type":"World is default, otherwise can do Screen",
+        "Pos": [0,0],
+        "Scale": [100,100],
+        "RGBA" : [1,1,1,1],
+        "Sprite_Texture_ID": "ALL_CAPS_TEXTURE_ID_AS_PER_TEXTURES_CSV",
+        "Object_Shape": "If not specified, will do Rect. Otherwise can do Circle",
+        "Has_Collider": 0,
+        "Has_Physics": 0,
+        "Physics":
+        [
+          {
+            "Velocity": 0
+          }
+        ]
+      }
+    ],
+
+    "Num_Prefabs": 13,
+    "Prefabs":
+    [
+      {
+        "ID": "DIGIPEN_SPLASH_SCREEN",
+        "Scale": [1920, 1080],
+        "Sprite_Texture_ID": "DIGIPEN_SPLASH_SCREEN"    
+      },
+      {
+        "ID": "BLUE_SKY",
+        "Scale": [1920, 1080],
+        "Sprite_Texture_ID": "BLUE_SKY"
+      },
+      {
+        "ID": "FADE_SCREEN",
+        "Scale": [1920, 1080],
+        "Sprite_Texture_ID": "BLUE_SKY"
+      },
+      {
+        "ID": "BLACK",
+        "RGBA" : [0,0,0,1]
+      },
+      {
+        "ID": "WHITE"
+      },
+      {
+        "ID": "RED",
+        "RGBA" : [1,0,0,1]
+      },
+      {
+        "ID": "GREEN",
+        "RGBA" : [0,1,1,1]
+      },
+      {
+        "ID": "BLUE",
+        "RGBA" : [0,0,1,1]
+      },
+      {
+        "ID": "CIRCLE",
+        "RGBA" : [1,1,0,1],
+        "Object_Shape": "Circle"        
+      },
+      {
+        "ID": "SPAWN",
+        "RGBA" : [1,0,1,1],
+        "Has_Collider" : 1
+      },
+      {
+        "ID": "GUI_TEST",
+        "Transform_Type":"Screen",
+        "RGBA" : [0.75,0,0,1]
+      },
+      {
+        "ID": "GUI_TEST_TEXTURE",
+        "Transform_Type":"Screen",
+        "Sprite_Texture_ID": "WASD",
+        "RGBA" : [0.75,0,0,1]
+      },
+      {
+        "ID": "PLAYER",
+        "Sprite_Texture_ID": "SPEARMAN_IDLE_0",
+        "Has_Collider": 0,
+        "Has_Physics": 0,
+        "Physics":
+        [
+          {
+            "Velocity": 300
+          }
+        ]
+      }
+    ]
+  }
+  

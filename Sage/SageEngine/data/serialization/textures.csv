@@ -1,11 +1,14 @@
-Texture ID,Filepath,Width,Height,No. of Sprites
-DIGIPEN_SPLASH_SCREEN,../SageEngine/data/assets/textures/digipen_splash_screen.png,1890,1063,1
-BLUE_SKY,../SageEngine/data/assets/textures/blue_sky.png,320,180,1
-WASD,../SageEngine/data/assets/textures/wasd.png,45,29,1
-BAR_FRAME,../SageEngine/data/assets/textures/bar_frame.png,150,15,1
-BAR_FILL,../SageEngine/data/assets/textures/bar_fill.png,150,15,1
-BAR_BG,../SageEngine/data/assets/textures/bar_bg.png,150,15,1
-CELL_FRAME_BLACK,../SageEngine/data/assets/textures/cell_frame_white.png,86,65,1
-CELL_FRAME_WHITE,../SageEngine/data/assets/textures/cell_frame_black.png,86,65,1
-CELL_FILL,../SageEngine/data/assets/textures/cell_fill.png,86,65,1
-SPEARMAN_IDLE,../SageEngine/data/assets/textures/units/spearman/spearman_idle/,160,152,2
+Texture ID,Filepath,Width,Height,No. of Sprites,Is Folder
+DIGIPEN_SPLASH_SCREEN,../SageEngine/data/assets/textures/digipen_splash_screen.png,1890,1063,1,No
+BLUE_SKY,../SageEngine/data/assets/textures/blue_sky.png,320,180,1,No
+WASD,../SageEngine/data/assets/textures/wasd.png,45,29,1,No
+BAR_FRAME,../SageEngine/data/assets/textures/bar_frame.png,150,15,1,No
+BAR_FILL,../SageEngine/data/assets/textures/bar_fill.png,150,15,1,No
+BAR_BG,../SageEngine/data/assets/textures/bar_bg.png,150,15,1,No
+CELL_FRAME_BLACK,../SageEngine/data/assets/textures/cell_frame_white.png,86,65,1,No
+CELL_FRAME_WHITE,../SageEngine/data/assets/textures/cell_frame_black.png,86,65,1,No
+CELL_FILL,../SageEngine/data/assets/textures/cell_fill.png,86,65,1,No
+SPEARMAN_IDLE,../SageEngine/data/assets/textures/units/spearman/spearman_idle/,160,152,2,Yes
+SPEARMAN_WALK,../SageEngine/data/assets/textures/units/spearman/spearman_walk/,160,152,4,Yes
+SPEARMAN_ATTACK,../SageEngine/data/assets/textures/units/spearman/spearman_attack/,160,152,2,Yes
+SPEARMAN_DEAD,../SageEngine/data/assets/textures/units/spearman/spearman_dead/,160,152,1,Yes

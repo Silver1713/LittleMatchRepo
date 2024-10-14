@@ -4,7 +4,7 @@
 \title		Little Match
 \author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
-\date		11 September 2024
+\date		13 October 2024
 \brief		Contains the derived class Animator that overrides the virtual functions of the
 			base class Component to do animator specific tasks. Times itself to pass the
 			sprites to the gameobject's rendering component to simulate an animation
@@ -22,11 +22,14 @@ class Animator : public Component
 private:
 	Assets::Animation_Set::Animation_Set animation_set;
 
+	Assets::Animation_Set::State current_state;
+
 	Sprite2D* sprite{ nullptr };
 	Image* image{ nullptr };
 	SageObject** obj{ nullptr };
 
 	float internal_timer{};
+	unsigned int current_frame{};
 public:
 
 	/*!*****************************************************************************
@@ -68,6 +71,21 @@ public:
 		per component
 	*******************************************************************************/
 	void Exit() override;
+
+	/*!*****************************************************************************
+	  \brief
+		Transitions into a different state
+
+	  \param _new_state
+		name of the new state to transition into
+	*******************************************************************************/
+	void Switch_State(Assets::Animation_Set::State const& _new_state);
+
+	/*!*****************************************************************************
+	  \brief
+		Gets the next frame in the current state's animation
+	*******************************************************************************/
+	void Go_To_Next_Frame();
 
 	/*!*****************************************************************************
 	  \brief
