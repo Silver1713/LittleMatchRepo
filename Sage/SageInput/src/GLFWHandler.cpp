@@ -219,6 +219,7 @@ void GLFWInputHandler::Set_Bindings()
 {
 	mono_add_internal_call("SageEngine.Input::Get_Key", GLFWInputHandler::Get_Key);
 	mono_add_internal_call("SageEngine.Input::Get_Key_Pressed", GLFWInputHandler::Get_Key_Pressed);
+	mono_add_internal_call("SageEngine.Input::Get_Mouse_Pos", GLFWInputHandler::Mouse_Pos_Cb);
 }
 
  

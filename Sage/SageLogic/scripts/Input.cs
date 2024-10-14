@@ -11,5 +11,8 @@ namespace SageEngine
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern bool Get_Key_Pressed();
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public static extern void Get_Mouse_Pos(out float mouse_x, out float mouse_y);
     }
 }
