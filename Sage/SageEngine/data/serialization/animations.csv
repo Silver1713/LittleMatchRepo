@@ -1,5 +1,5 @@
-Animation ID,Parent Texture ID,Path to folder
-SPEARMAN_IDLE,SPEARMAN_IDLE,../SageEngine/data/assets/textures/units/spearman/spearman_idle
-SPEARMAN_WALK,SPEARMAN_WALK,../SageEngine/data/assets/textures/units/spearman/spearman_walk
-SPEARMAN_ATTACK,SPEARMAN_ATTACK,../SageEngine/data/assets/textures/units/spearman/spearman_attack
-SPEARMAN_DEAD,SPEARMAN_DEAD,../SageEngine/data/assets/textures/units/spearman/spearman_dead
+Animation ID,Parent Texture ID,Path to folder,Frame Time
+SPEARMAN_IDLE,SPEARMAN_IDLE,../SageEngine/data/assets/textures/units/spearman/spearman_idle,0.5
+SPEARMAN_WALK,SPEARMAN_WALK,../SageEngine/data/assets/textures/units/spearman/spearman_walk,0.25
+SPEARMAN_ATTACK,SPEARMAN_ATTACK,../SageEngine/data/assets/textures/units/spearman/spearman_attack,0.5
+SPEARMAN_DEAD,SPEARMAN_DEAD,../SageEngine/data/assets/textures/units/spearman/spearman_dead,1

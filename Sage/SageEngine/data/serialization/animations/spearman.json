@@ -7,25 +7,29 @@
         "Name": "idle",
         "Animation_ID": "SPEARMAN_IDLE",
         "Is_Looping": 1.0,
-        "Is_Starting_State": 1.0
+        "Is_Starting_State": 1.0,
+        "Speed_Multiplier" : 1.0
       },
       {
         "Name": "walk",
         "Animation_ID": "SPEARMAN_IDLE",
         "Is_Looping": 1.0,
-        "Is_Starting_State": 0.0
+        "Is_Starting_State": 0.0,
+        "Speed_Multiplier" : 1.0
       },
       {
         "Name": "attack",
         "Animation_ID": "SPEARMAN_ATTACK",
         "Is_Looping": 1.0,
-        "Is_Starting_State": 0.0
+        "Is_Starting_State": 0.0,
+        "Speed_Multiplier" : 1.0
       },
       {
         "Name": "dead",
         "Animation_ID": "SPEARMAN_DEAD",
         "Is_Looping": 0.0,
-        "Is_Starting_State": 0.0
+        "Is_Starting_State": 0.0,
+        "Speed_Multiplier" : 0.0
       }
     ],
     "Num_Transitions": 5,

@@ -81,7 +81,7 @@ namespace Assets
 				try
 				{
 					//Parsing a folder of textures
-					if (std::stoul(source.comma_seperated_data[i].associated_data[SPRITES_NUM]) > 1)
+					if (source.comma_seperated_data[i].associated_data[IS_FOLDER] == "Yes")
 					{
 						if (std::filesystem::exists(source.comma_seperated_data[i].associated_data[FILEPATH]) && 
 							std::filesystem::is_directory(source.comma_seperated_data[i].associated_data[FILEPATH])) 
@@ -203,7 +203,33 @@ namespace Assets
 		*******************************************************************************/
 		void Init()
 		{
+			SageJSON::SageJSON prefabs_json;
+			std::ifstream file("../SageEngine/data/serialization/prefabs.json");
+			while (file)
+			{
+				file >> prefabs_json;
+			}
+			file.close();
+
+			//for (unsigned int i{}; i < prefabs_json["Num_Prefabs"].as<SageJSON::SageJSON::NumberValue>(); ++i)
+			//{
+			//	Prefab p;
+			//	p.prefab_ID = prefabs_json["Prefabs"][i]["ID"].as<SageJSON::SageJSON::StringValue>();				
+			//	try 
+			//	{
+			//		//p.transform_type = prefabs_json["Prefabs"][i]["Transform_Type"].as<SageJSON::SageJSON::StringValue>();
+			//	}
+			//	catch (...)
+			//	{
+
+			//	}
+			//	//p.sprite_texture_ID = prefabs_json["Prefabs"][i]["Sprite_Texture_ID"].as<SageJSON::SageJSON::StringValue>();
+			//}			
+
+			prefabs_json.close();
+
 			source = Parse_CSV("../SageEngine/data/serialization/prefabs.csv");
+
 			for (int i{ 1 }; i < source.num_rows; i++)
 			{
 				Prefab p;
@@ -306,6 +332,14 @@ namespace Assets
 					a.animation_ID = source.comma_seperated_data[i].associated_data[ANIMATION_ID];
 					a.parent_texture_ID = source.comma_seperated_data[i].associated_data[PARENT_TEXTURE_ID];
 					a.path_to_folder = source.comma_seperated_data[i].associated_data[PATH_TO_FOLDER];
+					try
+					{
+						a.frame_time = std::stof(source.comma_seperated_data[i].associated_data[FRAME_TIME]);
+					}
+					catch (const std::invalid_argument& e)
+					{
+						std::cerr << "Invalid argument: " << e.what() << " at index " << i << std::endl;
+					}
 
 					//count how many images are there in the folder
 					if (std::filesystem::exists(a.path_to_folder) &&
@@ -434,8 +468,9 @@ namespace Assets
 								try
 								{
 									s.name = current_animation_set["States"][i]["Name"].as<SageJSON::SageJSON::StringValue>();
-									s.animation_ID = current_animation_set["States"][i]["Animation_ID"].as<SageJSON::SageJSON::StringValue>();
+									s.animation = Assets::Animations::Get_Animation(current_animation_set["States"][i]["Animation_ID"].as<SageJSON::SageJSON::StringValue>());
 									s.looping = (bool)(current_animation_set["States"][i]["Is_Looping"].as<SageJSON::SageJSON::NumberValue>());
+									s.speed_multiplier = static_cast<float>(current_animation_set["States"][i]["Speed_Multiplier"].as<SageJSON::SageJSON::NumberValue>());
 									try
 									{
 										s.is_starting_state = (bool)current_animation_set["States"][i]["Is_Starting_State"].as<SageJSON::SageJSON::NumberValue>();
@@ -468,7 +503,6 @@ namespace Assets
 						}
 					}
 				}
-				std::cout << "hi" << std::endl;
 			}
 			else
 			{
