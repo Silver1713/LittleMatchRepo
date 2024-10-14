@@ -16,7 +16,8 @@ set(ALL_LIBS
 
 importDependencies()
 include(GenerateCoreComponents)
- # message(STATUS "All Libraries: ${ALL_LIBS}")
+
+# message(STATUS "All Libraries: ${ALL_LIBS}")
 option(GENERATE_ENGINE_CORE "Generate Engine Core" ON)
 option(COMPILE_USING_OBJECT "Compile using object" ON)
 
@@ -109,28 +110,25 @@ foreach(dir ${PROJECT_DIRECTORIES})
         set_property(TARGET ${DIR_NAME} PROPERTY CXX_STANDARD 20)
 
         if(WIN32 AND FMOD_IMPORT_SUCCESS)
-        add_custom_command(TARGET ${DIR_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different 
-                "$<$<CONFIG:Debug>:${FMOD_LIB_DIR}/fmodL.dll>$<$<NOT:$<CONFIG:Debug>>:${FMOD_LIB_DIR}/fmod.dll>" 
+            add_custom_command(TARGET ${DIR_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "$<$<CONFIG:Debug>:${FMOD_LIB_DIR}/fmodL.dll>$<$<NOT:$<CONFIG:Debug>>:${FMOD_LIB_DIR}/fmod.dll>"
                 "$<TARGET_FILE_DIR:${DIR_NAME}>"
-        )
-    endif()
-    
+            )
+        endif()
 
-    if(WIN32 AND MONO_IMPORT_SUCCESS)
-    add_custom_command(TARGET ${DIR_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different 
-            "$<$<CONFIG:Debug>:${MONO_DLL_PATH}>$<$<NOT:$<CONFIG:Debug>>:${MONO_DLL_PATH}>" 
-            "$<TARGET_FILE_DIR:${DIR_NAME}>"
-    )
-    add_custom_command(TARGET ${DIR_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different 
-            "${MONO_DLL_POSIX}" 
-            "$<TARGET_FILE_DIR:${DIR_NAME}>"
-    )
-endif()
-
-
+        if(WIN32 AND MONO_IMPORT_SUCCESS)
+            add_custom_command(TARGET ${DIR_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "$<$<CONFIG:Debug>:${MONO_DLL_PATH}>$<$<NOT:$<CONFIG:Debug>>:${MONO_DLL_PATH}>"
+                "$<TARGET_FILE_DIR:${DIR_NAME}>"
+            )
+            add_custom_command(TARGET ${DIR_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${MONO_DLL_POSIX}"
+                "$<TARGET_FILE_DIR:${DIR_NAME}>"
+            )
+        endif()
 
         IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(${DIR_NAME} PRIVATE -Wall ${DisableWarnings})
@@ -200,7 +198,8 @@ endif()
                 target_include_directories(${DIR_NAME}_lib PUBLIC
                     ${SUB_DIR_LIB}
                 )
-                IF (IS_LIBS_ONLY)
+
+                IF(IS_LIBS_ONLY)
                     list(APPEND ADDITION_INCLUDE ${SUB_DIR_LIB})
                 ENDIF()
             ENDIF()
@@ -212,16 +211,17 @@ endif()
         target_include_directories(${DIR_NAME}_lib
             PRIVATE ${dir}/include/internal
         )
-        
-        IF (IS_LIBS_ONLY)
-        list(APPEND INCLUDES_LIST ${dir}/include ${ADDITION_INCLUDE})
+
+        IF(IS_LIBS_ONLY)
+            list(APPEND INCLUDES_LIST ${dir}/include ${ADDITION_INCLUDE})
         ENDIF()
+
         list(APPEND LIB_LIST "${DIR_NAME}_lib")
         list(APPEND OBJECT_LIST "$<TARGET_OBJECTS:${DIR_NAME}_lib>")
     endif()
 endforeach()
 
-#  message("List of Libraries: ${LIB_LIST}")
+# message("List of Libraries: ${LIB_LIST}")
 
 # Generate Core Libraries and Engine
 IF(GENERATE_ENGINE_CORE)

@@ -122,6 +122,19 @@ endif()
         ${ALL_LIBS}
     )
 
+    if(WIN32 AND MONO_IMPORT_SUCCESS)
+    add_custom_command(TARGET ${CORE_LIB_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different 
+            "$<$<CONFIG:Debug>:${MONO_DLL_PATH}>$<$<NOT:$<CONFIG:Debug>>:${MONO_DLL_PATH}>" 
+            "$<TARGET_FILE_DIR:${CORE_LIB_NAME}>"
+    )
+    add_custom_command(TARGET ${CORE_LIB_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different 
+            "${MONO_DLL_POSIX}" 
+            "$<TARGET_FILE_DIR:${CORE_LIB_NAME}>"
+    )
+endif()
+
     set_property(TARGET ${CORE_LIB_NAME}_lib PROPERTY CXX_STANDARD 20)
     IF (NOT IS_LIBS_ONLY)
     set_property(TARGET ${CORE_LIB_NAME} PROPERTY CXX_STANDARD 20)

@@ -268,7 +268,7 @@ IF (${MONO_IMPORT_SUCCESS})
     set(MONO_DLL_STATIC "${MONO_IMPORT_DIR}/bin/libmono-btls-shared")
     set(MONO_DLL_POSIX "${MONO_IMPORT_DIR}/bin/MonoPosixHelper.dll")
 
-    if (NOT MONO_LIBRARY OR NOT MONO_LIB_IMPORTED)
+    if (NOT MONO_LIBRARY )
         message(STATUS "MONO library not found in MONO/ folder")
         set(MONO_IMPORT_SUCCESS FALSE)
     endif()
@@ -288,8 +288,7 @@ IF (${MONO_IMPORT_SUCCESS})
         
         INTERFACE_INCLUDE_DIRECTORIES ${MONO_IMPORT_INCLUDE_DIR}
     )
-    target_link_libraries(mono INTERFACE 
-    ${MONO_POSIX_LIBRARY} 
+    target_link_libraries(mono INTERFACE  
     ${MONO_LIBRARY_2}
     ${MONO_POSIX_LIBRARY}
     )
