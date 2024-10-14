@@ -122,5 +122,8 @@ public:
 	*******************************************************************************/
 	static void Mouse_Pos_Cb(GLFWwindow* _window, double _xpos, double _ypos);
 
+	// For scripting
 	static void Set_Bindings();
+
+	static void Get_Mouse_Pos(double& _xpos, double& _ypos);
 };

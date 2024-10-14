@@ -215,12 +215,19 @@ void GLFWInputHandler::Mouse_Pos_Cb(GLFWwindow* _window, double _xpos, double _y
 	std::cout << "Mouse X: " << g_mouse_pos_x << " Mouse Y: " << g_mouse_pos_y << std::endl;
 }
 
+void GLFWInputHandler::Get_Mouse_Pos(double& _xmouse, double& _ymouse)
+{
+	_xmouse = g_mouse_pos_x;
+	_ymouse = g_mouse_pos_y;
+}
+
+
 // Set binding for get key and get key pressed
 void GLFWInputHandler::Set_Bindings()
 {
 	mono_add_internal_call("SageEngine.Input::Get_Key", GLFWInputHandler::Get_Key);
 	mono_add_internal_call("SageEngine.Input::Get_Key_Pressed", GLFWInputHandler::Get_Key_Pressed);
-	mono_add_internal_call("SageEngine.Input::Get_Mouse_Pos", GLFWInputHandler::Mouse_Pos_Cb);
+	mono_add_internal_call("SageEngine.Input::Get_Mouse_Pos", GLFWInputHandler::Get_Mouse_Pos);
 }
 
  
