@@ -5,6 +5,8 @@ set(IS_LIBS_ONLY OFF)
 add_definitions(-DGLEW_STATIC)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
+set(BEHAVIOUR_DIR "${CMAKE_SOURCE_DIR}/BehaviourScripts")
 include(ImportDependencies)
 
 # All libraries - GLFW, glew , include libraries here for ALL
@@ -22,7 +24,7 @@ option(GENERATE_ENGINE_CORE "Generate Engine Core" ON)
 option(COMPILE_USING_OBJECT "Compile using object" ON)
 
 file(GLOB PROJECT_DIRECTORIES ${CMAKE_SOURCE_DIR}/Sage*/)
-message(STATUS "Project Directories: ${PROJECT_DIRECTORIES}")
+# message(STATUS "Project Directories: ${PROJECT_DIRECTORIES}")
 set(LIB_LIST)
 set(INCLUDES_LIST)
 set(OBJECT_LIST)
@@ -43,13 +45,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
             source_group("Shader Files" FILES ${SAGE_SHADER_FILES})
         endif()
 
-        if(DIR_NAME STREQUAL "SageLogic")
-            set(SAGE_LOGIC_SCRIPTS)
-            file(GLOB SAGE_LOGIC_SCRIPTS
-                ${dir}/scripts/*.cs
-            )
-            source_group("C# Scripts" FILES ${SAGE_LOGIC_SCRIPTS})
-        endif()
+        
 
         file(GLOB_RECURSE SAGE_SOURCE_FILE
             ${dir}/src/*.[ch]pp
@@ -77,7 +73,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
                 )
 
                 source_group("Source Files/${SUB_NAMESRC}" FILES ${DIR_SRC_FILE})
-                message(STATUS "Sourced Source Files/${SUB_NAME_LIB}")
+                # message(STATUS "Sourced Source Files/${SUB_NAME_LIB}")
             endif()
         endforeach()
 
@@ -93,7 +89,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
                     ${subdirh}/*.hpp
                 )
                 source_group("Header Files/${SUB_NAME}" FILES ${DIR_H_FILE})
-                message(STATUS"Header Files/${SUB_NAME}")
+                # message(STATUS"Header Files/${SUB_NAME}")
                 list(APPEND ADDITION_INCLUDE ${subdirh})
             endif()
         endforeach()
@@ -165,7 +161,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
                 ${SAGE_INTERNALS_H_FILES}
             )
         ELSE()
-            message(STATUS "Adding Library : ${DIR_NAME}_lib")
+            # message(STATUS "Adding Library : ${DIR_NAME}_lib")
             add_library(${DIR_NAME}_lib
                 STATIC
                 ${SAGE_SOURCE_FILE}
@@ -194,7 +190,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
                     ${SUB_DIR_LIB}/*.hpp
                 )
                 source_group("Header Files/${SUB_NAME_LIB}" FILES ${DIR_H_FILE_LIB})
-                message(STATUS "Sourced Header Files/${SUB_NAME_LIB}")
+                # message(STATUS "Sourced Header Files/${SUB_NAME_LIB}")
                 target_include_directories(${DIR_NAME}_lib PUBLIC
                     ${SUB_DIR_LIB}
                 )

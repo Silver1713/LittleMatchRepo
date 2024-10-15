@@ -548,7 +548,7 @@ namespace SageJSON
 
 				lexer_state = Lexer::LEXER_STATE::END_STRING;
 			}
-			else if (std::isdigit(symbol) && lexer_state != Lexer::LEXER_STATE::BEGIN_STRING)
+			else if ((std::isdigit(symbol)) && lexer_state != Lexer::LEXER_STATE::BEGIN_STRING )
 			{
 				lexer_state = Lexer::LEXER_STATE::BEGIN_NUMBER;
 			}
@@ -556,7 +556,7 @@ namespace SageJSON
 			{
 				lexer_state = Lexer::LEXER_STATE::BEGIN_BOOL;
 			}
-			else if (lexer_state != Lexer::LEXER_STATE::BEGIN_STRING && lexer_state != Lexer::LEXER_STATE::BEGIN_NUMBER)
+			else if (lexer_state != Lexer::LEXER_STATE::BEGIN_STRING && lexer_state != Lexer::LEXER_STATE::BEGIN_NUMBER && lexer_state != Lexer::LEXER_STATE::BEGIN_BOOL)
 			{
 				lexer_state = Lexer::LEXER_STATE::SYMBOL;
 			}
@@ -565,6 +565,9 @@ namespace SageJSON
 				if (symbol == '.' && !decimal_count)
 					decimal_count++;
 				else lexer_state = Lexer::LEXER_STATE::END_NUMBER;
+			} else if (lexer_state == Lexer::LEXER_STATE::BEGIN_BOOL && (symbol == 'e'))
+			{
+				lexer_state = Lexer::LEXER_STATE::END_BOOL;
 			}
 
 
@@ -600,6 +603,11 @@ namespace SageJSON
 					Lexer::Token token{ Lexer::Token::Type::ARRAY, std::string{symbol} };
 					tokens.emplace_back(token);
 				}
+				else if (symbol == '-')
+				{
+					Lexer::Token token{ Lexer::Token::Type::SYMBOL, std::string{symbol} };
+					tokens.emplace_back(token);
+				}
 			}
 			else if (lexer_state == Lexer::LEXER_STATE::BEGIN_STRING)
 			{
@@ -631,6 +639,19 @@ namespace SageJSON
 				decimal_count = 0;
 
 			}
+			else if (lexer_state == Lexer::LEXER_STATE::BEGIN_BOOL)
+			{
+				container += symbol;
+			}
+			else if (lexer_state == Lexer::LEXER_STATE::END_BOOL)
+			{
+				container += *begin;
+
+
+				Lexer::Token token{ Lexer::Token::Type::BOOLEAN, container };
+				tokens.emplace_back(token);
+				container.clear();
+			}
 
 			begin++;
 		}
@@ -646,6 +667,7 @@ namespace SageJSON
 		static std::string current{};
 		static bool inArray{ false };
 		static bool inObject{ false };
+		static bool minusSign{ false };
 		for (Lexer::Token& token : tokens)
 		{
 			if (current.empty() && token.type == Lexer::Token::Type::STRING && (!inArray || (inObject && inArray)))
@@ -751,10 +773,27 @@ namespace SageJSON
 			}
 			else if (token.type == Lexer::Token::Type::NUMBER)
 			{
+				double numCtn{ std::stod(token.value) };
+				if (minusSign) numCtn *= -1.0;
 				AST::Node* c_obj = node_stack.top();
-				AST::NumberValueNode* num = new AST::NumberValueNode(current, std::stod(token.value));
+				AST::NumberValueNode* num = new AST::NumberValueNode(current, numCtn);
+				minusSign = false;
 				current.clear();
 				ast.addChild(c_obj, num);
+			} else if (token.type == Lexer::Token::Type::BOOLEAN)
+			{
+				AST::Node* top_obj = node_stack.top();
+				AST::BooleanValueNode* boolValue = new AST::BooleanValueNode(current, (token.value == "true" ? true : false));
+				current.clear();
+				ast.addChild(top_obj, boolValue);
+
+			}
+			else if (token.type == Lexer::Token::Type::SYMBOL)
+			{
+				if (token.value == "-")
+				{
+					minusSign = true;
+				}
 			}
 
 		}

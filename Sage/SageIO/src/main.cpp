@@ -36,10 +36,10 @@ int main()
 	}
 
 
-	for (int i =0; i < 13; i++)
-	{
-		std::cout << json["Prefabs"][i]["ID"].as<SageJSON::SageJSON::StringValue>() << std::endl;
-	}
+	
+	
+		std::cout << json["Nested"]["BoolArray"][2].as<JSON::NumberValue>() << std::endl;
+	
 
 	
 

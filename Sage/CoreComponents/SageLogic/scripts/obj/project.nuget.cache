@@ -1,12 +1,22 @@
 {
   "version": 2,
-  "dgSpecHash": "D4vIY9NwRF4=",
-  "success": true,
-  "projectFilePath": "C:\\Users\\yeo_j\\Documents\\Digipen Repo\\Year 2\\Trimester 1\\CSD2401SWE\\Project\\LittleMatch\\Repo\\Sage\\SageLogic\\scripts\\SageEngineRT.csproj",
+  "dgSpecHash": "oHMXPhO+0IE=",
+  "success": false,
+  "projectFilePath": "C:\\Users\\yeo_j\\Documents\\Digipen Repo\\Year 2\\Trimester 1\\CSD2401SWE\\Project\\LittleMatch\\Repo\\Sage\\CoreComponents\\SageLogic\\scripts\\SageEngineRT.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\yeo_j\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\5.0.0\\microsoft.windowsdesktop.app.ref.5.0.0.nupkg.sha512",
     "C:\\Users\\yeo_j\\.nuget\\packages\\microsoft.netcore.app.ref\\5.0.0\\microsoft.netcore.app.ref.5.0.0.nupkg.sha512",
     "C:\\Users\\yeo_j\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\5.0.0\\microsoft.aspnetcore.app.ref.5.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1105",
+      "level": "Error",
+      "message": "Unable to find project information for 'C:\\Users\\yeo_j\\Documents\\Digipen Repo\\Year 2\\Trimester 1\\CSD2401SWE\\Project\\LittleMatch\\Repo\\Sage\\build\\SageLogic.vcxproj'. If you are using Visual Studio, this may be because the project is unloaded or not part of the current solution so run a restore from the command-line. Otherwise, the project file may be invalid or missing targets required for restore.",
+      "libraryId": "C:\\Users\\yeo_j\\Documents\\Digipen Repo\\Year 2\\Trimester 1\\CSD2401SWE\\Project\\LittleMatch\\Repo\\Sage\\build\\SageLogic.vcxproj",
+      "targetGraphs": [
+        "net5.0"
+      ]
+    }
+  ]
 }

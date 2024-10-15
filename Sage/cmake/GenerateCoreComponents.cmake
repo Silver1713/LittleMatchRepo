@@ -41,13 +41,21 @@ foreach(CORE_LIB_SUBDIR ${CORE_LIB_DIR})
         source_group("Source Files/${CORE_LIB_SRC_NAME}" FILES ${CORE_LIB_SRC_FILES})
     endforeach()
 
-
+   
     if(CORE_LIB_NAME STREQUAL "SageLogic")
+    message(STATUS "Behaviour Directory: ${BEHAVIOUR_DIR}")
+
     set(SAGE_LOGIC_SCRIPTS)
-    file(GLOB SAGE_LOGIC_SCRIPTS
-        ${CORE_LIB_SUBDIR}/scripts/*.cs
-    )
-    source_group("C# Scripts" FILES ${SAGE_LOGIC_SCRIPTS})
+
+    if(EXISTS "${BEHAVIOUR_DIR}")
+        message(STATUS "Behaviour Directory Exists")
+        file(GLOB_RECURSE SAGE_LOGIC_SCRIPTS
+            ${BEHAVIOUR_DIR}/scripts/*.cs
+        )
+        source_group("C# Scripts" FILES ${SAGE_LOGIC_SCRIPTS})
+
+        add_subdirectory(${BEHAVIOUR_DIR})
+    endif()
 endif()
     # add the program
     IF (NOT IS_LIBS_ONLY)
