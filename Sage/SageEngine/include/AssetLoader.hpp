@@ -150,7 +150,7 @@ namespace Assets
 		{
 			std::string parameter;
 			std::string type; // Greater, Less, Equals
-			float value;
+			float value{};
 		};
 
 		// Represents an animation state
@@ -221,18 +221,17 @@ namespace Assets
 		//What defines a parsed prefab
 		struct Prefab
 		{
-			std::string prefab_ID{};
-			std::string transform_type{};
-			ToastBox::Vec3 positions{};
-			ToastBox::Vec3 rotations{};
-			ToastBox::Vec3 scale{};
-			ToastBox::Vec4 colour{};
-			std::string sprite_texture_ID{};
-			std::string collision_data{};
-			std::string has_physics{};
-			float velocity{};
-			std::string audio_data{};
-			std::string object_shape{};
+			std::string prefab_ID{""};
+			std::string transform_type{"World"};
+			ToastBox::Vec3 positions{ 0,0,0 };
+			ToastBox::Vec3 rotations{0,0,0};
+			ToastBox::Vec3 scale{100.f,100.f,0};
+			ToastBox::Vec4 colour{1.f,1.f,1.f,1.f};
+			ToastBox::Vec3 velocity{0,0,0};
+			std::string sprite_texture_ID{""};
+			bool has_collider{false};
+			bool has_physics{false};
+			std::string object_shape{"Rect"};
 		};
 		
 		//label for each type of information a parsed prefab will have
@@ -326,12 +325,13 @@ namespace Assets
 		//what defines a deserialized Level
 		struct Level
 		{
+			std::string level_name;
 			std::vector<Prefabs::Prefab> prefabs;
 			std::vector<std::string> identifier;
 			std::vector<ToastBox::Vec3> positions;
 			std::vector<ToastBox::Vec3> rotations;
 			std::vector<ToastBox::Vec3> scale;
-			std::vector<ToastBox::Vec4> color;
+			std::vector<ToastBox::Vec4> colour;
 			std::vector<unsigned int> z_orders;
 		};
 		//the label for each type of information in a deserialized Level

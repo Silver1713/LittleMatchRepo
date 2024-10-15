@@ -221,37 +221,19 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	if (_p.transform_type == "Screen")
 	{
 		Add_Component(std::make_unique<UITransform>(_p.positions, _p.rotations, _p.scale));
-		if (!(_p.sprite_texture_ID == "Nil"))
-		{
-			Add_Component(std::make_unique<Image>(_p.sprite_texture_ID, _p.colour, _p.object_shape));
-		}
-		else
-		{
-			Add_Component(std::make_unique<Image>("", _p.colour, _p.object_shape));
-		}
+		Add_Component(std::make_unique<Image>(_p.sprite_texture_ID, _p.colour, _p.object_shape));
 	}
 	else
 	{
 		Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
-		if (!(_p.sprite_texture_ID == "Nil"))
-		{
-			Add_Component(std::make_unique<Sprite2D>(_p.sprite_texture_ID, _p.colour, _p.object_shape));
-		}
-		else
-		{
-			Add_Component(std::make_unique<Sprite2D>("", _p.colour, _p.object_shape));
-		}
-		if (!(_p.collision_data == "Nil"))
+		Add_Component(std::make_unique<Sprite2D>(_p.sprite_texture_ID, _p.colour, _p.object_shape));
+		if (_p.has_collider)
 		{
 			Add_Component(std::make_unique<BoxCollider2D>());
 		}
-		if (!(_p.has_physics == "Nil"))
+		if (_p.has_physics)
 		{
-			Add_Component(std::make_unique<Physics>(ToastBox::Vec2{ _p.velocity ,_p.velocity }));
-		}
-		if (!(_p.audio_data == "Nil"))
-		{
-			Add_Component(std::make_unique<Audio>());
+			Add_Component(std::make_unique<Physics>(ToastBox::Vec2{ _p.velocity.x ,_p.velocity.y }));
 		}
 	}
 

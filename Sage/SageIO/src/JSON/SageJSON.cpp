@@ -901,8 +901,6 @@ namespace SageJSON
 	}
 
 
-
-
 	std::istream& operator>>(std::istream& is, SageJSON& json)
 	{
 		std::string line{};

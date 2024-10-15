@@ -577,6 +577,11 @@ namespace SageJSON
 		*******************************************************************************/
 		friend std::ostream& operator<<(std::ostream& os, SageJSON& json);
 		/*!****************************************************************************
+		 \brief A function to check if the key exists
+		*******************************************************************************/
+		template <typename T>
+		bool key_exists();
+		/*!****************************************************************************
 		 \brief A function to convert the JSON data into a primitive data type. This
 		 allow it to be read naturally by the C++ program.
 		 \tparam T the type of the data to be converted to.
@@ -599,11 +604,42 @@ namespace SageJSON
 		*******************************************************************************/
 		AST::AST const& getAST() const;
 	};
+	template <typename T>
+	bool SageJSON::key_exists()
+	{
+		try
+		{
+			if (!current_node)
+			{
+				current_node = nullptr;
+				return false;
+			}
+			if (std::holds_alternative<T>(current_node->getKey()))
+			{
+				current_node = nullptr;
+				return true;
+			}
+			else if (std::holds_alternative<std::reference_wrapper<T>>(current_node->getKey()))
+			{
+				current_node = nullptr;
+				return true;
+			}
+			else
+			{
+				current_node = nullptr;
+				return false;
+			}
+		}
+		catch (...)
+		{
+			current_node = nullptr;
+			return false;
+		}
+	}
 
 	template <typename T>
 	T SageJSON::as()
-	{
-		
+	{		
 		try {
 			if (!current_node)
 			{

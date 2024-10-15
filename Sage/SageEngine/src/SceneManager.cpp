@@ -146,7 +146,7 @@ namespace SM {
 			s = static_cast<Sprite2D*>(g->Get_Component<Sprite2D>());
 			if (s)
 			{
-				s->Set_Colour(current_level.color[i]);
+				s->Set_Colour(current_level.colour[i]);
 			}
 		}
 
@@ -302,7 +302,7 @@ namespace SM {
 	*******************************************************************************/
 	void Startup_Scene(std::string const& new_level_ID)
 	{
-		if (new_level_ID == "splash_Screen")
+		if (new_level_ID == "splash_screen")
 		{
 			SM::fp_load = Splash_Screen::Load;
 			SM::fp_init = Splash_Screen::Init;

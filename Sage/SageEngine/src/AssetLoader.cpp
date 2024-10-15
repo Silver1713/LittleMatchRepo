@@ -211,61 +211,70 @@ namespace Assets
 			}
 			file.close();
 
-			//for (unsigned int i{}; i < prefabs_json["Num_Prefabs"].as<SageJSON::SageJSON::NumberValue>(); ++i)
-			//{
-			//	Prefab p;
-			//	p.prefab_ID = prefabs_json["Prefabs"][i]["ID"].as<SageJSON::SageJSON::StringValue>();				
-			//	try 
-			//	{
-			//		//p.transform_type = prefabs_json["Prefabs"][i]["Transform_Type"].as<SageJSON::SageJSON::StringValue>();
-			//	}
-			//	catch (...)
-			//	{
-
-			//	}
-			//	//p.sprite_texture_ID = prefabs_json["Prefabs"][i]["Sprite_Texture_ID"].as<SageJSON::SageJSON::StringValue>();
-			//}			
-
-			prefabs_json.close();
-
-			source = Parse_CSV("../SageEngine/data/serialization/prefabs.csv");
-
-			for (int i{ 1 }; i < source.num_rows; i++)
+			for (unsigned int i{}; i < prefabs_json["Num_Prefabs"].as<SageJSON::SageJSON::NumberValue>(); ++i)
 			{
 				Prefab p;
+				p.prefab_ID = prefabs_json["Prefabs"][i]["ID"].as<SageJSON::SageJSON::StringValue>();				
 				try
 				{
-					p.prefab_ID = source.comma_seperated_data[i].associated_data[PREFAB_ID];
-					p.transform_type = source.comma_seperated_data[i].associated_data[TRANSFORM_TYPE];
-					p.positions.x = std::stof(source.comma_seperated_data[i].associated_data[POS_X]);
-					p.positions.y = std::stof(source.comma_seperated_data[i].associated_data[POS_Y]);
-					p.positions.z = std::stof(source.comma_seperated_data[i].associated_data[POS_Z]);
-					p.rotations.x = std::stof(source.comma_seperated_data[i].associated_data[ROT_X]);
-					p.rotations.y = std::stof(source.comma_seperated_data[i].associated_data[ROT_Y]);
-					p.rotations.z = std::stof(source.comma_seperated_data[i].associated_data[ROT_Z]);
-					p.scale.x = std::stof(source.comma_seperated_data[i].associated_data[SCALE_X]);
-					p.scale.y = std::stof(source.comma_seperated_data[i].associated_data[SCALE_Y]);
-					p.scale.z = std::stof(source.comma_seperated_data[i].associated_data[SCALE_Z]);
-					p.colour.x = std::stof(source.comma_seperated_data[i].associated_data[COLOR_R]);
-					p.colour.y = std::stof(source.comma_seperated_data[i].associated_data[COLOR_G]);
-					p.colour.z = std::stof(source.comma_seperated_data[i].associated_data[COLOR_B]);
-					p.colour.w = std::stof(source.comma_seperated_data[i].associated_data[COLOR_A]);
-					p.sprite_texture_ID = source.comma_seperated_data[i].associated_data[SPRITE_TEXTURE_ID];
-					p.collision_data = source.comma_seperated_data[i].associated_data[COL_D];
-					p.has_physics = source.comma_seperated_data[i].associated_data[HAS_PHYSICS];
-					p.velocity = std::stof(source.comma_seperated_data[i].associated_data[PHYSICS_VELOCITY]);
-					p.object_shape = source.comma_seperated_data[i].associated_data[OBJ_SHAPE];
-					generated_prefabs[p.prefab_ID] = p;
+					if (prefabs_json["Prefabs"][i]["Transform_Type"].key_exists<SageJSON::SageJSON::StringValue>())
+					{
+						p.transform_type = prefabs_json["Prefabs"][i]["Transform_Type"].as<SageJSON::SageJSON::StringValue>();
+					}
+					if (prefabs_json["Prefabs"][i]["Pos"].key_exists<SageJSON::SageJSON::NumberValue>())
+					{
+						for (unsigned int j{}; j < 3; ++j)
+						{
+							p.positions[j] = static_cast<float>(prefabs_json["Prefabs"][i]["Pos"][j].as<SageJSON::SageJSON::NumberValue>());
+						}
+					}
+					if (static_cast<float>(prefabs_json["Prefabs"][i]["Scale"].key_exists<SageJSON::SageJSON::NumberValue>()))
+					{
+						for (unsigned int j{}; j < 3; ++j)
+						{
+							p.scale[j] = static_cast<float>(prefabs_json["Prefabs"][i]["Scale"][j].as<SageJSON::SageJSON::NumberValue>());
+						}
+					}
+					if (prefabs_json["Prefabs"][i]["RGBA"].key_exists<SageJSON::SageJSON::NumberValue>())
+					{
+						for (unsigned int j{}; j < 4; ++j)
+						{
+							p.colour[j] = static_cast<float>(prefabs_json["Prefabs"][i]["RGBA"][j].as<SageJSON::SageJSON::NumberValue>());
+						}
+					}
+					if (prefabs_json["Prefabs"][i]["Physics"]["Velocity"].key_exists<SageJSON::SageJSON::NumberValue>())
+					{
+						for (unsigned int j{}; j < 3; ++j)
+						{
+							p.velocity[j] = static_cast<float>(prefabs_json["Prefabs"][i]["Physics"]["Velocity"][j].as<SageJSON::SageJSON::NumberValue>());
+						}
+					}	
+					if (prefabs_json["Prefabs"][i]["Sprite_Texture_ID"].key_exists<SageJSON::SageJSON::StringValue>())
+					{
+						p.sprite_texture_ID = prefabs_json["Prefabs"][i]["Sprite_Texture_ID"].as<SageJSON::SageJSON::StringValue>();
+					}
+					if (prefabs_json["Prefabs"][i]["Object_Shape"].key_exists<SageJSON::SageJSON::StringValue>())
+					{
+						p.object_shape = prefabs_json["Prefabs"][i]["Object_Shape"].as<SageJSON::SageJSON::StringValue>();
+					}
+					if (prefabs_json["Prefabs"][i]["Has_Physics"].key_exists<SageJSON::SageJSON::StringValue>())
+					{
+						p.has_physics = prefabs_json["Prefabs"][i]["Has_Physics"].as<SageJSON::SageJSON::StringValue>() == "true" ? true : false;
+					}
+					if (prefabs_json["Prefabs"][i]["Has_Collider"].key_exists<SageJSON::SageJSON::StringValue>())
+					{
+						p.has_collider = prefabs_json["Prefabs"][i]["Has_Collider"].as<SageJSON::SageJSON::StringValue>() == "true" ? true : false;
+					}
+					
 				}
-				catch (const std::invalid_argument& e)
+				catch (...)
 				{
-					std::cerr << "Invalid argument: " << e.what() << " at index " << i << std::endl;
+					std::cerr << "Invalid value found during prefabs deserialization" << std::endl;
 				}
-				catch (const std::out_of_range& e)
-				{
-					std::cerr << "Out of range: " << e.what() << " at index " << i << std::endl;
-				}
+				generated_prefabs[p.prefab_ID] = p;
 			}
+
+			prefabs_json.close();
 			has_initialized = true;
 		}
 
@@ -647,6 +656,100 @@ namespace Assets
 			{
 				if (std::filesystem::is_regular_file(entry.status())) 
 				{
+					//if (entry.path().extension() == ".json")
+					//{
+					//	SageJSON::SageJSON current_level_json;
+					//	std::ifstream file(entry.path());
+					//	while (file)
+					//	{
+					//		file >> current_level_json;
+					//	}
+					//	file.close();
+
+					//	Level l;
+					//	for (unsigned int i{}; i < current_level_json["Num_Prefabs"].as<SageJSON::SageJSON::NumberValue>(); ++i)
+					//	{							
+					//		try
+					//		{
+					//			l.level_name = current_level_json["Level_Name"].as<SageJSON::SageJSON::StringValue>();
+					//			if (current_level_json["Prefabs"][i]["Prefab_ID"].key_exists<SageJSON::SageJSON::StringValue>())
+					//			{
+					//				l.prefabs.push_back(Prefabs::generated_prefabs[current_level_json["Prefabs"][i]["Prefab_ID"].as<SageJSON::SageJSON::StringValue>()]);
+					//			}
+					//			if (current_level_json["Prefabs"][i]["Identifier"].key_exists<SageJSON::SageJSON::StringValue>())
+					//			{
+					//				l.identifier.push_back(current_level_json["Prefabs"][i]["Identifier"].as<SageJSON::SageJSON::StringValue>());
+					//			}
+					//			if (current_level_json["Prefabs"][i]["Pos"][0].key_exists<SageJSON::SageJSON::NumberValue>())
+					//			{
+					//				ToastBox::Vec3 pos;
+					//				for (unsigned int j{}; j < 3; ++j)
+					//				{
+					//					pos[j] = static_cast<float>(current_level_json["Prefabs"][i]["Pos"][j].as<SageJSON::SageJSON::NumberValue>());
+					//				}
+					//				l.positions.push_back(pos);
+					//			}
+					//			else 
+					//			{
+					//				l.positions.push_back({ 0,0,0 });
+					//			}
+					//			if (current_level_json["Prefabs"][i]["Rot"][0].key_exists<SageJSON::SageJSON::NumberValue>())
+					//			{
+					//				ToastBox::Vec3 rot;
+					//				for (unsigned int j{}; j < 3; ++j)
+					//				{
+					//					rot[j] = static_cast<float>(current_level_json["Prefabs"][i]["Rot"][j].as<SageJSON::SageJSON::NumberValue>());
+					//				}
+					//				l.rotations.push_back(rot);
+					//			}
+					//			else 
+					//			{
+					//				l.rotations.push_back({ 0,0,0 });
+					//			}
+					//			if (current_level_json["Prefabs"][i]["Scale"][0].key_exists<SageJSON::SageJSON::NumberValue>())
+					//			{
+					//				ToastBox::Vec3 scale;
+					//				for (unsigned int j{}; j < 3; ++j)
+					//				{
+					//					scale[j] = static_cast<float>(current_level_json["Prefabs"][i]["Scale"][j].as<SageJSON::SageJSON::NumberValue>());
+					//				}
+					//				l.scale.push_back(scale);
+					//			}
+					//			else 
+					//			{
+					//				l.scale.push_back({0,0,0});
+					//			}
+					//			if (current_level_json["Prefabs"][i]["RGBA"][0].key_exists<SageJSON::SageJSON::NumberValue>())
+					//			{
+					//				ToastBox::Vec4 colour;
+					//				for (unsigned int j{}; j < 4; ++j)
+					//				{
+					//					colour[j] = static_cast<float>(current_level_json["Prefabs"][i]["RGBA"][j].as<SageJSON::SageJSON::NumberValue>());
+					//				}
+					//				l.colour.push_back(colour);
+					//			}
+					//			else 
+					//			{
+					//				l.colour.push_back({ 1.f,1.f,1.f,1.f });
+					//			}
+					//			if (current_level_json["Prefabs"][i]["Z_Order"].key_exists<SageJSON::SageJSON::NumberValue>())
+					//			{
+					//				l.z_orders.push_back(static_cast<unsigned int>(current_level_json["Prefabs"][i]["Z_Order"].as<SageJSON::SageJSON::NumberValue>()));
+					//			}
+					//			else 
+					//			{
+					//				l.z_orders.push_back(0);
+					//			}								
+					//		}
+					//		catch (...)
+					//		{
+					//			std::cerr << "Invalid level data in " << path << entry << std::endl;
+					//		}
+					//	}
+					//	levels[l.level_name] = l;
+					//	current_level_json.close();
+					//}
+
 					if (entry.path().extension() == ".csv")
 					{
 						Parsed_CSV p = Parse_CSV(entry.path().string());
@@ -685,7 +788,7 @@ namespace Assets
 
 								l.scale.push_back(scale);
 
-								ToastBox::Vec4 color
+								ToastBox::Vec4 colour
 								{
 									std::stof(p.comma_seperated_data[i].associated_data[COLOR_R]),
 									std::stof(p.comma_seperated_data[i].associated_data[COLOR_G]),
@@ -693,7 +796,7 @@ namespace Assets
 									std::stof(p.comma_seperated_data[i].associated_data[COLOR_A])
 								};
 
-								l.color.push_back(color);
+								l.colour.push_back(colour);
 								l.z_orders.push_back(std::stoul(p.comma_seperated_data[i].associated_data[Z_ORDER]));
 								levels[entry.path().stem().string()] = l;
 							}
