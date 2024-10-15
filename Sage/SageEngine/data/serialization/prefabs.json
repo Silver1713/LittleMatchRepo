@@ -4,68 +4,54 @@
       {
         "ID": "ALL_CAPS_ID",
         "Transform_Type":"World is default, otherwise can do Screen",
-        "Pos": [0,0],
-        "Scale": [100,100],
+        "Pos": [0,0,0],
+        "Scale": [100,100,0],
         "RGBA" : [1,1,1,1],
         "Sprite_Texture_ID": "ALL_CAPS_TEXTURE_ID_AS_PER_TEXTURES_CSV",
         "Object_Shape": "If not specified, will do Rect. Otherwise can do Circle",
-        "Has_Collider": 0,
-        "Has_Physics": 0,
+        "Has_Collider": false,
+        "Has_Physics": false,
         "Physics":
         [
           {
-            "Velocity": 0
+            "Velocity": [0,0,0]
           }
         ]
       }
     ],
 
-    "Num_Prefabs": 13,
+    "Num_Prefabs": 10,
     "Prefabs":
     [
       {
         "ID": "DIGIPEN_SPLASH_SCREEN",
-        "Scale": [1920, 1080],
-        "Sprite_Texture_ID": "DIGIPEN_SPLASH_SCREEN"    
+        "Scale": [1920, 1080,0],
+        "Sprite_Texture_ID": "DIGIPEN_SPLASH_SCREEN"
       },
       {
         "ID": "BLUE_SKY",
-        "Scale": [1920, 1080],
+        "Scale": [1920, 1080,0],
         "Sprite_Texture_ID": "BLUE_SKY"
       },
       {
         "ID": "FADE_SCREEN",
-        "Scale": [1920, 1080],
-        "Sprite_Texture_ID": "BLUE_SKY"
+        "Scale": [1920, 1080,0]
       },
       {
-        "ID": "BLACK",
-        "RGBA" : [0,0,0,1]
-      },
-      {
-        "ID": "WHITE"
-      },
-      {
-        "ID": "RED",
-        "RGBA" : [1,0,0,1]
-      },
-      {
-        "ID": "GREEN",
-        "RGBA" : [0,1,1,1]
-      },
-      {
-        "ID": "BLUE",
-        "RGBA" : [0,0,1,1]
+        "ID": "SQUARE"
       },
       {
         "ID": "CIRCLE",
-        "RGBA" : [1,1,0,1],
-        "Object_Shape": "Circle"        
+        "Object_Shape": "Circle"
       },
       {
         "ID": "SPAWN",
         "RGBA" : [1,0,1,1],
-        "Has_Collider" : 1
+        "Has_Collider": "true"
+      },
+      {
+        "ID": "FLOOR",
+        "Has_Collider": "true"
       },
       {
         "ID": "GUI_TEST",
@@ -81,12 +67,12 @@
       {
         "ID": "PLAYER",
         "Sprite_Texture_ID": "SPEARMAN_IDLE_0",
-        "Has_Collider": 0,
-        "Has_Physics": 0,
+        "Has_Collider": "true",
+        "Has_Physics": "true",
         "Physics":
         [
           {
-            "Velocity": 300
+            "Velocity": [300,200,0]
           }
         ]
       }

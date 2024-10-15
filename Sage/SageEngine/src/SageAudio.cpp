@@ -161,7 +161,6 @@ namespace SageAudio
 			else
 			{
 				std::cerr << "ERROR: Channel " << _channel << " doesn't exist!" << std::endl;
-				exit(-1);
 			}
 		}
 		return nullptr;
