@@ -19,6 +19,7 @@
 #include <unordered_map>
 #include <array>
 #include <string>
+#include <functional>
 
 //forward declaration
 class SageTexture;
@@ -149,7 +150,8 @@ namespace Assets
 		struct Condition 
 		{
 			std::string parameter;
-			std::string type; // Greater, Less, Equals
+			std::string type; // Greater, Less, Equals			
+			std::function<bool(float, float)> comparator;
 			float value{};
 		};
 
@@ -159,8 +161,8 @@ namespace Assets
 			std::string name;
 			Assets::Animations::Animation animation;
 			float speed_multiplier;
-			bool looping;
-			bool is_starting_state;
+			bool looping{ true };
+			bool is_starting_state{ false };
 		};
 
 		// Represents a transition between states
@@ -176,7 +178,7 @@ namespace Assets
 		struct Parameter 
 		{
 			std::string name;
-			float default_value;
+			float value;
 		};
 
 		//what defines an animation set
@@ -231,6 +233,8 @@ namespace Assets
 			std::string sprite_texture_ID{""};
 			bool has_collider{false};
 			bool has_physics{false};
+			bool has_animator{ false };
+			std::string animation_set_ID{ "" };
 			std::string object_shape{"Rect"};
 		};
 		

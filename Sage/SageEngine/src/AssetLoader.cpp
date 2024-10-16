@@ -257,15 +257,19 @@ namespace Assets
 					{
 						p.object_shape = prefabs_json["Prefabs"][i]["Object_Shape"].as<SageJSON::SageJSON::StringValue>();
 					}
-					if (prefabs_json["Prefabs"][i]["Has_Physics"].key_exists<SageJSON::SageJSON::StringValue>())
+					if (prefabs_json["Prefabs"][i]["Has_Physics"].key_exists<SageJSON::SageJSON::BoolValue>())
 					{
-						p.has_physics = prefabs_json["Prefabs"][i]["Has_Physics"].as<SageJSON::SageJSON::StringValue>() == "true" ? true : false;
+						p.has_physics = prefabs_json["Prefabs"][i]["Has_Physics"].as<SageJSON::SageJSON::BoolValue>();
 					}
-					if (prefabs_json["Prefabs"][i]["Has_Collider"].key_exists<SageJSON::SageJSON::StringValue>())
+					if (prefabs_json["Prefabs"][i]["Has_Collider"].key_exists<SageJSON::SageJSON::BoolValue>())
 					{
-						p.has_collider = prefabs_json["Prefabs"][i]["Has_Collider"].as<SageJSON::SageJSON::StringValue>() == "true" ? true : false;
+						p.has_collider = prefabs_json["Prefabs"][i]["Has_Collider"].as<SageJSON::SageJSON::BoolValue>();
 					}
-					
+					if (prefabs_json["Prefabs"][i]["Has_Animator"].key_exists<SageJSON::SageJSON::BoolValue>())
+					{
+						p.has_animator = prefabs_json["Prefabs"][i]["Has_Animator"].as<SageJSON::SageJSON::BoolValue>();
+						p.animation_set_ID = prefabs_json["Prefabs"][i]["Animator"][0]["Animation_Set_ID"].as<SageJSON::SageJSON::StringValue>();
+					}
 				}
 				catch (...)
 				{
@@ -478,13 +482,9 @@ namespace Assets
 								{
 									s.name = current_animation_set["States"][i]["Name"].as<SageJSON::SageJSON::StringValue>();
 									s.animation = Assets::Animations::Get_Animation(current_animation_set["States"][i]["Animation_ID"].as<SageJSON::SageJSON::StringValue>());
-									s.looping = (bool)(current_animation_set["States"][i]["Is_Looping"].as<SageJSON::SageJSON::NumberValue>());
+									s.looping = current_animation_set["States"][i]["Is_Looping"].as<SageJSON::SageJSON::BoolValue>();
+									s.is_starting_state = current_animation_set["States"][i]["Is_Starting_State"].as<SageJSON::SageJSON::BoolValue>();
 									s.speed_multiplier = static_cast<float>(current_animation_set["States"][i]["Speed_Multiplier"].as<SageJSON::SageJSON::NumberValue>());
-									try
-									{
-										s.is_starting_state = (bool)current_animation_set["States"][i]["Is_Starting_State"].as<SageJSON::SageJSON::NumberValue>();
-									}
-									catch (...){}
 								}
 								catch (const std::out_of_range& e)
 								{
@@ -502,7 +502,7 @@ namespace Assets
 							{
 								Parameter p;
 								p.name = current_animation_set["Parameters"][i]["Name"].as<SageJSON::SageJSON::StringValue>();
-								p.default_value = static_cast<float>(current_animation_set["Parameters"][i]["Default_Value"].as<SageJSON::SageJSON::NumberValue>());
+								p.value = static_cast<float>(current_animation_set["Parameters"][i]["Value"].as<SageJSON::SageJSON::NumberValue>());
 
 								as.parameters.push_back(p);
 							}

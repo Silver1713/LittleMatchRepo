@@ -226,15 +226,19 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	else
 	{
 		Add_Component(std::make_unique<Transform>(_p.positions, _p.rotations, _p.scale));
-		Add_Component(std::make_unique<Sprite2D>(_p.sprite_texture_ID, _p.colour, _p.object_shape));
-		if (_p.has_collider)
-		{
-			Add_Component(std::make_unique<BoxCollider2D>());
-		}
-		if (_p.has_physics)
-		{
-			Add_Component(std::make_unique<Physics>(ToastBox::Vec2{ _p.velocity.x ,_p.velocity.y }));
-		}
+		Add_Component(std::make_unique<Sprite2D>(_p.sprite_texture_ID, _p.colour, _p.object_shape));		
+	}
+	if (_p.has_collider)
+	{
+		Add_Component(std::make_unique<BoxCollider2D>());
+	}
+	if (_p.has_physics)
+	{
+		Add_Component(std::make_unique<Physics>(ToastBox::Vec2{ _p.velocity.x ,_p.velocity.y }));
+	}
+	if (_p.has_animator)
+	{
+		Add_Component(std::make_unique<Animator>(_p.animation_set_ID));
 	}
 
 	Init();

@@ -40,8 +40,11 @@ namespace Game {
 	static ToastBox::Vec3 const min_col{ 0.0f,0.0f,0.0f }, max_col{ 100.0f,100.0f,100.0f };
 
 	static std::unordered_map<std::string, GameObject*> game_objects;
+
+	//caches not supposed to exist once gameobject logic component is ready
 	static std::unordered_map<std::string, Transform*> transform_cache;
 	static std::unordered_map<std::string, BoxCollider2D*> collider_cache;
+	static std::unordered_map<std::string, Animator*> animator_cache;
 
 	static SageCamera camera;
 	static SageViewport vp;
@@ -59,6 +62,7 @@ namespace Game {
 		transform_cache.clear();
 
 		transform_cache["Player"] = static_cast<Transform*>(Game_Objects::Get_Game_Object("Player")->Get_Component<Transform>());
+		animator_cache["Player"] = static_cast<Animator*>(Game_Objects::Get_Game_Object("Player")->Get_Component<Animator>());
 
 		auto& objects = Game_Objects::Get_Game_Objects();
 		for (auto& object : objects)
@@ -134,18 +138,26 @@ namespace Game {
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_W))
 		{
 			curr_velocity.y = move_speed;
+			animator_cache["Player"]->Reset_Parameters();
+			animator_cache["Player"]->Set_Parameter("is_walking", 1.f);
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_A))
 		{
 			curr_velocity.x = -move_speed;
+			animator_cache["Player"]->Reset_Parameters();
+			animator_cache["Player"]->Set_Parameter("is_idle", 1.f);
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_S))
 		{
 			curr_velocity.y = -move_speed;
+			animator_cache["Player"]->Reset_Parameters();
+			animator_cache["Player"]->Set_Parameter("is_attacking", 1.f);
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_D))
 		{
 			curr_velocity.x = move_speed;
+			animator_cache["Player"]->Reset_Parameters();
+			animator_cache["Player"]->Set_Parameter("is_dead", 1.f);
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_Q))
 		{

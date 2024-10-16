@@ -16,6 +16,13 @@
           {
             "Velocity": [0,0,0]
           }
+        ],
+        "Has_Animator": false,
+        "Animator":
+        [
+          {
+            "Animation_Set_ID": "the ID is in serialization/animations/*.json"
+          }
         ]
       }
     ],
@@ -47,11 +54,11 @@
       {
         "ID": "SPAWN",
         "RGBA" : [1,0,1,1],
-        "Has_Collider": "true"
+        "Has_Collider": true
       },
       {
         "ID": "SQUARE_COLLIDER",
-        "Has_Collider": "true"
+        "Has_Collider": true
       },
       {
         "ID": "GUI_TEST",
@@ -67,14 +74,21 @@
       {
         "ID": "PLAYER",
         "Sprite_Texture_ID": "SPEARMAN_IDLE_0",
-        "Has_Collider": "true",
-        "Has_Physics": "true",
+        "Has_Collider": true,
+        "Has_Physics": true,
         "Physics":
         [
           {
             "Velocity": [300,200,0]
           }
-        ]
+        ],
+        "Has_Animator": true,
+        "Animator":
+        [
+          {
+            "Animation_Set_ID": "SPEARMAN"
+          }
+        ]        
       }
     ]
   }
