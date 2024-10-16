@@ -127,6 +127,7 @@ namespace SM {
 			Transform* t;
 			UITransform* ut;
 			Sprite2D* s;
+			Image* img;
 			g = Game_Objects::Instantiate(current_level.prefabs[i], current_level.identifier[i],current_level.z_orders[i]);
 			t = static_cast<Transform*>(g->Get_Component<Transform>());
 			ut = static_cast<UITransform*>(g->Get_Component<UITransform>());
@@ -144,9 +145,14 @@ namespace SM {
 			}
 
 			s = static_cast<Sprite2D*>(g->Get_Component<Sprite2D>());
+			img = static_cast<Image*>(g->Get_Component<Image>());
 			if (s)
 			{
 				s->Set_Colour(current_level.colour[i]);
+			}
+			else if (img)
+			{
+				img->Set_Colour(current_level.colour[i]);
 			}
 		}
 

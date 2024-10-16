@@ -50,7 +50,7 @@
         "Has_Collider": "true"
       },
       {
-        "ID": "FLOOR",
+        "ID": "SQUARE_COLLIDER",
         "Has_Collider": "true"
       },
       {
