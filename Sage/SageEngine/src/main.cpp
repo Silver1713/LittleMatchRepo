@@ -40,6 +40,7 @@
 #include "SageJSON.hpp"
 #include "Systems/SageScripting.hpp"
 #include "Game.hpp"
+#include "SageMonoManager.hpp"
 
 // Forward declaration
 void init();
@@ -98,7 +99,7 @@ int main()
 *******************************************************************************/
 void init()
 {
-	SageScriptSystem::Init("../MONO/lib", "../MONO/etc");
+    SageMonoManager::Initialize();
     SageTimer::Init();
 	SageJSON::SageJSON config;
 

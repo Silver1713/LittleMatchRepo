@@ -16,12 +16,14 @@ struct SageLoader
 	static std::map<std::string, MonoAssembly*> assemblies;
 
 	void Init(std::string const& mono_assembly_dir, std::string const& mono_config_dir);
-	void Load_Assembly(const char* name, const char* assembly_path);
-	void Run_Main(const char* assembly_name);
+	MonoAssembly* Load_Assembly(const char* name, const char* assembly_path);
+	MonoImage* Load_Image(MonoAssembly* assembly);
 
-	void Run_Method(const char* assembly_name, const char* method_name, const char* args);
+	
+	void Run_Main(MonoAssembly* assembly , const char* assembly_name);
+	
 
-	void Run_Method(MonoMethod* method, MonoObject* obj, void** args);
+	MonoDomain* Get_RT_Domain();
 
 	void Exit();
 

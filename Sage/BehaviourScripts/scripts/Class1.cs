@@ -15,7 +15,7 @@ namespace SageEngineRT
             sage_behaviour.Update();
             sage_behaviour.FixedUpdate();
             sage_behaviour.Exit();
-            Console.WriteLine("Finished HOHOHOH");
+            
         }
     }
 

@@ -31,16 +31,16 @@ int main(){
 	std::cout << "C# code compiled successfully\n";
 	loader.Init("../MONO/lib", "../MONO/etc");
 
-	loader.Load_Assembly("abc", "../BehaviourScripts/programs/SageLibrary.dll");
+	MonoAssembly* Assembly = loader.Load_Assembly("abc", "../BehaviourScripts/programs/SageLibrary.dll");
 	
 
 	std::cout << "Running Main @ abc.cs ...\n";
 	std::cout << "---------------------\n";
-	loader.Run_Main("abc");
+	loader.Run_Main(Assembly, "abc");
 	std::cout << "---------FIN----------\n";
 	std::cout << "Running Main @ hello.cs ...\n";
 	std::cout << "---------------------\n";
-	loader.Run_Main("hello");
+	loader.Run_Main(Assembly, "hello");
 	std::cout << "---------FIN----------\n";
 
 	loader.Exit();
