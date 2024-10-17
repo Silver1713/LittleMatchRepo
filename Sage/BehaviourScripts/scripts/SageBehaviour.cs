@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using SageEngine.Debug;
 
 
 namespace SageEngine
@@ -13,8 +14,8 @@ namespace SageEngine
 
         public void Update()
         {
-            Console.WriteLine("C#: Hello World From CSHARP!!");
-            int a = new int();
+            SageDebug.Print("SageBehaviour Update.");
+
         }
 
         public void FixedUpdate()

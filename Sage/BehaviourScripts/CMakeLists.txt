@@ -1,6 +1,6 @@
 enable_language(CSharp)
 
-message("Hello World!")
+
 message(STATUS "SAGE_LOGIC_SCRIPTS = ${SAGE_LOGIC_SCRIPTS}")
 
 

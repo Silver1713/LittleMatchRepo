@@ -1,6 +1,7 @@
 #include "SageMonoManager.hpp"
 
 #include <iostream>
+#include <filesystem>
 #include <mono/metadata/debug-helpers.h>
 
 #include "SageScriptLoader.hpp"
@@ -28,9 +29,7 @@ void SageMonoManager::Initialize()
 	compiler->Set_Compile_Flags("/target:library");
 
 	// Compile ALL C# Scripts
-	compiler->Add_Script(SageAssembler::FILE_MODE, "../BehaviourScripts/scripts/SageBehaviour.cs");
-	compiler->StartCompilation(true);
-	compiler->Wait_For_Compile();
+	Compile_Scripts("../BehaviourScripts/scripts", "../BehaviourScripts/programs/");
 
 	//MonoAssembly* assembly = loader->Load_Assembly("SageLibrary", "../BehaviourScripts/programs/SageLibrary.dll");
 	Load_Assembly("SageLibrary", "../BehaviourScripts/programs/SageLibrary.dll");
@@ -219,3 +218,27 @@ SageMonoManager::MonoKlassInfo* SageMonoManager::Get_Klass_Info(const char* _kla
 	}
 }
 
+void SageMonoManager::Compile_Scripts(const char* script_dir, const char* output_assembly)
+{
+	std::filesystem::path path(script_dir);
+	if (!std::filesystem::exists(path))
+	{
+		std::cout << "Directory does not exist\n";
+		return;
+	}
+
+	std::vector<std::string> files;
+	for (const auto& entry : std::filesystem::directory_iterator(path))
+	{
+		files.push_back(entry.path().string());
+	}
+
+	for (const auto& file : files)
+	{
+		compiler->Add_Script(SageAssembler::FILE_MODE, file.c_str());
+	}
+
+	compiler->Set_Output_Directory(output_assembly);
+	compiler->StartCompilation(true);
+	compiler->Wait_For_Compile();
+}

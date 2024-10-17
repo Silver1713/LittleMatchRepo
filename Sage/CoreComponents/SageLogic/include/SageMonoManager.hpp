@@ -76,6 +76,9 @@ struct SageMonoManager
 	static MonoKlassInfo* Get_Klass_Info(const char* _klass_name, const char* _namespace=nullptr);
 
 
+	//---Compilation of Scripts
+	static void Compile_Scripts(const char* script_dir, const char* output_assembly);
+
 
 };
 
