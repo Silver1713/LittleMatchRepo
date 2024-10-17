@@ -1,61 +1,246 @@
 #include "SageEditor.hpp"
 #include "../../SageEngine/include/Game.hpp"
+#include <windows.h>
+#include <commdlg.h>
+#include <iostream>
+#include <string>
 
 namespace SageEditor
 {
     ImGuiTextFilter     Filter;
-    ExampleTreeNode*    VisibleNode = NULL;
-
-    void Draw(ExampleTreeNode* root_node)
+    TreeNode*           selected_node = NULL;
+    TreeNode*           DemoTree = NULL;
+    static const ComponentInfo component_infos[]
     {
-        // Left side: draw tree
-        // - Currently using a table to benefit from RowBg feature
-        if (ImGui::BeginChild("##tree", ImVec2(300, 0), ImGuiChildFlags_ResizeX | ImGuiChildFlags_Borders | ImGuiChildFlags_NavFlattened))
-        {
-            ImGui::SetNextItemWidth(-FLT_MIN);
-            ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F, ImGuiInputFlags_Tooltip);
-            ImGui::PushItemFlag(ImGuiItemFlags_NoNavDefaultFocus, true);
-            if (ImGui::InputTextWithHint("##Filter", "incl,-excl", Filter.InputBuf, IM_ARRAYSIZE(Filter.InputBuf), ImGuiInputTextFlags_EscapeClearsAll))
-                Filter.Build();
-            ImGui::PopItemFlag();
+        { "MyBool",     ImGuiDataType_Bool,    1, offsetof(TreeNode, DataMyBool) },
+        { "MyInt",      ImGuiDataType_S32,     1, offsetof(TreeNode, DataMyInt) },
+        { "MyVec2",     ImGuiDataType_Float,   2, offsetof(TreeNode, DataMyVec2) },
+    };
 
-            if (ImGui::BeginTable("##bg", 1, ImGuiTableFlags_RowBg))
-            {
-                for (ExampleTreeNode* node : root_node->Childs)
-                    if (Filter.PassFilter(node->Name)) // Filter root node
-                        DrawTreeNode(node);
-                ImGui::EndTable();
-            }
-        }
-        ImGui::EndChild();
+
+    //Creates a node to a new GameObject in Hierarchy
+    static TreeNode* CreateNode(const char* name, int uid, TreeNode* parent)
+    {
+        TreeNode* node = IM_NEW(TreeNode);
+        snprintf(node->Name, IM_ARRAYSIZE(node->Name), "%s", name);
+        node->UID = uid;
+        node->Parent = parent;
+        node->IndexInParent = parent ? (unsigned short)parent->Childs.Size : 0;
+        if (parent)
+            parent->Childs.push_back(node);
+        return node;
     }
 
-    void DrawTreeNode(ExampleTreeNode* node)
+    //Creates the tree nodes containing GameObjects
+    static TreeNode* CreateTreeNode()
+    {
+        //Hardcoded GameObject from example
+        static const char* root_names[] = { "Empty GameObject" };
+        const size_t NAME_MAX_LEN = sizeof(TreeNode::Name);
+        char name_buf[NAME_MAX_LEN];
+        int uid = 0;
+        //ROOT of the tree
+        TreeNode* node_L0 = CreateNode("<ROOT>", ++uid, NULL);
+        snprintf(name_buf, IM_ARRAYSIZE(name_buf), "%s", root_names[0]);
+        //Indepedent GameObject
+        TreeNode* node_L1 = CreateNode(name_buf, ++uid, node_L0);
+        //Tells it that it has data to be changed in Inspector
+        node_L1->HasData = true;
+        return node_L0;
+    }
+
+    //Draws the TreeNode within ImGui dockspace
+    void DrawTreeNode(TreeNode* _node)
     {
         ImGui::TableNextRow();
         ImGui::TableNextColumn();
-        ImGui::PushID(node->UID);
+        ImGui::PushID(_node->UID);
         ImGuiTreeNodeFlags tree_flags = ImGuiTreeNodeFlags_None;
         tree_flags |= ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;    // Standard opening mode as we are likely to want to add selection afterwards
         tree_flags |= ImGuiTreeNodeFlags_NavLeftJumpsBackHere;                                  // Left arrow support
-        if (node == VisibleNode)
+        if (_node == selected_node)
             tree_flags |= ImGuiTreeNodeFlags_Selected;
-        if (node->Childs.Size == 0)
+        if (_node->Childs.Size == 0)
             tree_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Bullet;
-        if (node->DataMyBool == false)
+        if (_node->DataMyBool == false)
             ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyle().Colors[ImGuiCol_TextDisabled]);
-        bool node_open = ImGui::TreeNodeEx("", tree_flags, "%s", node->Name);
-        if (node->DataMyBool == false)
+        bool node_open = ImGui::TreeNodeEx("", tree_flags, "%s", _node->Name);
+        if (_node->DataMyBool == false)
             ImGui::PopStyleColor();
         if (ImGui::IsItemFocused())
-            VisibleNode = node;
+            selected_node = _node;
         if (node_open)
         {
-            for (ExampleTreeNode* child : node->Childs)
+            for (TreeNode* child : _node->Childs)
                 DrawTreeNode(child);
             ImGui::TreePop();
         }
         ImGui::PopID();
+    }
+
+    //Drawing Hierarchy dockspace with parameter of the TreeNode
+    //Here you can see 3 examples of what is to be expected from manipulation of Hierarchy dockspace
+    void Hierarchy(TreeNode* _root_node)
+    {
+        static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+
+        // - Currently using a table to benefit from RowBg feature
+        //Ctrl+F allows user to search GameObject
+        ImGui::SetNextItemWidth(-FLT_MIN);
+        ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F, ImGuiInputFlags_Tooltip);
+        ImGui::PushItemFlag(ImGuiItemFlags_NoNavDefaultFocus, true);
+        if (ImGui::InputTextWithHint("##search", "search", Filter.InputBuf, IM_ARRAYSIZE(Filter.InputBuf), ImGuiInputTextFlags_EscapeClearsAll))
+            Filter.Build();
+        ImGui::PopItemFlag();
+
+#pragma region Visible Selection
+        // 'selection_mask' is dumb representation of what may be user-side selection state.
+        //  You may retain selection state inside or outside your objects in whatever format you see fit.
+        // 'node_clicked' is temporary storage of what node we have clicked to process selection at the end
+        /// of the loop. May be a pointer to your own node type, etc.
+
+        //This example shows the selectable nodes of GameObject but is not reflected onto the Inspector
+        static int selection_mask = (1 << 2);
+        int node_clicked = -1;
+        for (int i = 0; i < 6; i++)
+        {
+            // Disable the default "open on single-click behavior" + set Selected flag according to our selection.
+            // To alter selection we use IsItemClicked() && !IsItemToggledOpen(), so clicking on an arrow doesn't alter selection.
+            ImGuiTreeNodeFlags node_flags = base_flags;
+            const bool is_selected = (selection_mask & (1 << i)) != 0;
+            if (is_selected)
+                node_flags |= ImGuiTreeNodeFlags_Selected;
+
+            // Items 3..5 are Tree Leaves
+            // The only reason we use TreeNode at all is to allow selection of the leaf. Otherwise we can
+            // use BulletText() or advance the cursor by GetTreeNodeToLabelSpacing() and call Text().
+            node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
+            ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, "Selectable Leaf %d", i);
+            if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+                node_clicked = i;
+            if (ImGui::BeginDragDropSource())
+            {
+                ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
+                ImGui::Text("This is a drag and drop source");
+                ImGui::EndDragDropSource();
+            }
+        }
+        if (node_clicked != -1)
+        {
+            // Update selection state
+            // (process outside of tree loop to avoid visual inconsistencies during the clicking frame)
+            if (ImGui::GetIO().KeyCtrl)
+                selection_mask ^= (1 << node_clicked);          // CTRL+click to toggle
+            else //if (!(selection_mask & (1 << node_clicked))) // Depending on selection behavior you want, may want to preserve selection when clicking on item that is part of the selection
+                selection_mask = (1 << node_clicked);           // Click to single-select
+        }
+#pragma endregion
+
+#pragma region Inspector Properties
+        //This is the main example for changing of properties in Inspector when selecting a GameObject in Hierarchy
+        //Currently, it doesn't save the properties as there's no File I/O or Parser for data.
+        //Renaming in Inspector is not properly added as it doesn't update onto the Hierarchy
+        if (ImGui::BeginTable("##bg", 1, ImGuiTableFlags_RowBg))
+        {
+            for (TreeNode* node : _root_node->Childs)
+                if (Filter.PassFilter(node->Name)) // Filter root node
+                    DrawTreeNode(node);
+
+            // FIXME: there is temporary (usually single-frame) ID Conflict during reordering as a same item may be submitting twice.
+            // This code was always slightly faulty but in a way which was not easily noticeable.
+            // Until we fix this, enable ImGuiItemFlags_AllowDuplicateId to disable detecting the issue.
+            ImGui::PushItemFlag(ImGuiItemFlags_AllowDuplicateId, true);
+#pragma endregion
+
+#pragma region GameObject Reordering
+            //This example shows the reordering of GameObjects on the Hierarchy. Simple drag and drop.
+            //Hardcoded array of GameObjects
+            static const char* item_names[] = { "Empty GameObject 1", "Empty GameObject 2", "Empty GameObject 3" };
+            for (int n = 0; n < IM_ARRAYSIZE(item_names); n++)
+            {
+                const char* item = item_names[n];
+                ImGui::Selectable(item);
+
+                if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
+                {
+                    int n_next = n + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
+                    if (n_next >= 0 && n_next < IM_ARRAYSIZE(item_names))
+                    {
+                        item_names[n] = item_names[n_next];
+                        item_names[n_next] = item;
+                        ImGui::ResetMouseDragDelta();
+                    }
+                }
+            }
+            ImGui::PopItemFlag();
+            ImGui::EndTable();
+#pragma endregion
+        }
+    }
+
+    //Draws Inspector dockspace
+    void Inspector()
+    {
+        // Right side: draw properties
+        ImGui::BeginGroup();
+        if (TreeNode* node = selected_node)
+        {
+            //This is how renaming works on the Inspector that is supposed to change in the Hierarchy.
+            if (ImGui::InputText("###name", node->Name, IM_ARRAYSIZE(node->Name), ImGuiInputTextFlags_EnterReturnsTrue))
+            {
+                /*RenamingDoc = doc;
+                RenamingStarted = true;*/
+            }
+
+            ImGui::Separator();
+            if (ImGui::BeginTable("##properties", 2, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY))
+            {
+                ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed);
+                ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch, 2.0f); // Default twice larger
+                if (node->HasData)
+                {
+                    // In a typical application, the structure description would be derived from a data-driven system.
+                    // - We try to mimic this with our ExampleMemberInfo structure and the ExampleTreeNodeMemberInfos[] array.
+                    // - Limits and some details are hard-coded to simplify the demo.
+                    for (const ComponentInfo& field_desc : component_infos)
+                    {
+                        ImGui::TableNextRow();
+                        ImGui::PushID(field_desc.Name);
+                        ImGui::TableNextColumn();
+                        ImGui::AlignTextToFramePadding();
+                        ImGui::TextUnformatted(field_desc.Name);
+                        ImGui::TableNextColumn();
+                        void* field_ptr = (void*)(((unsigned char*)node) + field_desc.Offset);
+                        switch (field_desc.DataType)
+                        {
+                        case ImGuiDataType_Bool:
+                        {
+                            IM_ASSERT(field_desc.DataCount == 1);
+                            ImGui::Checkbox("##Editor", (bool*)field_ptr);
+                            break;
+                        }
+                        case ImGuiDataType_S32:
+                        {
+                            int v_min = INT_MIN, v_max = INT_MAX;
+                            ImGui::SetNextItemWidth(-FLT_MIN);
+                            ImGui::DragScalarN("##Editor", field_desc.DataType, field_ptr, field_desc.DataCount, 1.0f, &v_min, &v_max);
+                            break;
+                        }
+                        case ImGuiDataType_Float:
+                        {
+                            float v_min = 0.0f, v_max = 1.0f;
+                            ImGui::SetNextItemWidth(-FLT_MIN);
+                            ImGui::SliderScalarN("##Editor", field_desc.DataType, field_ptr, field_desc.DataCount, &v_min, &v_max);
+                            break;
+                        }
+                        }
+                        ImGui::PopID();
+                    }
+                }
+                ImGui::EndTable();
+            }
+        }
+        ImGui::EndGroup();
     }
 
 	void RenderGUI()
@@ -123,81 +308,17 @@ namespace SageEditor
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
 
-        if (ImGui::BeginMenuBar())
-        {
-            if (ImGui::BeginMenu("File"))
-            {
-                if (ImGui::MenuItem("New Scenes")) {}
-                if (ImGui::MenuItem("Open Scenes", "Ctrl+O")) {}
-                if (ImGui::BeginMenu("Open Recent Scenes"))
-                {
-                    ImGui::EndMenu();
-                }
-                ImGui::Separator();
 
-                if (ImGui::MenuItem("Save", "Ctrl+S")) {}
-                if (ImGui::MenuItem("Save As..")) {}
-                ImGui::Separator();
-
-                if (ImGui::MenuItem("Build and Run")) {}
-                ImGui::Separator();
-
-                if (ImGui::MenuItem("Exit", "Alt+F4")) {}
-                ImGui::EndMenu();
-            }
-
-            if (ImGui::BeginMenu("Edit"))
-            {
-                if (ImGui::MenuItem("Undo", "Ctrl+Z")) {}
-                if (ImGui::MenuItem("Redo", "Ctrl+Y")) {}
-                ImGui::Separator();
-
-                if (ImGui::MenuItem("Select All", "Ctrl+A")) {}
-                if (ImGui::MenuItem("Deselect All", "Shift+D")) {}
-                if (ImGui::MenuItem("Invert Selection", "Ctrl+I")) {}
-                ImGui::Separator();
-
-                if (ImGui::MenuItem("Cut", "Ctrl+X")) {}
-                if (ImGui::MenuItem("Copy", "Crtl+C")) {}
-                if (ImGui::MenuItem("Paste", "Ctrl+V")) {}
-                if (ImGui::MenuItem("Duplicate", "Ctrl+D")) {}
-                if (ImGui::MenuItem("Delete", "Delete")) {}
-                ImGui::Separator();
-
-                ImGui::EndMenu();
-            }
-
-            if (ImGui::BeginMenu("Options"))
-            {
-                // Disabling fullscreen would allow the window to be moved to the front of other windows,
-                // which we can't undo at the moment without finer window depth/z control.
-                ImGui::MenuItem("Padding", NULL, &opt_padding);
-                ImGui::Separator();
-
-                if (ImGui::MenuItem("Flag: NoDockingOverCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingOverCentralNode) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoDockingOverCentralNode; }
-                if (ImGui::MenuItem("Flag: NoDockingSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingSplit) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoDockingSplit; }
-                if (ImGui::MenuItem("Flag: NoUndocking", "", (dockspace_flags & ImGuiDockNodeFlags_NoUndocking) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoUndocking; }
-                if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoResize; }
-                if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar; }
-                if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0, opt_fullscreen)) { dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode; }
-                ImGui::Separator();
-                ImGui::EndMenu();
-            }
-
-            ImGui::EndMenuBar();
-        }
 
 #pragma region Hierarchy
         ImGui::Begin("Hierarchy");
-
+        Hierarchy(CreateTreeNode());
         ImGui::End();
 #pragma endregion
 
 #pragma region Inspector
         ImGui::Begin("Inspector");
-        ImGui::Button("Button");
-        static float value = 0.0f;
-        ImGui::DragFloat("Value", &value);
+        Inspector();
         ImGui::End();
 #pragma endregion
 
@@ -221,7 +342,7 @@ namespace SageEditor
         ImGui::End();
 #pragma endregion
 
-        //ImGui End for Main Window, DON'T DELETE
+        //ImGui End for Begin(DockSpace Demo), DON'T DELETE
         ImGui::End();
 
         ImGui::ShowDemoWindow();
