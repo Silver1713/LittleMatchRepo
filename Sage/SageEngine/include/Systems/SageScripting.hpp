@@ -22,10 +22,15 @@ public:
 
 	void Init() override;
 	void Update() override;
+	void Update_Entity(GameObject* _entity) override;
+	
 	void Exit() override;
 	SystemType GetInstance() override;
 
 	~SageScriptSystem() override;
+
+
+	void Add_Script_Instance_Environment(const char* name ,Behaviour* _behaviour);
 
 
 	

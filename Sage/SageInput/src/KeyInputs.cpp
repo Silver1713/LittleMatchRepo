@@ -65,7 +65,7 @@ bool SAGEInputHandler::Get_Key_Pressed(int _keycode)
 *******************************************************************************/
 bool SAGEInputHandler::Get_Key(int keycode)
 {
-	std::cout << "Key: " << keycode << std::endl;
+
 	return SageInputPIML::Get_Key(keycode);
 }
 

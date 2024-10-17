@@ -38,10 +38,10 @@ struct SageMonoManager
 
 
 	static MonoDomain* Default_Domain;
-	static std::unordered_map<const char*, MonoDomain*> domains;
-	static std::unordered_map<const char*, MonoAssembly*> assemblies;
-	static std::unordered_map<const char*, MonoImage*> images;
-	static std::unordered_map<const char*, MonoKlassInfo> klassList;
+	static std::unordered_map<std::string, MonoDomain*> domains;
+	static std::unordered_map<std::string, MonoAssembly*> assemblies;
+	static std::unordered_map<std::string, MonoImage*> images;
+	static std::unordered_map<std::string, MonoKlassInfo> klassList;
 
 	// Class Information
 	
