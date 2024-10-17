@@ -24,6 +24,10 @@ private:
 
 	Assets::Animation_Set::State current_state;
 
+	std::unordered_map<std::string, Assets::Animation_Set::State> states;
+	std::unordered_map<std::string, float> conditions;
+	std::unordered_map<std::string, float> param_values;
+
 	Sprite2D* sprite{ nullptr };
 	Image* image{ nullptr };
 	SageObject** obj{ nullptr };
@@ -98,13 +102,20 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
-		Sets the flag _flag to bool _b for the purpose of animator conditionals
+		Sets the flag _flag to bool _b for the purpose of animator conditionals. For
+		true/false, 1.f is true, 0.f is false
 
-	  \param _flag
+	  \param _param
 		name of the flag
 
-	  \param _b
-		the bool to set the flag to
+	  \param _new_value
+		the new value of the flag
 	*******************************************************************************/
-	void Set_Parameter(std::string const& _flag, bool _b);
+	void Set_Parameter(std::string const& _param, float const _new_value);
+
+	/*!*****************************************************************************
+	  \brief
+		Sets all parameters to 0.f
+	*******************************************************************************/
+	void Reset_Parameters();
 };

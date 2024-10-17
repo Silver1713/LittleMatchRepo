@@ -29,7 +29,7 @@
         "Z_Order" : 2
       },
       {
-        "Prefab_ID": "SQUARE",
+        "Prefab_ID": "SQUARE_COLLIDER",
         "Identifier": "Wall",
         "Pos": [1010,0,0],
         "Scale": [100, 1000,0],
@@ -37,10 +37,10 @@
         "Z_Order": 1
       },
       {
-        "Prefab_ID": "SQUARE",
+        "Prefab_ID": "SQUARE_COLLIDER",
         "Identifier": "Floor",
         "Pos": [0,-500,0],
-        "Scale": [100, 1000,0],
+        "Scale": [1500, 100,0],
         "RGBA" : [1,0.8,0.7,1],
         "Z_Order": 1
       },
@@ -48,7 +48,7 @@
         "Prefab_ID": "CIRCLE",
         "Identifier": "Circle",
         "Pos": [500,200,0],
-        "Scale": [100, 1000,0],
+        "Scale": [100, 100,0],
         "RGBA" : [1,1,0,1],
         "Z_Order": 1
       },
@@ -61,25 +61,25 @@
         "Z_Order": 1
       },
       {
-        "Prefab_ID": "SQUARE",
+        "Prefab_ID": "SQUARE_COLLIDER",
         "Identifier": "Leaves",
         "Pos": [275,-100,0],
         "Scale": [300, 200,0],
-        "RGBA" : [0.5,0.3,0,1],
+        "RGBA" : [0.5,0.8,0.5,1],
         "Z_Order": 1
       },
       {
         "Prefab_ID": "GUI_TEST",
         "Identifier": "Controls",
-        "Pos": [100,100,0],
+        "Pos": [500,500,0],
         "Scale": [90,58,0],
         "RGBA" : [1,1,1,1]
       },
       {
         "Prefab_ID": "GUI_TEST_TEXTURE",
         "Identifier": "GUI_Top",
-        "Pos": [500,50,0],
-        "Scale": [500,75,0],
+        "Pos": [100,100,0],
+        "Scale": [90,58,0],
         "RGBA" : [1,0,0,1],
         "Z_Order": 1
       }

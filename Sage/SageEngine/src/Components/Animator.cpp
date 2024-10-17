@@ -50,6 +50,53 @@ void Animator::Init(GameObject* _parent)
 	//will use whichever is not nullptr
 	sprite = static_cast<Sprite2D*>(parent->Get_Component<Sprite2D>());
 	image = static_cast<Image*>(parent->Get_Component<Image>());
+
+	for (auto const& s : animation_set.states)
+	{
+		states[s.name] = s;
+	}
+
+	for (auto const& p : animation_set.parameters)
+	{
+		param_values[p.name] = p.value;
+	}
+
+	for (auto& t : animation_set.transitions)
+	{
+		for (auto& c : t.conditions)
+		{
+			conditions[c.parameter] = c.value;
+
+			if (c.type == "equals")
+			{
+				c.comparator = [](float a, float b) {return (a == b); };
+			}
+			else if (c.type == "not_equals")
+			{
+				c.comparator = [](float a, float b) {return (a != b); };
+			}
+			else if (c.type == "greater_than")
+			{
+				c.comparator = [](float a, float b) {return (a > b); };
+			}
+			else if (c.type == "less_than")
+			{
+				c.comparator = [](float a, float b) {return (a < b); };
+			}
+			else if (c.type == "greater_than_or_equals_to")
+			{
+				c.comparator = [](float a, float b) {return (a >= b); };
+			}
+			else if (c.type == "less_than_or_equals_to")
+			{
+				c.comparator = [](float a, float b) {return (a <= b); };
+			}
+			else 
+			{
+				c.comparator = [](float a, float b) {return (a == b); };
+			}			
+		}
+	}
 	
 	for (auto const& s : animation_set.states)
 	{
@@ -76,13 +123,36 @@ void Animator::Init(GameObject* _parent)
 *******************************************************************************/
 void Animator::Update()
 {
-	internal_timer += ((float)SageTimer::delta_time * current_state.speed_multiplier);
-	std::string cur_animation_key{};
+	for (auto& t : animation_set.transitions)
+	{
+		if (t.to_state == current_state.name)
+		{
+			continue;
+		}
 
+		if (t.from_state == current_state.name || t.from_state == "any")
+		{
+			bool pass{ true };
+			for (auto& c : t.conditions)
+			{
+				if (!(c.comparator(param_values[c.parameter], c.value)))
+				{
+					pass = false;
+				}				
+			}
+			if (pass)
+			{
+				Switch_State(states[t.to_state]);
+			}			
+		}
+	}
+
+	internal_timer += ((float)SageTimer::delta_time * current_state.speed_multiplier);
 
 	if (internal_timer > current_state.animation.frame_time)
 	{
 		Go_To_Next_Frame();
+		internal_timer = 0.f;
 	}
 }
 
@@ -111,7 +181,16 @@ void Animator::Switch_State(Assets::Animation_Set::State const& _new_state)
 *******************************************************************************/
 void Animator::Go_To_Next_Frame()
 {
-	current_frame = (current_frame + 1) > current_state.animation.num_frames ? 0 : (current_frame + 1);
+	current_frame = current_frame + 1;
+	
+	if (current_state.looping && (current_frame >= current_state.animation.num_frames))
+	{
+		current_frame = 0;
+	}
+	else if (!current_state.looping && (current_frame >= current_state.animation.num_frames))
+	{
+		current_frame = current_state.animation.num_frames - 1;
+	}
 
 	if (obj)
 	{
@@ -130,18 +209,31 @@ ComponentType Animator::Get_Component_Type() { return ANIMATOR; }
 
 /*!*****************************************************************************
   \brief
-	Sets the flag _flag to bool _b for the purpose of animator conditionals
+	Sets the flag _flag to bool _b for the purpose of animator conditionals. For
+	true/false, 1.f is true, 0.f is false
 
   \param _param
 	name of the flag
 
-  \param _b
-	the bool to set the flag to
+  \param _new_value
+	the new value of the flag
 *******************************************************************************/
-void Animator::Set_Parameter(std::string const& _param, bool _b)
+void Animator::Set_Parameter(std::string const& _param, float const _new_value)
 {
-	/*if (animation_set.flags.find(_flag) != animation_set.flags.end())
+	if (param_values.find(_param) != param_values.end())
 	{
-		animation_set.flags[_flag] = _b;
-	}*/
+		param_values[_param] = _new_value;
+	}	
+}
+
+/*!*****************************************************************************
+  \brief
+	Sets all parameters to 0.f
+*******************************************************************************/
+void Animator::Reset_Parameters()
+{
+	for (auto& p : param_values)
+	{
+		p.second = 0.f;
+	}
 }
