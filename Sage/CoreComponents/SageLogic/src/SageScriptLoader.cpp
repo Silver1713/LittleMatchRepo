@@ -30,23 +30,25 @@ void SageLoader::Init(std::string const& mono_assembly_dir, std::string const& m
 
 }
 
-void SageLoader::Load_Assembly(const char * name, const char*  assembly_path)
+
+
+MonoAssembly* SageLoader::Load_Assembly(const char * name, const char*  assembly_path)
 {
 	MonoAssembly* assembly = mono_domain_assembly_open(runtime_domain, assembly_path);
 	if (!assembly) {
 		std::cout << "Failed to open assembly\n";
-		return;
+		return nullptr;
 	} else
 	{
-		assemblies[name] = assembly;
+		return assembly;
 	}
 
 }
 
 
-void SageLoader::Run_Main(const char* assembly_name)
+void SageLoader::Run_Main(MonoAssembly* assembly, const char* assembly_name)
 {
-	MonoAssembly* assembly = assemblies[assembly_name];
+	
 	if (!assembly) {
 		std::cout << "Failed to open assembly\n";
 		return;
@@ -69,6 +71,21 @@ void SageLoader::Run_Main(const char* assembly_name)
 	
 }
 
+MonoImage* SageLoader::Load_Image(MonoAssembly* assembly)
+{
+	if (!assembly) {
+		std::cout << "Failed to open assembly\n";
+		return nullptr;
+	}
+	MonoImage* image = mono_assembly_get_image(assembly);
+	if (!image) {
+		std::cout << "Failed to get image\n";
+		return nullptr;
+	}
+	return image;
+
+}
+
 
 void SageLoader::Exit()
 {
@@ -77,6 +94,12 @@ void SageLoader::Exit()
 	mono_jit_cleanup(runtime_domain);
 
 	
+}
+
+
+MonoDomain* SageLoader::Get_RT_Domain()
+{
+	return runtime_domain;
 }
 
 

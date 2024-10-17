@@ -31,6 +31,7 @@ typedef enum {
 	BOXCOLLIDER2D,
 	PHYSICS,
 	AUDIO,
+	BEHAVIOUR,
 	NUM_OF_TYPES_OF_COMPONENTS
 } ComponentType;
 

@@ -12,7 +12,7 @@ struct SageBindings
 template <typename FuncPtr>
 void SageBindings::Add_Internal_Call(const char* _csname, FuncPtr _bindings_func)
 {
-	mono_add_internal_call(_csname, _bindings_func);
+	mono_add_internal_call(_csname, static_cast<const void*>(_bindings_func));
 }
 
 
