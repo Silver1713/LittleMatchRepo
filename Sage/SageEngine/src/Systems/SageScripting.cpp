@@ -6,7 +6,7 @@
 #include "SageMonoManager.hpp"
 #include "SageScriptLoader.hpp"
 #include "GameObjects.hpp"
-#include "Components/Behaviour.h"
+#include "Components/Behaviour.hpp"
 
 System::SystemType SageScriptSystem::GetInstance()
 {
