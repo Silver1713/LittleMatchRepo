@@ -5,6 +5,14 @@
 #include <iostream>
 #include <string>
 
+static bool show_hierarchy_window = false;
+static bool show_console_window = false;
+static bool show_inspector_window = false;
+static bool show_project_window = false;
+static bool show_scene_window = false;
+static bool show_game_window = false;
+static bool exit_requested = false;
+
 namespace SageEditor
 {
     ImGuiTextFilter     Filter;
@@ -17,7 +25,73 @@ namespace SageEditor
         { "MyVec2",     ImGuiDataType_Float,   2, offsetof(TreeNode, DataMyVec2) },
     };
 
+	// Bool flags for the toggling of windows
+    void Show_Hierarchy_Window(TreeNode* root) {
+        if (show_hierarchy_window) {
+            ImGui::Begin("Hierarchy");
+            /*if (ImGui::TreeNode("Parent 1"))
+            {
+                ImGui::Text("Child 1");
+                ImGui::Text("Child 2");
+                ImGui::TreePop();
+            }*/
+            /*if (ImGui::InputTextWithHint("##search", "search", Filter.InputBuf, IM_ARRAYSIZE(Filter.InputBuf))) {
+                Filter.Build();
+            }*/
+            //Hierarchy(CreateTreeNode());
+            //ImGui::Text("This is the Hierarchy window.");
+            ImGui::End();
+        }
+    }
 
+    void Show_Console_Window()
+    {
+        if (show_console_window)
+        {
+            ImGui::Begin("Console");
+            ImGui::Text("This is the Console window.");
+            ImGui::End();
+        }
+    }
+
+    void Show_Inspector_Window()
+    {
+        if (show_inspector_window)
+        {
+            ImGui::Begin("Inspector");
+            ImGui::Text("This is the Inspector window.");
+            ImGui::End();
+        }
+    }
+
+    void Show_Project_Window()
+    {
+        if (show_project_window)
+        {
+            ImGui::Begin("Project");
+            ImGui::Text("This is the Project window.");
+            ImGui::End();
+        }
+    }
+
+    void Show_Scene_Window()
+    {
+        if (show_scene_window)
+        {
+            ImGui::Begin("Scene");
+            ImGui::Text("This is the Scene window.");
+            ImGui::End();
+        }
+    }
+    void Show_Game_Window()
+    {
+        if (show_game_window)
+        {
+            ImGui::Begin("Game");
+            ImGui::Text("This is the Game window.");
+            ImGui::End();
+        }
+    }
     //Creates a node to a new GameObject in Hierarchy
     static TreeNode* CreateNode(const char* name, int uid, TreeNode* parent)
     {
@@ -243,8 +317,12 @@ namespace SageEditor
         ImGui::EndGroup();
     }
 
+    
+
 	void RenderGUI()
     {
+        // DOCKSPACE
+
         // READ THIS !!!
         // TL;DR; this demo is more complicated than what most users you would normally use.
         // If we remove all options we are showcasing, this demo would become:
@@ -308,43 +386,175 @@ namespace SageEditor
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
 
+        // MAIN MENU BAR
+        if (ImGui::BeginMainMenuBar())
+        {   
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("New"))
+                {
+                    // New scene
+                }
+                if (ImGui::MenuItem("Open", "Ctrl+O"))
+                {
+	                // To open scene
+                }
+                if (ImGui::MenuItem("Save", "Ctrl+S"))
+                {
+	                // To save scene
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Exit"))
+                {
+                    exit_requested = true;
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Edit"))
+            {
+                if (ImGui::MenuItem("Undo", "CTRL+Z"))
+                {
+	                // Undo Action
+                }
+                if (ImGui::MenuItem("Redo", "Ctrl+Y"))
+                {
+	                // Redo Action
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Settings"))
+                {
+	                
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Assets"))
+            {
+	            if (ImGui::MenuItem("Create"))
+	            {
+		            // Create new assets;
+	            }
+                if (ImGui::MenuItem("Import New Asset"))
+                {
+	                // Import new assets
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("GameObject"))
+            {
+                if (ImGui::MenuItem("Create Empty"))
+                {
+	                // Create empty game object
+                }
+                if (ImGui::MenuItem("2D Object"))
+                {
+                    // Create 2D objects such as sprite UI elements etc
+                }
+                if (ImGui::MenuItem("Audio"))
+                {
+                    // Create audio sources
+                }
+                if (ImGui::MenuItem("Camera"))
+                {
+                    // Add camera to scene
+                }
+                if (ImGui::MenuItem("Effect"))
+                {
+                    // Add particle systems
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Component"))
+            {
+                if (ImGui::MenuItem("Physics 2D"))
+                {
+                    // rigidbodies 2d
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Audio"))
+                {
+                    // Add audio component to game object?
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Scripts"))
+                {
+                    // Attach scripts that contain custom functionality
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Window"))
+            {
+                ImGui::MenuItem("Scene", nullptr, &show_scene_window);
+                ImGui::MenuItem("Inspector", nullptr, &show_inspector_window);
+                ImGui::MenuItem("Hierarchy", nullptr, &show_hierarchy_window);
+                ImGui::MenuItem("Game", nullptr, &show_game_window);
+                ImGui::MenuItem("Console", nullptr, &show_console_window);
+                ImGui::MenuItem("Project", nullptr, &show_project_window);
+
+                ImGui::EndMenu();
+            }
+            // ADD MORE FOR MAIN MENU
+            ImGui::EndMainMenuBar();
+        }
+
+        Show_Scene_Window();
+        Show_Game_Window();
+        Show_Inspector_Window();
+        Show_Hierarchy_Window(CreateTreeNode());
+        Show_Console_Window();
+        Show_Project_Window();
+
+        if (exit_requested)
+        {
+            // Call separate exit (in engine)
+        }
 
 
-#pragma region Hierarchy
-        ImGui::Begin("Hierarchy");
-        Hierarchy(CreateTreeNode());
-        ImGui::End();
-#pragma endregion
+//#pragma region Settings
+//        ImGui::Begin("Settings");
+//        ImGui::Button("Hello");
+//        static float value = 0.0f;
+//        ImGui::DragFloat("Value", &value);
+//        ImGui::End();
+//#pragma endregion
 
-#pragma region Inspector
-        ImGui::Begin("Inspector");
-        Inspector();
-        ImGui::End();
-#pragma endregion
+//#pragma region Hierarchy
+//        ImGui::Begin("Hierarchy");
+//        Hierarchy(CreateTreeNode());
+//        ImGui::End();
+//#pragma endregion
 
-#pragma region Scene
-        ImGui::Begin("Scene");
-        ImGui::End();
-#pragma endregion
+//#pragma region Inspector
+//        ImGui::Begin("Inspector");
+//        //Inspector();
+//        ImGui::Text("Select an object to inspect.");
+//        ImGui::End();
+//#pragma endregion
 
-#pragma region Game
-        ImGui::Begin("Game");
-        ImGui::End();
-#pragma endregion
+//#pragma region Scene
+//        ImGui::Begin("Scene");
+//        ImGui::End();
+//#pragma endregion
 
-#pragma region Project
-        ImGui::Begin("Project");
-        ImGui::End();
-#pragma endregion
+//#pragma region Game
+//        ImGui::Begin("Game");
+//        ImGui::End();
+//#pragma endregion
 
-#pragma region Console
-        ImGui::Begin("Console");
-        ImGui::End();
-#pragma endregion
+//#pragma region Project
+//        ImGui::Begin("Project");
+//        ImGui::End();
+//#pragma endregion
+
+//#pragma region Console
+//        ImGui::Begin("Console");
+//        ImGui::End();
+//#pragma endregion
 
         //ImGui End for Begin(DockSpace Demo), DON'T DELETE
         ImGui::End();
 
-        ImGui::ShowDemoWindow();
+       //ImGui::ShowDemoWindow();
     }
+
+    
 }
