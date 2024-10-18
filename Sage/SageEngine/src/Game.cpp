@@ -122,7 +122,7 @@ namespace Game {
 		GameObject* object = Game_Objects::Get_Game_Object("Player");
 		object->Add_Component(std::make_unique<Behaviour>());
 		Behaviour* behaviour = static_cast<Behaviour*>(object->Get_Component<Behaviour>());
-		behaviour->Add_Instance("SageBehaviour", "SageEngine");
+		behaviour->Add_Instance("GamePlayBehaviour", "");
 		plrphy->Set_Gravity_Disable(false);
 		
 		SageAudio::Play_Sound("bgm_main_menu", LOOP);

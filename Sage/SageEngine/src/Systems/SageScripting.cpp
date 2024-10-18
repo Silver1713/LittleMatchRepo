@@ -109,7 +109,7 @@ void SageScriptSystem::Invoke_Method_In_Instance(MonoObject* mono_object, const 
 		method = mono_method_desc_search_in_image(desc, image);
 		if (!method)
 		{
-			std::cout << "Failed to find method\n";
+			
 			return;
 		}
 		methods[klass][_method_name] = method;
@@ -135,3 +135,10 @@ void SageScriptSystem::Add_Script_Instance_Environment(const char* name, Behavio
 {
 	scriptable_entities[name] = _behaviour;
 }
+
+
+void SageScriptSystem::Map_Script_Instance_GameObject(MonoObject* _instance, GameObject* _entity)
+{
+	mapped_instances[_instance] = _entity;
+}
+
