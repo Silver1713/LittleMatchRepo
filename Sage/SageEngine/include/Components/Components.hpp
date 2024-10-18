@@ -20,4 +20,6 @@
 #include "Components/Sprite2D.hpp"
 #include "Components/Animator.hpp"
 #include "Components/Physics.hpp"
+#include "Components/Behaviour.hpp"
+#include "Components/Button.hpp"
 #include "Components/BoxCollider2D.hpp"
