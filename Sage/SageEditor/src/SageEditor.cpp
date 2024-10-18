@@ -12,6 +12,7 @@ static bool show_project_window = false;
 static bool show_scene_window = false;
 static bool show_game_window = false;
 static bool exit_requested = false;
+static bool show_assets_window = false;
 
 namespace SageEditor
 {
@@ -64,12 +65,91 @@ namespace SageEditor
         }
     }
 
-    void Show_Project_Window()
-    {
-        if (show_project_window)
-        {
+    //void Show_Project_Window()
+    //{
+    //    if (show_project_window)
+    //    {
+    //        ImGui::Begin("Project");
+    //        ImGui::Columns(2, "project_columns", true); // Create 2 columns that are resizeable
+    //        ImGui::BeginChild("FolderHierarchy", ImVec2(0, 0), true);
+
+    //        // HARDCODING TEST LAYOUT
+    //        if (ImGui::TreeNode("Assets"))
+    //        {
+	   //         if (ImGui::TreeNode("Scenes"))
+    //            {
+    //                ImGui::TreeNodeEx("Main Scene", ImGuiTreeNodeFlags_Leaf);
+    //                ImGui::TreePop();
+	   //         }
+    //            if (ImGui::TreeNode("Scripts"))
+    //            {
+    //                ImGui::TreeNodeEx("PlayerController.cs", ImGuiTreeNodeFlags_Leaf);
+    //                ImGui::TreePop();
+    //            }
+    //            ImGui::TreePop();
+    //        }
+
+    //        ImGui::EndChild(); // End left panel
+    //        ImGui::NextColumn(); // Right column (Assets)
+    //        ImGui::BeginChild("AssetView", ImVec2(0, 0), true);
+    //        ImGui::Text("Assets");
+    //        ImGui::EndGroup();
+    //        ImGui::EndChild();
+    //        ImGui::Columns(1);
+    //        ImGui::End();
+
+    //        //ImGui::Separator();
+    //        ////ImGui::MenuItem("Assets", nullptr, &show_assets_window);
+    //        ImGui::Text("This is the Project window.");
+    //        ImGui::End();
+    //    }
+    //}
+
+    void Show_Project_Window() {
+        if (show_project_window) {
             ImGui::Begin("Project");
-            ImGui::Text("This is the Project window.");
+
+            // Split the window into two sections: folder structure (left) and asset view (right)
+            ImGui::Columns(2, "project_columns", true);  // Create two columns, resizable
+
+            // Left column: Folder hierarchy
+            ImGui::BeginChild("FolderHierarchy", ImVec2(0, 0), true);
+             
+            // HARDCODING TESTING LAYOUT
+            if (ImGui::TreeNode("Assets")) {
+                if (ImGui::TreeNode("Scenes")) {
+                    ImGui::Text("Main Scene");
+                    ImGui::TreePop();  // Pop the "Scenes" node
+                }
+
+                if (ImGui::TreeNode("Scripts")) {
+                    ImGui::Text("PlayerController.cs");
+                    ImGui::TreePop();  // Pop the "Scripts" node
+                }
+
+                ImGui::TreePop();  // Pop the "Assets" node
+            }
+
+            ImGui::EndChild();  // End left panel (Folder Hierarchy)
+
+            ImGui::NextColumn();  // Move to the next column
+
+            // Right column: Asset view
+            ImGui::BeginChild("AssetView", ImVec2(0, 0), true);
+
+            ImGui::Text("Assets");  // Title
+            ImGui::Separator();
+
+            // Simulating asset grid or list (as icons)
+            ImGui::BeginGroup();
+
+            
+            ImGui::EndGroup();
+
+            ImGui::EndChild();  // End right panel (Asset View)
+
+            ImGui::Columns(1);  // Reset columns
+
             ImGui::End();
         }
     }
@@ -91,6 +171,16 @@ namespace SageEditor
             ImGui::Text("This is the Game window.");
             ImGui::End();
         }
+    }
+
+    void Show_Asset_Window()
+    {
+	    if (show_assets_window)
+	    {
+            ImGui::Begin("Assets:");
+            ImGui::Text("This is the assets window.");
+            ImGui::End();
+	    }
     }
     //Creates a node to a new GameObject in Hierarchy
     static TreeNode* CreateNode(const char* name, int uid, TreeNode* parent)
@@ -502,6 +592,7 @@ namespace SageEditor
         Show_Hierarchy_Window(CreateTreeNode());
         Show_Console_Window();
         Show_Project_Window();
+        Show_Asset_Window();
 
         if (exit_requested)
         {
