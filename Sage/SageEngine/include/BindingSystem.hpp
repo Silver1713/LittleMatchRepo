@@ -64,20 +64,24 @@ void BindingSystem::Create_Component_Shadow(T* component)
 	{
 		return;
 	}
+	MonoObject* component_instance;
 	switch (component->Get_Component_Type())
 	{
 	case ComponentType::TRANSFORM:
 		// Create transform shadow
-		MonoObject* transform_instance = SageMonoManager::Create_Instance(SageMonoManager::Get_Klass_Info("Transform", "SageEngine")->klass);
-		
+		component_instance = SageMonoManager::Create_Instance(SageMonoManager::Get_Klass_Info("Transform", "SageEngine")->klass);
 
 
-		representation->components[ComponentType::TRANSFORM] = transform_instance;
+
+		representation->components[ComponentType::TRANSFORM] = component_instance;
 		break;
-		default:
-			// Invalid component
-			break;
+	default:
+		// Invalid component
+		component_instance = nullptr;
+		break;
 	}
+
+
 }
 
 

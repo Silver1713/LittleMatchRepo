@@ -20,6 +20,18 @@
 #endif
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 
+// TESTING PURPOSES
+#include "AssetLoader.hpp"
+#include "GameObjects.hpp"
+#include "KeyInputs.h"
+#include "SageAudio.hpp"
+#include "SageHelper.hpp"
+#include "SageMonoManager.hpp"
+#include "SageRenderer.hpp"
+#include "SageTimer.hpp"
+#include "SceneManager.hpp"
+constexpr double physics_update_target = 0.02;
+
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
 // To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
 // Your own project should not be affected, as you are likely to link with a newer binary of GLFW that is adequate for your version of Visual Studio.
@@ -32,10 +44,21 @@
 #include "../libs/emscripten/emscripten_mainloop_stub.h"
 #endif
 
+namespace
+{
+    static double accumulator = 0;
+}
+
 static void glfw_error_callback(int error, const char* description)
 {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
+
+// Forward declaration
+void init();
+void update();
+void draw();
+void exit();
 
 // Main code
 int main(int, char**)
@@ -103,6 +126,14 @@ int main(int, char**)
     ImGui_ImplGlfw_InstallEmscriptenCallbacks(window, "#canvas");
 #endif
     ImGui_ImplOpenGL3_Init(glsl_version);
+    SageMonoManager::Initialize();
+    SageTimer::Init();
+    SageShaderManager::Add_Shader_Include("graphic_lib", "../SageGraphics/shaders/");
+    SageRenderer::Init();
+    SageTimer::Init();
+    Assets::Init();
+    Assets::Prefabs::Init();
+    SageAudio::Init();
 
     // Load Fonts
     // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
@@ -176,8 +207,11 @@ int main(int, char**)
             glfwMakeContextCurrent(backup_current_context);
         }
 
+        update();
+        draw();
         glfwSwapBuffers(window);
     }
+    exit();
 #ifdef __EMSCRIPTEN__
     EMSCRIPTEN_MAINLOOP_END;
 #endif
@@ -191,4 +225,37 @@ int main(int, char**)
     glfwTerminate();
 
     return 0;
+}
+
+void update()
+{
+    SageTimer::Update();
+    SageHelper::Update();
+    accumulator += SageTimer::delta_time;
+    if (accumulator >= physics_update_target)
+    {
+        accumulator -= physics_update_target;
+    }
+    SM::Input();
+    SM::Update();
+
+    SageAudio::Update();
+}
+
+void draw()
+{
+    //SageHelper::Draw();
+    std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS) + "| Game Objects: " + std::to_string(Game_Objects::Get_Game_Objects().size());
+    SageHelper::sage_ptr_window->Set_Title(s.c_str());
+    SM::Draw();
+}
+
+void exit()
+{
+    Game_Objects::Exit();
+    SM::Free();
+    Assets::Unload();
+    SM::Unload();
+    SageHelper::Exit();
+    SageAudio::Exit();
 }

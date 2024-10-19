@@ -4,6 +4,7 @@
 #include <commdlg.h>
 #include <iostream>
 #include <string>
+#include "imgui_impl_opengl3.h"
 
 static bool show_hierarchy_window = false;
 static bool show_console_window = false;
@@ -16,6 +17,7 @@ static bool show_assets_window = false;
 
 namespace SageEditor
 {
+    // Setup Dear ImGui context
     ImGuiTextFilter     Filter;
     TreeNode*           selected_node = NULL;
     TreeNode*           DemoTree = NULL;
@@ -26,6 +28,7 @@ namespace SageEditor
         { "MyVec2",     ImGuiDataType_Float,   2, offsetof(TreeNode, DataMyVec2) },
     };
 
+    
 	// Bool flags for the toggling of windows
     void Show_Hierarchy_Window(TreeNode* root) {
         if (show_hierarchy_window) {
@@ -64,46 +67,6 @@ namespace SageEditor
             ImGui::End();
         }
     }
-
-    //void Show_Project_Window()
-    //{
-    //    if (show_project_window)
-    //    {
-    //        ImGui::Begin("Project");
-    //        ImGui::Columns(2, "project_columns", true); // Create 2 columns that are resizeable
-    //        ImGui::BeginChild("FolderHierarchy", ImVec2(0, 0), true);
-
-    //        // HARDCODING TEST LAYOUT
-    //        if (ImGui::TreeNode("Assets"))
-    //        {
-	   //         if (ImGui::TreeNode("Scenes"))
-    //            {
-    //                ImGui::TreeNodeEx("Main Scene", ImGuiTreeNodeFlags_Leaf);
-    //                ImGui::TreePop();
-	   //         }
-    //            if (ImGui::TreeNode("Scripts"))
-    //            {
-    //                ImGui::TreeNodeEx("PlayerController.cs", ImGuiTreeNodeFlags_Leaf);
-    //                ImGui::TreePop();
-    //            }
-    //            ImGui::TreePop();
-    //        }
-
-    //        ImGui::EndChild(); // End left panel
-    //        ImGui::NextColumn(); // Right column (Assets)
-    //        ImGui::BeginChild("AssetView", ImVec2(0, 0), true);
-    //        ImGui::Text("Assets");
-    //        ImGui::EndGroup();
-    //        ImGui::EndChild();
-    //        ImGui::Columns(1);
-    //        ImGui::End();
-
-    //        //ImGui::Separator();
-    //        ////ImGui::MenuItem("Assets", nullptr, &show_assets_window);
-    //        ImGui::Text("This is the Project window.");
-    //        ImGui::End();
-    //    }
-    //}
 
     void Show_Project_Window() {
         if (show_project_window) {
