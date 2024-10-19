@@ -246,7 +246,7 @@ void GLFWInputHandler::Poll_Events()
 		if (state == GLFW_PRESS)
 		{
 			if (value == std::byte{ 2 })
-				return;
+				continue;
 			if (value == std::byte{ 1 })
 				value = std::byte{ 2 };
 			else value = std::byte{ 1 };

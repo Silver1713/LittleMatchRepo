@@ -67,9 +67,13 @@ int main(){
 		
 		// Poll for and process events
 		SAGEInputHandler::update();
-		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_5))
 		{
 			std::cout << "Key 5 is pressed\n";
+		}
+		if (SAGEInputHandler::Get_Key(SAGE_KEY_1))
+		{
+			std::cout << "Key 1 is pressed";
 		}
 
 	}
