@@ -77,7 +77,7 @@ namespace Game {
 		//Creates 2.5k instantiated "WHITE" prefab to test
 		for (unsigned int i{}; i < game_objects_to_create; ++i)
 		{
-			game_objects[std::to_string(i)] = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("WHITE"), "White_" + std::to_string(i));
+			game_objects[std::to_string(i)] = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("SQUARE"), "Square_" + std::to_string(i));
 			transform_cache[std::to_string(i)] = static_cast<Transform*>(game_objects[std::to_string(i)]->Get_Component<Transform>());
 
 			//randomize properties
@@ -236,34 +236,34 @@ namespace Game {
 				game_objects[std::to_string(i)]->Disable();
 			}
 		}
-		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
-		{
-			double x, y;
-			SAGEInputHandler::Get_Mouse_Position(x, y);
-			ToastBox::Vec2 mouse_pos{ static_cast<float>(x), static_cast<float>(y) };
+		//if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
+		//{
+		//	double x, y;
+		//	SAGEInputHandler::Get_Mouse_Position(x, y);
+		//	ToastBox::Vec2 mouse_pos{ static_cast<float>(x), static_cast<float>(y) };
 
-			ToastBox::Vec2 world = SageRenderer::camera->Screen_To_World(mouse_pos);
+		//	ToastBox::Vec2 world = SageRenderer::camera->Screen_To_World(mouse_pos);
 
 
-			std::cout << "World: " << world.x << " " << world.y << std::endl;
+		//	std::cout << "World: " << world.x << " " << world.y << std::endl;
 
-			GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("SPAWN"), "White_1");
-			transform_cache["White_1"] = static_cast<Transform*>(random->Get_Component<Transform>());
-			collider_cache["White_1"] = random->Get_Component<BoxCollider2D>();
+		//	GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("SPAWN"), "White_1");
+		//	transform_cache["White_1"] = static_cast<Transform*>(random->Get_Component<Transform>());
+		//	collider_cache["White_1"] = random->Get_Component<BoxCollider2D>();
 
-			random->Get_Component<BoxCollider2D>()->Set_Debug(enable_collider_view);
+		//	random->Get_Component<BoxCollider2D>()->Set_Debug(enable_collider_view);
 
-			float m_min_scale[3] = { 10.0f,10.0f,0.0f }, m_max_scale[3] = { 100.0f,100.0f,0.0f };
+		//	float m_min_scale[3] = { 10.0f,10.0f,0.0f }, m_max_scale[3] = { 100.0f,100.0f,0.0f };
 
-			ToastBox::Vec3 pos{ (float)(std::rand() % (int)max_pos.x + (int)min_pos.x), (float)(std::rand() % (int)max_pos.y + (int)min_pos.y),0.0f };
-			ToastBox::Vec3 rot{ (float)(std::rand() % (int)max_rot.x + (int)min_rot.x), (float)(std::rand() % (int)max_rot.y + (int)min_rot.y),0.0f };
-			ToastBox::Vec3 scale{ (float)(std::rand() % (int)m_max_scale[0] + (int)m_min_scale[0]), (float)(std::rand() % (int)m_max_scale[1] + (int)m_min_scale[1]),0.0f};
+		//	ToastBox::Vec3 pos{ (float)(std::rand() % (int)max_pos.x + (int)min_pos.x), (float)(std::rand() % (int)max_pos.y + (int)min_pos.y),0.0f };
+		//	ToastBox::Vec3 rot{ (float)(std::rand() % (int)max_rot.x + (int)min_rot.x), (float)(std::rand() % (int)max_rot.y + (int)min_rot.y),0.0f };
+		//	ToastBox::Vec3 scale{ (float)(std::rand() % (int)m_max_scale[0] + (int)m_min_scale[0]), (float)(std::rand() % (int)m_max_scale[1] + (int)m_min_scale[1]),0.0f};
 
-			transform_cache["White_1"]->Set_Position(pos);
-			transform_cache["White_1"]->Set_Rotation(rot);
-			transform_cache["White_1"]->Set_Scale(scale);
+		//	transform_cache["White_1"]->Set_Position(pos);
+		//	transform_cache["White_1"]->Set_Rotation(rot);
+		//	transform_cache["White_1"]->Set_Scale(scale);
 
-		}
+		//}
 		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_RIGHT))
 		{
 
@@ -399,13 +399,13 @@ namespace Game {
 						if (horizontal) {
 							if (dir.x > 0 && !(vel.x < 0))
 							{
-								std::cout << "Enter left;\n";
+								//std::cout << "Enter left;\n";
 								vel.x = 0;
 
 							}
 							else if (dir.x < 0 && !(vel.x > 0))
 							{
-								std::cout << "Enter right;\n";
+								//std::cout << "Enter right;\n";
 								vel.x = 0;
 							}
 
@@ -415,12 +415,12 @@ namespace Game {
 						{
 							if (dir.y > 0 && !(vel.y < 0))
 							{
-								std::cout << "Enter top;\n";
+								//std::cout << "Enter top;\n";
 								vel.y = 0;
 							}
 							else if (dir.y < 0 && !(vel.y > 0))
 							{
-								std::cout << "Enter bottom;\n";
+								//std::cout << "Enter bottom;\n";
 								vel.y = 0;								
 							}
 							transform->Set_Position({ pos.x, curr_vel.y * time + prevPos.y, pos.z });

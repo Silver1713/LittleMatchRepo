@@ -20,20 +20,55 @@
 class Button : public Component
 {
 private:
+	typedef void(*Function_Ptr)(GameObject*);
+
 	Transform* transform{ nullptr };
 	UITransform* ui_transform{ nullptr };
+	Sprite2D* sprite{ nullptr };
+	Image* image{ nullptr };
 	bool is_clicked{ false };
 	bool is_hovered{ false };
 
-	
+	ToastBox::Vec2 mouse_pos{};
+	ToastBox::Vec2 top_right{};
+	ToastBox::Vec2 bottom_left{};
+
+	Function_Ptr on_click{ nullptr };
+	Function_Ptr on_click_hold{ nullptr };
+	Function_Ptr on_click_release{ nullptr };
+	Function_Ptr on_hover_enter{ nullptr };
+	Function_Ptr on_hover{ nullptr };
+	Function_Ptr on_hover_exit{ nullptr };
 
 public:
+	ToastBox::Vec4 initial_colour{};
+	ToastBox::Vec3 initial_scale{};
 
 	/*!*****************************************************************************
 	  \brief
 		Default constructor for Button
 	*******************************************************************************/
 	Button();
+
+	/*!*****************************************************************************
+	  \brief
+		Constructor for Button that creates the Button that triggers functions
+		that has a signature like "void Name(GameObject* _caller)" based on events that happen to the
+		button
+	  \param _on_click
+		function that triggers on click
+	  \param _on_click_hold
+		function that triggers on held click
+	  \param _on_click_release
+		function that triggers on released click
+	  \param _on_hover_enter
+		function that triggers on entering hover state
+	  \param _on_hover
+		function that triggers on hover
+	  \param _on_hover_exit
+		function that triggers on hover exit
+	*******************************************************************************/
+	Button(Function_Ptr _on_click, Function_Ptr _on_click_hold, Function_Ptr _on_click_release, Function_Ptr _on_hover_enter, Function_Ptr _on_hover, Function_Ptr _on_hover_exit);
 
 	/*!*****************************************************************************
 	  \brief
@@ -47,9 +82,23 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
+		This function process any inputs the button might have
+	*******************************************************************************/
+	void Input() override;
+
+	/*!*****************************************************************************
+	  \brief
 		Updates the Button transforms to match its transform component
 	*******************************************************************************/
 	void Update() override;
+
+	/*!*****************************************************************************
+	  \brief
+		Checks if mouse is within bounds of the button
+	  \return
+		if mouse is within bounds
+	*******************************************************************************/
+	bool Within_Bounds();
 
 	/*!*****************************************************************************
 	  \brief
@@ -102,7 +151,7 @@ public:
 	  \return
 		whether the button is being clicked
 	*******************************************************************************/
-	bool const Is_Clicked();
+	bool const Is_Clicked() const;
 
 	/*!*****************************************************************************
 	  \brief
@@ -110,7 +159,56 @@ public:
 	  \return
 		whether the button is being moused over
 	*******************************************************************************/
-	bool const Is_Hovered();
+	bool const Is_Hovered() const;
+
+	/*!*****************************************************************************
+	  \brief
+		Sets the On_Click function to the provided parameter
+	  \param _new_on_click
+		the new function
+	*******************************************************************************/
+	void Set_On_Click(Function_Ptr _new_on_click);
+
+	/*!*****************************************************************************
+	  \brief
+		Sets the On_Click_Hold function to the provided parameter
+	  \param _new_on_click_hold
+		the new function
+	*******************************************************************************/
+	void Set_On_Click_Hold(Function_Ptr _new_on_click_hold);
+
+	/*!*****************************************************************************
+	  \brief
+		Sets the On_Click_Release function to the provided parameter
+	  \param _new_on_click_release
+		the new function
+	*******************************************************************************/
+	void Set_On_Click_Release(Function_Ptr _new_on_click_release);
+
+	/*!*****************************************************************************
+	  \brief
+		Sets the On_Hover_Enter function to the provided parameter
+	  \param _new_on_hover_enter
+		the new function
+	*******************************************************************************/
+	void Set_On_Hover_Enter(Function_Ptr _new_on_hover_enter);
+
+	/*!*****************************************************************************
+	  \brief
+		Sets the On_Hover function to the provided parameter
+	  \param _new_on_hover
+		the new function
+	*******************************************************************************/
+	void Set_On_Hover(Function_Ptr _new_on_hover);
+
+	/*!*****************************************************************************
+	  \brief
+		Sets the On_Hover_Exit function to the provided parameter
+	  \param _new_on_hover_exit
+		the new function
+	*******************************************************************************/
+	void Set_On_Hover_Exit(Function_Ptr _new_on_hover_exit);
+
 
 	/*!*****************************************************************************
 	  \brief
@@ -121,3 +219,20 @@ public:
 	*******************************************************************************/
 	ComponentType Get_Component_Type() override;
 };
+
+
+/*!*****************************************************************************
+  \brief
+	Default behaviour of button updating its status when event is triggered
+  \param _caller
+	the caller
+*******************************************************************************/
+void Default_Button_Update(GameObject* _caller);
+
+/*!*****************************************************************************
+  \brief
+	Default behaviour of button updating its status when clicked
+  \param _caller
+	the caller
+*******************************************************************************/
+void Default_Click(GameObject* _caller);

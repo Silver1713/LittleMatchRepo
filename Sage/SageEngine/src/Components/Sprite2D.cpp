@@ -204,6 +204,19 @@ void Sprite2D::Set_Colour(std::initializer_list<float> const& _new_col)
 
 /*!*****************************************************************************
   \brief
+	Gets the colour of the sprite
+
+  \return
+	the colour
+*******************************************************************************/
+ToastBox::Vec4 const& Sprite2D::Get_Colour()
+{
+	return colour;
+}
+
+
+/*!*****************************************************************************
+  \brief
 	This function changes the transparency of the sprite
 
   \param _a

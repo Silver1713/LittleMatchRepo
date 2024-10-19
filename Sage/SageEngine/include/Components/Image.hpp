@@ -124,6 +124,15 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
+		Gets the colour of the image
+
+	  \return
+		the colour
+	*******************************************************************************/
+	ToastBox::Vec4 const& Get_Colour();
+
+	/*!*****************************************************************************
+	  \brief
 		This function changes the transparency of the sprite
 
 	  \param _a

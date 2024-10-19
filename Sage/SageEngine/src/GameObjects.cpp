@@ -57,6 +57,7 @@ namespace Game_Objects
 		{
 			if (_g.second)
 			{
+				_g.second->Input();
 				_g.second->Update();
 			}
 		}
@@ -240,6 +241,10 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	{
 		Add_Component(std::make_unique<Animator>(_p.animation_set_ID));
 	}
+	if (_p.is_button)
+	{
+		Add_Component(std::make_unique<Button>());
+	}
 
 	Init();
 }
@@ -259,6 +264,23 @@ void GameObject::Init()
 	for (auto& _c : components)
 	{
 		_c->Init(this);
+	}
+}
+
+/*!*****************************************************************************
+  \brief
+	Updates the inputs to the gameobject
+*******************************************************************************/
+void GameObject::Input()
+{
+	if (components.empty() || (!is_enabled))
+	{
+		return;
+	}
+
+	for (const auto& _c : components)
+	{
+		_c->Input();
 	}
 }
 

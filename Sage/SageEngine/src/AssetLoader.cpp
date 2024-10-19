@@ -270,6 +270,10 @@ namespace Assets
 						p.has_animator = prefabs_json["Prefabs"][i]["Has_Animator"].as<SageJSON::SageJSON::BoolValue>();
 						p.animation_set_ID = prefabs_json["Prefabs"][i]["Animator"][0]["Animation_Set_ID"].as<SageJSON::SageJSON::StringValue>();
 					}
+					if (prefabs_json["Prefabs"][i]["Is_Button"].key_exists<SageJSON::SageJSON::BoolValue>())
+					{
+						p.is_button = prefabs_json["Prefabs"][i]["Is_Button"].as<SageJSON::SageJSON::BoolValue>();
+					}
 				}
 				catch (...)
 				{

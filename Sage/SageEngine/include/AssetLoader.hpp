@@ -234,6 +234,7 @@ namespace Assets
 			bool has_collider{false};
 			bool has_physics{false};
 			bool has_animator{ false };
+			bool is_button{ false };
 			std::string animation_set_ID{ "" };
 			std::string object_shape{"Rect"};
 		};

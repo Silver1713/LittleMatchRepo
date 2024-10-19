@@ -63,7 +63,7 @@ bool GLFWInputHandler::Get_Key_Pressed(int _keycode)
 *******************************************************************************/
 bool GLFWInputHandler::Get_Key(int _keycode)
 {
-	std::cout << "Key: " << _keycode << std::endl;
+	//std::cout << "Key: " << _keycode << std::endl;
 
 	// If it is pressed down once or held down, return true
 	if (key_map[_keycode] == std::byte{ 1 } || key_map[_keycode] == std::byte{2})
@@ -214,7 +214,7 @@ void GLFWInputHandler::Mouse_Pos_Cb(GLFWwindow* _window, double _xpos, double _y
 	g_mouse_pos_x = _xpos;
 	g_mouse_pos_y = _ypos;
 	(_window);
-	std::cout << "Mouse X: " << g_mouse_pos_x << " Mouse Y: " << g_mouse_pos_y << std::endl;
+	//std::cout << "Mouse X: " << g_mouse_pos_x << " Mouse Y: " << g_mouse_pos_y << std::endl;
 }
 
 void GLFWInputHandler::Get_Mouse_Pos(double& _xmouse, double& _ymouse)
