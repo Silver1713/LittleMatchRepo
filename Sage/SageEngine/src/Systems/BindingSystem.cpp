@@ -7,7 +7,7 @@
 #include "internal/GLFWHandler.h"
 
 
-std::vector<BindingSystem::MonoRepresentation> mono_entities;
+std::vector<BindingSystem::MonoRepresentation> BindingSystem::mono_entities{};
  std::unordered_map<MonoObject*, BindingSystem::MonoRepresentation*> BindingSystem::cs_to_cpp_mapping{};
  std::unordered_map<GameObject*, BindingSystem::MonoRepresentation*> BindingSystem::cpp_to_cs_mapping{};
 

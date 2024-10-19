@@ -40,6 +40,8 @@ public:
 	
 
 	static GameObject* Get_GameObject_From_Instance(MonoObject* _instance);
+	
+	
 
 	static void Init();
 
@@ -49,6 +51,11 @@ public:
 
 
 	static void Exit();
+
+
+
+
+
 
 
 
