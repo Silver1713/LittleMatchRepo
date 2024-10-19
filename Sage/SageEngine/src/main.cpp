@@ -80,7 +80,7 @@ int main()
 
 	while (!SageHelper::sage_ptr_window->Should_Window_Close())
 	{
-		glfwPollEvents();        
+		       
 		update();
 
 		draw();

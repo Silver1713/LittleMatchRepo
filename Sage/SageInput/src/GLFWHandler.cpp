@@ -39,16 +39,38 @@ static GLFWInputHandler* instance = nullptr;
 *******************************************************************************/
 bool GLFWInputHandler::Get_Key_Pressed(int _keycode)
 {
-	// If is 1, set it back to 0 to reset
-	if (key_map[_keycode] == std::byte{1})
+	int state;
+	if (_keycode >= 0 && _keycode <= 7)
 	{
-		key_map[_keycode] = std::byte{0};
+		state = glfwGetMouseButton(glfwGetCurrentContext(), _keycode);
+	}
+	else
+	{
+		state = glfwGetKey(glfwGetCurrentContext(), _keycode);
+	}
+
+
+	
+
+
+
+	if (key_map.contains(_keycode))
+	{
+		return (key_map[_keycode] == std::byte{ 1 });
+	}
+	
+
+	if (state == GLFW_PRESS)
+	{
+		key_map[_keycode] = std::byte{ 1 };
 		return true;
 	}
 	else
 	{
-		return false;
+		key_map[_keycode] = std::byte{ 0 };
+		
 	}
+	return false;
 }
 
 /*!*****************************************************************************
@@ -63,16 +85,29 @@ bool GLFWInputHandler::Get_Key_Pressed(int _keycode)
 *******************************************************************************/
 bool GLFWInputHandler::Get_Key(int _keycode)
 {
-
-
-	// If it is pressed down once or held down, return true
-	if (key_map[_keycode] == std::byte{ 1 } || key_map[_keycode] == std::byte{2})
+	if (key_map.contains(_keycode))
 	{
-		return true;
+		return (key_map[_keycode] == std::byte{ 1 } || key_map[_keycode] == std::byte{ 2 });
+	}
+	int state;
+	if (_keycode >= 0 && _keycode <= 7)
+	{
+		state = glfwGetMouseButton(glfwGetCurrentContext(), _keycode);
 	}
 	else
 	{
-		
+		state = glfwGetKey(glfwGetCurrentContext(), _keycode);
+	}
+
+	if (state == GLFW_PRESS)
+	{
+		key_map[_keycode] = std::byte{ 1 };
+		return true;
+	}
+	
+	else
+	{
+		key_map[_keycode] = std::byte{ 0 };
 		return false;
 	}
 }
@@ -89,7 +124,7 @@ bool GLFWInputHandler::Get_Key(int _keycode)
 	The key that is pressed
 
   \param _scancode
-    The hardware specific code of key
+	The hardware specific code of key
 
   \param _action
 	The type of action occured with the key pressed
@@ -113,19 +148,23 @@ void GLFWInputHandler::Key_Cb(GLFWwindow* _window, int _keycode, int _scancode, 
 	switch (_action)
 	{
 	case GLFW_PRESS:
-		key_map[_keycode] = std::byte{ 1 };
+		/*if (key_map[_keycode] == std::byte{ 1 })
+			key_map[_keycode] = std::byte{ 2 };
+		else key_map[_keycode] = std::byte{ 1 };*/
+		std::cout << "Key is Pressed\n";
+
 #if _DEBUG
 		std::cout << "Key is Pressed\n";
 #endif
 		break;
 	case GLFW_RELEASE:
-		key_map[_keycode] = std::byte{ 0 };
+		/*key_map[_keycode] = std::byte{ 0 };*/
 #if _DEBUG
 		std::cout << "Key is Released\n";
 #endif
 		break;
 	case GLFW_REPEAT:
-		key_map[_keycode] = std::byte{ 2 };
+		/*key_map[_keycode] = std::byte{ 2 };*/
 #if _DEBUG
 		std::cout << "Key is Hold\n";
 #endif
@@ -162,19 +201,19 @@ void GLFWInputHandler::Mouse_Cb(GLFWwindow* _window, int _button, int _action, i
 	switch (_action)
 	{
 	case GLFW_PRESS:
-		key_map[_button] = std::byte{ 1 };
+		//key_map[_button] = std::byte{ 1 };
 #if _DEBUG
 		std::cout << "Mouse is Pressed\n";
 #endif
 		break;
 	case GLFW_RELEASE:
-		key_map[_button] = std::byte{ 0 };
+		//key_map[_button] = std::byte{ 0 };
 #if _DEBUG
 		std::cout << "Mouse is Released\n";
 #endif
 		break;
 	case GLFW_REPEAT:
-		key_map[_button] = std::byte{ 2 };
+		//key_map[_button] = std::byte{ 2 };
 #if _DEBUG
 		std::cout << "Mouse is Hold\n";
 #endif
@@ -191,6 +230,39 @@ void GLFWInputHandler::Mouse_Cb(GLFWwindow* _window, int _button, int _action, i
 void GLFWInputHandler::Poll_Events()
 {
 	glfwPollEvents();
+
+	for (auto& [key, value] : key_map)
+	{
+		int state;
+		if (key >= 0 && key <= 7)
+		{
+			state = glfwGetMouseButton(glfwGetCurrentContext(), key);
+		}
+		else
+		{
+			state = glfwGetKey(glfwGetCurrentContext(), key);
+		}
+		
+		if (state == GLFW_PRESS)
+		{
+			if (value == std::byte{ 2 })
+				return;
+			if (value == std::byte{ 1 })
+				value = std::byte{ 2 };
+			else value = std::byte{ 1 };
+		}
+		else if (state == GLFW_RELEASE)
+		{
+			value = std::byte{ 0 };
+		}
+		else if (state == GLFW_REPEAT)
+		{
+			value = std::byte{ 2 };
+		}
+		
+	}
+
+	
 }
 
 /*!*****************************************************************************
@@ -230,10 +302,10 @@ void GLFWInputHandler::Set_Bindings()
 	SageBindings::Add_Internal_Call("SageEngine.Input::Get_Key", GLFWInputHandler::Get_Key);
 	SageBindings::Add_Internal_Call("SageEngine.Input::Get_Key_Pressed", GLFWInputHandler::Get_Key_Pressed);
 	SageBindings::Add_Internal_Call("SageEngine.Input::Get_Mouse_Pos", GLFWInputHandler::Get_Mouse_Pos);
-	
+
 }
 
- 
+
 
 
 

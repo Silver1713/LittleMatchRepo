@@ -181,8 +181,8 @@ namespace SM {
 	void Input()
 	{
 		
-		SM::fp_input();
 		SAGEInputHandler::update();
+		SM::fp_input();
 	}
 
 	/*!*****************************************************************************
