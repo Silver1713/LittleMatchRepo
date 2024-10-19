@@ -40,6 +40,8 @@ public:
 	
 
 	static GameObject* Get_GameObject_From_Instance(MonoObject* _instance);
+	
+	
 
 	static void Init();
 
@@ -49,6 +51,11 @@ public:
 
 
 	static void Exit();
+
+
+
+
+
 
 
 
@@ -64,18 +71,17 @@ void BindingSystem::Create_Component_Shadow(T* component)
 	{
 		return;
 	}
+	MonoObject* component_instance;
 	switch (component->Get_Component_Type())
 	{
 	case ComponentType::TRANSFORM:
 		// Create transform shadow
-		MonoObject* transform_instance = SageMonoManager::Create_Instance(SageMonoManager::Get_Klass_Info("Transform", "SageEngine")->klass);
-		
-
-
-		representation->components[ComponentType::TRANSFORM] = transform_instance;
+		component_instance = SageMonoManager::Create_Instance(SageMonoManager::Get_Klass_Info("Transform", "SageEngine")->klass);
+		representation->components[ComponentType::TRANSFORM] = component_instance;
 		break;
 		default:
 			// Invalid component
+			component_instance = nullptr;
 			break;
 	}
 }
