@@ -157,7 +157,7 @@ void Button::Update()
   \return
 	if mouse is within bounds
 *******************************************************************************/
-bool Button::Within_Bounds()
+bool const Button::Within_Bounds() const
 {
 	if ((mouse_pos.x >= bottom_left.x) && (mouse_pos.y >= bottom_left.y))
 	{
