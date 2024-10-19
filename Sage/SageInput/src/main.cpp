@@ -40,7 +40,7 @@ int main(){
 	assembler.Init("..\\MONO\\bin\\", "..\\CoreComponents\\SageLogic\\programs");
 	loader.Init("../MONO/lib", "../MONO/etc");
 	SAGEInputHandler::init();
-	assembler.Set_Command("mcs");
+	/*assembler.Set_Command("mcs");
 	assembler.Set_Compile_Flags("/target:library");
 
 	assembler.Add_Script(SageAssembler::FILE_MODE, "../CoreComponents/SageLogic/scripts/Input.cs");
@@ -51,7 +51,7 @@ int main(){
 	std::cout << "C# code compiled successfully\n";
 
 
-	loader.Load_Assembly("Input", assembler.Get_Assembly("Input").path_to_assembly.c_str());
+	loader.Load_Assembly("Input", assembler.Get_Assembly("Input").path_to_assembly.c_str());*/
 
 	
 
@@ -64,10 +64,17 @@ int main(){
 
 		// Swap front and back buffers
 		glfwSwapBuffers(window);
-		loader.Run_Main("Input");
 		
 		// Poll for and process events
-		glfwPollEvents();
+		SAGEInputHandler::update();
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_5))
+		{
+			std::cout << "Key 5 is pressed\n";
+		}
+		if (SAGEInputHandler::Get_Key(SAGE_KEY_1))
+		{
+			std::cout << "Key 1 is pressed";
+		}
 
 	}
 

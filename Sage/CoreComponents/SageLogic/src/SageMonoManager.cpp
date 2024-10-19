@@ -1,6 +1,7 @@
 #include "SageMonoManager.hpp"
 
 #include <iostream>
+#include <filesystem>
 #include <mono/metadata/debug-helpers.h>
 
 #include "SageScriptLoader.hpp"
@@ -11,10 +12,10 @@ std::unique_ptr<SageLoader> SageMonoManager::loader{};
 std::unique_ptr<SageAssembler> SageMonoManager::compiler{};
 MonoDomain* SageMonoManager::Default_Domain{};
 
-std::unordered_map<const char*, MonoDomain*> SageMonoManager::domains{};
-std::unordered_map<const char*, MonoAssembly*> SageMonoManager::assemblies{};
-std::unordered_map<const char*, MonoImage*> SageMonoManager::images{};
-std::unordered_map<const char*, SageMonoManager::MonoKlassInfo> SageMonoManager::klassList{};
+std::unordered_map<std::string, MonoDomain*> SageMonoManager::domains{};
+std::unordered_map<std::string, MonoAssembly*> SageMonoManager::assemblies{};
+std::unordered_map<std::string, MonoImage*> SageMonoManager::images{};
+std::unordered_map<std::string, SageMonoManager::MonoKlassInfo> SageMonoManager::klassList{};
 
 void SageMonoManager::Initialize()
 {
@@ -27,6 +28,12 @@ void SageMonoManager::Initialize()
 	compiler->Set_Command("mcs");
 	compiler->Set_Compile_Flags("/target:library");
 
+	// Compile ALL C# Scripts
+	Compile_Scripts("../BehaviourScripts/scripts", "../BehaviourScripts/programs/");
+
+	//MonoAssembly* assembly = loader->Load_Assembly("SageLibrary", "../BehaviourScripts/programs/SageLibrary.dll");
+	Load_Assembly("SageLibrary", "../BehaviourScripts/programs/SageLibrary.dll");
+	Load_Image("SageLibraryImage", "SageLibrary");
 	Default_Domain = loader->Get_RT_Domain();
 }
 
@@ -199,7 +206,39 @@ SageMonoManager::MonoKlassInfo* SageMonoManager::Get_Klass_Info(const char* _kla
 	}
 	else
 	{
-		return nullptr;
+		MonoImage* image = images["SageLibraryImage"];
+		MonoClass* klass = Load_Klass_In_Image(image, _klass_name, _namespace);
+		if (!klass)
+		{
+			std::cout << "Failed to load class\n";
+			return nullptr;
+		}
+
+		return &klassList[Klass_FName];
 	}
 }
 
+void SageMonoManager::Compile_Scripts(const char* script_dir, const char* output_assembly)
+{
+	std::filesystem::path path(script_dir);
+	if (!std::filesystem::exists(path))
+	{
+		std::cout << "Directory does not exist\n";
+		return;
+	}
+
+	std::vector<std::string> files;
+	for (const auto& entry : std::filesystem::directory_iterator(path))
+	{
+		files.push_back(entry.path().string());
+	}
+
+	for (const auto& file : files)
+	{
+		compiler->Add_Script(SageAssembler::FILE_MODE, file.c_str());
+	}
+
+	compiler->Set_Output_Directory(output_assembly);
+	compiler->StartCompilation(true);
+	compiler->Wait_For_Compile();
+}

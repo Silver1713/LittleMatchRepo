@@ -10,7 +10,7 @@
 			that uses gameobjects. Also contains the gameobject constructor which setup itself
 			based on the prefab that is passed into.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content ï¿½ 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #include "GameObjects.hpp"
@@ -22,7 +22,9 @@
 #include <memory>
 #include <iostream>
 
+#include "SageSystemManager.hpp"
 #include "Components/Physics.hpp"
+#include "Systems/SageScripting.hpp"
 
 namespace Game_Objects
 {
@@ -32,6 +34,7 @@ namespace Game_Objects
 	static std::vector<std::unique_ptr<GameObject>*> screen_space_game_objects;
 	static std::vector<std::unique_ptr<GameObject>*> world_space_game_objects;
 
+	static SageScriptSystem* script_system{ nullptr };
 
 	/*!*****************************************************************************
 	  \brief
@@ -39,6 +42,7 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Init()
 	{
+		script_system = SageSystemManager::Get_System<SageScriptSystem>();
 		for (auto& _g : g_game_objects)
 		{
 			if (_g.second)
@@ -53,6 +57,7 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Update()
 	{
+
 		for (auto& _g : g_game_objects)
 		{
 			if (_g.second)
@@ -265,6 +270,8 @@ void GameObject::Init()
 	{
 		_c->Init(this);
 	}
+
+
 }
 
 /*!*****************************************************************************
@@ -297,6 +304,11 @@ void GameObject::Update()
 
 	for (const auto& _c : components)
 	{
+		if (_c->Get_Component_Type() == ComponentType::BEHAVIOUR)
+		{
+			Game_Objects::script_system->Update_Entity(this);
+			continue;
+		}
 		_c->Update();
 	}
 }

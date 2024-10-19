@@ -6,7 +6,7 @@
 #include "SageMonoManager.hpp"
 #include "SageScriptLoader.hpp"
 #include "GameObjects.hpp"
-#include "Components/Behaviour.hpp"
+#include "Components/Behaviour.h"
 
 System::SystemType SageScriptSystem::GetInstance()
 {
@@ -49,6 +49,23 @@ void SageScriptSystem::Update()
 	}
 }
 
+
+void SageScriptSystem::Update_Entity(GameObject* _entity)
+{
+	Behaviour* behaviour = _entity->Get_Component<Behaviour>();
+	if (!behaviour)
+	{
+		return;
+	}
+
+	std::vector<std::pair<std::string, MonoObject*>>& instances = behaviour->Get_Mono_Instances();
+
+	for (auto& instance : instances)
+	{
+		Invoke_Method_In_Instance(instance.second, "Update()");
+	}
+}
+
 void SageScriptSystem::Exit()
 {
 	loader = nullptr;
@@ -65,10 +82,10 @@ void SageScriptSystem::Invoke_Method_In_Instance(MonoObject* mono_object, const 
 	bool found = false;
 	MonoClass* klass = mono_object_get_class(mono_object);
 	MonoMethod* method = nullptr;
-	if (methods.find(klass) != methods.end())
+	if (methods.contains(klass))
 	{
 		auto& method_map = methods[klass];
-		if (method_map.find(_method_name) != method_map.end())
+		if (method_map.contains(_method_name))
 		{
 			method = method_map[_method_name];
 			found = true;
@@ -82,12 +99,17 @@ void SageScriptSystem::Invoke_Method_In_Instance(MonoObject* mono_object, const 
 
 	if (!found)
 	{
+		const char* ns = mono_class_get_namespace(klass);
+
+		const char* class_name = mono_class_get_name(klass);
+		std::string quantified_method_name = std::string(ns) + "." + std::string(class_name) + ":" + _method_name;
+
 		MonoImage* image = mono_class_get_image(klass);
-		MonoMethodDesc* desc = mono_method_desc_new(_method_name, 0);
+		MonoMethodDesc* desc = mono_method_desc_new(quantified_method_name.c_str(), 1);
 		method = mono_method_desc_search_in_image(desc, image);
 		if (!method)
 		{
-			std::cout << "Failed to find method\n";
+			
 			return;
 		}
 		methods[klass][_method_name] = method;
@@ -109,6 +131,14 @@ void SageScriptSystem::Invoke_Method_In_Instance(MonoObject* mono_object, const 
 
 }
 
+void SageScriptSystem::Add_Script_Instance_Environment(const char* name, Behaviour* _behaviour)
+{
+	scriptable_entities[name] = _behaviour;
+}
 
 
+void SageScriptSystem::Map_Script_Instance_GameObject(MonoObject* _instance, GameObject* _entity)
+{
+	mapped_instances[_instance] = _entity;
+}
 

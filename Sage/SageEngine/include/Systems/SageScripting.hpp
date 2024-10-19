@@ -12,7 +12,7 @@ class SageScriptSystem : public System
 	SageLoader* loader;
 	std::unordered_map<std::string, Behaviour*> scriptable_entities;
 	std::unordered_map<MonoClass*, std::unordered_map<std::string, MonoMethod*>> methods{};
-
+	std::unordered_map<MonoObject*, GameObject*> mapped_instances{};
 
 
 public:
@@ -22,10 +22,20 @@ public:
 
 	void Init() override;
 	void Update() override;
+	void Update_Entity(GameObject* _entity) override;
+	
 	void Exit() override;
 	SystemType GetInstance() override;
 
 	~SageScriptSystem() override;
+
+
+	void Add_Script_Instance_Environment(const char* name ,Behaviour* _behaviour);
+	void Map_Script_Instance_GameObject(MonoObject* _instance, GameObject* _entity);
+
+
+	// For C# to call
+	
 
 
 	

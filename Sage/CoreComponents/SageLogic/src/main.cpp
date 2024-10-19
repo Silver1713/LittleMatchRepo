@@ -7,43 +7,7 @@
 #include "SageScriptLoader.hpp"
 SageLoader loader{};
 int main(){
-	// Get Start time
-	auto start = std::chrono::high_resolution_clock::now();
 	
-	SageAssembler assembler{};
-	assembler.Init("..\\MONO\\bin\\", "..\\BehaviourScripts\\programs");
-
-	assembler.Set_Command("mcs");
-	assembler.Set_Compile_Flags("/target:library");
-
-	assembler.Add_Script(SageAssembler::FILE_MODE, "../BehaviourScripts/scripts/abc.cs");
-	/*assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/hello.cs");
-	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/abc1.cs");
-	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/hello1.cs");
-	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/abc2.cs");
-	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/hello2.cs");
-	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/abc3.cs");
-	assembler.Add_Script(SageAssembler::FILE_MODE, "../SageLogic/scripts/hello3.cs");*/
-	assembler.Add_Script(SageAssembler::FILE_MODE, "../BehaviourScripts/scripts/SageBehaviour.cs");
-	assembler.StartCompilation(true);
-	std::cout << "Compiling C# Code...\n";
-	assembler.Wait_For_Compile();
-	std::cout << "C# code compiled successfully\n";
-	loader.Init("../MONO/lib", "../MONO/etc");
-
-	MonoAssembly* Assembly = loader.Load_Assembly("abc", "../BehaviourScripts/programs/SageLibrary.dll");
-	
-
-	std::cout << "Running Main @ abc.cs ...\n";
-	std::cout << "---------------------\n";
-	loader.Run_Main(Assembly, "abc");
-	std::cout << "---------FIN----------\n";
-	std::cout << "Running Main @ hello.cs ...\n";
-	std::cout << "---------------------\n";
-	loader.Run_Main(Assembly, "hello");
-	std::cout << "---------FIN----------\n";
-
-	loader.Exit();
 	return 0;
 
 	

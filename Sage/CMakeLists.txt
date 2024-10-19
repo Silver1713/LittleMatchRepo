@@ -23,7 +23,8 @@ include(GenerateCoreComponents)
 option(GENERATE_ENGINE_CORE "Generate Engine Core" ON)
 option(COMPILE_USING_OBJECT "Compile using object" ON)
 
-file(GLOB PROJECT_DIRECTORIES ${CMAKE_SOURCE_DIR}/Sage*/)
+file(GLOB PROJECT_DIRECTORIES ${CMAKE_SOURCE_DIR}/*/)
+
 # message(STATUS "Project Directories: ${PROJECT_DIRECTORIES}")
 set(LIB_LIST)
 set(INCLUDES_LIST)
@@ -36,6 +37,11 @@ foreach(dir ${PROJECT_DIRECTORIES})
     set(INERNAL_H_FILE_NAME "Internal Header Files")
 
     if(IS_DIRECTORY ${dir} AND NOT DIR_NAME STREQUAL "SageEngine" AND NOT DIR_NAME STREQUAL "Sage" AND NOT DIR_NAME STREQUAL "SageInputUnit" AND NOT IS_LIBS_ONLY)
+        if(NOT EXISTS "${dir}/.TARGET")
+        message(STATUS "Skipping: ${dir}")
+            continue()
+        endif()
+
         set(SAGE_SHADER_FILES)
 
         if(DIR_NAME STREQUAL "SageGraphics")
@@ -44,8 +50,6 @@ foreach(dir ${PROJECT_DIRECTORIES})
             )
             source_group("Shader Files" FILES ${SAGE_SHADER_FILES})
         endif()
-
-        
 
         file(GLOB_RECURSE SAGE_SOURCE_FILE
             ${dir}/src/*.[ch]pp
@@ -73,6 +77,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
                 )
 
                 source_group("Source Files/${SUB_NAMESRC}" FILES ${DIR_SRC_FILE})
+
                 # message(STATUS "Sourced Source Files/${SUB_NAME_LIB}")
             endif()
         endforeach()
@@ -89,6 +94,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
                     ${subdirh}/*.hpp
                 )
                 source_group("Header Files/${SUB_NAME}" FILES ${DIR_H_FILE})
+
                 # message(STATUS"Header Files/${SUB_NAME}")
                 list(APPEND ADDITION_INCLUDE ${subdirh})
             endif()
@@ -140,6 +146,10 @@ foreach(dir ${PROJECT_DIRECTORIES})
     endif()
 
     if(IS_DIRECTORY ${dir} AND NOT DIR_NAME STREQUAL "SageEngine" AND NOT DIR_NAME STREQUAL "Sage" AND NOT DIR_NAME STREQUAL "SageInputUnit")
+        if(NOT EXISTS "${dir}/.TARGET")
+            continue()
+        endif()
+
         file(GLOB_RECURSE SAGE_SOURCE_FILE
             ${dir}/src/*.[ch]pp
             ${dir}/src/*/*.[ch]pp
@@ -190,6 +200,7 @@ foreach(dir ${PROJECT_DIRECTORIES})
                     ${SUB_DIR_LIB}/*.hpp
                 )
                 source_group("Header Files/${SUB_NAME_LIB}" FILES ${DIR_H_FILE_LIB})
+
                 # message(STATUS "Sourced Header Files/${SUB_NAME_LIB}")
                 target_include_directories(${DIR_NAME}_lib PUBLIC
                     ${SUB_DIR_LIB}

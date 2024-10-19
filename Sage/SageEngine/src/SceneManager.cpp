@@ -27,6 +27,7 @@
 #include "Game.hpp"
 
 #include "SageMain.hpp"
+#include "SageSystemManager.hpp"
 
 #pragma region Public Functions
 namespace SM {	
@@ -168,6 +169,7 @@ namespace SM {
 	{
 		SAGEInputHandler::init();
 
+		SageSystemManager::Init();
 		Game_Objects::Init();
 		SM::fp_init();
 	}
@@ -179,8 +181,8 @@ namespace SM {
 	void Input()
 	{
 		
-		SM::fp_input();
 		SAGEInputHandler::update();
+		SM::fp_input();
 	}
 
 	/*!*****************************************************************************
@@ -224,7 +226,9 @@ namespace SM {
 	void Unload()
 	{
 		SM::fp_unload();
+		
 		Game_Objects::Exit();
+		SageSystemManager::Exit();
 	}
 
 	/*!*****************************************************************************

@@ -7,7 +7,7 @@
 \date		27 September 2024
 \brief		Contains the definition of functions for the public interface for the input system.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content ï¿½ 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 
@@ -65,7 +65,6 @@ bool SAGEInputHandler::Get_Key_Pressed(int _keycode)
 *******************************************************************************/
 bool SAGEInputHandler::Get_Key(int keycode)
 {
-	//std::cout << "Key: " << keycode << std::endl;
 	return SageInputPIML::Get_Key(keycode);
 }
 

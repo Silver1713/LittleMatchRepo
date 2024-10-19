@@ -9,7 +9,7 @@
 			used as testbed for core engine features like user input, instantiation 
 			and stress tests.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content ï¿½ 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 
@@ -29,6 +29,8 @@
 //FOR TESTING PURPOSES
 #include <cstdlib> // for srand()
 #include <memory>	
+
+#include "Components/Behaviour.h"
 
 
 namespace Game {
@@ -117,6 +119,10 @@ namespace Game {
 		
 
 		Physics* plrphy = static_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component<Physics>());
+		GameObject* object = Game_Objects::Get_Game_Object("Player");
+		object->Add_Component(std::make_unique<Behaviour>());
+		Behaviour* behaviour = static_cast<Behaviour*>(object->Get_Component<Behaviour>());
+		behaviour->Add_Instance("GamePlayBehaviour", "");
 		plrphy->Set_Gravity_Disable(false);
 		
 		SageAudio::Play_Sound("bgm_main_menu", LOOP);
@@ -244,9 +250,6 @@ namespace Game {
 
 		//	ToastBox::Vec2 world = SageRenderer::camera->Screen_To_World(mouse_pos);
 
-
-		//	std::cout << "World: " << world.x << " " << world.y << std::endl;
-
 		//	GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("SPAWN"), "White_1");
 		//	transform_cache["White_1"] = static_cast<Transform*>(random->Get_Component<Transform>());
 		//	collider_cache["White_1"] = random->Get_Component<BoxCollider2D>();
@@ -348,7 +351,7 @@ namespace Game {
 					Physics* phy = static_cast<Physics*>(collider->Get_Parent()->Get_Component<Physics>());
 					if (phy) {
 						phy->Get_Current_Velocity() = { 0,0 };
-						std::cout << _obj->Get_ID() << "collided with " << collider->Get_Parent()->Get_ID() << '\n';
+						//std::cout << _obj->Get_ID() << "collided with " << collider->Get_Parent()->Get_ID() << '\n';
 					}
 				});
 				colliders.push_back(collider);
@@ -399,13 +402,13 @@ namespace Game {
 						if (horizontal) {
 							if (dir.x > 0 && !(vel.x < 0))
 							{
-								//std::cout << "Enter left;\n";
+								
 								vel.x = 0;
 
 							}
 							else if (dir.x < 0 && !(vel.x > 0))
 							{
-								//std::cout << "Enter right;\n";
+								
 								vel.x = 0;
 							}
 
@@ -415,12 +418,12 @@ namespace Game {
 						{
 							if (dir.y > 0 && !(vel.y < 0))
 							{
-								//std::cout << "Enter top;\n";
+								
 								vel.y = 0;
 							}
 							else if (dir.y < 0 && !(vel.y > 0))
 							{
-								//std::cout << "Enter bottom;\n";
+								
 								vel.y = 0;								
 							}
 							transform->Set_Position({ pos.x, curr_vel.y * time + prevPos.y, pos.z });

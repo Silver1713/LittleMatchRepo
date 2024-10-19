@@ -16,6 +16,7 @@
 
 #include "Components/Physics.hpp"
 #include "GameObjects.hpp"
+#include "SageHelper.hpp"
 
 /*!*****************************************************************************
   \brief
