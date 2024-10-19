@@ -23,7 +23,7 @@
   \brief
 	Default constructor for Button
 *******************************************************************************/
-Button::Button() : on_click{ Default_Click }, on_hover_enter{ Default_Button_Update }, on_hover_exit{ Default_Button_Update } {}
+Button::Button() : on_click{ Default_Click }, on_hover_enter{ Default_Button_Update }, on_hover{ Default_Button_Update }, on_hover_exit{ Default_Button_Update } {}
 
 /*!*****************************************************************************
   \brief
