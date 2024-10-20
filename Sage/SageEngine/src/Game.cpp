@@ -9,7 +9,7 @@
 			used as testbed for core engine features like user input, instantiation 
 			and stress tests.
 
-			All content � 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 
@@ -79,8 +79,10 @@ namespace Game {
 		//Creates 2.5k instantiated "WHITE" prefab to test
 		for (unsigned int i{}; i < game_objects_to_create; ++i)
 		{
-			game_objects[std::to_string(i)] = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("SQUARE"), "Square_" + std::to_string(i));
-			transform_cache[std::to_string(i)] = static_cast<Transform*>(game_objects[std::to_string(i)]->Get_Component<Transform>());
+			//game_objects[std::to_string(i)] = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("SQUARE"), "Square_" + std::to_string(i));
+			GameObject* g = Game_Objects::Get_Game_Object("Square_" + std::to_string(i));
+			game_objects[g->Get_ID()] = g;
+			transform_cache["Square_" + std::to_string(i)] = static_cast<Transform*>(g->Get_Component<Transform>());
 
 			//randomize properties
 			ToastBox::Vec3 pos{ (float)(std::rand() % (int)max_pos.x + (int)min_pos.x), (float)(std::rand() % (int)max_pos.y + (int)min_pos.y),0.0f };
@@ -88,14 +90,14 @@ namespace Game {
 			ToastBox::Vec3 scale{ (float)(std::rand() % (int)max_scale.x + (int)min_scale.x), (float)(std::rand() % (int)max_scale.y + (int)min_scale.y),0.0f };
 			ToastBox::Vec3 col{ (float)(std::rand() % (int)max_col.x + (int)min_col.x) / 100.0f, (float)(std::rand() % (int)max_col.y + (int)min_col.y) / 100.0f,(float)(std::rand() % (int)max_col.z + (int)min_col.z) / 100.0f };
 
-			transform_cache[std::to_string(i)]->Set_Position(pos);
-			transform_cache[std::to_string(i)]->Set_Rotation(rot);
-			transform_cache[std::to_string(i)]->Set_Scale(scale);
+			transform_cache["Square_" + std::to_string(i)]->Set_Position(pos);
+			transform_cache["Square_" + std::to_string(i)]->Set_Rotation(rot);
+			transform_cache["Square_" + std::to_string(i)]->Set_Scale(scale);
 
-			Sprite2D* s = static_cast<Sprite2D*>(game_objects[std::to_string(i)]->Get_Component<Sprite2D>());
+			Sprite2D* s = static_cast<Sprite2D*>(g->Get_Component<Sprite2D>());
 			s->Set_Colour({ col[0],col[1],col[2] });
 
-			game_objects[std::to_string(i)]->Disable();
+			g->Disable();
 		}
 	}
 
@@ -113,11 +115,7 @@ namespace Game {
 		SageRenderer::Set_Current_View(vp);
 
 		vp.setViewport();
-
-		SageAudio::Play_Sound("bgm_main_menu", LOOP);
-		SageAudio::Play_Sound("ambient_rain", LOOP);
 		
-
 		Physics* plrphy = static_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component<Physics>());
 		GameObject* object = Game_Objects::Get_Game_Object("Player");
 		object->Add_Component(std::make_unique<Behaviour>());
@@ -220,53 +218,53 @@ namespace Game {
 
 		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_1))
 		{
-			if (game_objects["0"]->Is_Enabled())
+			if (game_objects["Square_0"]->Is_Enabled())
 			{
 				return;
 			}
 
 			for (unsigned int i{}; i < game_objects_to_create; ++i)
 			{
-				game_objects[std::to_string(i)]->Enable();
+				game_objects["Square_" + std::to_string(i)]->Enable();
 			}
 		}
 		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_2))
 		{
-			if (!game_objects["0"]->Is_Enabled())
+			if (!game_objects["Square_0"]->Is_Enabled())
 			{
 				return;
 			}
 
 			for (unsigned int i{}; i < game_objects_to_create; ++i)
 			{
-				game_objects[std::to_string(i)]->Disable();
+				game_objects["Square_" + std::to_string(i)]->Disable();
 			}
 		}
-		//if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
-		//{
-		//	double x, y;
-		//	SAGEInputHandler::Get_Mouse_Position(x, y);
-		//	ToastBox::Vec2 mouse_pos{ static_cast<float>(x), static_cast<float>(y) };
+		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
+		{
+			double x, y;
+			SAGEInputHandler::Get_Mouse_Position(x, y);
+			ToastBox::Vec2 mouse_pos{ static_cast<float>(x), static_cast<float>(y) };
 
-		//	ToastBox::Vec2 world = SageRenderer::camera->Screen_To_World(mouse_pos);
+			ToastBox::Vec2 world = SageRenderer::camera->Screen_To_World(mouse_pos);
 
-		//	GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("SPAWN"), "White_1");
-		//	transform_cache["White_1"] = static_cast<Transform*>(random->Get_Component<Transform>());
-		//	collider_cache["White_1"] = random->Get_Component<BoxCollider2D>();
+			GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("SPAWN"), "White_1");
+			transform_cache["White_1"] = static_cast<Transform*>(random->Get_Component<Transform>());
+			collider_cache["White_1"] = random->Get_Component<BoxCollider2D>();
 
-		//	random->Get_Component<BoxCollider2D>()->Set_Debug(enable_collider_view);
+			random->Get_Component<BoxCollider2D>()->Set_Debug(enable_collider_view);
 
-		//	float m_min_scale[3] = { 10.0f,10.0f,0.0f }, m_max_scale[3] = { 100.0f,100.0f,0.0f };
+			float m_min_scale[3] = { 10.0f,10.0f,0.0f }, m_max_scale[3] = { 100.0f,100.0f,0.0f };
 
-		//	ToastBox::Vec3 pos{ (float)(std::rand() % (int)max_pos.x + (int)min_pos.x), (float)(std::rand() % (int)max_pos.y + (int)min_pos.y),0.0f };
-		//	ToastBox::Vec3 rot{ (float)(std::rand() % (int)max_rot.x + (int)min_rot.x), (float)(std::rand() % (int)max_rot.y + (int)min_rot.y),0.0f };
-		//	ToastBox::Vec3 scale{ (float)(std::rand() % (int)m_max_scale[0] + (int)m_min_scale[0]), (float)(std::rand() % (int)m_max_scale[1] + (int)m_min_scale[1]),0.0f};
+			ToastBox::Vec3 pos{ (float)(std::rand() % (int)max_pos.x + (int)min_pos.x), (float)(std::rand() % (int)max_pos.y + (int)min_pos.y),0.0f };
+			ToastBox::Vec3 rot{ (float)(std::rand() % (int)max_rot.x + (int)min_rot.x), (float)(std::rand() % (int)max_rot.y + (int)min_rot.y),0.0f };
+			ToastBox::Vec3 scale{ (float)(std::rand() % (int)m_max_scale[0] + (int)m_min_scale[0]), (float)(std::rand() % (int)m_max_scale[1] + (int)m_min_scale[1]),0.0f};
 
-		//	transform_cache["White_1"]->Set_Position(pos);
-		//	transform_cache["White_1"]->Set_Rotation(rot);
-		//	transform_cache["White_1"]->Set_Scale(scale);
+			transform_cache["White_1"]->Set_Position(pos);
+			transform_cache["White_1"]->Set_Rotation(rot);
+			transform_cache["White_1"]->Set_Scale(scale);
 
-		//}
+		}
 		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_RIGHT))
 		{
 
@@ -447,7 +445,7 @@ namespace Game {
 		//rotates the 2.5k objects
 		for (unsigned int i{}; i < game_objects_to_create; ++i)
 		{
-			transform_cache[std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f,0.0f });
+			transform_cache["Square_" + std::to_string(i)]->Rotate({(float)SageHelper::delta_time * 5.0f,0.f,0.0f});
 		}
 
 		camera.update();

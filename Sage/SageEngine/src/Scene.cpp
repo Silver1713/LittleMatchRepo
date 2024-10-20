@@ -1,123 +1,100 @@
 /* Start Header ************************************************************************/
 /*!
-\file		SplashScreen.cpp
+\file		Scene.cpp
 \title		Memory's Flame
 \author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
 \par		b.muhammadhafiz@digipen.edu
-\date		08 September 2024
-\brief		Contains the definitions of functions that define the splash screen scene.
-			Called by SceneManager as function pointers to determine which scene the game
-			is in currently.
+\date		20 October 2024
+\brief		Contains the definitions of functions that define a scene
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content Â© 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
-#include "SageRenderer.hpp"
+
 #include "AssetLoader.hpp"
 #include "Prefabs.hpp"
-#include "KeyInputs.h"
+#include "SageRenderer.hpp"
 #include "SageHelper.hpp"
+#include "SageAudio.hpp"
+#include "Scene.hpp"
 
-#include "SceneManager.hpp"
-#include "Game.hpp"
-
-#include <string>
 #include <iostream>
-#include <memory>
+#include <random>
 
-#include "SageCamera.hpp"
-#include "SageViewport.hpp"
-namespace Splash_Screen {
-	static float time_elapsed{};
-	static float const wait_time{ 1.f };
-	static GameObject* digipen_splash_screen;
+//FOR TESTING PURPOSES
+#include <cstdlib> // for srand()
+#include <memory>	
+
+
+namespace Scene {
 
 	static SageCamera camera;
 	static SageViewport vp;
 
+	static bool enable_collider_view{ false };
+
 	/*!*****************************************************************************
 	  \brief
-		Loads the Splash Screen
+		Loads data the scene may need
 	*******************************************************************************/
 	void Load()
 	{
-		digipen_splash_screen = Game_Objects::Get_Game_Object("splash_screen");
 	}
 
 	/*!*****************************************************************************
 	  \brief
-		Initializes the Splash Screen
+		Initializes the scene
 	*******************************************************************************/
 	void Init()
 	{
-		time_elapsed = 0.f;
-		vp.set_position({ 0,0 });
-		vp.set_dims({ static_cast<float>(SageHelper::WINDOW_WIDTH), static_cast<float>(SageHelper::WINDOW_HEIGHT)});
+		camera.init({ 50,0 }, { static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
+		vp.set_dims({ static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) });
 		vp.calculate_viewport_xform();
-		vp.setViewport();
-
-		camera.init({ 0,0 }, { SageHelper::WINDOW_WIDTH / 1.f, SageHelper::WINDOW_HEIGHT / 1.f }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
 
 		SageRenderer::Set_Current_View(&camera);
 		SageRenderer::Set_Current_View(vp);
+
+		vp.setViewport();
+
+		SageAudio::Play_Sound("bgm_main_menu", LOOP);
+		SageAudio::Play_Sound("ambient_rain", LOOP);
 	}
 
 	/*!*****************************************************************************
 	  \brief
-		Input functions required by the Splash Screen
+		Handles input checks in the scene
 	*******************************************************************************/
 	void Input()
-	{	
+	{
 	}
 
 	/*!*****************************************************************************
 	  \brief
-		Updates the Splash Screen
+		Updates the scene
 	*******************************************************************************/
 	void Update()
 	{
-		time_elapsed += (float)SageHelper::delta_time;
-
-		static bool is_triggered{ false };
-
-		if (time_elapsed > wait_time)
-		{
-			if (!is_triggered)
-			{
-				SM::Start_Fade_Out();
-				SM::Set_Next_Scene(Game::Load, Game::Init, Game::Input, Game::Update, Game::Draw, Game::Free, Game::Unload);
-				is_triggered = true;
-			}
-			if (SM::Has_Faded_Out())
-			{
-				is_triggered = false;
-				SM::Go_To_Next_Scene();
-				SM::Start_Fade_In();
-			}
-		}
 	}
 
 	/*!*****************************************************************************
 	  \brief
-		Draws the Splash Screen
+		Draws the scene
 	*******************************************************************************/
 	void Draw()
 	{
-
 	}
 
 	/*!*****************************************************************************
 	  \brief
-		Frees the Splash Screen
+		Frees the scene
 	*******************************************************************************/
 	void Free()
 	{
-
 	}
 
 	/*!*****************************************************************************
 	  \brief
-		Unloads the Splash Screen
+		Unloads the scene
 	*******************************************************************************/
 	void Unload()
 	{

@@ -332,6 +332,7 @@ namespace Assets
 		{
 			std::string level_name;
 			std::vector<Prefabs::Prefab> prefabs;
+			std::vector<unsigned int> counts;
 			std::vector<std::string> identifier;
 			std::vector<ToastBox::Vec3> positions;
 			std::vector<ToastBox::Vec3> rotations;

@@ -281,6 +281,72 @@ bool const Button::Is_Hovered() const
 
 /*!*****************************************************************************
   \brief
+	Sets the On_Click function to the provided parameter
+  \param _new_on_click
+	the new function
+*******************************************************************************/
+void Button::Set_On_Click(Function_Ptr _new_on_click)
+{
+	on_click = _new_on_click;
+}
+
+/*!*****************************************************************************
+  \brief
+	Sets the On_Click_Hold function to the provided parameter
+  \param _new_on_click_hold
+	the new function
+*******************************************************************************/
+void Button::Set_On_Click_Hold(Function_Ptr _new_on_click_hold)
+{
+	on_click_hold = _new_on_click_hold;
+}
+
+/*!*****************************************************************************
+  \brief
+	Sets the On_Click_Release function to the provided parameter
+  \param _new_on_click_release
+	the new function
+*******************************************************************************/
+void Button::Set_On_Click_Release(Function_Ptr _new_on_click_release)
+{
+	on_click_release = _new_on_click_release;
+}
+
+/*!*****************************************************************************
+  \brief
+	Sets the On_Hover_Enter function to the provided parameter
+  \param _new_on_hover_enter
+	the new function
+*******************************************************************************/
+void Button::Set_On_Hover_Enter(Function_Ptr _new_on_hover_enter)
+{
+	on_hover_enter = _new_on_hover_enter;
+}
+
+/*!*****************************************************************************
+  \brief
+	Sets the On_Hover function to the provided parameter
+  \param _new_on_hover
+	the new function
+*******************************************************************************/
+void Button::Set_On_Hover(Function_Ptr _new_on_hover)
+{
+	on_hover = _new_on_hover;
+}
+
+/*!*****************************************************************************
+  \brief
+	Sets the On_Hover_Exit function to the provided parameter
+  \param _new_on_hover_exit
+	the new function
+*******************************************************************************/
+void Button::Set_On_Hover_Exit(Function_Ptr _new_on_hover_exit)
+{
+	on_hover_exit = _new_on_hover_exit;
+}
+
+/*!*****************************************************************************
+  \brief
 	Gets overriden based on what component this is
 
   \return
