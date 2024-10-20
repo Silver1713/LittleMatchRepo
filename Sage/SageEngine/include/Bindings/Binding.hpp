@@ -34,6 +34,12 @@ public:
 class TransformBinding : public Binding
 {
 public:
+	struct CSVector2D
+	{
+		float x;
+		float y;
+	};
+
 	void Bind() override;
 	void Bind(GameObject* object) override;
 	void Unbind() override;

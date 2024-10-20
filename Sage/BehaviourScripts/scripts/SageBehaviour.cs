@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using SageEngine.Debug;
-
+using SageEngine.Math;
 
 namespace SageEngine
 {
