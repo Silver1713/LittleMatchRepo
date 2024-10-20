@@ -34,9 +34,11 @@ MonoString* GameObjectBinding::getName(MonoObject* obj)
 MonoBoolean GameObjectBinding::getActive(MonoObject* obj)
 {
 	GameObject* entity = BindingSystem::Get_GameObject_From_Instance(obj);
-	MonoBoolean active = entity->Is_Enabled() ? (true) : (false);
+	MonoBoolean active = entity->Is_Enabled();
 	return active;
 }
+
+
 
 
 
