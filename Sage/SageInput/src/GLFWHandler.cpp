@@ -49,11 +49,6 @@ bool GLFWInputHandler::Get_Key_Pressed(int _keycode)
 		state = glfwGetKey(glfwGetCurrentContext(), _keycode);
 	}
 
-
-	
-
-
-
 	if (key_map.contains(_keycode))
 	{
 		return (key_map[_keycode] == std::byte{ 1 });
@@ -247,9 +242,15 @@ void GLFWInputHandler::Poll_Events()
 		{
 			if (value == std::byte{ 2 })
 				continue;
+
 			if (value == std::byte{ 1 })
+			{
 				value = std::byte{ 2 };
-			else value = std::byte{ 1 };
+			}
+				
+			else {
+				value = std::byte{ 1 };
+			}
 		}
 		else if (state == GLFW_RELEASE)
 		{
@@ -259,10 +260,7 @@ void GLFWInputHandler::Poll_Events()
 		{
 			value = std::byte{ 2 };
 		}
-		
 	}
-
-	
 }
 
 /*!*****************************************************************************
