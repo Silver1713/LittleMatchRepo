@@ -28,6 +28,7 @@
 #include "SageHelper.hpp"
 #include "SageMonoManager.hpp"
 #include "SageRenderer.hpp"
+#include "SageShaderManager.hpp"
 #include "SageTimer.hpp"
 #include "SceneManager.hpp"
 constexpr double physics_update_target = 0.02;
@@ -55,13 +56,74 @@ static void glfw_error_callback(int error, const char* description)
 }
 
 // Forward declaration
-void init();
+int init();
 void update();
 void draw();
 void exit();
 
+// Create window with graphics context
+const GLFWvidmode* mode;
+GLFWwindow* window;
+ImVec4 clear_color;
 // Main code
 int main(int, char**)
+{
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+    //io.ConfigViewportsNoAutoMerge = true;
+    //io.ConfigViewportsNoTaskBarIcon = true;
+
+    init();
+    // Main loop
+#ifdef __EMSCRIPTEN__
+    // For an Emscripten build we are disabling file-system access, so let's not attempt to do a fopen() of the imgui.ini file.
+    // You may manually call LoadIniSettingsFromMemory() to load settings from your own storage.
+    io.IniFilename = nullptr;
+    EMSCRIPTEN_MAINLOOP_BEGIN
+#else
+    while (!glfwWindowShouldClose(window))
+#endif
+    {
+        update();
+        draw();
+
+        // Update and Render additional Platform Windows
+        // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+        //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
+
+        glfwSwapBuffers(window);
+    }
+    exit();
+#ifdef __EMSCRIPTEN__
+    EMSCRIPTEN_MAINLOOP_END;
+#endif
+
+    // Cleanup
+    ImGui::EndFrame();
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
+
+    return 0;
+}
+
+int init()
 {
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
@@ -83,32 +145,23 @@ int main(int, char**)
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
 #else
     // GL 3.0 + GLSL 130
-    const char* glsl_version = "#version 130";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    const char* glsl_version = "#version 450";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
     //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 #endif
 
     // Create window with graphics context
-    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "Sage Editor", nullptr, nullptr);
+	mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    window = glfwCreateWindow(mode->width, mode->height, "Sage Editor", nullptr, nullptr);
     if (window == nullptr)
         return 1;
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync
-    
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
-    //io.ConfigViewportsNoAutoMerge = true;
-    //io.ConfigViewportsNoTaskBarIcon = true;
 
+    
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 
@@ -126,14 +179,14 @@ int main(int, char**)
     ImGui_ImplGlfw_InstallEmscriptenCallbacks(window, "#canvas");
 #endif
     ImGui_ImplOpenGL3_Init(glsl_version);
-    SageMonoManager::Initialize();
+    /*SageMonoManager::Initialize();
     SageTimer::Init();
     SageShaderManager::Add_Shader_Include("graphic_lib", "../SageGraphics/shaders/");
     SageRenderer::Init();
     SageTimer::Init();
     Assets::Init();
     Assets::Prefabs::Init();
-    SageAudio::Init();
+    SageAudio::Init();*/
 
     // Load Fonts
     // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
@@ -156,107 +209,84 @@ int main(int, char**)
     bool show_demo_window = true;
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
-    // Main loop
-#ifdef __EMSCRIPTEN__
-    // For an Emscripten build we are disabling file-system access, so let's not attempt to do a fopen() of the imgui.ini file.
-    // You may manually call LoadIniSettingsFromMemory() to load settings from your own storage.
-    io.IniFilename = nullptr;
-    EMSCRIPTEN_MAINLOOP_BEGIN
-#else
-    while (!glfwWindowShouldClose(window))
-#endif
-    {
-       
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        glfwPollEvents();
-        if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
-        {
-            ImGui_ImplGlfw_Sleep(10);
-            continue;
-        }
-
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        // Halis's Code
-        SageEditor::RenderGUI();
-
-        // Rendering
-        ImGui::Render();
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        // Update and Render additional Platform Windows
-        // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
-        //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
-            GLFWwindow* backup_current_context = glfwGetCurrentContext();
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-            glfwMakeContextCurrent(backup_current_context);
-        }
-
-        update();
-        draw();
-        glfwSwapBuffers(window);
-    }
-    exit();
-#ifdef __EMSCRIPTEN__
-    EMSCRIPTEN_MAINLOOP_END;
-#endif
-
-    // Cleanup
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-
-    glfwDestroyWindow(window);
-    glfwTerminate();
-
+    // Enable docking (this should be done once, in initialization, not per frame)
+    
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable docking globally
+    io.IniFilename = "../SageEditor/config/custom_layout.ini";  // Use custom ini file for storing layout
+    io.LogFilename = "../SageEditor/config/custom_layout_log.txt";
+    ImGui::LoadIniSettingsFromDisk(io.IniFilename);
     return 0;
 }
 
 void update()
 {
-    SageTimer::Update();
-    SageHelper::Update();
-    accumulator += SageTimer::delta_time;
-    if (accumulator >= physics_update_target)
+    // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+    glfwPollEvents();
+    if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
     {
-        accumulator -= physics_update_target;
+        ImGui_ImplGlfw_Sleep(10);
+        return;
     }
-    SM::Input();
-    SM::Update();
 
-    SageAudio::Update();
+    // Start the Dear ImGui frame
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    //ImGui::NewFrame();
 }
 
 void draw()
 {
-    //SageHelper::Draw();
-    std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS) + "| Game Objects: " + std::to_string(Game_Objects::Get_Game_Objects().size());
-    SageHelper::sage_ptr_window->Set_Title(s.c_str());
-    SM::Draw();
+    // Halis's Code and Hui Zong's Code
+    SageEditor::RenderGUI();
+
+    // Rendering
+    ImGui::Render();
+    int display_w, display_h;
+    glfwGetFramebufferSize(window, &display_w, &display_h);
+    glViewport(0, 0, display_w, display_h);
+    glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void exit()
 {
-    Game_Objects::Exit();
-    SM::Free();
-    Assets::Unload();
-    SM::Unload();
-    SageHelper::Exit();
-    SageAudio::Exit();
+	
 }
+
+//void update()
+//{
+//    SageTimer::Update();
+//    SageHelper::Update();
+//    accumulator += SageTimer::delta_time;
+//    if (accumulator >= physics_update_target)
+//    {
+//        accumulator -= physics_update_target;
+//    }
+//    SM::Input();
+//    SM::Update();
+//
+//    SageAudio::Update();
+//}
+//
+//void draw()
+//{
+//    //SageHelper::Draw();
+//    std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS) + "| Game Objects: " + std::to_string(Game_Objects::Get_Game_Objects().size());
+//    SageHelper::sage_ptr_window->Set_Title(s.c_str());
+//    SM::Draw();
+//}
+//
+//void exit()
+//{
+//    Game_Objects::Exit();
+//    SM::Free();
+//    Assets::Unload();
+//    SM::Unload();
+//    SageHelper::Exit();
+//    SageAudio::Exit();
+//}
