@@ -1,6 +1,7 @@
 //#include "Bindings/Bindings.hpp"
 #include "Bindings/GameObjectBinding.hpp"
 
+#include <iostream>
 #include <mono/metadata/appdomain.h>
 #include <mono/metadata/object.h>
 #include "BindingSystem.hpp"
@@ -8,13 +9,10 @@
 
 void GameObjectBinding::Bind()
 {
-
-}
-
-
-void GameObjectBinding::Bind(GameObject* object)
-{
-
+	mono_add_internal_call("SageEngine.Entity::getGameObject_Name", reinterpret_cast<void*>(GameObjectBinding::getName));
+	mono_add_internal_call("SageEngine.Entity::getGameObject_Active", reinterpret_cast<void*>(GameObjectBinding::getActive));
+	mono_add_internal_call("SageEngine.Entity::setGameObject_Active", reinterpret_cast<void*>(GameObjectBinding::setActive));
+	
 }
 
 
@@ -37,6 +35,29 @@ MonoBoolean GameObjectBinding::getActive(MonoObject* obj)
 	MonoBoolean active = entity->Is_Enabled();
 	return active;
 }
+
+void GameObjectBinding::setActive(MonoObject* obj, MonoBoolean active)
+{
+	GameObject* entity = BindingSystem::Get_GameObject_From_Instance(obj);
+
+	if (active)
+	{
+		entity->Enable();
+	}
+	else
+	{
+		entity->Disable();
+	}
+
+
+
+}
+
+void GameObjectBinding::setName(MonoObject* obj, MonoString* name)
+{
+}
+
+
 
 
 

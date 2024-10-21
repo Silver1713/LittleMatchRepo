@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include "BindingSystem.hpp"
 #include "SageSystemManager.hpp"
 #include "Systems/SageScripting.hpp"
 
@@ -11,7 +12,6 @@ void Behaviour::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
 
-	Add_Instance("SageBehaviour", "SageEngine");
 }
 
 void Behaviour::Update()
@@ -55,8 +55,29 @@ void Behaviour::Add_Instance(std::string _klass_name, std::string _namespace)
 		return;
 	}
 	MonoObject* instance = SageMonoManager::Create_Instance(klass->klass);
-	mono_instances.emplace_back(std::make_pair(_klass_name, instance));
 	SageSystemManager::Get_System<SageScriptSystem>()->Map_Script_Instance_GameObject(instance, parent);
+	BindingSystem::Map_Script_Instance_GameObject(instance, parent);
+
+	SageMonoManager::MonoKlassInfo* BaseClass = SageMonoManager::Get_Klass_Info("Component", "SageEngine");
+	// Get field gameObject
+	MonoClassField* field = mono_class_get_field_from_name(BaseClass->klass, "gameObject");
+	MonoObject* gameObject = BindingSystem::Get_MonoGameObject_From_Entity(parent);
+	mono_field_set_value(instance, field, gameObject);
+
+	// Get Field transform
+	BaseClass = SageMonoManager::Get_Klass_Info("Transform", "SageEngine");
+	field = mono_class_get_field_from_name(BaseClass->klass, "transform");
+	BindingSystem::MonoRepresentation* representation = BindingSystem::Get_Mono_Represation_From_Entity(parent);
+	MonoObject* transform = representation->components[ComponentType::TRANSFORM];
+
+	mono_field_set_value(instance, field, transform);
+
+	
+
+
+	mono_instances.emplace_back(std::make_pair(_klass_name, instance));
+
+
 }
 
 

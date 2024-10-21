@@ -1,25 +1,26 @@
 #include "Bindings/Binding.hpp"
 
-class TransformBinding : public Binding
+class TransformBinding
 {
 public:
-	struct CSVector2D
+#pragma pack(push, 1) 
+	struct alignas(4) CSVector2D
 	{
 		float x;
 		float y;
 	};
+#pragma pack(pop)
 
-	void Bind() override;
-	void Bind(GameObject* object) override;
-	void Unbind() override;
+	static void Bind();
+	void Bind(GameObject* object);
+	static void Unbind();
 
-	MonoObject* getPosition(MonoObject* obj);
-	MonoObject* getRotation(MonoObject* obj);
-	MonoObject* getScale(MonoObject* obj);
+	static void getPosition(MonoObject* obj, CSVector2D* out_obj=nullptr);
+	static float getRotation(MonoObject* obj);
+	static MonoObject* getScale(MonoObject* obj);
 
-	void setPosition(MonoObject* obj, MonoObject* position);
-	void setRotation(MonoObject* obj, MonoObject* rotation);
-	void setScale(MonoObject* obj, MonoObject* scale);
+	static void setPosition(MonoObject* obj, CSVector2D* in_obj);
+	static void setRotation(MonoObject* obj, MonoObject* rotation);
+	static void setScale(MonoObject* obj, MonoObject* scale);
 
-	~TransformBinding() override = default;
 };

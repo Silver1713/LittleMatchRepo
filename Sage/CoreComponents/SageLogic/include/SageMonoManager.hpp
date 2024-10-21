@@ -7,6 +7,8 @@
 #include <mono/metadata/image.h>
 #include <mono/utils/mono-forward.h>
 #include <string>
+
+#include "SageScriptLoader.hpp"
 struct SageLoader;
 class SageAssembler;
 struct SageMonoManager
@@ -69,7 +71,7 @@ struct SageMonoManager
 	// --- Reflection ---
 
 	static MonoClass* Load_Klass_In_Image(MonoImage* Image, const char* _klass_name, const char* _klass_namespace=nullptr);
-	static MonoObject* Create_Instance(MonoClass* _klass);
+	static MonoObject* Create_Instance(MonoClass* _klass, bool do_not_instantiate=false);
 
 	//------Retrieval-----
 
@@ -80,7 +82,33 @@ struct SageMonoManager
 	static void Compile_Scripts(const char* script_dir, const char* output_assembly);
 
 
+	//-----Get Domain-----
+	static MonoDomain* Get_Default_Domain();
+
+
+	//---Boxing and Unboxing---
+	template <typename T >
+	static MonoObject* Box_Value(MonoDomain* domain, MonoClass* klass, T* value);
+	template <typename T>
+	static T* Unbox_Value(MonoObject* obj);
+	
+
+
 };
+
+template <typename T>
+MonoObject* SageMonoManager::Box_Value(MonoDomain* domain, MonoClass* klass, T* value)
+{
+	MonoObject* boxed = mono_value_box(domain, klass, value);
+	return boxed;
+}
+
+template <typename T>
+T* SageMonoManager::Unbox_Value(MonoObject* obj)
+{
+	T* value = reinterpret_cast<T*>(mono_object_unbox(obj));
+	return value;
+}
 
 
 

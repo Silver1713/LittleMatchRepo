@@ -10,15 +10,23 @@ namespace SageEngine
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern string getGameObject_Name();
 
-        [MethodImpl(MethodImplOptions.InternalCall)] 
-        private extern void setGameObject_Name(string value);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern bool getGameObject_Active();
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern void setGameObject_Active(bool value);
 
 
-
-        protected string name
+        public string name
         {
             get => getGameObject_Name(); 
-            set => setGameObject_Name(value);
+
+        }
+
+        public bool active
+        {
+            get => getGameObject_Active();
+            set => setGameObject_Active(value);
 
         }
     }

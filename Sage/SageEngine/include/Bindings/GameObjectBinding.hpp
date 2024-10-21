@@ -2,20 +2,19 @@
 #define GAMEOBJECTBINDING_HPP
 #include "Binding.hpp"
 
-class GameObjectBinding : public Binding
-{
+class GameObjectBinding {
 public:
-	void Bind() override;
-	void Bind(GameObject* object) override;
-	void Unbind() override;
+	static void Bind() ;
+	static void Bind(GameObject* object) ;
+	static void Unbind() ;
 
-	MonoString* getName(MonoObject* obj);
-	MonoBoolean getActive(MonoObject* obj);
+	static MonoString* getName(MonoObject* obj);
+	static void setName(MonoObject* obj, MonoString* name);
+	static MonoBoolean getActive(MonoObject* obj);
+	static void setActive(MonoObject* obj, MonoBoolean active);
 
-	void Add_Component(MonoObject* obj, MonoObject* component);
-	MonoObject* Get_Component(MonoObject* obj, MonoReflectionType* component_name);
-
-	~GameObjectBinding() override = default;
+	static void Add_Component(MonoObject* obj, MonoObject* component);
+	static MonoObject* Get_Component(MonoObject* obj, MonoReflectionType* component_name);
 };
 
 

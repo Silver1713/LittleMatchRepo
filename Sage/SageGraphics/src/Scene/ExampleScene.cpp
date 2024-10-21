@@ -201,10 +201,10 @@ void ExampleScene::draw()
 	SageRenderer::Enable_OnScreenRender();
 	SageRenderer::Draw_Filled_Instance(instance);
 
-	// Write buffer to file
-//frame_buffer->Write_To_File("frame_buffer.png");
 
-	//Check for GLERR
+	
+
+	
 	
 
 	//SageRenderer::Draw_Rect(0, 0, 500, 1000, { 0,1,0,1 });

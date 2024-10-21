@@ -1,13 +1,20 @@
 
 using System;
+using System.Runtime.InteropServices;
 
 namespace SageEngine.Math
 {
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Vector2D
     {
         public float x;
         public float y;
 
+        //Vector2D()
+        //{
+        //    x = 0;
+        //    y = 0;
+        //}
 
         public float magnitude
         {
