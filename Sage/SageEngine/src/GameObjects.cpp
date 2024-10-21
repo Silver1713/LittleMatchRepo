@@ -22,6 +22,7 @@
 #include <memory>
 #include <iostream>
 
+#include "BindingSystem.hpp"
 #include "SageSystemManager.hpp"
 #include "Components/Physics.hpp"
 #include "Systems/SageScripting.hpp"
@@ -48,6 +49,7 @@ namespace Game_Objects
 			if (_g.second)
 			{
 				_g.second->Init();
+				BindingSystem::Init_Batch(_g.second.get());
 			}
 		}
 	}
@@ -269,6 +271,11 @@ void GameObject::Init()
 	for (auto& _c : components)
 	{
 		_c->Init(this);
+
+		if (_c->Get_Component_Type() == ComponentType::BEHAVIOUR)
+		{
+			std::cout << "Behaviour Component Added\n";
+		}
 	}
 
 

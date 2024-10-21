@@ -35,7 +35,7 @@
 
 namespace Game {
 	//TESTS
-	static unsigned int const game_objects_to_create{ 2500 };
+	static unsigned int const game_objects_to_create{ 1 };
 	static ToastBox::Vec3 const min_pos{ -960.0f,-540.0f,0.0f }, max_pos{ 1920.0f,1080.0f,0.0f };
 	static ToastBox::Vec3 const min_rot{ 0.0f,0.0f,0.0f }, max_rot{ 360.0f,360.0f,0.0f };
 	static ToastBox::Vec3 const min_scale{ 1.0f,1.0f,0.0f }, max_scale{ 10.0f,10.0f,0.0f };
@@ -120,6 +120,7 @@ namespace Game {
 		GameObject* object = Game_Objects::Get_Game_Object("Player");
 		object->Add_Component(std::make_unique<Behaviour>());
 		Behaviour* behaviour = static_cast<Behaviour*>(object->Get_Component<Behaviour>());
+		behaviour->Init(object);
 		behaviour->Add_Instance("GamePlayBehaviour", "");
 		plrphy->Set_Gravity_Disable(false);
 		

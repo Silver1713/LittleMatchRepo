@@ -1,45 +1,85 @@
 #include "BindingSystem.hpp"
 
+#include <iostream>
+#include <ostream>
+
 #include "SageBindings.hpp"
 #include "GameObjects.hpp"
 #include "SageRenderer.hpp"
 #include "Components/Behaviour.h"
 #include "internal/GLFWHandler.h"
-
+#include "Bindings/Bindings.hpp"
 
 std::vector<BindingSystem::MonoRepresentation> BindingSystem::mono_entities{};
- std::unordered_map<MonoObject*, BindingSystem::MonoRepresentation*> BindingSystem::cs_to_cpp_mapping{};
- std::unordered_map<GameObject*, BindingSystem::MonoRepresentation*> BindingSystem::cpp_to_cs_mapping{};
+ std::unordered_map<MonoObject*, unsigned> BindingSystem::cs_to_cpp_mapping{};
+ std::unordered_map<GameObject*, unsigned> BindingSystem::cpp_to_cs_mapping{};
 
 void BindingSystem::Map_Script_Instance_GameObject(MonoObject* _instance, GameObject* _entity)
 {
-	MonoRepresentation representation;
-	representation.cpp_entity = _entity;
-	representation.cs_entity = _instance;
+	std::vector<MonoRepresentation>::iterator const& it = std::find_if(mono_entities.begin(), mono_entities.end(), [&_entity](MonoRepresentation& obj)
+	{
+		return _entity == obj.cpp_entity;
+	});
 
-	mono_entities.emplace_back(representation);
-	MonoRepresentation* current = &mono_entities.front();
+	if (it == mono_entities.end())
+	{
+		std::string obj_class_name = mono_class_get_name(mono_object_get_class(_instance));
+		if (obj_class_name == "GameObject")
+		{
+			Create_Game_Object_Shadow(_entity);
+			Transform* transform = _entity->Get_Component<Transform>();
+			if (transform)
+			{
+				Create_Component_Shadow(transform);
+			}
+		}
+	}
 
-	cs_to_cpp_mapping[_instance] = current;
-	cpp_to_cs_mapping[_entity] = current;
+	int index = std::distance(mono_entities.begin(), it);
 
-
-
+	cs_to_cpp_mapping[_instance] = index;
+	cpp_to_cs_mapping[_entity] = index;
 }
 
 GameObject* BindingSystem::Get_GameObject_From_Instance(MonoObject* _instance)
 {
-	MonoRepresentation* representation = cs_to_cpp_mapping[_instance];
+	bool result = cs_to_cpp_mapping.contains(_instance);
+	unsigned representation = result? cs_to_cpp_mapping[_instance] : -1;
+	
+	if (!result)
+	{
+		mono_object_get_class(_instance);
+		char const* a = mono_class_get_name(mono_object_get_class(_instance));
+		return nullptr;
+	}
+
+	return mono_entities[representation].cpp_entity;
+}
+
+MonoObject* BindingSystem::Get_MonoGameObject_From_Entity(GameObject* _entity)
+{
+	bool result = cpp_to_cs_mapping.contains(_entity);
+	unsigned representation = result ? cpp_to_cs_mapping[_entity] : -1;
 	if (!representation)
 	{
 		return nullptr;
 	}
 
-	return representation->cpp_entity;
+	return mono_entities[representation].cs_entity;
 }
 
 
+BindingSystem::MonoRepresentation* BindingSystem::Get_Mono_Represation_From_Entity(GameObject* _entity)
+{
+	bool result = cpp_to_cs_mapping.contains(_entity);
+	unsigned representation = result ? cpp_to_cs_mapping[_entity] : -1;
+	if (!representation)
+	{
+		return {};
+	}
 
+	return &mono_entities[representation];
+}
 
 void BindingSystem::Init()
 {
@@ -47,12 +87,20 @@ void BindingSystem::Init()
 	Bind_Input_System();
 	Bind_Rendering_System();
 
+	GameObjectBinding::Bind();
+	TransformBinding::Bind();
+
+
+	
+
 }
 
 void BindingSystem::Exit()
 {
 	cs_to_cpp_mapping.clear();
 	cpp_to_cs_mapping.clear();
+
+
 }
 
 
@@ -84,14 +132,17 @@ void BindingSystem::Init_Batch(GameObject* _entity)
 
 void BindingSystem::Create_Game_Object_Shadow(GameObject* _entity)
 {
-	MonoRepresentation representation;
+	MonoRepresentation representation{};
 	representation.cpp_entity = _entity;
 	SageMonoManager::MonoKlassInfo* klass = SageMonoManager::Get_Klass_Info("GameObject", "SageEngine");
 	representation.cs_entity = SageMonoManager::Create_Instance(klass->klass);
+	
+	
+
 	mono_entities.emplace_back(representation);
-	MonoRepresentation* current = &mono_entities.front();
-	cpp_to_cs_mapping[_entity] = current;
-	cs_to_cpp_mapping[representation.cs_entity] = current;
+	unsigned current_pos = static_cast<unsigned>(mono_entities.size() - 1);
+	cpp_to_cs_mapping[_entity] = current_pos;
+	cs_to_cpp_mapping[representation.cs_entity] = current_pos;
 
 }
 

@@ -14,6 +14,7 @@ void draw();
 void exit();
 int loop = 60;
 int window = 3;
+
 #define ENABLE_HIGH_PERFORMANCE_GPU 1
 
 #if ENABLE_HIGH_PERFORMANCE_GPU == 1
@@ -51,6 +52,8 @@ void init()
 
 	
 	SageHelper::Init(1920,1080,"Hello");
+
+	glfwSwapInterval(1);
 	ExampleScene::init();
 
 
@@ -59,6 +62,9 @@ void init()
 
 void update()
 {
+
+
+	
 	SageHelper::Update();
 	ExampleScene::update();
 }

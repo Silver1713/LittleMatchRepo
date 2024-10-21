@@ -41,7 +41,9 @@
 #include "Systems/SageScripting.hpp"
 #include "Game.hpp"
 #include "SageMonoManager.hpp"
+#include "SageFrameBuffer.hpp"
 
+SageFrameBuffer frame_buffer;
 // Forward declaration
 void init();
 void update();
@@ -119,6 +121,8 @@ void init()
 	int window_height = static_cast<int>(
         config["Window"]["Height"].as<SageJSON::SageJSON::NumberValue>());
 
+	
+
 	std::string window_title = config["Window"]["Title"].as<SageJSON::SageJSON::StringValue>();
     std::string editor_startup_scene = config["Other_Configurations"]["Editor_Startup_Scene"].as<SageJSON::SageJSON::StringValue>();
     std::string game_startup_scene = config["Other_Configurations"]["Game_Startup_Scene"].as<SageJSON::SageJSON::StringValue>();
@@ -128,6 +132,8 @@ void init()
     int status = SageHelper::Init(window_width, window_height, window_title.c_str());
     SageShaderManager::Add_Shader_Include("graphic_lib", "../SageGraphics/shaders/");
 	SageRenderer::Init();
+    frame_buffer.Init(window_width, window_height);
+    SageRenderer::Set_Framebuffer(&frame_buffer);
     SageTimer::Init();
 
     if (status)
@@ -186,10 +192,11 @@ void PhysicsUpdate()
 void draw()
 {
     //SageHelper::Draw();
+    SageRenderer::Enable_OnScreenRender();
     std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS)  + "| Game Objects: " +std::to_string(Game_Objects::Get_Game_Objects().size());
     SageHelper::sage_ptr_window->Set_Title(s.c_str());
     SM::Draw();
-	
+	SageRenderer::Enable_OnScreenRender();
 }
 
 /*!*****************************************************************************
