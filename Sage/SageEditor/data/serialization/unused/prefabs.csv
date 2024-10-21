@@ -1,0 +1,14 @@
+Prefab ID,Transform Type,Position X,Position Y,Position Z,Rotation X,Rotation Y,Rotation Z,Scale X ,Scale Y,Scale Z,R,G ,B,A,Sprite Texture ID,Collision Data,Has Physics,Velocity,Object Shape
+DIGIPEN_SPLASH_SCREEN,World,0,0,0,0,0,0,1920,1080,0,1,1,1,1,DIGIPEN_SPLASH_SCREEN,Nil,Nil,0,Rect
+BLUE_SKY,World,0,0,0,0,0,0,1920,1080,0,1,1,1,1,BLUE_SKY,Nil,Nil,0,Rect
+FADE_SCREEN,World,0,0,0,0,0,0,1920,1080,0,0,0,0,1,Nil,Nil,Nil,0,Rect
+BLACK,World,0,0,0,0,0,0,100,100,0,0,0,0,1,Nil,Nil,Nil,0,Rect
+WHITE,World,0,0,0,0,0,0,100,100,0,1,1,1,1,Nil,Nil,Nil,0,Rect
+RED,World,0,0,0,0,0,0,100,100,0,1,1,0,1,Nil,Yes,Yes,0,Rect
+GREEN,World,0,0,0,0,0,0,100,100,0,0,1,0,1,Nil,Nil,Nil,0,Rect
+BLUE,World,0,0,0,0,0,0,100,100,0,0,0,1,1,Nil,Yes,Nil,0,Rect
+CIRCLE,World,0,0,0,0,0,0,100,100,0,1,1,0,1,Nil,Nil,Nil,0,Circle
+SPAWN,World,0,0,0,0,0,0,100,100,0,1,0,1,1,Nil,Yes,Nil,0,Rect
+GUI_TEST,Screen,0,0,0,0,0,0,100,100,0,0.75,0,0,1,Nil,Nil,Nil,0,Rect
+GUI_TEST_TEXTURE,Screen,0,0,0,0,0,0,100,100,0,1,1,1,1,WASD,Nil,Nil,0,Rect
+PLAYER,World,0,0,0,0,0,0,100,100,0,1,1,0,1,SPEARMAN_IDLE_0,Yes,Yes,300,Rect

@@ -86,11 +86,13 @@ void BindingSystem::Create_Component_Shadow(T* component)
 		cs_to_cpp_mapping[component_instance] = index;
 		//mono_runtime_object_init(component_instance);
 		break;
-		default:
-			// Invalid component
-			component_instance = nullptr;
-			break;
+	default:
+		// Invalid component
+		component_instance = nullptr;
+		break;
 	}
+
+
 }
 
 
