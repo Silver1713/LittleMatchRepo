@@ -35,7 +35,7 @@
 
 namespace Game {
 	//TESTS
-	static unsigned int const game_objects_to_create{ 1 };
+	static unsigned int const game_objects_to_create{ 2500 };
 	static ToastBox::Vec3 const min_pos{ -960.0f,-540.0f,0.0f }, max_pos{ 1920.0f,1080.0f,0.0f };
 	static ToastBox::Vec3 const min_rot{ 0.0f,0.0f,0.0f }, max_rot{ 360.0f,360.0f,0.0f };
 	static ToastBox::Vec3 const min_scale{ 1.0f,1.0f,0.0f }, max_scale{ 10.0f,10.0f,0.0f };
@@ -96,6 +96,9 @@ namespace Game {
 			s->Set_Colour({ col[0],col[1],col[2] });
 
 			game_objects[std::to_string(i)]->Disable();
+
+
+			
 		}
 	}
 
