@@ -195,6 +195,7 @@ RENDER_CONFIG::RENDER_CONFIG(unsigned int options, float render_alpha, float bor
 
 void SageRenderer::Clear_Color(ToastBox::Vec4 clr)
 {
+	
 	SageRendererInternal::Clear_Color(clr);
 
 }

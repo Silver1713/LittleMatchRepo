@@ -78,6 +78,7 @@ void SageMonoManager::Compiler_Add_Source(const char* name, const char* source)
 void SageMonoManager::Compiler_CompileAsync(bool into_lib)
 {
 	compiler->StartCompilation(into_lib);
+	compiler->GetLog();
 	compiler->Wait_For_Compile();
 }
 
@@ -242,6 +243,7 @@ void SageMonoManager::Compile_Scripts(const char* script_dir, const char* output
 	compiler->Set_Output_Directory(output_assembly);
 	compiler->StartCompilation(true);
 	compiler->Wait_For_Compile();
+	std::cout << compiler->GetLog();
 }
 
 
