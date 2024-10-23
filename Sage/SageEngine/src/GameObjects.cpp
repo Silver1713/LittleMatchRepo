@@ -10,7 +10,7 @@
 			that uses gameobjects. Also contains the gameobject constructor which setup itself
 			based on the prefab that is passed into.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content ï¿½ 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #include "GameObjects.hpp"
@@ -64,7 +64,7 @@ namespace Game_Objects
 		{
 			if (_g.second)
 			{
-				
+				_g.second->Input();
 				_g.second->Update();
 			}
 		}
@@ -249,6 +249,10 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	{
 		Add_Component(std::make_unique<Animator>(_p.animation_set_ID));
 	}
+	if (_p.is_button)
+	{
+		Add_Component(std::make_unique<Button>());
+	}
 
 	Init();
 }
@@ -276,6 +280,23 @@ void GameObject::Init()
 	}
 
 
+}
+
+/*!*****************************************************************************
+  \brief
+	Updates the inputs to the gameobject
+*******************************************************************************/
+void GameObject::Input()
+{
+	if (components.empty() || (!is_enabled))
+	{
+		return;
+	}
+
+	for (const auto& _c : components)
+	{
+		_c->Input();
+	}
 }
 
 /*!*****************************************************************************

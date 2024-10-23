@@ -652,8 +652,7 @@ namespace SageJSON
 		{
 			if (!current_node)
 			{
-				current_node = nullptr;
-				return false;
+				throw std::invalid_argument("");
 			}
 			if (std::holds_alternative<T>(current_node->getKey()))
 			{
@@ -667,6 +666,7 @@ namespace SageJSON
 			}
 			else
 			{
+				throw std::runtime_error("");
 				current_node = nullptr;
 				return false;
 			}

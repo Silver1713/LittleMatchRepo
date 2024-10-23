@@ -23,11 +23,12 @@
           {
             "Animation_Set_ID": "the ID is in serialization/animations/*.json"
           }
-        ]
+        ],
+        "Is_Button": false
       }
     ],
 
-    "Num_Prefabs": 10,
+    "Num_Prefabs": 9,
     "Prefabs":
     [
       {
@@ -42,7 +43,8 @@
       },
       {
         "ID": "FADE_SCREEN",
-        "Scale": [1920, 1080,0]
+        "Scale": [1920, 1080,0],
+        "RGBA" : [0,0,0,1]
       },
       {
         "ID": "SQUARE"
@@ -61,15 +63,11 @@
         "Has_Collider": true
       },
       {
-        "ID": "GUI_TEST",
+        "ID": "GUI_SQUARE",
         "Transform_Type":"Screen",
-        "RGBA" : [0.75,0,0,1]
-      },
-      {
-        "ID": "GUI_TEST_TEXTURE",
-        "Transform_Type":"Screen",
-        "Sprite_Texture_ID": "WASD",
-        "RGBA" : [0.75,0,0,1]
+        "Sprite_Texture_ID": "SQUARE",
+        "RGBA" : [0.75,0,0,1],
+        "Is_Button": true
       },
       {
         "ID": "PLAYER",

@@ -284,7 +284,7 @@ void GLFWInputHandler::Mouse_Pos_Cb(GLFWwindow* _window, double _xpos, double _y
 	g_mouse_pos_x = _xpos;
 	g_mouse_pos_y = _ypos;
 	(_window);
-	std::cout << "Mouse X: " << g_mouse_pos_x << " Mouse Y: " << g_mouse_pos_y << std::endl;
+	//std::cout << "Mouse X: " << g_mouse_pos_x << " Mouse Y: " << g_mouse_pos_y << std::endl;
 }
 
 void GLFWInputHandler::Get_Mouse_Pos(double& _xmouse, double& _ymouse)

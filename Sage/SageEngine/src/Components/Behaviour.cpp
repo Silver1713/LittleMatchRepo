@@ -1,5 +1,5 @@
 #include "SageMonoManager.hpp"
-#include "Components/Behaviour.h"
+#include "Components/Behaviour.hpp"
 
 #include <iostream>
 

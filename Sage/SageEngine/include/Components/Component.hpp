@@ -60,6 +60,13 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
+		to be overriden by the Input function of specialized components
+		that this component will polymorph into
+	*******************************************************************************/
+	virtual void Input();
+
+	/*!*****************************************************************************
+	  \brief
 		to be overriden by the Update function of specialized components
 		that this component will polymorph into
 	*******************************************************************************/
