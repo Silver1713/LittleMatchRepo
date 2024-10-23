@@ -39,6 +39,19 @@ SageShader* SageRendererInternal::default_shader;
 void SageRendererInternal::Draw_Filled(SageObject& object, RENDER_CONFIG_INTERNAL config)
 {
 	SageObject::SageMaterial& mat = object.GetMaterial();
+
+	if (config.options & I_SAGE_ENABLE_ALPHA)
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	}
+	else
+	{
+
+		glDisable(GL_BLEND);
+	}
+
 	if (config.options & I_SAGE_ENABLE_BORDER)
 	{
 		mat.enable_border_color = true;
