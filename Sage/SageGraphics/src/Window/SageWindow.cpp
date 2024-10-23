@@ -169,4 +169,14 @@ SageWindow* SageWindow::Get_Active_Window()
 	return Active_Window;
 }
 
+int SageWindow::Get_Display_Size_X() const
+{
+	return window_internal_impl->Get_Display_Size_X();
+}
+
+int SageWindow::Get_Display_Size_Y() const
+{
+	return window_internal_impl->Get_Display_Size_Y();
+}
+
 

@@ -525,7 +525,7 @@ RENDER_CONFIG_INTERNAL::RENDER_CONFIG_INTERNAL(unsigned int options, float rende
 
 void SageRendererInternal::Clear_Color(ToastBox::Vec4 clr)
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(clr.x, clr.y, clr.z, clr.a);
 
 }

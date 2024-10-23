@@ -241,6 +241,9 @@ public:
 	static SageWindow* Get_Active_Window();
 
 
+	int Get_Display_Size_X() const;
+	int Get_Display_Size_Y() const;
+
 };
 
 

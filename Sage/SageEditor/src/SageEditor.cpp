@@ -6,6 +6,8 @@
 #include <string>
 
 #include "imgui_internal.h"
+#include "SageFrameBuffer.hpp"
+#include "SageRenderer.hpp"
 
 static bool show_hierarchy_window = true;
 static bool show_console_window = true;
@@ -161,7 +163,8 @@ namespace SageEditor
         if (show_scene_window)
         {
             ImGui::Begin("Scene");
-            ImGui::Text("This is the Scene window.");
+            ImGui::Image(SageRenderer::Get_FrameBuffer()->Get_Color_Buffer_Handle(), { 1920,1080 }, { 0,1 }, { 1,0 });
+            
             ImGui::End();
         }
     }
