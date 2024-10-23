@@ -5,20 +5,22 @@
 #include <iostream>
 #include <string>
 
-static bool show_hierarchy_window = false;
-static bool show_console_window = false;
-static bool show_inspector_window = false;
-static bool show_project_window = false;
-static bool show_scene_window = false;
-static bool show_game_window = false;
-static bool exit_requested = false;
+#include "imgui_internal.h"
+
+static bool show_hierarchy_window = true;
+static bool show_console_window = true;
+static bool show_inspector_window = true;
+static bool show_project_window = true;
+static bool show_scene_window = true;
+static bool show_game_window = true;
+static bool exit_requested = true;
 static bool show_assets_window = false;
 
 namespace SageEditor
 {
     ImGuiTextFilter     Filter;
-    TreeNode*           selected_node = NULL;
-    TreeNode*           DemoTree = NULL;
+    TreeNode* selected_node = NULL;
+    TreeNode* DemoTree = NULL;
     static const ComponentInfo component_infos[]
     {
         { "MyBool",     ImGuiDataType_Bool,    1, offsetof(TreeNode, DataMyBool) },
@@ -26,7 +28,7 @@ namespace SageEditor
         { "MyVec2",     ImGuiDataType_Float,   2, offsetof(TreeNode, DataMyVec2) },
     };
 
-	// Bool flags for the toggling of windows
+    // Bool flags for the toggling of windows
     void Show_Hierarchy_Window(TreeNode* root) {
         if (show_hierarchy_window) {
             ImGui::Begin("Hierarchy");
@@ -76,11 +78,11 @@ namespace SageEditor
     //        // HARDCODING TEST LAYOUT
     //        if (ImGui::TreeNode("Assets"))
     //        {
-	   //         if (ImGui::TreeNode("Scenes"))
+       //         if (ImGui::TreeNode("Scenes"))
     //            {
     //                ImGui::TreeNodeEx("Main Scene", ImGuiTreeNodeFlags_Leaf);
     //                ImGui::TreePop();
-	   //         }
+       //         }
     //            if (ImGui::TreeNode("Scripts"))
     //            {
     //                ImGui::TreeNodeEx("PlayerController.cs", ImGuiTreeNodeFlags_Leaf);
@@ -114,7 +116,7 @@ namespace SageEditor
 
             // Left column: Folder hierarchy
             ImGui::BeginChild("FolderHierarchy", ImVec2(0, 0), true);
-             
+
             // HARDCODING TESTING LAYOUT
             if (ImGui::TreeNode("Assets")) {
                 if (ImGui::TreeNode("Scenes")) {
@@ -143,7 +145,7 @@ namespace SageEditor
             // Simulating asset grid or list (as icons)
             ImGui::BeginGroup();
 
-            
+
             ImGui::EndGroup();
 
             ImGui::EndChild();  // End right panel (Asset View)
@@ -175,12 +177,12 @@ namespace SageEditor
 
     void Show_Asset_Window()
     {
-	    if (show_assets_window)
-	    {
+        if (show_assets_window)
+        {
             ImGui::Begin("Assets:");
             ImGui::Text("This is the assets window.");
             ImGui::End();
-	    }
+        }
     }
     //Creates a node to a new GameObject in Hierarchy
     static TreeNode* CreateNode(const char* name, int uid, TreeNode* parent)
@@ -407,10 +409,11 @@ namespace SageEditor
         ImGui::EndGroup();
     }
 
-    
 
-	void RenderGUI()
+
+    void RenderGUI()
     {
+        ImGui::NewFrame();
         // DOCKSPACE
 
         // READ THIS !!!
@@ -431,10 +434,11 @@ namespace SageEditor
         static bool opt_fullscreen = true;
         static bool opt_padding = false;
         static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-
-        // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-        // because it would be confusing to have two docking targets within each others.
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+
+        
+        
+        // Fullscreen window setup
         if (opt_fullscreen)
         {
             const ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -446,39 +450,74 @@ namespace SageEditor
             window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
             window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
         }
-        else
-        {
-            dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
-        }
 
-        // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
-        // and handle the pass-thru hole, so we ask Begin() to not render a background.
-        if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-            window_flags |= ImGuiWindowFlags_NoBackground;
-
-        // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-        // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
-        // all active windows docked into it will lose their parent and become undocked.
-        // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
-        // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
         if (!opt_padding)
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+        // Begin the dockspace window
         ImGui::Begin("DockSpace Demo", nullptr, window_flags);
-        ImGui::PopStyleVar(2);
+
+        // Pop the style vars that were pushed for fullscreen mode
+        if (opt_fullscreen)
+            ImGui::PopStyleVar(2);
+
         if (!opt_padding)
             ImGui::PopStyleVar();
 
         // Submit the DockSpace
-        ImGuiIO& io = ImGui::GetIO();
-        if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-        {
-            ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-            ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-        }
+        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+
+        
+
+
+        //if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+        //{
+        //    ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+        //    ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+        //    ImVec2 dockspace_size = ImGui::GetContentRegionAvail();
+        //    //ImGui::DockSpaceOverViewport(dockspace_id, ImGui::GetMainViewport(), dockspace_flags);
+        //    dockspace_size.y = 1440;
+        //    std::cout << dockspace_size.x << " * " << dockspace_size.y << std::endl;
+        //    //static bool first_time = true;
+        //    //if (first_time)
+        //    //{
+        //    //    first_time = false;
+
+        //    //    
+
+        //    //    // Clear any previous layout
+        //    //    ImGui::DockBuilderRemoveNode(dockspace_id); // Clear the node
+        //    //    ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace); // Re-add the dockspace node
+
+
+
+        //    //    // Step 1: Split the dockspace into left (30%) and right (70%)
+        //    //    ImGuiID dock_left_id{}, dock_middle_id{}, dock_right_id{};
+        //    //    ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.5f, &dock_left_id, &dock_right_id);  // Left 30%, Right 70%
+        //    //    
+        //    //    //// Step 2: Split the right (70%) into middle (70%) and right (30%)
+        //    //    //ImGui::DockBuilderSplitNode(dock_right_id, ImGuiDir_Right, 0.0f, &dock_right_id, &dock_middle_id);  // Right 30%, Middle 70%
+        //    //    //
+        //    //    //// Step 3: Split the left section into top (Hierarchy) and bottom (Project)
+        //    //    //ImGuiID dock_left_top_id{}, dock_left_bottom_id{};
+        //    //    //ImGui::DockBuilderSplitNode(dock_left_id, ImGuiDir_Down, 0.3f, &dock_left_bottom_id, &dock_left_top_id);  // Top 70%, Bottom 30%
+
+        //    //    // Dock windows into their respective sections
+        //    //    //ImGui::DockBuilderDockWindow("Hierarchy", dock_left_top_id);     // Top-left (Hierarchy)
+        //    //    //ImGui::DockBuilderDockWindow("Project", dock_left_bottom_id);    // Bottom-left (Project)
+        //    //    ImGui::DockBuilderDockWindow("Scene", dock_left_id);           // Middle (Scene)
+        //    //    ImGui::DockBuilderDockWindow("Inspector", dock_right_id);        // Right (Inspector)
+
+        //    //    // Finalize the layout
+        //    //    ImGui::DockBuilderFinish(dockspace_id);
+
+        //    //}
+        //}
 
         // MAIN MENU BAR
         if (ImGui::BeginMainMenuBar())
-        {   
+        {
             if (ImGui::BeginMenu("File"))
             {
                 if (ImGui::MenuItem("New"))
@@ -487,11 +526,11 @@ namespace SageEditor
                 }
                 if (ImGui::MenuItem("Open", "Ctrl+O"))
                 {
-	                // To open scene
+                    // To open scene
                 }
                 if (ImGui::MenuItem("Save", "Ctrl+S"))
                 {
-	                // To save scene
+                    // To save scene
                 }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Exit"))
@@ -504,28 +543,28 @@ namespace SageEditor
             {
                 if (ImGui::MenuItem("Undo", "CTRL+Z"))
                 {
-	                // Undo Action
+                    // Undo Action
                 }
                 if (ImGui::MenuItem("Redo", "Ctrl+Y"))
                 {
-	                // Redo Action
+                    // Redo Action
                 }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Settings"))
                 {
-	                
+
                 }
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Assets"))
             {
-	            if (ImGui::MenuItem("Create"))
-	            {
-		            // Create new assets;
-	            }
+                if (ImGui::MenuItem("Create"))
+                {
+                    // Create new assets;
+                }
                 if (ImGui::MenuItem("Import New Asset"))
                 {
-	                // Import new assets
+                    // Import new assets
                 }
                 ImGui::EndMenu();
             }
@@ -533,7 +572,7 @@ namespace SageEditor
             {
                 if (ImGui::MenuItem("Create Empty"))
                 {
-	                // Create empty game object
+                    // Create empty game object
                 }
                 if (ImGui::MenuItem("2D Object"))
                 {
@@ -600,52 +639,52 @@ namespace SageEditor
         }
 
 
-//#pragma region Settings
-//        ImGui::Begin("Settings");
-//        ImGui::Button("Hello");
-//        static float value = 0.0f;
-//        ImGui::DragFloat("Value", &value);
-//        ImGui::End();
-//#pragma endregion
+        //#pragma region Settings
+        //        ImGui::Begin("Settings");
+        //        ImGui::Button("Hello");
+        //        static float value = 0.0f;
+        //        ImGui::DragFloat("Value", &value);
+        //        ImGui::End();
+        //#pragma endregion
 
-//#pragma region Hierarchy
-//        ImGui::Begin("Hierarchy");
-//        Hierarchy(CreateTreeNode());
-//        ImGui::End();
-//#pragma endregion
+        //#pragma region Hierarchy
+        //        ImGui::Begin("Hierarchy");
+        //        Hierarchy(CreateTreeNode());
+        //        ImGui::End();
+        //#pragma endregion
 
-//#pragma region Inspector
-//        ImGui::Begin("Inspector");
-//        //Inspector();
-//        ImGui::Text("Select an object to inspect.");
-//        ImGui::End();
-//#pragma endregion
+        //#pragma region Inspector
+        //        ImGui::Begin("Inspector");
+        //        //Inspector();
+        //        ImGui::Text("Select an object to inspect.");
+        //        ImGui::End();
+        //#pragma endregion
 
-//#pragma region Scene
-//        ImGui::Begin("Scene");
-//        ImGui::End();
-//#pragma endregion
+        //#pragma region Scene
+        //        ImGui::Begin("Scene");
+        //        ImGui::End();
+        //#pragma endregion
 
-//#pragma region Game
-//        ImGui::Begin("Game");
-//        ImGui::End();
-//#pragma endregion
+        //#pragma region Game
+        //        ImGui::Begin("Game");
+        //        ImGui::End();
+        //#pragma endregion
 
-//#pragma region Project
-//        ImGui::Begin("Project");
-//        ImGui::End();
-//#pragma endregion
+        //#pragma region Project
+        //        ImGui::Begin("Project");
+        //        ImGui::End();
+        //#pragma endregion
 
-//#pragma region Console
-//        ImGui::Begin("Console");
-//        ImGui::End();
-//#pragma endregion
+        //#pragma region Console
+        //        ImGui::Begin("Console");
+        //        ImGui::End();
+        //#pragma endregion
 
-        //ImGui End for Begin(DockSpace Demo), DON'T DELETE
+                //ImGui End for Begin(DockSpace Demo), DON'T DELETE
         ImGui::End();
 
-       //ImGui::ShowDemoWindow();
+        //ImGui::ShowDemoWindow();
     }
 
-    
+
 }
