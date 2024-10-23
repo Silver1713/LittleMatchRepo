@@ -14,7 +14,7 @@
 #include "Components/Component.hpp"
 #include "Components/UITransform.hpp"
 
-#include "Components/Physics.hpp"
+#include "Components/RigidBody.hpp"
 #include "GameObjects.hpp"
 
 /*!*****************************************************************************

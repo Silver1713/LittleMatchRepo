@@ -1,6 +1,6 @@
 /* Start Header ************************************************************************/
 /*!
-\file		Physics.hpp
+\file		RigidBody.hpp
 \title		Little Match
 \author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265
 \par		b.muhammadhafiz@digipen.edu
@@ -16,7 +16,7 @@
 #include "Components/Transform.hpp"
 #include "Vector2.h"
 
-class Physics : public Component
+class RigidBody : public Component
 {
 private:
 	ToastBox::Vec2 velocity{};
@@ -30,8 +30,13 @@ private:
 
 
 public:
-	Physics();
-	Physics(ToastBox::Vec2 _velocity);
+	enum struct ForceMode
+	{
+		Force,
+		Impulse
+	};
+	RigidBody();
+	RigidBody(ToastBox::Vec2 _velocity);
 
 	void Init(GameObject* _parent) override;
 	
@@ -50,5 +55,7 @@ public:
 	// UpdateVelocity (future use)
 	void UpdateVelocity(float delta_time);
 
+
+	void AddForce(ToastBox::Vec2 force, ForceMode mode);
 	
 };

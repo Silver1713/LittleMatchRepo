@@ -20,7 +20,7 @@
 #include "Components/BoxCollider2D.hpp"
 #include "Components/Component.hpp"
 #include "Components/Transform.hpp"
-#include "Components/Physics.hpp"
+#include "Components/RigidBody.hpp"
 #include "GameObjects.hpp"
 
 #include "Vector2.h"
@@ -115,7 +115,7 @@ ComponentType BoxCollider2D::Get_Component_Type()
 void BoxCollider2D::Check_Collisions(float _delta_time)
 {
     Transform* transform = static_cast<Transform*>(Get_Parent()->Get_Component<Transform>());
-    Physics* physics = static_cast<Physics*>(Get_Parent()->Get_Component<Physics>());
+    RigidBody* physics = static_cast<RigidBody*>(Get_Parent()->Get_Component<RigidBody>());
 
     if (!transform || !physics) return;
 
@@ -304,7 +304,7 @@ void BoxCollider2D::Handle_Collision(GameObject* _other)
         << typeid(*_other).name() << std::endl;
 
     // Stop movement if there's a physics component
-    Physics* physics = static_cast<Physics*>(parent->Get_Component<Physics>());
+    RigidBody* physics = static_cast<RigidBody*>(parent->Get_Component<RigidBody>());
     if (physics)
     {
         physics->Get_Current_Velocity().x = 0;

@@ -24,7 +24,7 @@
 
 #include "BindingSystem.hpp"
 #include "SageSystemManager.hpp"
-#include "Components/Physics.hpp"
+#include "Components/RigidBody.hpp"
 #include "Systems/SageScripting.hpp"
 
 namespace Game_Objects
@@ -243,7 +243,7 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	}
 	if (_p.has_physics)
 	{
-		Add_Component(std::make_unique<Physics>(ToastBox::Vec2{ _p.velocity.x ,_p.velocity.y }));
+		Add_Component(std::make_unique<RigidBody>(ToastBox::Vec2{ _p.velocity.x ,_p.velocity.y }));
 	}
 	if (_p.has_animator)
 	{

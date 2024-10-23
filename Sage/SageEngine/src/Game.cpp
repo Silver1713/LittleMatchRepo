@@ -20,7 +20,7 @@
 #include "SageAudio.hpp"
 #include "KeyInputs.h"
 #include "Game.hpp"
-#include "Components/Physics.hpp"
+#include "Components/RigidBody.hpp"
 
 
 #include <iostream>
@@ -116,7 +116,7 @@ namespace Game {
 
 		vp.setViewport();
 		
-		Physics* plrphy = static_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component<Physics>());
+		RigidBody* plrphy = static_cast<RigidBody*>(Game_Objects::Get_Game_Object("Player")->Get_Component<RigidBody>());
 		GameObject* object = Game_Objects::Get_Game_Object("Player");
 		object->Add_Component(std::make_unique<Behaviour>());
 		Behaviour* behaviour = static_cast<Behaviour*>(object->Get_Component<Behaviour>());
@@ -127,6 +127,8 @@ namespace Game {
 		SageAudio::Play_Sound("bgm_main_menu", LOOP);
 		SageAudio::Play_Sound("ambient_rain", LOOP);
 
+		plrphy->AddForce({ 0,500 }, RigidBody::ForceMode::Impulse);
+
 	}
 
 	/*!*****************************************************************************
@@ -136,7 +138,7 @@ namespace Game {
 	void Input()
 	{
 		float move_speed = 300.f;
-		Physics* plrphy = static_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component<Physics>());
+		RigidBody* plrphy = static_cast<RigidBody*>(Game_Objects::Get_Game_Object("Player")->Get_Component<RigidBody>());
 		//tests
 
 		ToastBox::Vec2& curr_velocity = plrphy->Get_Current_Velocity();
@@ -347,7 +349,7 @@ namespace Game {
 					if (!_obj) {
 						return;
 					}
-					Physics* phy = static_cast<Physics*>(collider->Get_Parent()->Get_Component<Physics>());
+					RigidBody* phy = static_cast<RigidBody*>(collider->Get_Parent()->Get_Component<RigidBody>());
 					if (phy) {
 						phy->Get_Current_Velocity() = { 0,0 };
 						//std::cout << _obj->Get_ID() << "collided with " << collider->Get_Parent()->Get_ID() << '\n';
@@ -361,7 +363,7 @@ namespace Game {
 		// AABB Here
 		for (auto& collider : colliders)
 		{
-			Physics* phys = static_cast<Physics*>(collider->Get_Parent()->Get_Component<Physics>());
+			RigidBody* phys = static_cast<RigidBody*>(collider->Get_Parent()->Get_Component<RigidBody>());
 			if (!phys)
 				continue;
 			for (auto& other : colliders)
