@@ -16,7 +16,7 @@ public class GamePlayBehaviour : SageBehaviour
     void Update()
     {
         Vector2D position = transform.position;
-        transform.position = new Vector2D(0, 0);
+        
 
         SageDebug.Print("[" + position.x + "," + position.y + "]");
         

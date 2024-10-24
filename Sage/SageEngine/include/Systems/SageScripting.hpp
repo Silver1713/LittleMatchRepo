@@ -21,6 +21,7 @@ public:
 	void Invoke_Method_In_Instance(MonoObject* mono_instance, const char* _method_name="Main(String[] args)", const char* _args = nullptr);
 
 	void Init() override;
+	
 	void Update() override;
 	void Update_Entity(GameObject* _entity) override;
 	

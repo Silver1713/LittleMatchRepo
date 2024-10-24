@@ -14,7 +14,7 @@
 #include "Components/Component.hpp"
 #include "Components/Transform.hpp"
 
-#include "Components/Physics.hpp"
+#include "Components/RigidBody.hpp"
 #include "GameObjects.hpp"
 #include "SageHelper.hpp"
 
