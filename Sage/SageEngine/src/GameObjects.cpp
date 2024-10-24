@@ -250,7 +250,16 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	}
 	if (_p.is_button)
 	{
-		Add_Component(std::make_unique<Button>());
+		Add_Component(std::make_unique<Button>(_p.on_click,_p.on_click_hold,_p.on_click_release,_p.on_hover_enter,_p.on_hover,_p.on_hover_exit));
+	}
+	//Generates children if it has any
+	if (_p.has_children)
+	{
+		for (unsigned int i{}; i < _p.num_children; ++i)
+		{
+			GameObject* p = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab(_p.children_IDs[i]), _identifier + "_Child_" + std::to_string(i), z_order);
+			this->Add_Child(p);
+		}
 	}
 
 	Init();
@@ -413,4 +422,69 @@ void GameObject::Disable()
 void GameObject::Add_Component(std::unique_ptr<Component> _c)
 {
 	components.push_back(std::move(_c));
+}
+
+/*!*****************************************************************************
+  \brief
+	Sets the parent
+  \param _new_parent
+	pointer to the new parent gameobject
+*******************************************************************************/
+void GameObject::Set_Parent(GameObject* const _new_parent)
+{
+	parent = _new_parent;
+}
+
+/*!*****************************************************************************
+  \brief
+	Gets the parent
+  \return
+	pointer to the parent gameobject
+*******************************************************************************/
+GameObject* GameObject::Get_Parent()
+{
+	return parent;
+}
+
+/*!*****************************************************************************
+  \brief
+	Adds a gameobject to be a child to this gameobject
+  \param _new_child
+	the gameobject to add
+*******************************************************************************/
+void GameObject::Add_Child(GameObject* const _new_child)
+{
+	_new_child->Set_Parent(this);
+	children[_new_child->Get_ID()] = _new_child;
+}
+
+/*!*****************************************************************************
+  \brief
+	Removes a child from the map of children gameobjects of this gameobject
+  \param _identifier
+	the name of the child that is to be removed
+*******************************************************************************/
+void GameObject::Remove_Child(std::string const& _identifier)
+{
+	if (children.find(_identifier) != children.end())
+	{
+		children.erase(_identifier);
+	}
+}
+
+/*!*****************************************************************************
+  \brief
+	Gets the child with the given name
+  \param _identifier
+	the name of the child that is to be gotten
+  \return
+	the poitner to the gameobject if it exists, nullptr if not
+*******************************************************************************/
+GameObject* GameObject::Get_Child(std::string const& _identifier)
+{
+	if (children.find(_identifier) != children.end())
+	{
+		return children[_identifier];
+	}
+	return nullptr;
 }

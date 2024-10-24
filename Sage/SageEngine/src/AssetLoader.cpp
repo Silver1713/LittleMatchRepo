@@ -268,28 +268,58 @@ namespace Assets
 					if (prefabs_json["Prefabs"][i]["Has_Animator"].key_exists<SageJSON::SageJSON::BoolValue>())
 					{
 						p.has_animator = prefabs_json["Prefabs"][i]["Has_Animator"].as<SageJSON::SageJSON::BoolValue>();
-						p.animation_set_ID = prefabs_json["Prefabs"][i]["Animator"][0]["Animation_Set_ID"].as<SageJSON::SageJSON::StringValue>();
+						if (p.has_animator)
+						{
+							p.animation_set_ID = prefabs_json["Prefabs"][i]["Animator"]["Animation_Set_ID"].as<SageJSON::SageJSON::StringValue>();
+						}
 					}
 					if (prefabs_json["Prefabs"][i]["Is_Button"].key_exists<SageJSON::SageJSON::BoolValue>())
 					{
 						p.is_button = prefabs_json["Prefabs"][i]["Is_Button"].as<SageJSON::SageJSON::BoolValue>();
+						if (p.is_button)
+						{
+							if (prefabs_json["Prefabs"][i]["Button"]["On_Click"].key_exists<SageJSON::SageJSON::StringValue>())
+							{
+								p.on_click = prefabs_json["Prefabs"][i]["Button"]["On_Click"].as<SageJSON::SageJSON::StringValue>();
+							}
+							if (prefabs_json["Prefabs"][i]["Button"]["On_Click_Hold"].key_exists<SageJSON::SageJSON::StringValue>())
+							{
+								p.on_click_hold = prefabs_json["Prefabs"][i]["Button"]["On_Click_Hold"].as<SageJSON::SageJSON::StringValue>();
+							}
+							if (prefabs_json["Prefabs"][i]["Button"]["On_Click_Release"].key_exists<SageJSON::SageJSON::StringValue>())
+							{
+								p.on_click_release = prefabs_json["Prefabs"][i]["Button"]["On_Click_Release"].as<SageJSON::SageJSON::StringValue>();
+							}
+							if (prefabs_json["Prefabs"][i]["Button"]["On_Hover_Enter"].key_exists<SageJSON::SageJSON::StringValue>())
+							{
+								p.on_hover_enter = prefabs_json["Prefabs"][i]["Button"]["On_Hover_Enter"].as<SageJSON::SageJSON::StringValue>();
+							}
+							if (prefabs_json["Prefabs"][i]["Button"]["On_Hover"].key_exists<SageJSON::SageJSON::StringValue>())
+							{
+								p.on_hover = prefabs_json["Prefabs"][i]["Button"]["On_Hover"].as<SageJSON::SageJSON::StringValue>();
+							}
+							if (prefabs_json["Prefabs"][i]["Button"]["On_Hover_Exit"].key_exists<SageJSON::SageJSON::StringValue>())
+							{
+								p.on_hover_exit = prefabs_json["Prefabs"][i]["Button"]["On_Hover_Exit"].as<SageJSON::SageJSON::StringValue>();
+							}
+						}
 					}
+					if (prefabs_json["Prefabs"][i]["Has_Children"].key_exists<SageJSON::SageJSON::BoolValue>())
+					{
+						p.has_children = prefabs_json["Prefabs"][i]["Has_Children"].as<SageJSON::SageJSON::BoolValue>();
+						p.num_children = static_cast<unsigned int>(prefabs_json["Prefabs"][i]["Num_Children"].as<SageJSON::SageJSON::NumberValue>());
+						for (unsigned int j{}; j < p.num_children; ++j)
+						{
+							p.children_IDs.push_back(prefabs_json["Prefabs"][i]["Children"][j]["Prefab_ID"].as<SageJSON::SageJSON::StringValue>());
+						}
+					}
+					
 				}
 				catch (...)
 				{
 					std::cerr << "Invalid value found during prefabs deserialization" << std::endl;
 				}
 				generated_prefabs[p.prefab_ID] = p;
-
-				//try
-				//{
-				//	if (prefabs_json["Prefabs"][i].key_exists)
-				//	{};
-				//}
-				//catch (...)
-				//{
-				//	break;
-				//}
 			}
 
 			prefabs_json.close();
