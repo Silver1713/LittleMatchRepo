@@ -230,7 +230,7 @@ namespace SM {
 
 	/*!*****************************************************************************
 	  \brief
-		Frees the current scene
+		Frees the current sceneas
 	*******************************************************************************/
 	void Free()
 	{
@@ -319,8 +319,6 @@ namespace SM {
 			SM::fp_draw = Game::Draw;
 			SM::fp_free = Game::Free;
 			SM::fp_unload = Game::Unload;
-			SM::Load();
-			SM::Init();
 		}
 		else
 		{
@@ -372,9 +370,8 @@ namespace SM {
 			SM::fp_free = Game::Free;
 			SM::fp_unload = Game::Unload;
 		}
-		else if (new_level_ID == "editor_scene")
+		else if (level_ID == "editor_scene")
 		{
-			current_level = Assets::Levels::Get_Level(new_level_ID);
 			SM::fp_load = EditorScene::Load;
 			SM::fp_init = EditorScene::Init;
 			SM::fp_draw = EditorScene::Draw;
