@@ -36,7 +36,6 @@ int main()
 	JSON::NumberValue number = json["Nested"]["BoolArray"][2].as<JSON::NumberValue>();
 
 
-	int n = static_cast<int>(number);
 
 
 	

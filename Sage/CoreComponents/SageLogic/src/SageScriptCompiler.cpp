@@ -21,14 +21,97 @@
 #include <mono/jit/jit.h>
 #include <fstream>
 #include <iostream>
-
-
+#ifdef _WIN32
+#include <Windows.h>
+#elif __linux__
+#include <unistd.h>
+#endif
 
 
 std::string const SageAssembler::FILE_MODE = "__FILE_PATH__";
 std::mutex SageAssembler::mutex;
-SageAssembler::SageAssembler(size_t _script_to_thread_ratio) : script_to_tread_ratio{ _script_to_thread_ratio }, thread_id{}, worker{},
-                                                               path_to_compiler_dir{}, output_directory{}, scripts{}, command{}, flags{}, log{}, data{}
+
+
+#if _WIN32
+std::string Run_CaptureSTDOUT(const char* command)
+{
+	SECURITY_ATTRIBUTES security_attributes;
+	security_attributes.nLength = sizeof(SECURITY_ATTRIBUTES);
+	security_attributes.bInheritHandle = TRUE;
+	security_attributes.lpSecurityDescriptor = NULL;
+
+	// Create Pipe to get the output
+	HANDLE read_pipe, write_pipe;
+	if (!CreatePipe(&read_pipe, &write_pipe, &security_attributes, 0))
+	{
+		return "Failed to create pipe";
+	}
+
+	SetHandleInformation(read_pipe, HANDLE_FLAG_INHERIT, 0);
+
+	STARTUPINFO startup_info = {sizeof(STARTUPINFO)};
+	startup_info.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+	startup_info.hStdOutput = write_pipe;
+	startup_info.hStdError = write_pipe;
+
+	PROCESS_INFORMATION process_info;
+	if (!CreateProcess(NULL, const_cast<char*>(command), NULL, NULL, TRUE, 0, NULL, NULL, &startup_info, &process_info))
+	{
+		// Get the last error code
+		DWORD errorCode = GetLastError();
+		// Format the error message
+		LPVOID lpMsgBuf;
+		FormatMessage(
+			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL,
+			errorCode,
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			(LPTSTR)&lpMsgBuf,
+			0, NULL);
+
+		std::string errorMessage = "Failed to create process. Error code: " + std::to_string(errorCode) + "\n";
+		errorMessage += (char*)lpMsgBuf;  // Append the system error message
+
+		// Free the buffer allocated by FormatMessage
+		LocalFree(lpMsgBuf);
+
+		return errorMessage;
+	}
+
+	CloseHandle(write_pipe);
+
+	DWORD read;
+	std::string output;
+	char buffer;
+	while (true) {
+		// Check if the process has finished
+		DWORD exitCode;
+		GetExitCodeProcess(process_info.hProcess, &exitCode);
+		if (exitCode != STILL_ACTIVE) break;  // Exit the loop if the process has terminated
+
+		// Read any available output from the pipe
+		while (ReadFile(read_pipe, &buffer, 1, &read, NULL))
+		{
+			output += buffer;
+		}
+	}
+
+	WaitForSingleObject(process_info.hProcess, INFINITE);
+
+	CloseHandle(process_info.hProcess);
+	CloseHandle(process_info.hThread);
+	CloseHandle(read_pipe);
+
+	return output;
+
+}
+
+#endif
+
+
+
+
+SageAssembler::SageAssembler(size_t _script_to_thread_ratio) : script_to_tread_ratio{ _script_to_thread_ratio }, thread_id{}, worker{},path_to_compiler_dir{}, output_directory{}, scripts{}, command{}, flags{}, log{}, data{}
 {
 }
 
@@ -120,19 +203,12 @@ SageAssembly SageAssembler::Compile(std::string const& name, std::string const& 
 
 	std::string actual_command = compile_command + " " + flags + " " + temp_file_path + " -out:" + output_path;
 
-	int syscall_status = std::system(actual_command.c_str());
-	
+	std::string output = Run_CaptureSTDOUT(actual_command.c_str());
+
+	log += output + '\n';
 	
 
-	if (syscall_status)
-	{
-		log = "Failed to compile";
-		std::cout << "Failed to compile" << '\n';
-		return {};
-	}
-	else {
-		log = "Compiled successfully";
-	}
+	
 	// Delete the temp file
 	int a  = remove(temp_file_path.c_str());
 	if (!a)
@@ -179,19 +255,9 @@ SageAssembly SageAssembler::CompileFile(std::string const& path)
 
 	std::string actual_command = compile_command + " " + flags + " " + path + " -out:" + output_path;
 
-	int syscall_status = std::system(actual_command.c_str());
+	std::string output = Run_CaptureSTDOUT(actual_command.c_str());
 
-
-
-	if (syscall_status)
-	{
-		log = "Failed to compile";
-		std::cout << "Failed to compile" << '\n';
-		return {};
-	}
-	else {
-		log = "Compiled successfully";
-	}
+	log += output + '\n';
 	std::cout << "Compiled " << name << " into " << output_path << '\n';
 
 	
@@ -234,19 +300,13 @@ void SageAssembler::CompileFileAsync(std::string const& path)
 
 	std::string actual_command = compile_command + " " + flags + " " + path + " -out:" + output_path;
 	
-	int syscall_status = std::system(actual_command.c_str());
+	std::string output = Run_CaptureSTDOUT(actual_command.c_str());
+
+	log += output + '\n';
 
 
 
-	if (syscall_status)
-	{
-		log = "Failed to compile";
-		std::cout << "Failed to compile" << '\n';
-		return;
-	}
-	else {
-		log = "Compiled successfully";
-	}
+	
 	std::cout << "Compiled " << name << " into " << output_path << '\n';
 
 
@@ -299,8 +359,10 @@ void SageAssembler::CompileLibraryAsync()
 		
 	}
 
-	std::string actual_command = compile_command + " " + flags + " " + files + " -out:" + output_path;
-	std::system(actual_command.c_str());
+	std::string actual_command = compile_command+".bat" + " " + flags + " " + files + " -out:" + output_path;
+	std::string output = Run_CaptureSTDOUT(actual_command.c_str());
+
+	log += output + '\n';
 
 	for (std::string const& f : temp_files)
 	{
@@ -446,10 +508,18 @@ void SageAssembler::Add_Script(std::string const& name, std::string const& conte
 
 
 
+std::string SageAssembler::GetLog()
+{
+	//Ignore the first 3 lines
+	std::string log = this->log;
+	size_t pos = log.find('\n');
+	pos = log.find('\n', pos + 1);
+	pos = log.find('\n', pos + 1);
+	std::string nString = log.substr(pos + 1);
 
+	return nString;
 
-
-
+}
 
 
 

@@ -87,5 +87,9 @@ void main() {
         c_clr = uColor;
 	}
 
+    if (uUseTexture) {
+        color = vec4(c_clr.x, c_clr.y, c_clr.z, c_clr.a);
+    } 
+    else
     color = vec4(c_clr.x, c_clr.y, c_clr.z, uAlpha);
 }

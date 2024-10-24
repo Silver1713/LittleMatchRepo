@@ -25,39 +25,15 @@
  */
 
 #include <iostream>
-#include <numeric>
 #include <backward.hpp>
-#include "SageRenderer.hpp"
 #include "SageHelper.hpp"
-#include "KeyInputs.h"
-
-#include "AssetLoader.hpp"
-#include "Prefabs.hpp"
-#include "SceneManager.hpp"
-#include "SageAudio.hpp"
-#include "SageShaderManager.hpp"
-#include "SageTimer.hpp"
-#include "SageJSON.hpp"
-#include "Systems/SageScripting.hpp"
-#include "Game.hpp"
-#include "SageMonoManager.hpp"
-#include "SageFrameBuffer.hpp"
-
-SageFrameBuffer frame_buffer;
+#include "SageEngine.hpp"
 // Forward declaration
 void init();
 void update();
 void PhysicsUpdate();
 void draw();
 void exit();
-int loop = 60;
-int window = 3;
- const std::string window_config_path = "../SageEngine/data/configuration/project_config.json";
-constexpr double physics_update_target = 0.02;
-namespace
-{
-    static double accumulator = 0;
-}
 
 
 
@@ -83,15 +59,15 @@ int main()
 	while (!SageHelper::sage_ptr_window->Should_Window_Close())
 	{
 		       
-		update();
+		SageEngine::Update();
 
-		draw();
+		SageEngine::Draw(false);
 
 		SageHelper::sage_ptr_window->Swap_Buffers();
 
 
 	}
-	exit();
+	SageEngine::Exit();
 	return 0;
 }
 
@@ -101,59 +77,7 @@ int main()
 *******************************************************************************/
 void init()
 {
-    SageMonoManager::Initialize();
-    SageTimer::Init();
-	SageJSON::SageJSON config;
-
-	std::ifstream file(window_config_path);
-
-      
-    while (file)
-    {
-		file >> config;
-    }
-
-    config.print();
-
-    file.close();
-
-	int window_width = static_cast<int>(config["Window"]["Width"].as<SageJSON::SageJSON::NumberValue>());
-	int window_height = static_cast<int>(
-        config["Window"]["Height"].as<SageJSON::SageJSON::NumberValue>());
-
-	
-
-	std::string window_title = config["Window"]["Title"].as<SageJSON::SageJSON::StringValue>();
-    std::string editor_startup_scene = config["Other_Configurations"]["Editor_Startup_Scene"].as<SageJSON::SageJSON::StringValue>();
-    std::string game_startup_scene = config["Other_Configurations"]["Game_Startup_Scene"].as<SageJSON::SageJSON::StringValue>();
-
-    config.close();
-    
-    int status = SageHelper::Init(window_width, window_height, window_title.c_str());
-    SageShaderManager::Add_Shader_Include("graphic_lib", "../SageGraphics/shaders/");
-	SageRenderer::Init();
-    frame_buffer.Init(window_width, window_height);
-    SageRenderer::Set_Framebuffer(&frame_buffer);
-    SageTimer::Init();
-
-    if (status)
-    {
-        std::cerr << "Sage failed to create OpenGL context.";
-
-        std::exit(EXIT_FAILURE);
-    }
-    Assets::Init();
-    Prefabs::Init();
-    SageAudio::Init();
-    
-    if (1) // to be changed with some sort of flag to detect if running through editor or as built game
-    {
-        SM::Startup_Scene(editor_startup_scene);
-    }
-    else 
-    {
-        SM::Startup_Scene(game_startup_scene);
-    }
+	SageEngine::Init();
 }
 
 /*!*****************************************************************************
@@ -162,18 +86,7 @@ void init()
 *******************************************************************************/
 void update()
 {
-    SageTimer::Update();
-    SageHelper::Update();
-	accumulator += SageTimer::delta_time;
-	if (accumulator >= physics_update_target)
-	{
-        PhysicsUpdate();
-		accumulator -= physics_update_target;
-	}
-	SM::Input();
-    SM::Update();
-    
-    SageAudio::Update();
+	SageEngine::Update();
 }
 
 /*!*****************************************************************************
@@ -191,12 +104,7 @@ void PhysicsUpdate()
 *******************************************************************************/
 void draw()
 {
-    //SageHelper::Draw();
-    SageRenderer::Enable_OnScreenRender();
-    std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS)  + "| Game Objects: " +std::to_string(Game_Objects::Get_Game_Objects().size());
-    SageHelper::sage_ptr_window->Set_Title(s.c_str());
-    SM::Draw();
-	SageRenderer::Enable_OnScreenRender();
+	SageEngine::Draw(false);
 }
 
 /*!*****************************************************************************
@@ -205,10 +113,5 @@ void draw()
 *******************************************************************************/
 void exit()
 {
-    Game_Objects::Exit();
-    SM::Free();
-    Assets::Unload();
-    SM::Unload();
-    SageHelper::Exit();
-    SageAudio::Exit();
+    SageEngine::Exit();
 }

@@ -25,7 +25,10 @@ struct SageLoader
 
 	MonoDomain* Get_RT_Domain();
 
+
+
 	void Exit();
+
 
 };
 

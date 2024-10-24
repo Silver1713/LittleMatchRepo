@@ -146,5 +146,9 @@ public:
 
 	*******************************************************************************/
 	void Set_Framebuffer_Callback();
+
+
+	int Get_Display_Size_X() const;
+	int Get_Display_Size_Y() const;
 };
 #endif

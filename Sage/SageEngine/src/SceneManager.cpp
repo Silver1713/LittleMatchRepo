@@ -23,6 +23,7 @@
 
 #include <iostream>
 
+#include "EditorScene.hpp"
 #include "SplashScreen.hpp"
 #include "Scene.hpp"
 #include "Game.hpp"
@@ -318,6 +319,8 @@ namespace SM {
 			SM::fp_draw = Game::Draw;
 			SM::fp_free = Game::Free;
 			SM::fp_unload = Game::Unload;
+			SM::Load();
+			SM::Init();
 		}
 		else
 		{
@@ -368,6 +371,18 @@ namespace SM {
 			SM::fp_draw = Game::Draw;
 			SM::fp_free = Game::Free;
 			SM::fp_unload = Game::Unload;
+		}
+		else if (new_level_ID == "editor_scene")
+		{
+			current_level = Assets::Levels::Get_Level(new_level_ID);
+			SM::fp_load = EditorScene::Load;
+			SM::fp_init = EditorScene::Init;
+			SM::fp_draw = EditorScene::Draw;
+			SM::fp_input = EditorScene::Input;
+			SM::fp_update = EditorScene::Update;
+			SM::fp_draw = EditorScene::Draw;
+			SM::fp_free = EditorScene::Free;
+			SM::fp_unload = EditorScene::Unload;
 		}
 		else
 		{

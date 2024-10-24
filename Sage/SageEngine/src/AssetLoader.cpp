@@ -25,6 +25,7 @@
 #include <array>
 #include <filesystem>
 #include "SageJSON.hpp"
+#include "SageTexture.h"
 
 #include "fmod.hpp"
 #include "fmod_errors.h"

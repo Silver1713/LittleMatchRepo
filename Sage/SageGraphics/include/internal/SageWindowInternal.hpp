@@ -254,7 +254,12 @@ public:
 
 	void Set_Fb_Callback();
 
+	int Get_Display_Size_X() const;
+	int Get_Display_Size_Y() const;
+
 	static void Frame_Buffersize_Cb(GLFWwindow* window, int width, int height);
+
+
 
 
 };
