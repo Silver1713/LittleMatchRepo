@@ -3,6 +3,8 @@
 #include <limits.h>
 #include <cstdio>
 #include "imgui_impl_opengl3.h"
+#include "GameObjects.hpp"
+#include "AssetLoader.hpp"
 namespace SageEditor
 {
 //-----------------------------------------------------------------------------
@@ -37,10 +39,39 @@ namespace SageEditor
         int             Offset;     // Offset inside parent structure
     };
 
+    class GameObject
+    {
+    public:
+        std::string name;
+        std::vector<GameObject*> children;
+        std::vector<Component*> components;
+
+        GameObject(const std::string& name) : name(name) {}
+
+        void AddComponent(Component* component)
+        {
+            components.push_back(component);
+        }
+
+        ~GameObject()
+        {
+            // Clean up dynamically allocated children and components
+            for (auto* child : children) {
+                delete child;
+            }
+            for (auto* component : components) {
+                delete component;
+            }
+        }
+    };
+
+    GameObject* GetRootGameObject();
+    void CleanUpScene();
     static TreeNode* CreateNode(const char* name, int uid, TreeNode* parent);
     static TreeNode* CreateTreeNode();
     void DrawTreeNode(TreeNode* node);
-    void Hierarchy(TreeNode* root_node);
+    void Hierarchy();
+    //void Hierarchy(TreeNode* root_node);
     void Inspector();
     void RenderGUI();
 }

@@ -255,7 +255,7 @@ void draw()
 
 void exit()
 {
-	
+    //SageEditor::CleanUpScene();
 }
 
 //void update()
