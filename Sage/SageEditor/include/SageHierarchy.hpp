@@ -1,24 +1,17 @@
 #pragma once
 #include "imgui.h"
-#include <limits.h>
-#include <cstdio>
 #include "imgui_impl_opengl3.h"
 #include "GameObjects.hpp"
 #include "AssetLoader.hpp"
-namespace SageEditor
-{
-//-----------------------------------------------------------------------------
-// [SECTION] Helpers: ExampleTreeNode, ExampleMemberInfo (for use by Property Editor etc.)
-//-----------------------------------------------------------------------------
 
-// Simple representation for a tree
-// (this is designed to be simple to understand for our demos, not to be fancy or efficient etc.)
+namespace SageHierarchy
+{
     struct TreeNode
     {
         // Tree structure
         char                        Name[64] = "";
         int                         UID = 0;
-        TreeNode*                   Parent = NULL;
+        TreeNode* Parent = NULL;
         ImVector<TreeNode*>         Childs;
         unsigned short              IndexInParent = 0;  // Maintaining this allows us to implement linear traversal more easily
 
@@ -33,7 +26,7 @@ namespace SageEditor
     // (this is a minimal version of what a typical advanced application may provide)
     struct ComponentInfo
     {
-        const char*     Name;       // Member name
+        const char* Name;       // Member name
         ImGuiDataType   DataType;   // Member type
         int             DataCount;  // Member count (1 when scalar)
         int             Offset;     // Offset inside parent structure
@@ -65,9 +58,10 @@ namespace SageEditor
         }
     };
 
-    GameObject* GetRootGameObject();
-    void CleanUpScene();
-    //void Hierarchy(TreeNode* root_node);
-    void Inspector();
-    void RenderGUI();
+	static TreeNode* CreateNode(const char* name, int uid, TreeNode* parent);
+	static TreeNode* CreateTreeNode();
+	void DrawTreeNode(TreeNode* _node);
+	void CreateNewGameObject();
+	void DrawHierarchy(GameObject* object);
+	void Hierarchy();
 }
