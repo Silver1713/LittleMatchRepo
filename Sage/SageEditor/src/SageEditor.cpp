@@ -38,7 +38,7 @@ namespace SageEditor
     void Show_Hierarchy_Window(TreeNode* root) {
         if (show_hierarchy_window) {
             ImGui::Begin("Hierarchy");
-            Hierarchy();
+            //Hierarchy();
             /*if (ImGui::TreeNode("Parent 1"))
             {
                 ImGui::Text("Child 1");
