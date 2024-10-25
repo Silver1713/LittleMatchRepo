@@ -8,6 +8,7 @@
 #include "imgui_internal.h"
 #include "SageFrameBuffer.hpp"
 #include "SageRenderer.hpp"
+#include "SageInspector.hpp"
 
 static bool show_hierarchy_window = true;
 static bool show_console_window = true;
@@ -34,6 +35,7 @@ namespace SageEditor
     void Show_Hierarchy_Window(TreeNode* root) {
         if (show_hierarchy_window) {
             ImGui::Begin("Hierarchy");
+            Hierarchy(CreateTreeNode());
             /*if (ImGui::TreeNode("Parent 1"))
             {
                 ImGui::Text("Child 1");
@@ -63,7 +65,9 @@ namespace SageEditor
     {
         if (show_inspector_window)
         {
+            // Sagecomponent.init
             ImGui::Begin("Inspector");
+            Inspector();
             ImGui::Text("This is the Inspector window.");
             ImGui::End();
         }
@@ -408,8 +412,10 @@ namespace SageEditor
                 }
                 ImGui::EndTable();
             }
+            SageComponent::ShowInspector();
         }
         ImGui::EndGroup();
+        
     }
 
 
@@ -686,7 +692,7 @@ namespace SageEditor
                 //ImGui End for Begin(DockSpace Demo), DON'T DELETE
         ImGui::End();
 
-        //ImGui::ShowDemoWindow();
+        ImGui::ShowDemoWindow();
     }
 
 
