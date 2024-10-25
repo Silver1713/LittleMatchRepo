@@ -11,7 +11,7 @@
         "Object_Shape": "If not specified, will do Rect. Otherwise can do Circle",
         "Has_Collider": false,
         "Has_Physics": false,
-        "Physics":      
+        "Physics":
         {
           "Velocity": [0,0,0]
         },        
@@ -31,7 +31,6 @@
           "On_Hover_Exit": ""
         },                 
         "Has_Children": false,
-        "Num_Children": 0,
         "Children":
         [
           {
@@ -40,11 +39,22 @@
           {
             "Prefab_ID":"second child etc etc..."
           }
+        ],
+        "Has_Behaviour": false,
+        "Behaviour_List" : 
+        [
+          {
+            "CS_Class_Name":"behavaiour 1 etc etc",
+            "CS_Namespace": ""
+          },
+          {
+            "CS_Class_Name":"behavaiour 2 etc etc",
+            "CS_Namespace": ""
+          }
         ]
       }
     ],
 
-    "Num_Prefabs": 13,
     "Prefabs":
     [
       {
@@ -143,7 +153,14 @@
         "Animator":
         {
           "Animation_Set_ID": "SPEARMAN"
-        }
+        },
+        "Has_Behaviour": false,
+        "Behaviour_List" : 
+        [
+          {
+            "CS_Class_Name":"PlayerBehaviour"
+          }
+        ]
       }
     ]
   }

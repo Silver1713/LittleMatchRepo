@@ -251,6 +251,12 @@ namespace Assets
 			bool has_children{ false };
 			unsigned int num_children{};
 			std::vector<std::string> children_IDs;
+
+			bool has_behaviour{ false };
+			unsigned int num_behaviour{};
+			std::vector<std::string> cs_class_name{ "" };
+			std::vector<std::string> cs_namespace{ "" };
+			
 		};
 
 		/*!*****************************************************************************

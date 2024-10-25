@@ -47,7 +47,7 @@ namespace Game_Objects
 		for (auto& _g : g_game_objects)
 		{
 			if (_g.second)
-			{
+			{				
 				_g.second->Init();
 				BindingSystem::Init_Batch(_g.second.get());
 			}
@@ -220,7 +220,7 @@ GameObject::GameObject(){}
 	The prefab to copy from
 
   \param _identifier
-	What this instance should be called
+	What this instance should be called 
 
   \param _z_order
 	The z-order of the object
@@ -253,6 +253,17 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	{
 		Add_Component(std::make_unique<Button>(_p.on_click,_p.on_click_hold,_p.on_click_release,_p.on_hover_enter,_p.on_hover,_p.on_hover_exit));
 	}
+	if (_p.has_behaviour)
+	{
+		Add_Component(std::make_unique<Behaviour>());
+		Behaviour* b = Get_Component<Behaviour>();
+		b->Init(this);
+		for (unsigned int i{}; i < _p.num_behaviour; ++i)
+		{
+			b->Add_Instance(_p.cs_class_name[i], _p.cs_namespace[i]);
+		}
+	}
+
 	//Generates children if it has any
 	if (_p.has_children)
 	{

@@ -212,7 +212,9 @@ namespace Assets
 			}
 			file.close();
 
-			for (unsigned int i{}; i < prefabs_json["Num_Prefabs"].as<SageJSON::SageJSON::NumberValue>(); ++i)
+			unsigned int num_prefabs{ static_cast<unsigned int>(prefabs_json["Prefabs"].as<SageJSON::SageJSON::JSONList>().size()) };
+
+			for (unsigned int i{}; i < num_prefabs; ++i)
 			{
 				Prefab p;
 				p.prefab_ID = prefabs_json["Prefabs"][i]["ID"].as<SageJSON::SageJSON::StringValue>();				
@@ -303,12 +305,26 @@ namespace Assets
 							{
 								p.on_hover_exit = prefabs_json["Prefabs"][i]["Button"]["On_Hover_Exit"].as<SageJSON::SageJSON::StringValue>();
 							}
+							if (prefabs_json["Prefabs"][i]["Has_Behaviour"].key_exists<SageJSON::SageJSON::BoolValue>())
+							{
+								p.has_behaviour = prefabs_json["Prefabs"][i]["Has_Behaviour"].as<SageJSON::SageJSON::BoolValue>();
+								
+								p.num_behaviour = static_cast<unsigned int>(prefabs_json["Prefabs"][i]["Behaviour_List"].as<SageJSON::SageJSON::NumberValue>());
+								for (unsigned int j{}; j < p.num_behaviour; ++j)
+								{
+									p.cs_class_name.push_back(prefabs_json["Prefabs"][i]["Behaviour_List"][j]["CS_Class_Name"].as<SageJSON::SageJSON::StringValue>());
+									if (prefabs_json["Prefabs"][i]["Behaviour_List"][j]["CS_Namespace"].key_exists<SageJSON::SageJSON::StringValue>())
+									{
+										p.cs_namespace.push_back(prefabs_json["Prefabs"][i]["Behaviour_List"][j]["CS_Namespace"].as<SageJSON::SageJSON::StringValue>());
+									}
+								}
+							}
 						}
 					}
 					if (prefabs_json["Prefabs"][i]["Has_Children"].key_exists<SageJSON::SageJSON::BoolValue>())
 					{
 						p.has_children = prefabs_json["Prefabs"][i]["Has_Children"].as<SageJSON::SageJSON::BoolValue>();
-						p.num_children = static_cast<unsigned int>(prefabs_json["Prefabs"][i]["Num_Children"].as<SageJSON::SageJSON::NumberValue>());
+						p.num_children = static_cast<unsigned int>(prefabs_json["Children"].as<SageJSON::SageJSON::JSONList>().size());
 						for (unsigned int j{}; j < p.num_children; ++j)
 						{
 							p.children_IDs.push_back(prefabs_json["Prefabs"][i]["Children"][j]["Prefab_ID"].as<SageJSON::SageJSON::StringValue>());
@@ -712,7 +728,10 @@ namespace Assets
 						file.close();
 
 						Level l;
-						for (unsigned int i{}; i < current_level_json["Num_Prefabs"].as<SageJSON::SageJSON::NumberValue>(); ++i) 
+
+						unsigned int num_prefabs{ static_cast<unsigned int>(current_level_json["Prefabs"].as<SageJSON::SageJSON::JSONList>().size()) };
+
+						for (unsigned int i{}; i < num_prefabs; ++i)
 						{
 							try
 							{

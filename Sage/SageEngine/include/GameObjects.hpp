@@ -119,6 +119,11 @@ public:
 	*******************************************************************************/
 	void Add_Component(std::unique_ptr<Component> _c);
 
+	std::vector<std::unique_ptr<Component>>& Get_Component_List()
+	{
+		return components;
+	}
+
 	/*!*****************************************************************************
 	  \brief
 		Gets the component of the specified type T belonging to the gameobject

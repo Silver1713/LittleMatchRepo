@@ -6,7 +6,7 @@ using SageEngine.Debug;
 using SageEngine.Math;
 
 
-public class GamePlayBehaviour : SageBehaviour
+public class PlayerBehaviour : SageBehaviour
 {
     void Init()
     {
@@ -15,10 +15,8 @@ public class GamePlayBehaviour : SageBehaviour
 
     void Update()
     {
-        Vector2D position = transform.position;
-        
-
-        SageDebug.Print(gameObject.name);
+        string g_name = gameObject.name;
+        SageDebug.Print(g_name);
         
 
 

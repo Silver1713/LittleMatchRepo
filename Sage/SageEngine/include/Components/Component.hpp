@@ -33,6 +33,7 @@ typedef enum {
 	AUDIO,
 	BEHAVIOUR,
 	BUTTON,
+	SLIDER,
 	NUM_OF_TYPES_OF_COMPONENTS
 } ComponentType;
 

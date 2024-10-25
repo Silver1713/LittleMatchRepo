@@ -139,7 +139,7 @@ namespace Buttons
 	void Exit_Game(GameObject* _caller)
 	{
 		Default_Click(_caller);
-		SM::Exit_Game();
+		//SM::Exit_Game();
 	}
 }
 
