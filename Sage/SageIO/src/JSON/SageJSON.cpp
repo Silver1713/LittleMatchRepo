@@ -302,6 +302,13 @@ namespace SageJSON::AST
 		value.push_back(node);
 	}
 
+	size_t ArrayNode::size() const
+	{
+		return value.size();
+
+	}
+
+
 	// Object
 
 	ObjectNode::ObjectNode(std::string key, std::vector<Node*> value)
@@ -357,6 +364,12 @@ namespace SageJSON::AST
 		str += " }";
 		return str;
 	}
+
+	size_t ObjectNode::size() const
+	{
+		return value.size();
+	}
+
 
 	void AST::addChild(Node* node)
 	{
@@ -888,6 +901,7 @@ namespace SageJSON
 
 		}
 	}
+	
 
 
 	SageJSON& SageJSON::operator[](int key)
@@ -911,21 +925,160 @@ namespace SageJSON
 				auto* values = std::get_if<std::vector<AST::Node*>>(&key_value);
 				if (values)
 				{
+					if (key >= values->size())
+					{
+						throw std::out_of_range("Index out of range in JSON array");
+					}
+
 					current_node = (*values)[key];
 					return *this;
 
 				}
 			}
-			throw std::out_of_range("index out of range in JSON array");
+			throw std::out_of_range("Index out of range in JSON array");
 		}
 		catch (std::out_of_range err)
 		{
 			SageJSONCerr << "Warning: Key is not found.An nullptr is returned.\nAre you sure its an array?\n";
+			SageJSONCerr << err.what() << '\n';
 			current_node = nullptr;
 			return *this;
 
 		}
 	}
+
+
+	size_t SageJSON::len() 
+	{
+		SageJSONCout << "Executing len\n";
+		if (current_node == nullptr)
+		{
+			return 0;
+		}
+
+		AST::ObjectNode* obj = dynamic_cast<AST::ObjectNode*>(current_node);
+		if (obj)
+		{
+			size_t obj_size = obj->size();
+			current_node = nullptr;
+			return obj_size;
+		}
+
+		AST::ArrayNode* arr = dynamic_cast<AST::ArrayNode*>(current_node);
+		if (arr)
+		{
+			size_t arr_size = arr->size();
+			current_node = nullptr;
+			return arr_size;
+		}
+		
+		size_t cn = sizeof * current_node;
+		current_node = nullptr;
+		return cn;
+	
+
+	}
+
+
+
+	/// ---- SageJSONArrayProxy ----
+
+	SageJSON::SageJSONArrayProxy::SageJSONArrayProxy(SageJSON& mainClass, AST::AST::JSONIterator current) :parent{ mainClass }, current_node{ current },
+		array_node(dynamic_cast<AST::ArrayNode*>(current_node)){}
+
+
+	SageJSON::SageJSONArrayProxy& SageJSON::SageJSONArrayProxy::operator[](size_t key)
+	{
+		if (!array_node)
+		{
+			SageJSONCerr << "Warning: Key is not found.An nullptr is returned.\nAre you sure its an array?\n";
+			current_node = nullptr;
+			return *this;
+		}
+
+		auto key_value = array_node->getKey();
+		auto* values = std::get_if<std::vector<AST::Node*>>(&key_value);
+		if (values)
+		{
+			AST::ArrayNode* arrNode = dynamic_cast<AST::ArrayNode*>((*values)[key]);
+
+			if (!arrNode)
+			{
+				current_node = arrNode;
+				array_node = nullptr;
+				return *this;
+			}
+			current_node = (*values)[key];
+			array_node = arrNode;
+			return *this;
+		}
+		else
+		{
+			SageJSONCerr << "Warning: Key is not found.An nullptr is returned.\nAre you sure its an array?\n";
+			current_node = nullptr;
+			return *this;
+		}
+
+	}
+
+
+
+	size_t SageJSON::SageJSONArrayProxy::size() const
+	{
+		return array_node->size();
+	}
+
+
+
+	/// ---- SageJSONObjProxy ----
+	SageJSON::SageJSONObjectProxy::SageJSONObjectProxy(SageJSON& mainClass, AST::AST::JSONIterator current) : parent(mainClass), current_node(current),
+		object_node(dynamic_cast<AST::ObjectNode*>(current_node)) {}
+
+	SageJSON::SageJSONObjectProxy& SageJSON::SageJSONObjectProxy::operator[](std::string key)
+	{
+		if (!object_node)
+		{
+			SageJSONCerr << "Warning: Key is not found.An nullptr is returned.\n It is not an JSONObject.\n";
+			current_node = nullptr;
+			return *this;
+		}
+
+		auto key_value = object_node->getKey();
+		auto* values = std::get_if<std::vector<AST::Node*>>(&key_value);
+		if (values)
+		{
+			for (auto& i : *values)
+			{
+				if (i->getName() == key)
+				{
+					current_node = i;
+					object_node = dynamic_cast<AST::ObjectNode*>(current_node);
+					return *this;
+				}
+			}
+			SageJSONCout << "Warning: Key is not found.An nullptr is returned.\n";
+			current_node = nullptr;
+			object_node = nullptr;
+			return *this;
+		}
+		else
+		{
+			SageJSONCerr << "Warning: Key is not found.An nullptr is returned. \nAre you sure its an object?\n";
+			current_node = nullptr;
+			return *this;
+		}
+	}
+
+	size_t SageJSON::SageJSONObjectProxy::size() const
+	{
+		return object_node->size();
+	}
+
+	
+
+
+	
+	
 
 	SageJSON& SageJSON::operator<<(std::string line)
 	{
@@ -977,6 +1130,8 @@ namespace SageJSON
 
 		return is;
 	}
+
+	
 
 	std::ostream& operator<<(std::ostream& os, SageJSON& json)
 	{

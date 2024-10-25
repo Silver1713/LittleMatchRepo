@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using SageEngine;
 using SageEngine.Debug;
-
+using SageEngine.Math;
 
 
 public class GamePlayBehaviour : SageBehaviour
@@ -14,7 +15,12 @@ public class GamePlayBehaviour : SageBehaviour
 
     void Update()
     {
-        SageDebug.Print("SageBehaviour Update.");
+        Vector2D position = transform.position;
+        
+
+        SageDebug.Print("[" + position.x + "," + position.y + "]");
+        
+
 
     }
 

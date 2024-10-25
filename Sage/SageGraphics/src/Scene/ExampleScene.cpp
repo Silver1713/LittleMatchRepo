@@ -10,6 +10,7 @@
 #include "SageModelManager.hpp"
 #include "SageObjectManager.hpp"
 #include "SageObject.hpp"
+#include "SageFrameBuffer.hpp"
 #include "SageShaderManager.hpp"
 //#include "SageCameraInternal.hpp"
 
@@ -20,6 +21,8 @@ SageViewport v_p;
 SageCamera camera2d;
 
 SageInstance instance;
+
+SageFrameBuffer* frame_buffer;
 
 //OpenGL err callback
 void APIENTRY SageOpenGLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
@@ -136,6 +139,16 @@ void ExampleScene::init()
 	v_p.setViewport();
 
 	SageRenderer::Set_Current_View(&camera2d);
+
+	frame_buffer = new SageFrameBuffer(SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT);
+
+	SageRenderer::Set_Framebuffer(frame_buffer);
+	//Check if framebuffer is attached using glGetIntegerv(GL_FRAMEBUFFER_BINDING, &frame_buffer_id);
+	GLint bufferID;
+
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &bufferID);
+
+	std::cout << "Frame buffer id: " << bufferID << std::endl;
 	
 
 }
@@ -183,8 +196,15 @@ void ExampleScene::draw()
 	SageRenderer::Set_Option_On(SageRenderer::SAGE_ENABLE_CAMERA);
 	SageRenderer::Set_Alpha(1.f);
 	SageRenderer::Set_Option_Off(SageRenderer::SAGE_ENABLE_CAMERA);
+	SageRenderer::Enable_OffScreenRender();
 	SageRenderer::Draw_Filled_Instance(instance);
-	//Check for GLERR
+	SageRenderer::Enable_OnScreenRender();
+	SageRenderer::Draw_Filled_Instance(instance);
+
+
+	
+
+	
 	
 
 	//SageRenderer::Draw_Rect(0, 0, 500, 1000, { 0,1,0,1 });

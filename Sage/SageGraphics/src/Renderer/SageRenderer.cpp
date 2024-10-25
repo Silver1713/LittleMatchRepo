@@ -16,13 +16,14 @@
 
 #include "SageRendererInternal.hpp"
 #include "SageRenderer.hpp"
-
-
+#include "SageFrameBuffer.hpp"
 class SageCameraInternal2D;
 SageViewport SageRenderer::viewport;
 RENDER_CONFIG SageRenderer::default_config{ SageRenderer::SAGE_ENABLE_TEXTURE | SageRenderer::SAGE_ENABLE_ALPHA};
 SageCamera* SageRenderer::camera;
 SageShader* SageRenderer::default_shader;
+
+SageFrameBuffer* SageRenderer::framebuffer;
 void SageRenderer::Draw_Filled(SageObject& object, RENDER_CONFIG config)
 {
 	SageRendererInternal::Draw_Filled(object, {
@@ -194,6 +195,7 @@ RENDER_CONFIG::RENDER_CONFIG(unsigned int options, float render_alpha, float bor
 
 void SageRenderer::Clear_Color(ToastBox::Vec4 clr)
 {
+	
 	SageRendererInternal::Clear_Color(clr);
 
 }
@@ -201,5 +203,36 @@ void SageRenderer::Clear_Color(ToastBox::Vec4 clr)
 void SageRenderer::Draw_Filled_Instance(SageInstance& object)
 {
 	SageRendererInternal::Draw_Filled(object);
+}
+
+void SageRenderer::Set_Framebuffer(SageFrameBuffer* fb)
+{
+	if (framebuffer)
+	{
+		framebuffer->Unbind();
+
+	}
+
+	framebuffer = fb;
+
+	
+
+
+}
+
+SageFrameBuffer* SageRenderer::Get_FrameBuffer()
+{
+	return framebuffer;
+}
+
+void SageRenderer::Enable_OffScreenRender()
+{
+	framebuffer->Bind();
+
+}
+
+void SageRenderer::Enable_OnScreenRender()
+{
+	framebuffer->Unbind();
 }
 

@@ -35,6 +35,7 @@ class SageAssembler
 	size_t script_to_tread_ratio; //!< How many scripts that the assembler can accept to compile per thread
 	std::thread::id thread_id; //!< The thread id of the current thread that is compiling the scripts.
 	std::string log; //!< The log of the current thread that is compiling the scripts. (For debugging purposes)
+
 	std::string data; //!< The data of the current thread that is compiling the scripts. (For debugging purposes)
 
 	std::string path_to_compiler_dir{}; //!< The path to the C# compiler
@@ -116,7 +117,7 @@ public:
 
 	void StartCompilation(bool into_one = false); //!< Start the a asynchronous compilation process
 	void Wait_For_Compile(); //!< Wait for the thread to finish compiling the scripts
-
+	std::string GetLog();
 	SageAssembly Get_Assembly(std::string const& name); //!< Get the assembly that was compiled
 
 

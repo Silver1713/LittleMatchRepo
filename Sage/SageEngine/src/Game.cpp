@@ -9,7 +9,7 @@
 			used as testbed for core engine features like user input, instantiation 
 			and stress tests.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content Â© 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 
@@ -20,7 +20,7 @@
 #include "SageAudio.hpp"
 #include "KeyInputs.h"
 #include "Game.hpp"
-#include "Components/Physics.hpp"
+#include "Components/RigidBody.hpp"
 
 
 #include <iostream>
@@ -79,8 +79,10 @@ namespace Game {
 		//Creates 2.5k instantiated "WHITE" prefab to test
 		for (unsigned int i{}; i < game_objects_to_create; ++i)
 		{
-			game_objects[std::to_string(i)] = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("WHITE"), "White_" + std::to_string(i));
-			transform_cache[std::to_string(i)] = static_cast<Transform*>(game_objects[std::to_string(i)]->Get_Component<Transform>());
+			//game_objects[std::to_string(i)] = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("SQUARE"), "Square_" + std::to_string(i));
+			GameObject* g = Game_Objects::Get_Game_Object("Square_" + std::to_string(i));
+			game_objects[g->Get_ID()] = g;
+			transform_cache["Square_" + std::to_string(i)] = static_cast<Transform*>(g->Get_Component<Transform>());
 
 			//randomize properties
 			ToastBox::Vec3 pos{ (float)(std::rand() % (int)max_pos.x + (int)min_pos.x), (float)(std::rand() % (int)max_pos.y + (int)min_pos.y),0.0f };
@@ -88,14 +90,14 @@ namespace Game {
 			ToastBox::Vec3 scale{ (float)(std::rand() % (int)max_scale.x + (int)min_scale.x), (float)(std::rand() % (int)max_scale.y + (int)min_scale.y),0.0f };
 			ToastBox::Vec3 col{ (float)(std::rand() % (int)max_col.x + (int)min_col.x) / 100.0f, (float)(std::rand() % (int)max_col.y + (int)min_col.y) / 100.0f,(float)(std::rand() % (int)max_col.z + (int)min_col.z) / 100.0f };
 
-			transform_cache[std::to_string(i)]->Set_Position(pos);
-			transform_cache[std::to_string(i)]->Set_Rotation(rot);
-			transform_cache[std::to_string(i)]->Set_Scale(scale);
+			transform_cache["Square_" + std::to_string(i)]->Set_Position(pos);
+			transform_cache["Square_" + std::to_string(i)]->Set_Rotation(rot);
+			transform_cache["Square_" + std::to_string(i)]->Set_Scale(scale);
 
-			Sprite2D* s = static_cast<Sprite2D*>(game_objects[std::to_string(i)]->Get_Component<Sprite2D>());
+			Sprite2D* s = static_cast<Sprite2D*>(g->Get_Component<Sprite2D>());
 			s->Set_Colour({ col[0],col[1],col[2] });
 
-			game_objects[std::to_string(i)]->Disable();
+			g->Disable();
 		}
 	}
 
@@ -113,20 +115,19 @@ namespace Game {
 		SageRenderer::Set_Current_View(vp);
 
 		vp.setViewport();
-
-		SageAudio::Play_Sound("bgm_main_menu", LOOP);
-		SageAudio::Play_Sound("ambient_rain", LOOP);
 		
-
-		Physics* plrphy = static_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component<Physics>());
+		RigidBody* plrphy = static_cast<RigidBody*>(Game_Objects::Get_Game_Object("Player")->Get_Component<RigidBody>());
 		GameObject* object = Game_Objects::Get_Game_Object("Player");
 		object->Add_Component(std::make_unique<Behaviour>());
 		Behaviour* behaviour = static_cast<Behaviour*>(object->Get_Component<Behaviour>());
+		behaviour->Init(object);
 		behaviour->Add_Instance("GamePlayBehaviour", "");
 		plrphy->Set_Gravity_Disable(false);
 		
 		SageAudio::Play_Sound("bgm_main_menu", LOOP);
 		SageAudio::Play_Sound("ambient_rain", LOOP);
+
+		plrphy->AddForce({ 0,500 }, RigidBody::ForceMode::Impulse);
 
 	}
 
@@ -137,7 +138,7 @@ namespace Game {
 	void Input()
 	{
 		float move_speed = 300.f;
-		Physics* plrphy = static_cast<Physics*>(Game_Objects::Get_Game_Object("Player")->Get_Component<Physics>());
+		RigidBody* plrphy = static_cast<RigidBody*>(Game_Objects::Get_Game_Object("Player")->Get_Component<RigidBody>());
 		//tests
 
 		ToastBox::Vec2& curr_velocity = plrphy->Get_Current_Velocity();
@@ -220,26 +221,26 @@ namespace Game {
 
 		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_1))
 		{
-			if (game_objects["0"]->Is_Enabled())
+			if (game_objects["Square_0"]->Is_Enabled())
 			{
 				return;
 			}
 
 			for (unsigned int i{}; i < game_objects_to_create; ++i)
 			{
-				game_objects[std::to_string(i)]->Enable();
+				game_objects["Square_" + std::to_string(i)]->Enable();
 			}
 		}
 		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_2))
 		{
-			if (!game_objects["0"]->Is_Enabled())
+			if (!game_objects["Square_0"]->Is_Enabled())
 			{
 				return;
 			}
 
 			for (unsigned int i{}; i < game_objects_to_create; ++i)
 			{
-				game_objects[std::to_string(i)]->Disable();
+				game_objects["Square_" + std::to_string(i)]->Disable();
 			}
 		}
 		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
@@ -249,9 +250,6 @@ namespace Game {
 			ToastBox::Vec2 mouse_pos{ static_cast<float>(x), static_cast<float>(y) };
 
 			ToastBox::Vec2 world = SageRenderer::camera->Screen_To_World(mouse_pos);
-
-
-			
 
 			GameObject* random = Game_Objects::Instantiate(Prefabs::Get_Prefab("SPAWN"), "White_1");
 			transform_cache["White_1"] = static_cast<Transform*>(random->Get_Component<Transform>());
@@ -351,7 +349,7 @@ namespace Game {
 					if (!_obj) {
 						return;
 					}
-					Physics* phy = static_cast<Physics*>(collider->Get_Parent()->Get_Component<Physics>());
+					RigidBody* phy = static_cast<RigidBody*>(collider->Get_Parent()->Get_Component<RigidBody>());
 					if (phy) {
 						phy->Get_Current_Velocity() = { 0,0 };
 						//std::cout << _obj->Get_ID() << "collided with " << collider->Get_Parent()->Get_ID() << '\n';
@@ -365,7 +363,7 @@ namespace Game {
 		// AABB Here
 		for (auto& collider : colliders)
 		{
-			Physics* phys = static_cast<Physics*>(collider->Get_Parent()->Get_Component<Physics>());
+			RigidBody* phys = static_cast<RigidBody*>(collider->Get_Parent()->Get_Component<RigidBody>());
 			if (!phys)
 				continue;
 			for (auto& other : colliders)
@@ -450,7 +448,7 @@ namespace Game {
 		//rotates the 2.5k objects
 		for (unsigned int i{}; i < game_objects_to_create; ++i)
 		{
-			transform_cache[std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f,0.0f });
+			transform_cache["Square_" + std::to_string(i)]->Rotate({(float)SageHelper::delta_time * 5.0f,0.f,0.0f});
 		}
 
 		camera.update();

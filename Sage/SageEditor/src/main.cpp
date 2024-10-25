@@ -18,19 +18,23 @@
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
 #endif
+
+#define ENABLE_NVIDIA_OPTIMUS 1
+
+#if ENABLE_NVIDIA_OPTIMUS == 1
+extern "C"
+{
+    __declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+}
+#endif
+
+
 #include <GLFW/glfw3.h> // Will drag system OpenGL headers
 
 // TESTING PURPOSES
-#include "AssetLoader.hpp"
-#include "GameObjects.hpp"
-#include "KeyInputs.h"
-#include "SageAudio.hpp"
+#include "SageEngine.hpp"
 #include "SageHelper.hpp"
-#include "SageMonoManager.hpp"
-#include "SageRenderer.hpp"
-#include "SageShaderManager.hpp"
-#include "SageTimer.hpp"
-#include "SceneManager.hpp"
+#include "SageWindow.hpp"
 constexpr double physics_update_target = 0.02;
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
@@ -44,6 +48,9 @@ constexpr double physics_update_target = 0.02;
 #ifdef __EMSCRIPTEN__
 #include "../libs/emscripten/emscripten_mainloop_stub.h"
 #endif
+const std::string editor_window_config_path = "../SageEditor/data/configuration/project_config.json";
+
+
 
 namespace
 {
@@ -62,9 +69,10 @@ void draw();
 void exit();
 
 // Create window with graphics context
-const GLFWvidmode* mode;
 GLFWwindow* window;
+SageWindow* window_self;
 ImVec4 clear_color;
+
 // Main code
 int main(int, char**)
 {
@@ -79,19 +87,18 @@ int main(int, char**)
     //io.ConfigViewportsNoAutoMerge = true;
     //io.ConfigViewportsNoTaskBarIcon = true;
 
-    init();
+	SageEngine::Init(editor_window_config_path.c_str());
+	init();
+    
     // Main loop
-#ifdef __EMSCRIPTEN__
-    // For an Emscripten build we are disabling file-system access, so let's not attempt to do a fopen() of the imgui.ini file.
-    // You may manually call LoadIniSettingsFromMemory() to load settings from your own storage.
-    io.IniFilename = nullptr;
-    EMSCRIPTEN_MAINLOOP_BEGIN
-#else
+
     while (!glfwWindowShouldClose(window))
-#endif
     {
         update();
+		SageEngine::Update();
+
         draw();
+		SageEngine::Draw(true);
 
         // Update and Render additional Platform Windows
         // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
@@ -107,9 +114,7 @@ int main(int, char**)
         glfwSwapBuffers(window);
     }
     exit();
-#ifdef __EMSCRIPTEN__
-    EMSCRIPTEN_MAINLOOP_END;
-#endif
+
 
     // Cleanup
     ImGui::EndFrame();
@@ -125,36 +130,15 @@ int main(int, char**)
 
 int init()
 {
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit())
-        return 1;
+	
+	
 
-    // Decide GL+GLSL versions
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-    // GL ES 2.0 + GLSL 100
-    const char* glsl_version = "#version 100";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-#elif defined(__APPLE__)
-    // GL 3.2 + GLSL 150
-    const char* glsl_version = "#version 150";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
-#else
     // GL 3.0 + GLSL 130
     const char* glsl_version = "#version 450";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
-#endif
 
     // Create window with graphics context
-	mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-    window = glfwCreateWindow(mode->width, mode->height, "Sage Editor", nullptr, nullptr);
+	
+    window = glfwGetCurrentContext();
     if (window == nullptr)
         return 1;
     glfwMakeContextCurrent(window);
@@ -175,37 +159,8 @@ int init()
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
-#ifdef __EMSCRIPTEN__
-    ImGui_ImplGlfw_InstallEmscriptenCallbacks(window, "#canvas");
-#endif
     ImGui_ImplOpenGL3_Init(glsl_version);
-    /*SageMonoManager::Initialize();
-    SageTimer::Init();
-    SageShaderManager::Add_Shader_Include("graphic_lib", "../SageGraphics/shaders/");
-    SageRenderer::Init();
-    SageTimer::Init();
-    Assets::Init();
-    Assets::Prefabs::Init();
-    SageAudio::Init();*/
-
-    // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
-    // - Read 'docs/FONTS.md' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    // - Our Emscripten build process allows embedding fonts to be accessible at runtime from the "fonts/" folder. See Makefile.emscripten for details.
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != nullptr);
-
-    // Our state
+    
     bool show_demo_window = true;
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -215,6 +170,7 @@ int init()
     io.IniFilename = "../SageEditor/config/custom_layout.ini";  // Use custom ini file for storing layout
     io.LogFilename = "../SageEditor/config/custom_layout_log.txt";
     ImGui::LoadIniSettingsFromDisk(io.IniFilename);
+
     return 0;
 }
 
@@ -257,36 +213,3 @@ void exit()
 {
     //SageEditor::CleanUpScene();
 }
-
-//void update()
-//{
-//    SageTimer::Update();
-//    SageHelper::Update();
-//    accumulator += SageTimer::delta_time;
-//    if (accumulator >= physics_update_target)
-//    {
-//        accumulator -= physics_update_target;
-//    }
-//    SM::Input();
-//    SM::Update();
-//
-//    SageAudio::Update();
-//}
-//
-//void draw()
-//{
-//    //SageHelper::Draw();
-//    std::string s = "Scene 1 | FPS: " + std::to_string(SageHelper::FPS) + "| Game Objects: " + std::to_string(Game_Objects::Get_Game_Objects().size());
-//    SageHelper::sage_ptr_window->Set_Title(s.c_str());
-//    SM::Draw();
-//}
-//
-//void exit()
-//{
-//    Game_Objects::Exit();
-//    SM::Free();
-//    Assets::Unload();
-//    SM::Unload();
-//    SageHelper::Exit();
-//    SageAudio::Exit();
-//}

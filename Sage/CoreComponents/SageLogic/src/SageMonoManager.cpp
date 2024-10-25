@@ -25,8 +25,8 @@ void SageMonoManager::Initialize()
 	// Initialize Mono Environment
 	loader->Init("../MONO/lib", "../MONO/etc");
 	compiler->Init("..\\MONO\\bin\\", "..\\BehaviourScripts\\programs");
-	compiler->Set_Command("mcs");
-	compiler->Set_Compile_Flags("/target:library");
+	compiler->Set_Command("csc"); // use roslyn compiler.
+	compiler->Set_Compile_Flags("/target:library -langversion:8.0");
 
 	// Compile ALL C# Scripts
 	Compile_Scripts("../BehaviourScripts/scripts", "../BehaviourScripts/programs/");
@@ -78,6 +78,7 @@ void SageMonoManager::Compiler_Add_Source(const char* name, const char* source)
 void SageMonoManager::Compiler_CompileAsync(bool into_lib)
 {
 	compiler->StartCompilation(into_lib);
+	compiler->GetLog();
 	compiler->Wait_For_Compile();
 }
 
@@ -176,11 +177,12 @@ MonoClass* SageMonoManager::Load_Klass_In_Image(MonoImage* Image, const char* _k
 
 
 
-MonoObject* SageMonoManager::Create_Instance(MonoClass* _klass)
+MonoObject* SageMonoManager::Create_Instance(MonoClass* _klass, bool do_not_instantiate)
 {
-
+	
 	MonoObject* instance = mono_object_new(Default_Domain, _klass);
-	mono_runtime_object_init(instance);
+	if (!do_not_instantiate)
+		mono_runtime_object_init(instance);
 	return instance;
 }
 
@@ -241,4 +243,11 @@ void SageMonoManager::Compile_Scripts(const char* script_dir, const char* output
 	compiler->Set_Output_Directory(output_assembly);
 	compiler->StartCompilation(true);
 	compiler->Wait_For_Compile();
+	std::cout << compiler->GetLog();
+}
+
+
+MonoDomain* SageMonoManager::Get_Default_Domain()
+{
+	return Default_Domain;
 }

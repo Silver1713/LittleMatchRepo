@@ -103,3 +103,14 @@ void SageWindow::SageWindowImpl::Set_Maximize(bool can_maximize)
 	window->Set_Maximize(can_maximize);
 	this->maximize = can_maximize;
 }
+
+int SageWindow::SageWindowImpl::Get_Display_Size_X() const
+{
+	return window->Get_Display_Size_X();
+}
+
+
+int SageWindow::SageWindowImpl::Get_Display_Size_Y() const
+{
+	return window->Get_Display_Size_Y();
+}

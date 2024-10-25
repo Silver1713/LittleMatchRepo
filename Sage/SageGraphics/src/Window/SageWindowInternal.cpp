@@ -223,8 +223,21 @@ void SageWindowInternal::Frame_Buffersize_Cb(GLFWwindow* window, int width, int 
 }
 
 
+int SageWindowInternal::Get_Display_Size_X() const
+{
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+	return mode->width;
+
+}
 
 
+int SageWindowInternal::Get_Display_Size_Y() const
+{
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+	return mode->height;
+}
 
 
 

@@ -367,6 +367,7 @@ namespace SageJSON
 			JSONType getKey() override;
 			JSONType const getKey() const override;
 			void appendList(Node* node);
+			size_t size() const;
 		};
 		/*!*****************************************************************************
 		\brief
@@ -388,6 +389,7 @@ namespace SageJSON
 			JSONType getKey() override;
 			JSONType const getKey() const override;
 			void addNode(Node* node);
+			size_t size() const;
 		};
 
 
@@ -508,11 +510,47 @@ namespace SageJSON
 
 	public:
 
+		class SageJSONArrayProxy
+		{
+			SageJSON& parent;
+			AST::AST::JSONIterator current_node;
+			AST::ArrayNode* array_node;
+
+			SageJSONArrayProxy& operator[](size_t index);
+
+			size_t size() const;
+
+
+			template <typename T>
+			T as();
+
+			SageJSONArrayProxy(SageJSON& mainClass, AST::AST::JSONIterator current);
+		};
+
+		
+
+		class SageJSONObjectProxy
+		{
+			SageJSON& parent;
+			AST::AST::JSONIterator current_node;
+			AST::ObjectNode* object_node;
+
+			SageJSONObjectProxy& operator[](std::string key);
+			size_t size() const;
+			template <typename T>
+			T as();
+
+			SageJSONObjectProxy(SageJSON& mainClass, AST::AST::JSONIterator current);
+		};
+
+		
+
 		size_t size; //!< The size of the JSON file
 		using NumberValue = double; //!< The number value of the JSON data
 		using StringValue = std::string; //!< The string value of the JSON data
 		using BoolValue = bool; //!< The boolean value of the JSON data
 		using NullValue = nullptr_t; //!< The null value of the JSON data
+		using JSONList = std::vector<AST::Node*>; //!< JSON object and arrays.
 		/*!****************************************************************************
 		 \brief Default constructor that create an empty JSON parser. Allows for streaming
 		 of data from the input stream
@@ -603,6 +641,9 @@ namespace SageJSON
 		 \brief Get the AST of the JSON data.
 		*******************************************************************************/
 		AST::AST const& getAST() const;
+
+		size_t len();
+		
 	};
 	template <typename T>
 	bool SageJSON::key_exists()
@@ -611,8 +652,7 @@ namespace SageJSON
 		{
 			if (!current_node)
 			{
-				current_node = nullptr;
-				return false;
+				throw std::invalid_argument("");
 			}
 			if (std::holds_alternative<T>(current_node->getKey()))
 			{
@@ -626,6 +666,7 @@ namespace SageJSON
 			}
 			else
 			{
+				throw std::runtime_error("");
 				current_node = nullptr;
 				return false;
 			}
@@ -711,6 +752,104 @@ namespace SageJSON
 			return *this;
 		}
 	}
+
+
+	template <typename T>
+	T SageJSON::SageJSONArrayProxy::as()
+	{
+		try {
+			if (!current_node)
+			{
+				throw std::invalid_argument("No JSON Array found, are you sure the key is correct?");
+			}
+			if (std::holds_alternative<T>(current_node->getKey()))
+			{
+				T val = std::get<T>(current_node->getKey());
+				current_node = nullptr;
+				return val;
+			}
+			else if (std::holds_alternative<std::reference_wrapper<T>>(current_node->getKey()))
+			{
+				T val = std::get<std::reference_wrapper<T>>(current_node->getKey()).get();
+				current_node = nullptr;
+				return val;
+			}
+			else
+			{
+				throw std::runtime_error("Type mismatch");
+
+			}
+		}
+		catch (std::runtime_error& e)
+		{
+			SageJSONCerr << "Warning: " << e.what() << " Variable is not converted to primitive data." << std::endl;
+			current_node = nullptr;
+			return {};
+		}
+		catch (std::invalid_argument& e)
+		{
+			SageJSONCerr << "Warning: " << e.what() << '\n' << " Variable is not converted to primitive data." << std::endl;
+			current_node = nullptr;
+			return {};
+		}
+		catch (...)
+		{
+			SageJSONCerr << "Warning: " << "Unknown error" << " Variable is not converted to primitive data." << std::endl;
+			current_node = nullptr;
+			return {};
+		}
+	}
+
+
+	template <typename T>
+	T SageJSON::SageJSONObjectProxy::as()
+	{
+		try {
+			if (!current_node)
+			{
+				throw std::invalid_argument("No JSON Array found, are you sure the key is correct?");
+			}
+			if (std::holds_alternative<T>(current_node->getKey()))
+			{
+				T val = std::get<T>(current_node->getKey());
+				current_node = nullptr;
+				return val;
+			}
+			else if (std::holds_alternative<std::reference_wrapper<T>>(current_node->getKey()))
+			{
+				T val = std::get<std::reference_wrapper<T>>(current_node->getKey()).get();
+				current_node = nullptr;
+				return val;
+			}
+			else
+			{
+				throw std::runtime_error("Type mismatch");
+
+			}
+		}
+		catch (std::runtime_error& e)
+		{
+			SageJSONCerr << "Warning: " << e.what() << " Variable is not converted to primitive data." << std::endl;
+			current_node = nullptr;
+			return {};
+		}
+		catch (std::invalid_argument& e)
+		{
+			SageJSONCerr << "Warning: " << e.what() << '\n' << " Variable is not converted to primitive data." << std::endl;
+			current_node = nullptr;
+			return {};
+		}
+		catch (...)
+		{
+			SageJSONCerr << "Warning: " << "Unknown error" << " Variable is not converted to primitive data." << std::endl;
+			current_node = nullptr;
+			return {};
+		}
+	}
+
+	
+
+
 }
 
 

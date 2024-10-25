@@ -25,6 +25,7 @@
 #include <array>
 #include <filesystem>
 #include "SageJSON.hpp"
+#include "SageTexture.h"
 
 #include "fmod.hpp"
 #include "fmod_errors.h"
@@ -221,21 +222,21 @@ namespace Assets
 					{
 						p.transform_type = prefabs_json["Prefabs"][i]["Transform_Type"].as<SageJSON::SageJSON::StringValue>();
 					}
-					if (prefabs_json["Prefabs"][i]["Pos"].key_exists<SageJSON::SageJSON::NumberValue>())
+					if (prefabs_json["Prefabs"][i]["Pos"][0].key_exists<SageJSON::SageJSON::NumberValue>())
 					{
 						for (unsigned int j{}; j < 3; ++j)
 						{
 							p.positions[j] = static_cast<float>(prefabs_json["Prefabs"][i]["Pos"][j].as<SageJSON::SageJSON::NumberValue>());
 						}
 					}
-					if (static_cast<float>(prefabs_json["Prefabs"][i]["Scale"].key_exists<SageJSON::SageJSON::NumberValue>()))
+					if (prefabs_json["Prefabs"][i]["Scale"][0].key_exists<SageJSON::SageJSON::NumberValue>())
 					{
 						for (unsigned int j{}; j < 3; ++j)
 						{
 							p.scale[j] = static_cast<float>(prefabs_json["Prefabs"][i]["Scale"][j].as<SageJSON::SageJSON::NumberValue>());
 						}
 					}
-					if (prefabs_json["Prefabs"][i]["RGBA"].key_exists<SageJSON::SageJSON::NumberValue>())
+					if (prefabs_json["Prefabs"][i]["RGBA"][0].key_exists<SageJSON::SageJSON::NumberValue>())
 					{
 						for (unsigned int j{}; j < 4; ++j)
 						{
@@ -270,12 +271,26 @@ namespace Assets
 						p.has_animator = prefabs_json["Prefabs"][i]["Has_Animator"].as<SageJSON::SageJSON::BoolValue>();
 						p.animation_set_ID = prefabs_json["Prefabs"][i]["Animator"][0]["Animation_Set_ID"].as<SageJSON::SageJSON::StringValue>();
 					}
+					if (prefabs_json["Prefabs"][i]["Is_Button"].key_exists<SageJSON::SageJSON::BoolValue>())
+					{
+						p.is_button = prefabs_json["Prefabs"][i]["Is_Button"].as<SageJSON::SageJSON::BoolValue>();
+					}
 				}
 				catch (...)
 				{
 					std::cerr << "Invalid value found during prefabs deserialization" << std::endl;
 				}
 				generated_prefabs[p.prefab_ID] = p;
+
+				//try
+				//{
+				//	if (prefabs_json["Prefabs"][i].key_exists)
+				//	{};
+				//}
+				//catch (...)
+				//{
+				//	break;
+				//}
 			}
 
 			prefabs_json.close();
@@ -667,14 +682,22 @@ namespace Assets
 						file.close();
 
 						Level l;
-						for (unsigned int i{}; i < current_level_json["Num_Prefabs"].as<SageJSON::SageJSON::NumberValue>(); ++i)
-						{							
+						for (unsigned int i{}; i < current_level_json["Num_Prefabs"].as<SageJSON::SageJSON::NumberValue>(); ++i) 
+						{
 							try
 							{
 								l.level_name = current_level_json["Level_Name"].as<SageJSON::SageJSON::StringValue>();
 								if (current_level_json["Prefabs"][i]["Prefab_ID"].key_exists<SageJSON::SageJSON::StringValue>())
 								{
 									l.prefabs.push_back(Prefabs::generated_prefabs[current_level_json["Prefabs"][i]["Prefab_ID"].as<SageJSON::SageJSON::StringValue>()]);
+								}
+								if (current_level_json["Prefabs"][i]["Count"].key_exists<SageJSON::SageJSON::NumberValue>())
+								{
+									l.counts.push_back(static_cast<unsigned int>(current_level_json["Prefabs"][i]["Count"].as<SageJSON::SageJSON::NumberValue>()));
+								}
+								else
+								{
+									l.counts.push_back(1u);
 								}
 								if (current_level_json["Prefabs"][i]["Identifier"].key_exists<SageJSON::SageJSON::StringValue>())
 								{
@@ -739,12 +762,22 @@ namespace Assets
 								else 
 								{
 									l.z_orders.push_back(0);
-								}								
+								}	
 							}
 							catch (...)
 							{
 								std::cerr << "Invalid level data in " << path << entry << std::endl;
 							}
+
+							//try
+							//{
+							//	if (current_level_json["Prefabs"][i+1]["Prefab_ID"].key_exists<SageJSON::SageJSON::StringValue>())
+							//	{};
+							//}
+							//catch (...)
+							//{
+							//	break;
+							//}
 						}
 						levels[l.level_name] = l;
 						current_level_json.close();

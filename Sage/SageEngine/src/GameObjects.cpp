@@ -10,7 +10,7 @@
 			that uses gameobjects. Also contains the gameobject constructor which setup itself
 			based on the prefab that is passed into.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content ï¿½ 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #include "GameObjects.hpp"
@@ -22,8 +22,9 @@
 #include <memory>
 #include <iostream>
 
+#include "BindingSystem.hpp"
 #include "SageSystemManager.hpp"
-#include "Components/Physics.hpp"
+#include "Components/RigidBody.hpp"
 #include "Systems/SageScripting.hpp"
 
 namespace Game_Objects
@@ -48,6 +49,7 @@ namespace Game_Objects
 			if (_g.second)
 			{
 				_g.second->Init();
+				BindingSystem::Init_Batch(_g.second.get());
 			}
 		}
 	}
@@ -62,7 +64,7 @@ namespace Game_Objects
 		{
 			if (_g.second)
 			{
-				
+				_g.second->Input();
 				_g.second->Update();
 			}
 		}
@@ -74,6 +76,7 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Draw()
 	{
+		std::cout << "Drawing\n";
 		SageRenderer::Clear_Color({ 1,1,1,1 });
 
 		for (unsigned int current_z{}; current_z <= max_z_orders; ++current_z)
@@ -240,11 +243,15 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	}
 	if (_p.has_physics)
 	{
-		Add_Component(std::make_unique<Physics>(ToastBox::Vec2{ _p.velocity.x ,_p.velocity.y }));
+		Add_Component(std::make_unique<RigidBody>(ToastBox::Vec2{ _p.velocity.x ,_p.velocity.y }));
 	}
 	if (_p.has_animator)
 	{
 		Add_Component(std::make_unique<Animator>(_p.animation_set_ID));
+	}
+	if (_p.is_button)
+	{
+		Add_Component(std::make_unique<Button>());
 	}
 
 	Init();
@@ -265,9 +272,31 @@ void GameObject::Init()
 	for (auto& _c : components)
 	{
 		_c->Init(this);
+
+		if (_c->Get_Component_Type() == ComponentType::BEHAVIOUR)
+		{
+			std::cout << "Behaviour Component Added\n";
+		}
 	}
 
 
+}
+
+/*!*****************************************************************************
+  \brief
+	Updates the inputs to the gameobject
+*******************************************************************************/
+void GameObject::Input()
+{
+	if (components.empty() || (!is_enabled))
+	{
+		return;
+	}
+
+	for (const auto& _c : components)
+	{
+		_c->Input();
+	}
 }
 
 /*!*****************************************************************************

@@ -56,6 +56,11 @@ public:
 	void Init();
 	/*!*****************************************************************************
 	  \brief
+		Updates the inputs to the gameobject
+	*******************************************************************************/
+	void Input();
+	/*!*****************************************************************************
+	  \brief
 		Updates the gameobject
 	*******************************************************************************/
 	void Update();
@@ -185,6 +190,12 @@ namespace Game_Objects
 	void Clear_Game_Objects();
 }
 
+/*!*****************************************************************************
+  \brief
+	Gets the component of the specified type T belonging to the gameobject
+  \return
+	pointer to the component or nullptr if not found
+*******************************************************************************/
 template <typename T, typename>
 T* GameObject::Get_Component()
 {

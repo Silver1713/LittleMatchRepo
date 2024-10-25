@@ -190,6 +190,18 @@ void Image::Set_Colour(std::initializer_list<float> const& _new_col)
 
 /*!*****************************************************************************
   \brief
+	Gets the colour of the images
+
+  \return
+	the colour
+*******************************************************************************/
+ToastBox::Vec4 const& Image::Get_Colour()
+{
+	return colour;
+}
+
+/*!*****************************************************************************
+  \brief
 	This function changes the transparency of the sprite
 
   \param _a

@@ -4,11 +4,13 @@
       {
         "Prefab_ID": "ALL_CAPS_ID",
         "Identifier": "Name of this instance of gameobject",
+        "Comments": "This will not be processed and is simply a place for developer comments",
         "Pos": [0,0,0],
         "Rot": [0,0,0],
         "Scale": [100,100,0],
         "RGBA" : [1,1,1,1],
-        "Z_Order" : 0
+        "Z_Order" : 0,
+        "Count" : 1
       }
     ],
 
@@ -69,18 +71,18 @@
         "Z_Order": 1
       },
       {
-        "Prefab_ID": "GUI_TEST",
-        "Identifier": "Controls",
-        "Pos": [500,500,0],
-        "Scale": [90,58,0],
-        "RGBA" : [1,1,1,1]
+        "Prefab_ID": "SQUARE",
+        "Identifier": "Square",
+        "Z_Order": 1,
+        "Comments": "2.5k object test for milestone 1",
+        "Count": 2500
       },
       {
-        "Prefab_ID": "GUI_TEST_TEXTURE",
+        "Prefab_ID": "GUI_SQUARE",
         "Identifier": "GUI_Top",
-        "Pos": [100,100,0],
-        "Scale": [90,58,0],
-        "RGBA" : [1,0,0,1],
+        "Pos": [960,540,0],
+        "Scale": [200,200,0],
+        "RGBA" : [1,1,1,1],
         "Z_Order": 1
       }
     ]

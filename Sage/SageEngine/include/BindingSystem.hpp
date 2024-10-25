@@ -29,8 +29,8 @@ public:
 
 	};
 	static std::vector<BindingSystem::MonoRepresentation> mono_entities;
-	static std::unordered_map<MonoObject*, MonoRepresentation*> cs_to_cpp_mapping;
-	static std::unordered_map<GameObject*, MonoRepresentation*> cpp_to_cs_mapping;
+	static std::unordered_map<MonoObject*, unsigned> cs_to_cpp_mapping;
+	static std::unordered_map<GameObject*, unsigned> cpp_to_cs_mapping;
 	
 	static void Map_Script_Instance_GameObject(MonoObject* _instance, GameObject* _entity);
 
@@ -41,7 +41,10 @@ public:
 
 	static GameObject* Get_GameObject_From_Instance(MonoObject* _instance);
 	
-	
+	static MonoObject* Get_MonoGameObject_From_Entity(GameObject* _entity);
+
+
+	static MonoRepresentation* Get_Mono_Represation_From_Entity(GameObject* _entity);
 
 	static void Init();
 
@@ -65,22 +68,23 @@ public:
 template <typename T>
 void BindingSystem::Create_Component_Shadow(T* component)
 {
+	if (!component) return;
 	GameObject* parent = component->Get_Parent();
-	MonoRepresentation* representation = cpp_to_cs_mapping[parent];
-	if (!representation)
+	bool found = cpp_to_cs_mapping.contains(parent);
+	if (!found)
 	{
 		return;
 	}
 	MonoObject* component_instance;
+	unsigned index = cpp_to_cs_mapping[parent];
 	switch (component->Get_Component_Type())
 	{
 	case ComponentType::TRANSFORM:
 		// Create transform shadow
 		component_instance = SageMonoManager::Create_Instance(SageMonoManager::Get_Klass_Info("Transform", "SageEngine")->klass);
-
-
-
-		representation->components[ComponentType::TRANSFORM] = component_instance;
+		mono_entities[index].components[ComponentType::TRANSFORM] = component_instance;
+		cs_to_cpp_mapping[component_instance] = index;
+		//mono_runtime_object_init(component_instance);
 		break;
 	default:
 		// Invalid component

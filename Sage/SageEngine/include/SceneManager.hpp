@@ -100,7 +100,7 @@ namespace SM {
 	  \param _unload
 		the unload function that the scene manager will use
 	*******************************************************************************/
-	void Set_Next_Scene(void(*_load)(), void(*_init)(), void (*_input)(), void(*_update)(), void (*_draw)(), void (*_free)(), void (*_unload)(), std::string const& new_level_ID = "Level_1");
+	void Set_Next_Scene(void(*_load)(), void(*_init)(), void (*_input)(), void(*_update)(), void (*_draw)(), void (*_free)(), void (*_unload)(), std::string const& new_level_ID = "level_1");
 	/*!*****************************************************************************
 	  \brief
 		Goes to the next scene as specified by Set_Next_Scene

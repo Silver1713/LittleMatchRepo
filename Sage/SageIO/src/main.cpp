@@ -27,19 +27,16 @@ int main()
 	while (!file.eof())
 	{
 		file >> json;
-		
-		/*std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-		
-		double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
-
-		std::cout << "Execution time: " << elapsed_time << " ms" << std::endl;*/
 	}
 
 
+
 	
-	
-		std::cout << json["Nested"]["BoolArray"][2].as<JSON::NumberValue>() << std::endl;
-	
+	std::cout << json["Nested"]["BoolArray"][2].as<JSON::NumberValue>()+2000 << std::endl;
+	JSON::NumberValue number = json["Nested"]["BoolArray"][2].as<JSON::NumberValue>();
+
+
+
 
 	
 

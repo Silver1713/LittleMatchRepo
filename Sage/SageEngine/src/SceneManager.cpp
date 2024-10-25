@@ -23,7 +23,9 @@
 
 #include <iostream>
 
+#include "EditorScene.hpp"
 #include "SplashScreen.hpp"
+#include "Scene.hpp"
 #include "Game.hpp"
 
 #include "SageMain.hpp"
@@ -122,38 +124,51 @@ namespace SM {
 	void Load()
 	{
 		//Creates all prefabs that are supposed to exist in current level scene
-		for (unsigned int i{}; i < current_level.prefabs.size(); i++)
+		for (unsigned int i{}; i < current_level.prefabs.size(); ++i)
 		{
-			GameObject* g;
-			Transform* t;
-			UITransform* ut;
-			Sprite2D* s;
-			Image* img;
-			g = Game_Objects::Instantiate(current_level.prefabs[i], current_level.identifier[i],current_level.z_orders[i]);
-			t = static_cast<Transform*>(g->Get_Component<Transform>());
-			ut = static_cast<UITransform*>(g->Get_Component<UITransform>());
-			if (ut)
+			for (unsigned int j{}; j < current_level.counts[i]; ++j)
 			{
-				ut->Set_Position(current_level.positions[i]);
-				ut->Set_Rotation(current_level.rotations[i]);
-				ut->Set_Scale(current_level.scale[i]);
-			}
-			else if (t)
-			{
-				t->Set_Position(current_level.positions[i]);
-				t->Set_Rotation(current_level.rotations[i]);
-				t->Set_Scale(current_level.scale[i]);
-			}
+				GameObject* g{ nullptr };
+				Transform* t{ nullptr };
+				UITransform* ut{ nullptr };
+				Sprite2D* s{ nullptr };
+				Image* img{ nullptr };
+				std::string identifier{};
+				if (current_level.counts[i] > 1u)
+				{
+					identifier = current_level.identifier[i] + '_' + std::to_string(j);
+				}
+				else 
+				{
+					identifier = current_level.identifier[i];
+				}
 
-			s = static_cast<Sprite2D*>(g->Get_Component<Sprite2D>());
-			img = static_cast<Image*>(g->Get_Component<Image>());
-			if (s)
-			{
-				s->Set_Colour(current_level.colour[i]);
-			}
-			else if (img)
-			{
-				img->Set_Colour(current_level.colour[i]);
+				g = Game_Objects::Instantiate(current_level.prefabs[i], identifier, current_level.z_orders[i]);
+				t = static_cast<Transform*>(g->Get_Component<Transform>());
+				ut = static_cast<UITransform*>(g->Get_Component<UITransform>());
+				if (ut)
+				{
+					ut->Set_Position(current_level.positions[i]);
+					ut->Set_Rotation(current_level.rotations[i]);
+					ut->Set_Scale(current_level.scale[i]);
+				}
+				else if (t)
+				{
+					t->Set_Position(current_level.positions[i]);
+					t->Set_Rotation(current_level.rotations[i]);
+					t->Set_Scale(current_level.scale[i]);
+				}
+
+				s = static_cast<Sprite2D*>(g->Get_Component<Sprite2D>());
+				img = static_cast<Image*>(g->Get_Component<Image>());
+				if (s)
+				{
+					s->Set_Colour(current_level.colour[i]);
+				}
+				else if (img)
+				{
+					img->Set_Colour(current_level.colour[i]);
+				}
 			}
 		}
 
@@ -312,6 +327,7 @@ namespace SM {
 	*******************************************************************************/
 	void Startup_Scene(std::string const& new_level_ID)
 	{
+		current_level = Assets::Levels::Get_Level(new_level_ID);
 		if (new_level_ID == "splash_screen")
 		{
 			SM::fp_load = Splash_Screen::Load;
@@ -322,12 +338,9 @@ namespace SM {
 			SM::fp_draw = Splash_Screen::Draw;
 			SM::fp_free = Splash_Screen::Free;
 			SM::fp_unload = Splash_Screen::Unload;
-			SM::Load();
-			SM::Init();
 		}
-		else 
+		else if (new_level_ID == "level_1")
 		{
-			current_level = Assets::Levels::Get_Level(new_level_ID);
 			SM::fp_load = Game::Load;
 			SM::fp_init = Game::Init;
 			SM::fp_draw = Game::Draw;
@@ -338,7 +351,34 @@ namespace SM {
 			SM::fp_unload = Game::Unload;
 			SM::Load();
 			SM::Init();
-		}	
+		}
+		else if (new_level_ID == "editor_scene")
+		{
+			current_level = Assets::Levels::Get_Level(new_level_ID);
+			SM::fp_load = EditorScene::Load;
+			SM::fp_init = EditorScene::Init;
+			SM::fp_draw = EditorScene::Draw;
+			SM::fp_input = EditorScene::Input;
+			SM::fp_update = EditorScene::Update;
+			SM::fp_draw = EditorScene::Draw;
+			SM::fp_free = EditorScene::Free;
+			SM::fp_unload = EditorScene::Unload;
+			SM::Load();
+			SM::Init();
+		}
+		else
+		{
+			SM::fp_load = Scene::Load;
+			SM::fp_init = Scene::Init;
+			SM::fp_draw = Scene::Draw;
+			SM::fp_input = Scene::Input;
+			SM::fp_update = Scene::Update;
+			SM::fp_draw = Scene::Draw;
+			SM::fp_free = Scene::Free;
+			SM::fp_unload = Scene::Unload;
+		}
+		SM::Load();
+		SM::Init();
 	}
 
 	/*!*****************************************************************************
