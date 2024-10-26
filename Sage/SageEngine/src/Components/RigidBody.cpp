@@ -42,7 +42,7 @@ void RigidBody::Update()
 
 void RigidBody::Exit() {}
 
-ComponentType RigidBody::Get_Component_Type() { return PHYSICS; }
+ComponentType RigidBody::Get_Component_Type() { return RIGIDBODY; }
 
 void RigidBody::Set_Gravity_Disable(bool _is_static)
 {

@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <mono/metadata/debug-helpers.h>
-
+#include <mono/metadata/object.h>
 #include "SageMonoManager.hpp"
 #include "SageScriptLoader.hpp"
 #include "GameObjects.hpp"
@@ -141,4 +141,25 @@ void SageScriptSystem::Map_Script_Instance_GameObject(MonoObject* _instance, Gam
 {
 	mapped_instances[_instance] = _entity;
 }
+
+
+void SageScriptSystem::Init_CSBehaviour_Instance(MonoObject* _instance)
+{
+	Invoke_Method_In_Instance(_instance, "Init()");
+
+}
+
+
+void SageScriptSystem::Throw_Exception(MonoString* message_instance)
+{
+	MonoClass* exception = mono_get_exception_class();
+	MonoObject* ex_instance = mono_object_new(SageMonoManager::Default_Domain, exception);
+	void* args[1];
+	args[0] = message_instance;
+	mono_runtime_invoke(mono_class_get_method_from_name(exception, ".ctor", 1), ex_instance, args, nullptr);
+
+	mono_raise_exception(reinterpret_cast<MonoException*>(ex_instance));
+}
+
+
 
