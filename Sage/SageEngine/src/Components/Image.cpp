@@ -103,7 +103,7 @@ void Image::Update()
 	obj->transform.scale.y = transform->Get_Scale().y;
 	obj->transform.orientation.x = transform->Get_Rotation().x;
 	obj->transform.orientation.y = transform->Get_Rotation().y;
-
+	obj->material.color = { colour[0],colour[1],colour[2],colour[3] };
 	//need to update color also
 
 	obj->Update();
@@ -167,7 +167,7 @@ void Image::Set_Colour(ToastBox::Vec4 const& _new_col)
 		if (obj)
 		{
 			obj->GetMaterial().color[i] = colour[i];
-		}		
+		}
 	}
 
 }
