@@ -1,1 +1,0 @@
-"Generate Solutions for VS 2022" > output.log
