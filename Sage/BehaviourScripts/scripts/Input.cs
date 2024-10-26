@@ -134,7 +134,7 @@ namespace SageEngine
         public static extern bool GetKey(KeyCode key);
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern bool GetKeyDown(KeyCode key);
-        [MethodImpl(MethodImplOptions.InternalCall)]
+        
 
     }
 }
