@@ -8,6 +8,7 @@ macro(import_tinyobjloader)
             tinyobjloader
             GIT_REPOSITORY https://github.com/tinyobjloader/tinyobjloader.git
             GIT_TAG release
+            GIT_PROGRESS TRUE
             SOURCE_DIR ${DEP_DIR}/tinyobjloader
         )
         FetchContent_MakeAvailable(tinyobjloader)
@@ -22,6 +23,7 @@ macro(import_lodepng)
             lodepng
             GIT_REPOSITORY https://github.com/lvandeve/lodepng.git
             GIT_TAG master
+            GIT_PROGRESS TRUE
             SOURCE_DIR ${DEP_DIR}/lodepng
         )
         FetchContent_MakeAvailable(lodepng)
@@ -35,6 +37,7 @@ macro(import_glm)
             glm
             GIT_REPOSITORY https://github.com/g-truc/glm.git
             GIT_TAG master
+            GIT_PROGRESS TRUE
             SOURCE_DIR ${DEP_DIR}/glm
         )
         FetchContent_MakeAvailable(glm)
@@ -48,6 +51,7 @@ macro(import_glew)
             glew_s
             GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
             GIT_TAG master
+            GIT_PROGRESS TRUE
             SOURCE_DIR ${DEP_DIR}/glew
         )
         FetchContent_MakeAvailable(glew_s)
@@ -61,6 +65,7 @@ macro(import_glfw)
             glfw
             GIT_REPOSITORY https://github.com/glfw/glfw.git
             GIT_TAG master
+            GIT_PROGRESS TRUE
             SOURCE_DIR ${DEP_DIR}/glfw
         )
 
@@ -88,6 +93,7 @@ macro(import_soil)
             soil
             GIT_REPOSITORY https://github.com/paralin/soil
             GIT_TAG master
+            GIT_PROGRESS TRUE
             SOURCE_DIR ${DEP_DIR}/soil
         )
         FetchContent_MakeAvailable(soil)
@@ -100,6 +106,7 @@ macro(import_stb)
         FetchContent_Declare(
             stb
             GIT_REPOSITORY https://github.com/nothings/stb.git
+            GIT_PROGRESS TRUE
             GIT_TAG master 
         )
         FetchContent_MakeAvailable(stb)
@@ -115,6 +122,7 @@ macro(import_backward_stacktrace)
             backward
             GIT_REPOSITORY https://github.com/bombela/backward-cpp
             GIT_TAG master
+            GIT_PROGRESS TRUE
             SOURCE_DIR ${DEP_DIR}/backward
         )
         FetchContent_MakeAvailable(backward)
@@ -132,6 +140,7 @@ macro(import_json)
             json
             GIT_REPOSITORY https://github.com/nlohmann/json
             GIT_TAG b36f4c477c40356a0ae1204b567cca3c2a57d201
+            GIT_PROGRESS TRUE
             SOURCE_DIR ${DEP_DIR}/json
         )
         FetchContent_MakeAvailable(json)
@@ -205,6 +214,7 @@ if (NOT TARGET freetype)
         freetype
         GIT_REPOSITORY https://github.com/freetype/freetype/
         GIT_TAG master
+        GIT_PROGRESS TRUE
         SOURCE_DIR ${DEP_DIR}/freetype
     )
     FetchContent_MakeAvailable(freetype)
@@ -219,6 +229,7 @@ macro (import_imgui)
             imgui
             GIT_REPOSITORY https://github.com/ocornut/imgui
             GIT_TAG docking
+            GIT_PROGRESS TRUE
             SOURCE_DIR ${DEP_DIR}/imgui
         )
         FetchContent_MakeAvailable(imgui)
@@ -271,7 +282,9 @@ IF (${MONO_IMPORT_SUCCESS})
         message(STATUS "MONO library not found in MONO/ folder")
         set(MONO_IMPORT_SUCCESS FALSE)
     endif()
-
+    
+    set(CMAKE_CSharp_COMPILER "${MONO_IMPORT_DIR}/bin/csc")
+    
     add_library(mono SHARED IMPORTED)
     message(STATUS "Mono: ${MONO_LIBRARY}")
     set_target_properties(mono PROPERTIES
