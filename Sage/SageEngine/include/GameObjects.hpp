@@ -151,6 +151,22 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
+		Gets the position of the transform of the gameobject
+	  \return
+		Vector 3 to the position of the gameobject
+	*******************************************************************************/
+	ToastBox::Vec3 const Get_Position();
+
+	/*!*****************************************************************************
+	  \brief
+		Sets the position of the transform of the gameobject
+	  \param
+		Vector 3 to the position of the gameobject
+	*******************************************************************************/
+	void Set_Position(ToastBox::Vec3 const& _new_pos);
+
+	/*!*****************************************************************************
+	  \brief
 		Adds a gameobject to be a child to this gameobject
 	  \param _new_child
 		the gameobject to add

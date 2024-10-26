@@ -42,6 +42,7 @@ class Component
 {
 protected:
 	GameObject* parent{ nullptr };
+	bool is_enabled{ true };
 public:
 	/*!*****************************************************************************
 	  \brief
@@ -113,5 +114,23 @@ public:
 		the new parent gameobject
 	*******************************************************************************/
 	void Set_Parent(GameObject* const _parent);
+
+	/*!*****************************************************************************
+	  \brief
+		Enable or disable the component
+
+	  \param _is_enabled
+		enabled or disabled
+	*******************************************************************************/
+	void Set_Enabled(bool const _is_enabled);
+
+	/*!*****************************************************************************
+	  \brief
+		Gets the active state of the component
+
+	  \return
+		whether is enabled or disabled
+	*******************************************************************************/
+	bool const Get_Enabled() const;
 };
 

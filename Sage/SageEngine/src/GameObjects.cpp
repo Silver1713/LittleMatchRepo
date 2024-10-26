@@ -253,6 +253,16 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	{
 		Add_Component(std::make_unique<Button>(_p.on_click,_p.on_click_hold,_p.on_click_release,_p.on_hover_enter,_p.on_hover,_p.on_hover_exit));
 	}
+	if (_p.is_slider)
+	{
+		Add_Component(std::make_unique<Slider>(
+			Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab(_p.slider_children_ID.at("Frame")), _identifier + "_Frame", _z_order),
+			Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab(_p.slider_children_ID.at("Fill")), _identifier + "_Fill", _z_order),
+			Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab(_p.slider_children_ID.at("BG")), _identifier + "_BG", _z_order),
+			_p.slider_init,
+			_p.slider_update));
+	}
+
 	if (_p.has_behaviour)
 	{
 		Add_Component(std::make_unique<Behaviour>());
@@ -270,7 +280,11 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 		for (unsigned int i{}; i < _p.num_children; ++i)
 		{
 			GameObject* p = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab(_p.children_IDs[i]), _identifier + "_Child_" + std::to_string(i), z_order);
-			this->Add_Child(p);
+			if (p)
+			{
+				p->Set_Position(Get_Position());
+			}
+			Add_Child(p);
 		}
 	}
 
@@ -456,6 +470,47 @@ void GameObject::Set_Parent(GameObject* const _new_parent)
 GameObject* GameObject::Get_Parent()
 {
 	return parent;
+}
+
+/*!*****************************************************************************
+  \brief
+	Gets the position of the transform of the gameobject
+  \return
+	Vector 3 to the position of the gameobject
+*******************************************************************************/
+ToastBox::Vec3 const GameObject::Get_Position()
+{
+	Transform* t = Get_Component<Transform>();
+	UITransform* ut = Get_Component<UITransform>();
+	if (t)
+	{
+		return t->Get_Position();
+	}
+	else if (ut)
+	{
+		return ut->Get_Position();
+	}
+	return ToastBox::Vec3();
+}
+
+/*!*****************************************************************************
+  \brief
+	Sets the position of the transform of the gameobject
+  \param
+	Vector 3 to the position of the gameobject
+*******************************************************************************/
+void GameObject::Set_Position(ToastBox::Vec3 const& _new_pos)
+{
+	Transform* t = Get_Component<Transform>();
+	UITransform* ut = Get_Component<UITransform>();
+	if (t)
+	{
+		t->Set_Position(_new_pos);
+	}
+	else if (ut)
+	{
+		ut->Set_Position(_new_pos);
+	}
 }
 
 /*!*****************************************************************************

@@ -137,32 +137,31 @@ namespace Game {
 	*******************************************************************************/
 	void Input()
 	{
-		float move_speed = 300.f;
 		RigidBody* plrphy = static_cast<RigidBody*>(Game_Objects::Get_Game_Object("Player")->Get_Component<RigidBody>());
 		//tests
 
 		ToastBox::Vec2& curr_velocity = plrphy->Get_Current_Velocity();
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_W))
 		{
-			curr_velocity.y = move_speed;
+			curr_velocity.y = plrphy->Get_Velocity().y;
 			animator_cache["Player"]->Reset_Parameters();
 			animator_cache["Player"]->Set_Parameter("is_walking", 1.f);
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_A))
 		{
-			curr_velocity.x = -move_speed;
+			curr_velocity.x = -plrphy->Get_Velocity().x;
 			animator_cache["Player"]->Reset_Parameters();
 			animator_cache["Player"]->Set_Parameter("is_idle", 1.f);
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_S))
 		{
-			curr_velocity.y = -move_speed;
+			curr_velocity.y = -plrphy->Get_Velocity().y;
 			animator_cache["Player"]->Reset_Parameters();
 			animator_cache["Player"]->Set_Parameter("is_attacking", 1.f);
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_D))
 		{
-			curr_velocity.x = move_speed;
+			curr_velocity.x = plrphy->Get_Velocity().x;
 			animator_cache["Player"]->Reset_Parameters();
 			animator_cache["Player"]->Set_Parameter("is_dead", 1.f);
 		}

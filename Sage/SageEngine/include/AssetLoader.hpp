@@ -225,6 +225,7 @@ namespace Assets
 		{
 			std::string prefab_ID{""};
 			std::string transform_type{"World"};
+			std::string object_shape{ "Rect" };
 			ToastBox::Vec3 positions{ 0,0,0 };
 			ToastBox::Vec3 rotations{0,0,0};
 			ToastBox::Vec3 scale{100.f,100.f,0};
@@ -238,7 +239,6 @@ namespace Assets
 			std::string animation_set_ID{ "" };
 
 			bool is_button{ false };
-
 			std::string on_click{ "Default_Click" };
 			std::string on_click_hold{ "" };
 			std::string on_click_release{ "" };
@@ -246,11 +246,15 @@ namespace Assets
 			std::string on_hover{ "Default_Button_Update" };
 			std::string on_hover_exit{ "Default_Button_Update" };
 
-			std::string object_shape{"Rect"};
-
 			bool has_children{ false };
 			unsigned int num_children{};
 			std::vector<std::string> children_IDs;
+
+			bool is_slider{ false };
+			//elements are Frame, Fill, BG
+			std::unordered_map<std::string, std::string> slider_children_ID;
+			std::string slider_init{ "" };
+			std::string slider_update{ "" };
 
 			bool has_behaviour{ false };
 			unsigned int num_behaviour{};

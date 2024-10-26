@@ -22,4 +22,5 @@
 #include "Components/RigidBody.hpp"
 #include "Components/Behaviour.hpp"
 #include "Components/Button.hpp"
+#include "Components/Slider.hpp"
 #include "Components/BoxCollider2D.hpp"

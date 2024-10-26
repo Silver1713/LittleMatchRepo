@@ -31,6 +31,7 @@ void RigidBody::Init(GameObject* _parent)
 
 void RigidBody::Update()
 {	
+	if (!is_enabled) { return; }
 	float dt = (float)SageTimer::delta_time;
 	if (enable_gravity)
 	{

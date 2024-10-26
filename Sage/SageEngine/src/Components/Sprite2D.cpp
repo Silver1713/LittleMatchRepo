@@ -96,6 +96,7 @@ void Sprite2D::Init(GameObject* _parent)
 *******************************************************************************/
 void Sprite2D::Update()
 {
+	if (!is_enabled) { return; }
 	//updates the sageobject with the current transforms of the Transform component
 	obj->transform.position.x = transform->Get_Position().x;
 	obj->transform.position.y = transform->Get_Position().y;

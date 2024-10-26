@@ -16,7 +16,7 @@ void Behaviour::Init(GameObject* _parent)
 
 void Behaviour::Update()
 {
-
+	if (!is_enabled) { return; }
 }
 
 void Behaviour::Draw()

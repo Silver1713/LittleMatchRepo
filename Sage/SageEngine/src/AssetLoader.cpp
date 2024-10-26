@@ -245,7 +245,7 @@ namespace Assets
 							p.colour[j] = static_cast<float>(prefabs_json["Prefabs"][i]["RGBA"][j].as<SageJSON::SageJSON::NumberValue>());
 						}
 					}
-					if (prefabs_json["Prefabs"][i]["Physics"]["Velocity"].key_exists<SageJSON::SageJSON::NumberValue>())
+					if (prefabs_json["Prefabs"][i]["Physics"]["Velocity"][0].key_exists<SageJSON::SageJSON::NumberValue>())
 					{
 						for (unsigned int j{}; j < 3; ++j)
 						{
@@ -308,26 +308,49 @@ namespace Assets
 							if (prefabs_json["Prefabs"][i]["Has_Behaviour"].key_exists<SageJSON::SageJSON::BoolValue>())
 							{
 								p.has_behaviour = prefabs_json["Prefabs"][i]["Has_Behaviour"].as<SageJSON::SageJSON::BoolValue>();
-								
-								p.num_behaviour = static_cast<unsigned int>(prefabs_json["Prefabs"][i]["Behaviour_List"].as<SageJSON::SageJSON::NumberValue>());
-								for (unsigned int j{}; j < p.num_behaviour; ++j)
+								if (p.has_behaviour)
 								{
-									p.cs_class_name.push_back(prefabs_json["Prefabs"][i]["Behaviour_List"][j]["CS_Class_Name"].as<SageJSON::SageJSON::StringValue>());
-									if (prefabs_json["Prefabs"][i]["Behaviour_List"][j]["CS_Namespace"].key_exists<SageJSON::SageJSON::StringValue>())
+									p.num_behaviour = static_cast<unsigned int>(prefabs_json["Prefabs"][i]["Behaviour_List"].as<SageJSON::SageJSON::NumberValue>());
+									for (unsigned int j{}; j < p.num_behaviour; ++j)
 									{
-										p.cs_namespace.push_back(prefabs_json["Prefabs"][i]["Behaviour_List"][j]["CS_Namespace"].as<SageJSON::SageJSON::StringValue>());
+										p.cs_class_name.push_back(prefabs_json["Prefabs"][i]["Behaviour_List"][j]["CS_Class_Name"].as<SageJSON::SageJSON::StringValue>());
+										if (prefabs_json["Prefabs"][i]["Behaviour_List"][j]["CS_Namespace"].key_exists<SageJSON::SageJSON::StringValue>())
+										{
+											p.cs_namespace.push_back(prefabs_json["Prefabs"][i]["Behaviour_List"][j]["CS_Namespace"].as<SageJSON::SageJSON::StringValue>());
+										}
 									}
-								}
+								}								
+							}
+						}
+					}
+					if (prefabs_json["Prefabs"][i]["Is_Slider"].key_exists<SageJSON::SageJSON::BoolValue>())
+					{
+						p.is_slider = prefabs_json["Prefabs"][i]["Is_Slider"].as<SageJSON::SageJSON::BoolValue>();
+						if (p.is_slider)
+						{
+							p.slider_children_ID["Frame"] = prefabs_json["Prefabs"][i]["Slider"]["Frame_Prefab_ID"].as<SageJSON::SageJSON::StringValue>();
+							p.slider_children_ID["Fill"] = prefabs_json["Prefabs"][i]["Slider"]["Fill_Prefab_ID"].as<SageJSON::SageJSON::StringValue>();
+							p.slider_children_ID["BG"] = prefabs_json["Prefabs"][i]["Slider"]["BG_Prefab_ID"].as<SageJSON::SageJSON::StringValue>();
+							if (prefabs_json["Prefabs"][i]["Slider"]["Init"].key_exists<SageJSON::SageJSON::StringValue>())
+							{
+								p.slider_init = prefabs_json["Prefabs"][i]["Slider"]["Init"].as<SageJSON::SageJSON::StringValue>();
+							}
+							if (prefabs_json["Prefabs"][i]["Slider"]["Update"].key_exists<SageJSON::SageJSON::StringValue>())
+							{
+								p.slider_update = prefabs_json["Prefabs"][i]["Slider"]["Update"].as<SageJSON::SageJSON::StringValue>();
 							}
 						}
 					}
 					if (prefabs_json["Prefabs"][i]["Has_Children"].key_exists<SageJSON::SageJSON::BoolValue>())
 					{
 						p.has_children = prefabs_json["Prefabs"][i]["Has_Children"].as<SageJSON::SageJSON::BoolValue>();
-						p.num_children = static_cast<unsigned int>(prefabs_json["Children"].as<SageJSON::SageJSON::JSONList>().size());
-						for (unsigned int j{}; j < p.num_children; ++j)
+						if (p.has_children)
 						{
-							p.children_IDs.push_back(prefabs_json["Prefabs"][i]["Children"][j]["Prefab_ID"].as<SageJSON::SageJSON::StringValue>());
+							p.num_children = static_cast<unsigned int>(prefabs_json["Children"].as<SageJSON::SageJSON::JSONList>().size());
+							for (unsigned int j{}; j < p.num_children; ++j)
+							{
+								p.children_IDs.push_back(prefabs_json["Prefabs"][i]["Children"][j]["Prefab_ID"].as<SageJSON::SageJSON::StringValue>());
+							}
 						}
 					}
 					
