@@ -17,8 +17,11 @@ public class PlayerBehaviour : SageBehaviour
     {
         string g_name = gameObject.name;
         SageDebug.Print(g_name);
+        //if (false)
+        //{
+        //    transform.position = new Vector2D(0, 0);
+        //}
         
-
 
     }
 

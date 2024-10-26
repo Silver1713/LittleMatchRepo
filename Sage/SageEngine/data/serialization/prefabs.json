@@ -155,7 +155,7 @@
           "Animation_Set_ID": "SPEARMAN"
         },
         "Has_Behaviour": false,
-        "Behaviour_List" : 
+        "Behaviour_List" :
         [
           {
             "CS_Class_Name":"PlayerBehaviour"
