@@ -1,6 +1,4 @@
-#include "imgui.h"
-#include "GameObjects.hpp"
-#include <stdio.h>
+#include "SageInspector.hpp"
 
 namespace Sage_Inspector
 {
@@ -73,13 +71,13 @@ namespace Sage_Inspector
             }
             ImGui::TableSetColumnIndex(2);
             float rot_y = _transform_component->Get_Rotation().y;
-            if (ImGui::InputFloat("##PositionY", &rot_y))
+            if (ImGui::InputFloat("##RotationY", &rot_y))
             {
                 _transform_component->Get_Rotation().y = rot_y;
             }
             ImGui::TableSetColumnIndex(3);
             float rot_z = _transform_component->Get_Rotation().z;
-            if (ImGui::InputFloat("##PositionZ", &rot_z))
+            if (ImGui::InputFloat("##ROTATIONZ", &rot_z))
             {
                 _transform_component->Get_Rotation().z = rot_z;
             }
@@ -192,6 +190,7 @@ namespace Sage_Inspector
             {
             	_ui_transform->Get_Scale().z = scale_z;
             }
+            ImGui::EndTable();
         }
     }
 
@@ -224,28 +223,40 @@ namespace Sage_Inspector
             {
                 _rigid_body->Get_Velocity().y = velocity_y;
             }
-            ImGui::EndTable;
+            ImGui::EndTable();
 	    }
 
         ImGui::Separator();
         ImGui::Text("Enable Gravity");
         static bool gravity_flag = _rigid_body->Gravity_Flag();
-        ImGui::Checkbox("##Gravity", &gravity_flag);
+        ImGui::Checkbox("##Enable Gravity", &gravity_flag);
         _rigid_body->Set_Gravity_Flag(gravity_flag);
         ImGui::Text("Gravity");
         float gravity_val = _rigid_body->Get_Gravity();
-        _rigid_body->Apply_New_Gravity(gravity_val);
+        if (ImGui::InputFloat("##Gravity Value", &gravity_val))
+        {
+            _rigid_body->Apply_New_Gravity(gravity_val);
+        }
+        
         ImGui::Separator();
 
         ImGui::Text("Mass");
         float mass = _rigid_body->Get_Mass();
-        if (ImGui::InputFloat("#Mass", &mass))
+        if (ImGui::InputFloat("##Mass", &mass))
         {
             _rigid_body->Apply_Mass(mass);
         }
     }
 
     void Show_Box_Collider2D_Component(BoxCollider2D* _box_collider2D)
+    {
+        ImGui::Text("Enable Debug Mode");
+        static bool debug_flag = _box_collider2D->Get_Debug();
+        ImGui::Checkbox("##Enable Debug", &debug_flag);
+        _box_collider2D->Set_Debug(debug_flag);
+    }
+
+    void Show_Image_Component(Image* _image)
     {
 	    
     }
@@ -263,115 +274,53 @@ namespace Sage_Inspector
     //    }
     //}
 
-    void ShowInspector() {
+    void ShowInspector(GameObject* _game_object) {
         
         //ImGui::Button("Add Component");
 
-        for (auto& gameobject : Game_Objects::Get_Game_Objects()) {
-            for (auto& component : gameobject.second.get()->Get_Component_List())
+        for (auto& component : _game_object->Get_Component_List())
+        {
+            switch (component.get()->Get_Component_Type())
             {
-                switch (component.get()->Get_Component_Type())
-                {
-                case TRANSFORM:
-                    Show_Transform_Component(dynamic_cast<Transform*>(component.get()));
-                    break;
-                case COMPONENT:
-                    break;
-                case UITRANSFORM:
-                    Show_UITransform_Component(dynamic_cast<UITransform*>(component.get()));
-                    break;
-                case SPRITE2D:
-                    break;
-                case IMAGE:
-                    break;
-                case RENDERER:
-                    break;
-                case ANIMATOR:
-                    break;
-                case BOXCOLLIDER2D:
-                    break;
-                case RIGIDBODY:
-                    Show_RigidBody_Component(dynamic_cast<RigidBody*>(component.get()));
-                    break;
-                case AUDIO:
-                    break;
-                case BEHAVIOUR:
-                    break;
-                case BUTTON:
-                    break;
-                case NUM_OF_TYPES_OF_COMPONENTS:
-                    break;
-                }
+            case COMPONENT:
+                break;
+            case TRANSFORM:
+                Show_Transform_Component(dynamic_cast<Transform*>(component.get()));
+                break;
+            case UITRANSFORM:
+                Show_UITransform_Component(dynamic_cast<UITransform*>(component.get()));
+                break;
+            case SPRITE2D:
+                break;
+            case IMAGE:
+                break;
+            case RENDERER:
+                // Not touch
+                break;
+            case ANIMATOR:
+                break;
+            case BOXCOLLIDER2D:
+                Show_Box_Collider2D_Component(dynamic_cast<BoxCollider2D*>(component.get()));
+                break;
+            case RIGIDBODY:
+                Show_RigidBody_Component(dynamic_cast<RigidBody*>(component.get()));
+                break;
+            case AUDIO:
+                // Not touch
+                break;
+            case BEHAVIOUR:
+                // Not touch
+                break;
+            case BUTTON:
+                // Not touch
+                break;
+            case NUM_OF_TYPES_OF_COMPONENTS:
+                // Not touch
+                break;
+            default:
+                break;
             }
         }
     }
 
-
-    //void Inspector()
-    //{
-    //    // Right side: draw properties
-    //    ImGui::BeginGroup();
-    //    if (TreeNode* node = selected_node)
-    //    {
-    //        //This is how renaming works on the Inspector that is supposed to change in the Hierarchy.
-    //        if (ImGui::InputText("###name", node->Name, IM_ARRAYSIZE(node->Name), ImGuiInputTextFlags_EnterReturnsTrue))
-    //        {
-    //            /*RenamingDoc = doc;
-    //            RenamingStarted = true;*/
-    //        }
-
-    //        ImGui::Separator();
-    //        if (ImGui::BeginTable("##properties", 2, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY))
-    //        {
-    //            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed);
-    //            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch, 2.0f); // Default twice larger
-    //            if (node->HasData)
-    //            {
-    //                // In a typical application, the structure description would be derived from a data-driven system.
-    //                // - We try to mimic this with our ExampleMemberInfo structure and the ExampleTreeNodeMemberInfos[] array.
-    //                // - Limits and some details are hard-coded to simplify the demo.
-    //                for (const ComponentInfo& field_desc : component_infos)
-    //                {
-    //                    ImGui::TableNextRow();
-    //                    ImGui::PushID(field_desc.Name);
-    //                    ImGui::TableNextColumn();
-    //                    ImGui::AlignTextToFramePadding();
-    //                    ImGui::TextUnformatted(field_desc.Name);
-    //                    ImGui::TableNextColumn();
-    //                    void* field_ptr = (void*)(((unsigned char*)node) + field_desc.Offset);
-    //                    switch (field_desc.DataType)
-    //                    {
-    //                    case ImGuiDataType_Bool:
-    //                    {
-    //                        IM_ASSERT(field_desc.DataCount == 1);
-    //                        ImGui::Checkbox("##Editor", (bool*)field_ptr);
-    //                        break;
-    //                    }
-    //                    case ImGuiDataType_S32:
-    //                    {
-    //                        int v_min = INT_MIN, v_max = INT_MAX;
-    //                        ImGui::SetNextItemWidth(-FLT_MIN);
-    //                        ImGui::DragScalarN("##Editor", field_desc.DataType, field_ptr, field_desc.DataCount, 1.0f, &v_min, &v_max);
-    //                        break;
-    //                    }
-    //                    case ImGuiDataType_Float:
-    //                    {
-    //                        float v_min = 0.0f, v_max = 1.0f;
-    //                        ImGui::SetNextItemWidth(-FLT_MIN);
-    //                        ImGui::SliderScalarN("##Editor", field_desc.DataType, field_ptr, field_desc.DataCount, &v_min, &v_max);
-    //                        break;
-    //                    }
-    //                    }
-    //                    ImGui::PopID();
-    //                }
-    //            }
-    //            ImGui::EndTable();
-    //        }
-    //    }
-    //    ImGui::EndGroup();
-    //}
-
-	void ComponentButtons() {
-		//if (I)
-	}
 }

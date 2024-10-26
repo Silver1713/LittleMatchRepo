@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 
+#include "EditorStateManager.hpp"
 #include "GameObjects.hpp"
 #include "imgui_internal.h"
 #include "SageFrameBuffer.hpp"
@@ -81,7 +82,11 @@ namespace SageEditor
             }*/
             // Sagecomponent.init
             ImGui::Begin("Inspector");
-
+            GameObject* test = EditorStateManager::Get_Selection();
+            if (test != nullptr)
+            {
+                Sage_Inspector::ShowInspector(test);
+            }
             //Inspector();
             ImGui::Text("This is the Inspector window.");
             ImGui::End();
@@ -309,22 +314,29 @@ namespace SageEditor
             //This example shows the reordering of GameObjects on the Hierarchy. Simple drag and drop.
             //Hardcoded array of GameObjects
             static const char* item_names[] = { "Player", "Empty GameObject 2", "Empty GameObject 3" };
+            
             for (int n = 0; n < IM_ARRAYSIZE(item_names); n++)
             {
                 const char* item = item_names[n];
                 ImGui::Selectable(item);
-
-                if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
+                
+                if (ImGui::IsItemActive())
                 {
-                    
-                    int n_next = n + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
-                    if (n_next >= 0 && n_next < IM_ARRAYSIZE(item_names))
+                    if (ImGui::IsItemHovered())
                     {
-                        item_names[n] = item_names[n_next];
-                        item_names[n_next] = item;
-                        ImGui::ResetMouseDragDelta();
+                        EditorStateManager::Add_Selected_Object(Game_Objects::Get_Game_Object("Player"));
+                        
+                        
+                        int n_next = n + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
+                        if (n_next >= 0 && n_next < IM_ARRAYSIZE(item_names))
+                        {
+                            item_names[n] = item_names[n_next];
+                            item_names[n_next] = item;
+                            ImGui::ResetMouseDragDelta();
+                        }
                     }
                 }
+                    
             }
             ImGui::PopItemFlag();
             ImGui::EndTable();
@@ -393,7 +405,7 @@ namespace SageEditor
                 }
                 ImGui::EndTable();
             }
-            Sage_Inspector::ShowInspector();
+            //Sage_Inspector::ShowInspector();
         }
         ImGui::EndGroup();
         
@@ -556,8 +568,8 @@ namespace SageEditor
             if (ImGui::BeginMenu("Window"))
             {
                 ImGui::MenuItem("Scene", nullptr, &show_scene_window);
-                ImGui::MenuItem("Inspector", nullptr, &show_inspector_window);
                 ImGui::MenuItem("Hierarchy", nullptr, &show_hierarchy_window);
+                ImGui::MenuItem("Inspector", nullptr, &show_inspector_window);
                 ImGui::MenuItem("Game", nullptr, &show_game_window);
                 ImGui::MenuItem("Console", nullptr, &show_console_window);
                 ImGui::MenuItem("Project", nullptr, &show_project_window);
@@ -570,8 +582,8 @@ namespace SageEditor
 
         Show_Scene_Window();
         Show_Game_Window();
-        Show_Inspector_Window();
         Show_Hierarchy_Window(CreateTreeNode());
+        Show_Inspector_Window();
         Show_Console_Window();
         Show_Project_Window();
         Show_Asset_Window();
