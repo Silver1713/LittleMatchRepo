@@ -271,7 +271,9 @@ IF (${MONO_IMPORT_SUCCESS})
         message(STATUS "MONO library not found in MONO/ folder")
         set(MONO_IMPORT_SUCCESS FALSE)
     endif()
-
+    
+    set(CMAKE_CSharp_COMPILER "${MONO_IMPORT_DIR}/bin/csc")
+    
     add_library(mono SHARED IMPORTED)
     message(STATUS "Mono: ${MONO_LIBRARY}")
     set_target_properties(mono PROPERTIES
