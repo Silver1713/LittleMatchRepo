@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 
+#include "GameObjects.hpp"
 #include "imgui_internal.h"
 #include "SageFrameBuffer.hpp"
 #include "SageRenderer.hpp"
@@ -35,6 +36,15 @@ namespace SageEditor
     void Show_Hierarchy_Window(TreeNode* root) {
         if (show_hierarchy_window) {
             ImGui::Begin("Hierarchy");
+            /*for (auto& gameObject : Game_Objects::Get_Game_Objects())
+            {
+                if (ImGui::Selectable(gameObject.second->Get_ID().c_str, selected_node == gameObject))
+                {
+                    selected_node = gameObject;
+                }
+
+	            
+            }*/
             Hierarchy(CreateTreeNode());
             /*if (ImGui::TreeNode("Parent 1"))
             {
@@ -65,53 +75,18 @@ namespace SageEditor
     {
         if (show_inspector_window)
         {
+            /*if (selected_game_object)
+            {
+                Sage_Inspector::ShowInspector();
+            }*/
             // Sagecomponent.init
             ImGui::Begin("Inspector");
-            Inspector();
+
+            //Inspector();
             ImGui::Text("This is the Inspector window.");
             ImGui::End();
         }
     }
-
-    //void Show_Project_Window()
-    //{
-    //    if (show_project_window)
-    //    {
-    //        ImGui::Begin("Project");
-    //        ImGui::Columns(2, "project_columns", true); // Create 2 columns that are resizeable
-    //        ImGui::BeginChild("FolderHierarchy", ImVec2(0, 0), true);
-
-    //        // HARDCODING TEST LAYOUT
-    //        if (ImGui::TreeNode("Assets"))
-    //        {
-       //         if (ImGui::TreeNode("Scenes"))
-    //            {
-    //                ImGui::TreeNodeEx("Main Scene", ImGuiTreeNodeFlags_Leaf);
-    //                ImGui::TreePop();
-       //         }
-    //            if (ImGui::TreeNode("Scripts"))
-    //            {
-    //                ImGui::TreeNodeEx("PlayerController.cs", ImGuiTreeNodeFlags_Leaf);
-    //                ImGui::TreePop();
-    //            }
-    //            ImGui::TreePop();
-    //        }
-
-    //        ImGui::EndChild(); // End left panel
-    //        ImGui::NextColumn(); // Right column (Assets)
-    //        ImGui::BeginChild("AssetView", ImVec2(0, 0), true);
-    //        ImGui::Text("Assets");
-    //        ImGui::EndGroup();
-    //        ImGui::EndChild();
-    //        ImGui::Columns(1);
-    //        ImGui::End();
-
-    //        //ImGui::Separator();
-    //        ////ImGui::MenuItem("Assets", nullptr, &show_assets_window);
-    //        ImGui::Text("This is the Project window.");
-    //        ImGui::End();
-    //    }
-    //}
 
     void Show_Project_Window() {
         if (show_project_window) {
@@ -255,6 +230,11 @@ namespace SageEditor
     //Here you can see 3 examples of what is to be expected from manipulation of Hierarchy dockspace
     void Hierarchy(TreeNode* _root_node)
     {
+        // TESTING PURPOSES
+        auto const& test_subj = Game_Objects::Get_Game_Object("Player");
+
+        std::shared_ptr<GameObject> selectedGameObject = nullptr;
+
         static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 
         // - Currently using a table to benefit from RowBg feature
@@ -328,7 +308,7 @@ namespace SageEditor
 #pragma region GameObject Reordering
             //This example shows the reordering of GameObjects on the Hierarchy. Simple drag and drop.
             //Hardcoded array of GameObjects
-            static const char* item_names[] = { "Empty GameObject 1", "Empty GameObject 2", "Empty GameObject 3" };
+            static const char* item_names[] = { "Player", "Empty GameObject 2", "Empty GameObject 3" };
             for (int n = 0; n < IM_ARRAYSIZE(item_names); n++)
             {
                 const char* item = item_names[n];
@@ -336,6 +316,7 @@ namespace SageEditor
 
                 if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
                 {
+                    
                     int n_next = n + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
                     if (n_next >= 0 && n_next < IM_ARRAYSIZE(item_names))
                     {
@@ -353,7 +334,7 @@ namespace SageEditor
 
     //Draws Inspector dockspace
     void Inspector()
-    {
+    {   
         // Right side: draw properties
         ImGui::BeginGroup();
         if (TreeNode* node = selected_node)
@@ -412,7 +393,7 @@ namespace SageEditor
                 }
                 ImGui::EndTable();
             }
-            SageComponent::ShowInspector();
+            Sage_Inspector::ShowInspector();
         }
         ImGui::EndGroup();
         
@@ -476,53 +457,6 @@ namespace SageEditor
         // Submit the DockSpace
         ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-
-        
-
-
-        //if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-        //{
-        //    ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-        //    ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-        //    ImVec2 dockspace_size = ImGui::GetContentRegionAvail();
-        //    //ImGui::DockSpaceOverViewport(dockspace_id, ImGui::GetMainViewport(), dockspace_flags);
-        //    dockspace_size.y = 1440;
-        //    std::cout << dockspace_size.x << " * " << dockspace_size.y << std::endl;
-        //    //static bool first_time = true;
-        //    //if (first_time)
-        //    //{
-        //    //    first_time = false;
-
-        //    //    
-
-        //    //    // Clear any previous layout
-        //    //    ImGui::DockBuilderRemoveNode(dockspace_id); // Clear the node
-        //    //    ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace); // Re-add the dockspace node
-
-
-
-        //    //    // Step 1: Split the dockspace into left (30%) and right (70%)
-        //    //    ImGuiID dock_left_id{}, dock_middle_id{}, dock_right_id{};
-        //    //    ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.5f, &dock_left_id, &dock_right_id);  // Left 30%, Right 70%
-        //    //    
-        //    //    //// Step 2: Split the right (70%) into middle (70%) and right (30%)
-        //    //    //ImGui::DockBuilderSplitNode(dock_right_id, ImGuiDir_Right, 0.0f, &dock_right_id, &dock_middle_id);  // Right 30%, Middle 70%
-        //    //    //
-        //    //    //// Step 3: Split the left section into top (Hierarchy) and bottom (Project)
-        //    //    //ImGuiID dock_left_top_id{}, dock_left_bottom_id{};
-        //    //    //ImGui::DockBuilderSplitNode(dock_left_id, ImGuiDir_Down, 0.3f, &dock_left_bottom_id, &dock_left_top_id);  // Top 70%, Bottom 30%
-
-        //    //    // Dock windows into their respective sections
-        //    //    //ImGui::DockBuilderDockWindow("Hierarchy", dock_left_top_id);     // Top-left (Hierarchy)
-        //    //    //ImGui::DockBuilderDockWindow("Project", dock_left_bottom_id);    // Bottom-left (Project)
-        //    //    ImGui::DockBuilderDockWindow("Scene", dock_left_id);           // Middle (Scene)
-        //    //    ImGui::DockBuilderDockWindow("Inspector", dock_right_id);        // Right (Inspector)
-
-        //    //    // Finalize the layout
-        //    //    ImGui::DockBuilderFinish(dockspace_id);
-
-        //    //}
-        //}
 
         // MAIN MENU BAR
         if (ImGui::BeginMainMenuBar())

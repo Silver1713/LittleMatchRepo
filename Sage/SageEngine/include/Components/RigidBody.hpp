@@ -42,11 +42,12 @@ public:
 	
 	void Update() override;
 	void Exit() override;
-	ToastBox::Vec2 const& Get_Velocity();
+	ToastBox::Vec2 const& Get_Velocity() const;
+	ToastBox::Vec2& Get_Velocity();
 	ToastBox::Vec2& Get_Current_Velocity();
 	ComponentType Get_Component_Type() override;
 
-	// getters/setters for physics
+	// setters for physics
 	void Set_Gravity_Disable(bool _is_static);
 
 	// ApplyGravity
@@ -55,7 +56,23 @@ public:
 	// UpdateVelocity (future use)
 	void UpdateVelocity(float delta_time);
 
-
 	void AddForce(ToastBox::Vec2 force, ForceMode mode);
-	
+
+	// Return Gravity bool flag
+	bool Gravity_Flag() const;
+
+	bool Gravity_Flag();
+
+	// Set Gravity bool flag
+	void Set_Gravity_Flag(bool flag);
+
+	// Get and Set mass
+	float Get_Mass() const;
+
+	void Apply_Mass(float new_mass);
+
+	// Get and Set gravity
+	float Get_Gravity() const;
+
+	void Apply_New_Gravity(float new_gravity);
 };

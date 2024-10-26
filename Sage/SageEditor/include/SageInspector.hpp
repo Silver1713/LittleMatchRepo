@@ -1,6 +1,6 @@
 #include "imgui.h"
 
-namespace SageComponent 
+namespace Sage_Inspector 
 {
 	void ShowInspector();
 }
