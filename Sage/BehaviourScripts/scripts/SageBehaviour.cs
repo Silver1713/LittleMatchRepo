@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using SageEngine.Debug;
-
+using SageEngine.Math;
 
 namespace SageEngine
 {
-    public class SageBehaviour
+    public class SageBehaviour : Component
     {
+        
         void Init()
         {
             Console.WriteLine("SageBehaviour Init");

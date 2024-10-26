@@ -103,6 +103,9 @@ void Image::Update()
 	obj->transform.scale.y = transform->Get_Scale().y;
 	obj->transform.orientation.x = transform->Get_Rotation().x;
 	obj->transform.orientation.y = transform->Get_Rotation().y;
+
+	//need to update color also
+
 	obj->Update();
 }
 /*!*****************************************************************************
@@ -186,6 +189,18 @@ void Image::Set_Colour(std::initializer_list<float> const& _new_col)
 			obj->GetMaterial().color[i] = colour[i];
 		}	
 	}
+}
+
+/*!*****************************************************************************
+  \brief
+	Gets the colour of the images
+
+  \return
+	the colour
+*******************************************************************************/
+ToastBox::Vec4 const& Image::Get_Colour()
+{
+	return colour;
 }
 
 /*!*****************************************************************************

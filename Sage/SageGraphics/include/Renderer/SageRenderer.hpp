@@ -34,6 +34,7 @@ class SageTexture; //!< Forward declaration of the SageTexture class
 class SageShader; //!< Forward declaration of the SageShader class
 
 class SageCamera; //!< Forward declaration of the SageCamera class
+class SageFrameBuffer; //!< Forward declaration of the SageFramebuffer class
 
 
 /*!*****************************************************************************
@@ -172,7 +173,7 @@ struct SageRenderer
 	static SageShader* default_shader; //!< The default shader program used for rendering when no shader is specified.
 	static SageCamera* camera; //!< The active camera used for rendering.
 
-
+	static SageFrameBuffer* framebuffer; //!< The framebuffer used for offscreen rendering.
 
 	/*!*****************************************************************************
 	\brief
@@ -478,6 +479,13 @@ struct SageRenderer
 	*******************************************************************************/
 	static void Clear_Color(ToastBox::Vec4 clr);
 
+	static void Create_New_Screen();
+
+	static void Set_Framebuffer(SageFrameBuffer* framebuffer);
+	static SageFrameBuffer* Get_FrameBuffer();
+
+	static void Enable_OffScreenRender();
+	static void Enable_OnScreenRender();
 };
 
 

@@ -103,6 +103,8 @@ void Sprite2D::Update()
 	obj->transform.scale.y = transform->Get_Scale().y;
 	obj->transform.orientation.x = transform->Get_Rotation().x;
 	obj->transform.orientation.y = transform->Get_Rotation().y;
+
+	//need to update color also
 	obj->Update();
 }
 /*!*****************************************************************************
@@ -201,6 +203,19 @@ void Sprite2D::Set_Colour(std::initializer_list<float> const& _new_col)
 		}	
 	}
 }
+
+/*!*****************************************************************************
+  \brief
+	Gets the colour of the sprite
+
+  \return
+	the colour
+*******************************************************************************/
+ToastBox::Vec4 const& Sprite2D::Get_Colour()
+{
+	return colour;
+}
+
 
 /*!*****************************************************************************
   \brief

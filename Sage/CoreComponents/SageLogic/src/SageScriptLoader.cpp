@@ -1,6 +1,7 @@
 #include "SageScriptLoader.hpp"
 
 #include <iostream>
+#include <sstream>
 #include <thread>
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/debug-helpers.h>
@@ -101,5 +102,4 @@ MonoDomain* SageLoader::Get_RT_Domain()
 {
 	return runtime_domain;
 }
-
 

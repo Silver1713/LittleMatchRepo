@@ -41,7 +41,7 @@ namespace Splash_Screen {
 	*******************************************************************************/
 	void Load()
 	{
-		digipen_splash_screen = Game_Objects::Instantiate(Prefabs::Get_Prefab("DIGIPEN_SPLASH_SCREEN"),"Digipen_Splash_Screen");
+		digipen_splash_screen = Game_Objects::Get_Game_Object("splash_screen");
 	}
 
 	/*!*****************************************************************************
@@ -87,7 +87,7 @@ namespace Splash_Screen {
 				SM::Start_Fade_Out();
 				SM::Set_Next_Scene(Game::Load, Game::Init, Game::Input, Game::Update, Game::Draw, Game::Free, Game::Unload);
 				is_triggered = true;
-			}			
+			}
 			if (SM::Has_Faded_Out())
 			{
 				is_triggered = false;

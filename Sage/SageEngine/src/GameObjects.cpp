@@ -10,7 +10,7 @@
 			that uses gameobjects. Also contains the gameobject constructor which setup itself
 			based on the prefab that is passed into.
 
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
+			All content ï¿½ 2024 DigiPen Institute of Technology Singapore. All rights reserved.
 */
 /* End Header **************************************************************************/
 #include "GameObjects.hpp"
@@ -22,8 +22,9 @@
 #include <memory>
 #include <iostream>
 
+#include "BindingSystem.hpp"
 #include "SageSystemManager.hpp"
-#include "Components/Physics.hpp"
+#include "Components/RigidBody.hpp"
 #include "Systems/SageScripting.hpp"
 
 namespace Game_Objects
@@ -48,6 +49,7 @@ namespace Game_Objects
 			if (_g.second)
 			{
 				_g.second->Init();
+				BindingSystem::Init_Batch(_g.second.get());
 			}
 		}
 	}
@@ -62,7 +64,7 @@ namespace Game_Objects
 		{
 			if (_g.second)
 			{
-				
+				_g.second->Input();
 				_g.second->Update();
 			}
 		}
@@ -74,6 +76,7 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Draw()
 	{
+		std::cout << "Drawing\n";
 		SageRenderer::Clear_Color({ 1,1,1,1 });
 
 		for (unsigned int current_z{}; current_z <= max_z_orders; ++current_z)
@@ -240,11 +243,24 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	}
 	if (_p.has_physics)
 	{
-		Add_Component(std::make_unique<Physics>(ToastBox::Vec2{ _p.velocity.x ,_p.velocity.y }));
+		Add_Component(std::make_unique<RigidBody>(ToastBox::Vec2{ _p.velocity.x ,_p.velocity.y }));
 	}
 	if (_p.has_animator)
 	{
 		Add_Component(std::make_unique<Animator>(_p.animation_set_ID));
+	}
+	if (_p.is_button)
+	{
+		Add_Component(std::make_unique<Button>(_p.on_click,_p.on_click_hold,_p.on_click_release,_p.on_hover_enter,_p.on_hover,_p.on_hover_exit));
+	}
+	//Generates children if it has any
+	if (_p.has_children)
+	{
+		for (unsigned int i{}; i < _p.num_children; ++i)
+		{
+			GameObject* p = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab(_p.children_IDs[i]), _identifier + "_Child_" + std::to_string(i), z_order);
+			this->Add_Child(p);
+		}
 	}
 
 	Init();
@@ -265,9 +281,31 @@ void GameObject::Init()
 	for (auto& _c : components)
 	{
 		_c->Init(this);
+
+		if (_c->Get_Component_Type() == ComponentType::BEHAVIOUR)
+		{
+			std::cout << "Behaviour Component Added\n";
+		}
 	}
 
 
+}
+
+/*!*****************************************************************************
+  \brief
+	Updates the inputs to the gameobject
+*******************************************************************************/
+void GameObject::Input()
+{
+	if (components.empty() || (!is_enabled))
+	{
+		return;
+	}
+
+	for (const auto& _c : components)
+	{
+		_c->Input();
+	}
 }
 
 /*!*****************************************************************************
@@ -385,4 +423,80 @@ void GameObject::Disable()
 void GameObject::Add_Component(std::unique_ptr<Component> _c)
 {
 	components.push_back(std::move(_c));
+}
+
+/*!*****************************************************************************
+  \brief
+	Clears all gameobjects
+  \return
+	Returns the vector of components that the gameobject posseses
+*******************************************************************************/
+std::vector<std::unique_ptr<Component>>& GameObject::Get_Component_List()
+{
+	return components;
+}
+
+/*!*****************************************************************************
+  \brief
+	Sets the parent
+  \param _new_parent
+	pointer to the new parent gameobject
+*******************************************************************************/
+void GameObject::Set_Parent(GameObject* const _new_parent)
+{
+	parent = _new_parent;
+}
+
+/*!*****************************************************************************
+  \brief
+	Gets the parent
+  \return
+	pointer to the parent gameobject
+*******************************************************************************/
+GameObject* GameObject::Get_Parent()
+{
+	return parent;
+}
+
+/*!*****************************************************************************
+  \brief
+	Adds a gameobject to be a child to this gameobject
+  \param _new_child
+	the gameobject to add
+*******************************************************************************/
+void GameObject::Add_Child(GameObject* const _new_child)
+{
+	_new_child->Set_Parent(this);
+	children[_new_child->Get_ID()] = _new_child;
+}
+
+/*!*****************************************************************************
+  \brief
+	Removes a child from the map of children gameobjects of this gameobject
+  \param _identifier
+	the name of the child that is to be removed
+*******************************************************************************/
+void GameObject::Remove_Child(std::string const& _identifier)
+{
+	if (children.find(_identifier) != children.end())
+	{
+		children.erase(_identifier);
+	}
+}
+
+/*!*****************************************************************************
+  \brief
+	Gets the child with the given name
+  \param _identifier
+	the name of the child that is to be gotten
+  \return
+	the poitner to the gameobject if it exists, nullptr if not
+*******************************************************************************/
+GameObject* GameObject::Get_Child(std::string const& _identifier)
+{
+	if (children.find(_identifier) != children.end())
+	{
+		return children[_identifier];
+	}
+	return nullptr;
 }

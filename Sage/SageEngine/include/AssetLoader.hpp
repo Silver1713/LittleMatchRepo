@@ -160,7 +160,7 @@ namespace Assets
 		{
 			std::string name;
 			Assets::Animations::Animation animation;
-			float speed_multiplier;
+			float speed_multiplier{};
 			bool looping{ true };
 			bool is_starting_state{ false };
 		};
@@ -171,14 +171,14 @@ namespace Assets
 			std::string from_state;
 			std::string to_state;
 			std::vector<Condition> conditions;
-			float duration;
+			float duration{};
 		};
 
 		// Represents a parameter in the animation system
 		struct Parameter 
 		{
 			std::string name;
-			float value;
+			float value{};
 		};
 
 		//what defines an animation set
@@ -233,36 +233,25 @@ namespace Assets
 			std::string sprite_texture_ID{""};
 			bool has_collider{false};
 			bool has_physics{false};
+
 			bool has_animator{ false };
 			std::string animation_set_ID{ "" };
+
+			bool is_button{ false };
+
+			std::string on_click{ "Default_Click" };
+			std::string on_click_hold{ "" };
+			std::string on_click_release{ "" };
+			std::string on_hover_enter{ "Default_Button_Update" };
+			std::string on_hover{ "Default_Button_Update" };
+			std::string on_hover_exit{ "Default_Button_Update" };
+
 			std::string object_shape{"Rect"};
+
+			bool has_children{ false };
+			unsigned int num_children{};
+			std::vector<std::string> children_IDs;
 		};
-		
-		//label for each type of information a parsed prefab will have
-		typedef enum
-		{
-			PREFAB_ID,
-			TRANSFORM_TYPE,
-			POS_X,
-			POS_Y,
-			POS_Z,
-			ROT_X,
-			ROT_Y,
-			ROT_Z,
-			SCALE_X,
-			SCALE_Y,
-			SCALE_Z,
-			COLOR_R,
-			COLOR_G,
-			COLOR_B,
-			COLOR_A,
-			SPRITE_TEXTURE_ID,
-			COL_D,
-			HAS_PHYSICS,
-			PHYSICS_VELOCITY,
-			OBJ_SHAPE,
-			NUM_DATA_TYPES
-		} Data_Type;
 
 		/*!*****************************************************************************
 		  \brief
@@ -331,6 +320,7 @@ namespace Assets
 		{
 			std::string level_name;
 			std::vector<Prefabs::Prefab> prefabs;
+			std::vector<unsigned int> counts;
 			std::vector<std::string> identifier;
 			std::vector<ToastBox::Vec3> positions;
 			std::vector<ToastBox::Vec3> rotations;
@@ -338,27 +328,6 @@ namespace Assets
 			std::vector<ToastBox::Vec4> colour;
 			std::vector<unsigned int> z_orders;
 		};
-		//the label for each type of information in a deserialized Level
-		typedef enum
-		{
-			PREFAB_ID,
-			IDENTIFIER,
-			POS_X,
-			POS_Y,
-			POS_Z,
-			ROT_X,
-			ROT_Y,
-			ROT_Z,
-			SCALE_X,
-			SCALE_Y,
-			SCALE_Z,
-			COLOR_R,
-			COLOR_G,
-			COLOR_B,
-			COLOR_A,
-			Z_ORDER,
-			NUM_DATA_TYPES
-		} Data_Type;
 
 		/*!*****************************************************************************
 		  \brief
