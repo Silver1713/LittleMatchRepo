@@ -298,6 +298,7 @@ namespace Sage_Inspector
                 // Not touch
                 break;
             case ANIMATOR:
+                // Not touch
                 break;
             case BOXCOLLIDER2D:
                 Show_Box_Collider2D_Component(dynamic_cast<BoxCollider2D*>(component.get()));

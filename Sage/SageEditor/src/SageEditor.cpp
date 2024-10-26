@@ -11,6 +11,7 @@
 #include "SageFrameBuffer.hpp"
 #include "SageRenderer.hpp"
 #include "SageInspector.hpp"
+#include "SageProject.hpp"
 
 static bool show_hierarchy_window = true;
 static bool show_console_window = true;
@@ -95,50 +96,52 @@ namespace SageEditor
 
     void Show_Project_Window() {
         if (show_project_window) {
-            ImGui::Begin("Project");
+            Sage_Project::Initialize("../SageEditor/client");
+            Sage_Project::Show();
+            //ImGui::Begin("Project");
 
-            // Split the window into two sections: folder structure (left) and asset view (right)
-            ImGui::Columns(2, "project_columns", true);  // Create two columns, resizable
+            //// Split the window into two sections: folder structure (left) and asset view (right)
+            //ImGui::Columns(2, "project_columns", true);  // Create two columns, resizable
 
-            // Left column: Folder hierarchy
-            ImGui::BeginChild("FolderHierarchy", ImVec2(0, 0), true);
+            //// Left column: Folder hierarchy
+            //ImGui::BeginChild("FolderHierarchy", ImVec2(0, 0), true);
 
-            // HARDCODING TESTING LAYOUT
-            if (ImGui::TreeNode("Assets")) {
-                if (ImGui::TreeNode("Scenes")) {
-                    ImGui::Text("Main Scene");
-                    ImGui::TreePop();  // Pop the "Scenes" node
-                }
+            //// HARDCODING TESTING LAYOUT
+            //if (ImGui::TreeNode("Assets")) {
+            //    if (ImGui::TreeNode("Scenes")) {
+            //        ImGui::Text("Main Scene");
+            //        ImGui::TreePop();  // Pop the "Scenes" node
+            //    }
 
-                if (ImGui::TreeNode("Scripts")) {
-                    ImGui::Text("PlayerController.cs");
-                    ImGui::TreePop();  // Pop the "Scripts" node
-                }
+            //    if (ImGui::TreeNode("Scripts")) {
+            //        ImGui::Text("PlayerController.cs");
+            //        ImGui::TreePop();  // Pop the "Scripts" node
+            //    }
 
-                ImGui::TreePop();  // Pop the "Assets" node
-            }
+            //    ImGui::TreePop();  // Pop the "Assets" node
+            //}
 
-            ImGui::EndChild();  // End left panel (Folder Hierarchy)
+            //ImGui::EndChild();  // End left panel (Folder Hierarchy)
 
-            ImGui::NextColumn();  // Move to the next column
+            //ImGui::NextColumn();  // Move to the next column
 
-            // Right column: Asset view
-            ImGui::BeginChild("AssetView", ImVec2(0, 0), true);
+            //// Right column: Asset view
+            //ImGui::BeginChild("AssetView", ImVec2(0, 0), true);
 
-            ImGui::Text("Assets");  // Title
-            ImGui::Separator();
+            //ImGui::Text("Assets");  // Title
+            //ImGui::Separator();
 
-            // Simulating asset grid or list (as icons)
-            ImGui::BeginGroup();
+            //// Simulating asset grid or list (as icons)
+            //ImGui::BeginGroup();
 
 
-            ImGui::EndGroup();
+            //ImGui::EndGroup();
 
-            ImGui::EndChild();  // End right panel (Asset View)
+            //ImGui::EndChild();  // End right panel (Asset View)
 
-            ImGui::Columns(1);  // Reset columns
+            //ImGui::Columns(1);  // Reset columns
 
-            ImGui::End();
+            //ImGui::End();
         }
     }
 
