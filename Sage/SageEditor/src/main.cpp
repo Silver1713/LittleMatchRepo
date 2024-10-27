@@ -9,6 +9,7 @@
 
 #include <backward.hpp>
 #include "SageEditor.hpp"
+#include "SageHierarchy.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -130,9 +131,6 @@ int main(int, char**)
 
 int init()
 {
-	
-	
-
     // GL 3.0 + GLSL 130
     const char* glsl_version = "#version 450";
 
@@ -196,7 +194,7 @@ void update()
 
 void draw()
 {
-    // Halis's Code and Hui Zong's Code
+    //[HALIS] [HUI ZONG]
     SageEditor::RenderGUI();
 
     // Rendering

@@ -1,13 +1,14 @@
-#include "SageEditor.hpp"
 #include "../../SageEngine/include/Game.hpp"
 #include <windows.h>
 #include <commdlg.h>
 #include <iostream>
 #include <string>
 
+#include "SageEditor.hpp"
 #include "imgui_internal.h"
 #include "SageFrameBuffer.hpp"
 #include "SageRenderer.hpp"
+#include "SageHierarchy.hpp"
 
 static bool show_hierarchy_window = true;
 static bool show_console_window = true;
@@ -21,25 +22,12 @@ static bool show_assets_window = false;
 namespace SageEditor
 {
     ImGuiTextFilter     Filter;
-    TreeNode* selected_node = NULL;
-    TreeNode* DemoTree = NULL;
 
     // Bool flags for the toggling of windows
-    void Show_Hierarchy_Window(TreeNode* root) {
+    void Show_Hierarchy_Window() {
         if (show_hierarchy_window) {
             ImGui::Begin("Hierarchy");
-            //Hierarchy();
-            /*if (ImGui::TreeNode("Parent 1"))
-            {
-                ImGui::Text("Child 1");
-                ImGui::Text("Child 2");
-                ImGui::TreePop();
-            }*/
-            /*if (ImGui::InputTextWithHint("##search", "search", Filter.InputBuf, IM_ARRAYSIZE(Filter.InputBuf))) {
-                Filter.Build();
-            }*/
-            //Hierarchy(CreateTreeNode());
-            //ImGui::Text("This is the Hierarchy window.");
+            SageHierarchy::Hierarchy();
             ImGui::End();
         }
     }
@@ -59,7 +47,7 @@ namespace SageEditor
         if (show_inspector_window)
         {
             ImGui::Begin("Inspector");
-            Inspector();
+            //Inspector();
             ImGui::End();
         }
     }
@@ -181,112 +169,107 @@ namespace SageEditor
         }
     }
 
-    void CleanUpScene() {
-        delete rootGameObject;
-        rootGameObject = nullptr;
-    }
-
-//    //Drawing Hierarchy dockspace with parameter of the TreeNode
-//    //Here you can see 3 examples of what is to be expected from manipulation of Hierarchy dockspace
-//    void Hierarchy(TreeNode* _root_node)
-//    {
-//        static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
-//
-//        // - Currently using a table to benefit from RowBg feature
-//        //Ctrl+F allows user to search GameObject
-//        ImGui::SetNextItemWidth(-FLT_MIN);
-//        ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F, ImGuiInputFlags_Tooltip);
-//        ImGui::PushItemFlag(ImGuiItemFlags_NoNavDefaultFocus, true);
-//        if (ImGui::Button("Add GameObject")) {
-//            CreateNewGameObject();
-//        }
-//        if (ImGui::InputTextWithHint("##search", "search", Filter.InputBuf, IM_ARRAYSIZE(Filter.InputBuf), ImGuiInputTextFlags_EscapeClearsAll))
-//            Filter.Build();
-//        ImGui::PopItemFlag();
-////#pragma region Visible Selection
-////        // 'selection_mask' is dumb representation of what may be user-side selection state.
-////        //  You may retain selection state inside or outside your objects in whatever format you see fit.
-////        // 'node_clicked' is temporary storage of what node we have clicked to process selection at the end
-////        /// of the loop. May be a pointer to your own node type, etc.
-////
-////        //This example shows the selectable nodes of GameObject but is not reflected onto the Inspector
-////        static int selection_mask = (1 << 2);
-////        int node_clicked = -1;
-////        for (int i = 0; i < 6; i++)
-////        {
-////            // Disable the default "open on single-click behavior" + set Selected flag according to our selection.
-////            // To alter selection we use IsItemClicked() && !IsItemToggledOpen(), so clicking on an arrow doesn't alter selection.
-////            ImGuiTreeNodeFlags node_flags = base_flags;
-////            const bool is_selected = (selection_mask & (1 << i)) != 0;
-////            if (is_selected)
-////                node_flags |= ImGuiTreeNodeFlags_Selected;
-////
-////            // Items 3..5 are Tree Leaves
-////            // The only reason we use TreeNode at all is to allow selection of the leaf. Otherwise we can
-////            // use BulletText() or advance the cursor by GetTreeNodeToLabelSpacing() and call Text().
-////            node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
-////            ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, "Selectable Leaf %d", i);
-////            if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-////                node_clicked = i;
-////            if (ImGui::BeginDragDropSource())
-////            {
-////                ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
-////                ImGui::Text("This is a drag and drop source");
-////                ImGui::EndDragDropSource();
-////            }
-////        }
-////        if (node_clicked != -1)
-////        {
-////            // Update selection state
-////            // (process outside of tree loop to avoid visual inconsistencies during the clicking frame)
-////            if (ImGui::GetIO().KeyCtrl)
-////                selection_mask ^= (1 << node_clicked);          // CTRL+click to toggle
-////            else //if (!(selection_mask & (1 << node_clicked))) // Depending on selection behavior you want, may want to preserve selection when clicking on item that is part of the selection
-////                selection_mask = (1 << node_clicked);           // Click to single-select
-////        }
-////#pragma endregion
-////
-////#pragma region Inspector Properties
-////        //This is the main example for changing of properties in Inspector when selecting a GameObject in Hierarchy
-////        //Currently, it doesn't save the properties as there's no File I/O or Parser for data.
-////        //Renaming in Inspector is not properly added as it doesn't update onto the Hierarchy
-////        if (ImGui::BeginTable("##bg", 1, ImGuiTableFlags_RowBg))
-////        {
-////            for (TreeNode* node : _root_node->Childs)
-////                if (Filter.PassFilter(node->Name)) // Filter root node
-////                    DrawTreeNode(node);
-////
-////            // FIXME: there is temporary (usually single-frame) ID Conflict during reordering as a same item may be submitting twice.
-////            // This code was always slightly faulty but in a way which was not easily noticeable.
-////            // Until we fix this, enable ImGuiItemFlags_AllowDuplicateId to disable detecting the issue.
-////            ImGui::PushItemFlag(ImGuiItemFlags_AllowDuplicateId, true);
-////        }
-////#pragma endregion
-////
-////#pragma region GameObject Reordering
-////            //This example shows the reordering of GameObjects on the Hierarchy. Simple drag and drop.
-////            //Hardcoded array of GameObjects
-////            static const char* item_names[] = { "Empty GameObject 1", "Empty GameObject 2", "Empty GameObject 3" };
-////            for (int n = 0; n < IM_ARRAYSIZE(item_names); n++)
-////            {
-////                const char* item = item_names[n];
-////                ImGui::Selectable(item);
-////
-////                if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
-////                {
-////                    int n_next = n + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
-////                    if (n_next >= 0 && n_next < IM_ARRAYSIZE(item_names))
-////                    {
-////                        item_names[n] = item_names[n_next];
-////                        item_names[n_next] = item;
-////                        ImGui::ResetMouseDragDelta();
-////                    }
-////                }
-////            }
-////            ImGui::PopItemFlag();
-////            ImGui::EndTable();
-////#pragma endregion
-//    }
+    //    //Drawing Hierarchy dockspace with parameter of the TreeNode
+    //    //Here you can see 3 examples of what is to be expected from manipulation of Hierarchy dockspace
+    //    void Hierarchy(TreeNode* _root_node)
+    //    {
+    //        static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+    //
+    //        // - Currently using a table to benefit from RowBg feature
+    //        //Ctrl+F allows user to search GameObject
+    //        ImGui::SetNextItemWidth(-FLT_MIN);
+    //        ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F, ImGuiInputFlags_Tooltip);
+    //        ImGui::PushItemFlag(ImGuiItemFlags_NoNavDefaultFocus, true);
+    //        if (ImGui::Button("Add GameObject")) {
+    //            CreateNewGameObject();
+    //        }
+    //        if (ImGui::InputTextWithHint("##search", "search", Filter.InputBuf, IM_ARRAYSIZE(Filter.InputBuf), ImGuiInputTextFlags_EscapeClearsAll))
+    //            Filter.Build();
+    //        ImGui::PopItemFlag();
+    ////#pragma region Visible Selection
+    ////        // 'selection_mask' is dumb representation of what may be user-side selection state.
+    ////        //  You may retain selection state inside or outside your objects in whatever format you see fit.
+    ////        // 'node_clicked' is temporary storage of what node we have clicked to process selection at the end
+    ////        /// of the loop. May be a pointer to your own node type, etc.
+    ////
+    ////        //This example shows the selectable nodes of GameObject but is not reflected onto the Inspector
+    ////        static int selection_mask = (1 << 2);
+    ////        int node_clicked = -1;
+    ////        for (int i = 0; i < 6; i++)
+    ////        {
+    ////            // Disable the default "open on single-click behavior" + set Selected flag according to our selection.
+    ////            // To alter selection we use IsItemClicked() && !IsItemToggledOpen(), so clicking on an arrow doesn't alter selection.
+    ////            ImGuiTreeNodeFlags node_flags = base_flags;
+    ////            const bool is_selected = (selection_mask & (1 << i)) != 0;
+    ////            if (is_selected)
+    ////                node_flags |= ImGuiTreeNodeFlags_Selected;
+    ////
+    ////            // Items 3..5 are Tree Leaves
+    ////            // The only reason we use TreeNode at all is to allow selection of the leaf. Otherwise we can
+    ////            // use BulletText() or advance the cursor by GetTreeNodeToLabelSpacing() and call Text().
+    ////            node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
+    ////            ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, "Selectable Leaf %d", i);
+    ////            if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+    ////                node_clicked = i;
+    ////            if (ImGui::BeginDragDropSource())
+    ////            {
+    ////                ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
+    ////                ImGui::Text("This is a drag and drop source");
+    ////                ImGui::EndDragDropSource();
+    ////            }
+    ////        }
+    ////        if (node_clicked != -1)
+    ////        {
+    ////            // Update selection state
+    ////            // (process outside of tree loop to avoid visual inconsistencies during the clicking frame)
+    ////            if (ImGui::GetIO().KeyCtrl)
+    ////                selection_mask ^= (1 << node_clicked);          // CTRL+click to toggle
+    ////            else //if (!(selection_mask & (1 << node_clicked))) // Depending on selection behavior you want, may want to preserve selection when clicking on item that is part of the selection
+    ////                selection_mask = (1 << node_clicked);           // Click to single-select
+    ////        }
+    ////#pragma endregion
+    ////
+    ////#pragma region Inspector Properties
+    ////        //This is the main example for changing of properties in Inspector when selecting a GameObject in Hierarchy
+    ////        //Currently, it doesn't save the properties as there's no File I/O or Parser for data.
+    ////        //Renaming in Inspector is not properly added as it doesn't update onto the Hierarchy
+    ////        if (ImGui::BeginTable("##bg", 1, ImGuiTableFlags_RowBg))
+    ////        {
+    ////            for (TreeNode* node : _root_node->Childs)
+    ////                if (Filter.PassFilter(node->Name)) // Filter root node
+    ////                    DrawTreeNode(node);
+    ////
+    ////            // FIXME: there is temporary (usually single-frame) ID Conflict during reordering as a same item may be submitting twice.
+    ////            // This code was always slightly faulty but in a way which was not easily noticeable.
+    ////            // Until we fix this, enable ImGuiItemFlags_AllowDuplicateId to disable detecting the issue.
+    ////            ImGui::PushItemFlag(ImGuiItemFlags_AllowDuplicateId, true);
+    ////        }
+    ////#pragma endregion
+    ////
+    ////#pragma region GameObject Reordering
+    ////            //This example shows the reordering of GameObjects on the Hierarchy. Simple drag and drop.
+    ////            //Hardcoded array of GameObjects
+    ////            static const char* item_names[] = { "Empty GameObject 1", "Empty GameObject 2", "Empty GameObject 3" };
+    ////            for (int n = 0; n < IM_ARRAYSIZE(item_names); n++)
+    ////            {
+    ////                const char* item = item_names[n];
+    ////                ImGui::Selectable(item);
+    ////
+    ////                if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
+    ////                {
+    ////                    int n_next = n + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
+    ////                    if (n_next >= 0 && n_next < IM_ARRAYSIZE(item_names))
+    ////                    {
+    ////                        item_names[n] = item_names[n_next];
+    ////                        item_names[n_next] = item;
+    ////                        ImGui::ResetMouseDragDelta();
+    ////                    }
+    ////                }
+    ////            }
+    ////            ImGui::PopItemFlag();
+    ////            ImGui::EndTable();
+    ////#pragma endregion
+    //    }
 
     ////Draws Inspector dockspace
     //void Inspector()
@@ -353,38 +336,33 @@ namespace SageEditor
     //}
 
     void RenderInspectorWindow() {
-        if (selectedObject) {
-            // Display properties like name
-            char nameBuffer[128];
-            strcpy(nameBuffer, selectedObject->name.c_str());
-            if (ImGui::InputText("Name", nameBuffer, sizeof(nameBuffer))) {
-                selectedObject->name = nameBuffer;
-            }
-
-            // Display components and allow adding new ones
-            ImGui::Text("Components:");
-            for (auto* component : selectedObject->components) {
-                ImGui::Text("Component");
-            }
-
-            if (ImGui::Button("Add Component")) {
-                ImGui::OpenPopup("AddComponentPopup");
-            }
-
-            if (ImGui::BeginPopup("AddComponentPopup")) {
-                // Example: list of component types to add
-                if (ImGui::MenuItem("Transform")) {
-                    
-                }
-                if (ImGui::MenuItem("Mesh Renderer")) {
-                    
-                }
-                ImGui::EndPopup();
-            }
-        }
-        else {
-            ImGui::Text("Select a GameObject to edit its properties");
-        }
+        //if (selectedObject) {
+        //    // Display properties like name
+        //    char nameBuffer[128];
+        //    strcpy(nameBuffer, selectedObject->name.c_str());
+        //    if (ImGui::InputText("Name", nameBuffer, sizeof(nameBuffer))) {
+        //        selectedObject->name = nameBuffer;
+        //    }
+        //    // Display components and allow adding new ones
+        //    ImGui::Text("Components:");
+        //    for (auto* component : selectedObject->components) {
+        //        ImGui::Text("Component");
+        //    }
+        //    if (ImGui::Button("Add Component")) {
+        //        ImGui::OpenPopup("AddComponentPopup");
+        //    }
+        //    if (ImGui::BeginPopup("AddComponentPopup")) {
+        //        // Example: list of component types to add
+        //        if (ImGui::MenuItem("Transform")) {
+        //        }
+        //        if (ImGui::MenuItem("Mesh Renderer")) {
+        //        }
+        //        ImGui::EndPopup();
+        //    }
+        //}
+        //else {
+        //    ImGui::Text("Select a GameObject to edit its properties");
+        //}
     }
 
     void RenderGUI()
@@ -459,15 +437,10 @@ namespace SageEditor
         //    //if (first_time)
         //    //{
         //    //    first_time = false;
-
         //    //    
-
         //    //    // Clear any previous layout
         //    //    ImGui::DockBuilderRemoveNode(dockspace_id); // Clear the node
         //    //    ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace); // Re-add the dockspace node
-
-
-
         //    //    // Step 1: Split the dockspace into left (30%) and right (70%)
         //    //    ImGuiID dock_left_id{}, dock_middle_id{}, dock_right_id{};
         //    //    ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.5f, &dock_left_id, &dock_right_id);  // Left 30%, Right 70%
@@ -478,16 +451,13 @@ namespace SageEditor
         //    //    //// Step 3: Split the left section into top (Hierarchy) and bottom (Project)
         //    //    //ImGuiID dock_left_top_id{}, dock_left_bottom_id{};
         //    //    //ImGui::DockBuilderSplitNode(dock_left_id, ImGuiDir_Down, 0.3f, &dock_left_bottom_id, &dock_left_top_id);  // Top 70%, Bottom 30%
-
         //    //    // Dock windows into their respective sections
         //    //    //ImGui::DockBuilderDockWindow("Hierarchy", dock_left_top_id);     // Top-left (Hierarchy)
         //    //    //ImGui::DockBuilderDockWindow("Project", dock_left_bottom_id);    // Bottom-left (Project)
         //    //    ImGui::DockBuilderDockWindow("Scene", dock_left_id);           // Middle (Scene)
         //    //    ImGui::DockBuilderDockWindow("Inspector", dock_right_id);        // Right (Inspector)
-
         //    //    // Finalize the layout
         //    //    ImGui::DockBuilderFinish(dockspace_id);
-
         //    //}
         //}
 
@@ -604,7 +574,8 @@ namespace SageEditor
         Show_Scene_Window();
         Show_Game_Window();
         Show_Inspector_Window();
-        Show_Hierarchy_Window(CreateTreeNode());
+        SageHierarchy::UpdateGameObjectsFromScene();
+        Show_Hierarchy_Window();
         Show_Console_Window();
         Show_Project_Window();
         Show_Asset_Window();
@@ -614,52 +585,9 @@ namespace SageEditor
             // Call separate exit (in engine)
         }
 
-
-        //#pragma region Settings
-        //        ImGui::Begin("Settings");
-        //        ImGui::Button("Hello");
-        //        static float value = 0.0f;
-        //        ImGui::DragFloat("Value", &value);
-        //        ImGui::End();
-        //#pragma endregion
-
-        //#pragma region Hierarchy
-        //        ImGui::Begin("Hierarchy");
-        //        Hierarchy(CreateTreeNode());
-        //        ImGui::End();
-        //#pragma endregion
-
-        //#pragma region Inspector
-        //        ImGui::Begin("Inspector");
-        //        //Inspector();
-        //        ImGui::Text("Select an object to inspect.");
-        //        ImGui::End();
-        //#pragma endregion
-
-        //#pragma region Scene
-        //        ImGui::Begin("Scene");
-        //        ImGui::End();
-        //#pragma endregion
-
-        //#pragma region Game
-        //        ImGui::Begin("Game");
-        //        ImGui::End();
-        //#pragma endregion
-
-        //#pragma region Project
-        //        ImGui::Begin("Project");
-        //        ImGui::End();
-        //#pragma endregion
-
-        //#pragma region Console
-        //        ImGui::Begin("Console");
-        //        ImGui::End();
-        //#pragma endregion
-
-                //ImGui End for Begin(DockSpace Demo), DON'T DELETE
+        //ImGui End for Begin(DockSpace Demo), DON'T DELETE
         ImGui::End();
 
         ImGui::ShowDemoWindow();
     }
-
 }

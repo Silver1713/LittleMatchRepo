@@ -317,6 +317,8 @@ namespace SM {
 		SM::fp_unload = fp_unload_tmp;
 		SM::Load();
 		SM::Init();
+
+		std::cout << "Moving to next scene: " << level_ID << std::endl;
 	}
 	/*!*****************************************************************************
 	  \brief

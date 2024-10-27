@@ -336,6 +336,59 @@ namespace Assets
 			}
 			return generated_prefabs;
 		}
+
+		//[HALIS]
+		void Save_Prefabs(const std::string& file_path) {
+			//SageJSON::SageJSON prefabs_json;
+			//prefabs_json["Num_Prefabs"] = generated_prefabs.size();
+
+			//unsigned int index = 0;
+			//for (const auto& pair : generated_prefabs) {
+			//	const Prefab& p = pair.second;
+			//	prefabs_json["Prefabs"][index]["ID"] = p.prefab_ID;
+			//	prefabs_json["Prefabs"][index]["Transform_Type"] = p.transform_type;
+
+			//	// Add position
+			//	prefabs_json["Prefabs"][index]["Pos"][0] = p.positions.x; // Assuming you have access to x, y, z
+			//	prefabs_json["Prefabs"][index]["Pos"][1] = p.positions.y;
+			//	prefabs_json["Prefabs"][index]["Pos"][2] = p.positions.z;
+
+			//	// Add scale
+			//	prefabs_json["Prefabs"][index]["Scale"][0] = p.scale.x;
+			//	prefabs_json["Prefabs"][index]["Scale"][1] = p.scale.y;
+			//	prefabs_json["Prefabs"][index]["Scale"][2] = p.scale.z;
+
+			//	// Add color
+			//	prefabs_json["Prefabs"][index]["RGBA"][0] = p.colour.r; // Assuming you have access to r, g, b, a
+			//	prefabs_json["Prefabs"][index]["RGBA"][1] = p.colour.g;
+			//	prefabs_json["Prefabs"][index]["RGBA"][2] = p.colour.b;
+			//	prefabs_json["Prefabs"][index]["RGBA"][3] = p.colour.a;
+
+			//	// Add velocity
+			//	prefabs_json["Prefabs"][index]["Physics"]["Velocity"][0] = p.velocity.x;
+			//	prefabs_json["Prefabs"][index]["Physics"]["Velocity"][1] = p.velocity.y;
+			//	prefabs_json["Prefabs"][index]["Physics"]["Velocity"][2] = p.velocity.z;
+
+			//	// Add other attributes...
+			//	prefabs_json["Prefabs"][index]["Sprite_Texture_ID"] = p.sprite_texture_ID;
+			//	prefabs_json["Prefabs"][index]["Object_Shape"] = p.object_shape;
+			//	prefabs_json["Prefabs"][index]["Has_Physics"] = p.has_physics;
+			//	prefabs_json["Prefabs"][index]["Has_Collider"] = p.has_collider;
+			//	prefabs_json["Prefabs"][index]["Has_Animator"] = p.has_animator;
+			//	prefabs_json["Prefabs"][index]["Is_Button"] = p.is_button;
+
+			//	if (p.has_animator) {
+			//		prefabs_json["Prefabs"][index]["Animator"][0]["Animation_Set_ID"] = p.animation_set_ID;
+			//	}
+
+			//	index++;
+			//}
+
+			//// Save to file
+			//std::ofstream file(file_path);
+			//file << prefabs_json; // This should correctly serialize the prefabs_json object
+			//file.close();
+		}
 	}
 
 	//Animation category

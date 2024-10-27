@@ -292,6 +292,9 @@ namespace Assets
 			The reference to the map of prefabs
 		*******************************************************************************/
 		std::unordered_map<std::string, Prefab>const& Get_Prefabs();
+
+		//[HALIS]
+		void Save_Prefabs(const std::string& file_path);
 	}
 	
 	//Audio category
