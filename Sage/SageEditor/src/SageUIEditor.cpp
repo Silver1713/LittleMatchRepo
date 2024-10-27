@@ -645,4 +645,20 @@ namespace SageUIEditor
     }
 
 
+    namespace IMGUI_Elements
+    {
+		IMGUI_Vector2::IMGUI_Vector2(float* _value) : active(false), hovered(false), onChanged(false), onClick(false)
+	   {
+           
+           onChanged = ImGui::InputFloat2("##Vector2", _value);
+           active = ImGui::IsItemActive();
+           hovered = ImGui::IsItemHovered();
+           onClick = ImGui::IsItemClicked();
+          
+	   }
+
+
+    }
+
+
 }

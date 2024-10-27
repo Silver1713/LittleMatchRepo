@@ -117,12 +117,24 @@ void RigidBody::Apply_Mass(float new_mass)
 	mass = new_mass;
 }
 
-float RigidBody::Get_Gravity() const
+ToastBox::Vec2 const& RigidBody::Get_Gravity() const
 {
 	return gravity;
 }
 
-void RigidBody::Apply_New_Gravity(float new_gravity)
+void RigidBody::Apply_New_Gravity(ToastBox::Vec2 new_gravity)
 {
 	gravity = new_gravity;
 }
+
+void RigidBody::Set_Mass(float _mass)
+{
+	mass = _mass;
+}
+
+void RigidBody::Set_Gravity(ToastBox::Vec2 _gravity)
+{
+	gravity = _gravity;
+}
+
+

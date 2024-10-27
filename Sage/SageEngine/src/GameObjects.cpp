@@ -500,3 +500,8 @@ GameObject* GameObject::Get_Child(std::string const& _identifier)
 	}
 	return nullptr;
 }
+
+std::vector<std::unique_ptr<Component>>& GameObject::Get_Components()
+{
+	return components;
+}

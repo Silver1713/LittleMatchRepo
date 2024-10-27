@@ -63,7 +63,6 @@ public:
 
 	bool Gravity_Flag();
 
-	void AddForce(ToastBox::Vec2 force, ForceMode mode);
 
 
 	void Set_Mass(float _mass);
@@ -80,12 +79,10 @@ public:
 	void Set_Gravity_Flag(bool flag);
 
 	// Get and Set mass
-	float Get_Mass() const;
 
 	void Apply_Mass(float new_mass);
 
 	// Get and Set gravity
-	float Get_Gravity() const;
 
-	void Apply_New_Gravity(float new_gravity);
+	void Apply_New_Gravity(ToastBox::Vec2 new_gravity);
 };

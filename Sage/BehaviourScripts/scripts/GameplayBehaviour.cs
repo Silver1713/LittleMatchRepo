@@ -11,7 +11,7 @@ public class GamePlayBehaviour : SageBehaviour
     void Init()
     {
         RigidBody t = gameObject.GetComponent<RigidBody>();
-
+       GetComponent<RigidBody>().gravity = new Vector2D(2000.0f, -9.8f);
         if (t == null)
         {
             SageDebug.Print("Rigidbody is null");
