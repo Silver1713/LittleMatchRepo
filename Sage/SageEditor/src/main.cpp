@@ -8,12 +8,14 @@
 // - Introduction, links and more at the top of imgui.cpp
 
 #include <backward.hpp>
-#include "SageEditor.hpp"
+#include "SageUIEditor.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
+
+#include "KeyInputs.h"
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
@@ -94,6 +96,7 @@ int main(int, char**)
 
     while (!glfwWindowShouldClose(window))
     {
+
         update();
 		SageEngine::Update();
 
@@ -181,7 +184,15 @@ void update()
         // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
         // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
         // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-    glfwPollEvents();
+
+    ImGuiIO& io = ImGui::GetIO();
+
+	SAGEInputHandler::update();
+    
+    
+
+	
+
     if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
     {
         ImGui_ImplGlfw_Sleep(10);
@@ -197,7 +208,7 @@ void update()
 void draw()
 {
     // Halis's Code and Hui Zong's Code
-    SageEditor::RenderGUI();
+    SageUIEditor::RenderGUI();
 
     // Rendering
     ImGui::Render();

@@ -1,4 +1,4 @@
-#include "SageEditor.hpp"
+#include "SageUIEditor.hpp"
 #include "../../SageEngine/include/Game.hpp"
 #include <windows.h>
 #include <commdlg.h>
@@ -18,7 +18,7 @@ static bool show_game_window = true;
 static bool exit_requested = true;
 static bool show_assets_window = false;
 
-namespace SageEditor
+namespace SageUIEditor
 {
     ImGuiTextFilter     Filter;
     TreeNode* selected_node = NULL;

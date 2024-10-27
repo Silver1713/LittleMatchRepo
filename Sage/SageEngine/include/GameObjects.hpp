@@ -126,6 +126,14 @@ public:
 	template <typename T, typename = std::enable_if_t<std::is_base_of_v<Component, T>>>
 	T* Get_Component();
 
+	/*!*****************************************************************************
+	  \brief
+		Get the component of the gameobject
+	  \return
+		The components list
+	*******************************************************************************/
+	std::vector<std::unique_ptr<Component>>& Get_Components();
+
 };
 
 // The central gameobject manager that iterates through all active gameobjects

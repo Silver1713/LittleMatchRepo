@@ -415,3 +415,8 @@ void GameObject::Add_Component(std::unique_ptr<Component> _c)
 {
 	components.push_back(std::move(_c));
 }
+
+std::vector<std::unique_ptr<Component>>& GameObject::Get_Components()
+{
+	return components;
+}

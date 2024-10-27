@@ -26,7 +26,7 @@ private:
 
 	bool enable_gravity{ true }; // disable physics
 	float mass{ 1.0f };
-	float gravity{ 200.f };
+	ToastBox::Vec2 gravity{ 0,-200.f };
 
 
 public:
@@ -57,5 +57,16 @@ public:
 
 
 	void AddForce(ToastBox::Vec2 force, ForceMode mode);
+
+
+	void Set_Mass(float _mass);
+
+	float Get_Mass() const;
+
+
+	void Set_Gravity(ToastBox::Vec2 _gravity);
+
+	ToastBox::Vec2 const& Get_Gravity() const;
+
 	
 };

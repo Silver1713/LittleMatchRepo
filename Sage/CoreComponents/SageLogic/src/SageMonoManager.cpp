@@ -17,6 +17,34 @@ std::unordered_map<std::string, MonoAssembly*> SageMonoManager::assemblies{};
 std::unordered_map<std::string, MonoImage*> SageMonoManager::images{};
 std::unordered_map<std::string, SageMonoManager::MonoKlassInfo> SageMonoManager::klassList{};
 
+
+SageMonoManager::MonoKlassInfo::MonoKlassInfo()
+{
+	klass = nullptr;
+	image = nullptr;
+	assembly = nullptr;
+	Klass_Namespace = nullptr;
+	Klass_Name = nullptr;
+	Klass_Full_Name = nullptr;
+	Klass_OfA_Name = nullptr;
+}
+
+
+
+
+SageMonoManager::MonoKlassInfo::~MonoKlassInfo()
+{
+	if (Klass_Full_Name)
+	{
+
+		delete[] Klass_Full_Name;
+		Klass_Full_Name = nullptr;
+	}
+}
+
+
+
+
 void SageMonoManager::Initialize()
 {
 	compiler = std::make_unique<SageAssembler>();
@@ -167,11 +195,12 @@ MonoClass* SageMonoManager::Load_Klass_In_Image(MonoImage* Image, const char* _k
 		Klass_FName = std::string(ns) + "." + std::string(_klass_name);
 	}
 
-	KlassInfo.Klass_Full_Name = Klass_FName.c_str();
+	KlassInfo.Klass_Full_Name = new char[Klass_FName.size()+1];
+	std::strcpy(KlassInfo.Klass_Full_Name, Klass_FName.c_str());
 
 	KlassInfo.Klass_OfA_Name = mono_class_get_name(mono_class_get_parent(klass));
 
-	klassList[Klass_FName.c_str()] = KlassInfo;
+	klassList[Klass_FName.c_str()] = std::move(KlassInfo);
 	return klass;
 }
 
@@ -220,6 +249,55 @@ SageMonoManager::MonoKlassInfo* SageMonoManager::Get_Klass_Info(const char* _kla
 	}
 }
 
+
+SageMonoManager::MonoKlassInfo::MonoKlassInfo(MonoKlassInfo&& other)
+{
+	klass = other.klass;
+	image = other.image;
+	assembly = other.assembly;
+	Klass_Namespace = other.Klass_Namespace;
+	Klass_Name = other.Klass_Name;
+	Klass_Full_Name = other.Klass_Full_Name;
+	Klass_OfA_Name = other.Klass_OfA_Name;
+
+	other.klass = nullptr;
+	other.image = nullptr;
+	other.assembly = nullptr;
+	other.Klass_Namespace = nullptr;
+	other.Klass_Name = nullptr;
+	other.Klass_Full_Name = nullptr;
+	other.Klass_OfA_Name = nullptr;
+}
+
+SageMonoManager::MonoKlassInfo& SageMonoManager::MonoKlassInfo::operator=(MonoKlassInfo&& other)
+{
+	if (this == &other)
+	{
+		return *this;
+	}
+
+	klass = other.klass;
+	image = other.image;
+	assembly = other.assembly;
+	Klass_Namespace = other.Klass_Namespace;
+	Klass_Name = other.Klass_Name;
+	Klass_Full_Name = other.Klass_Full_Name;
+	Klass_OfA_Name = other.Klass_OfA_Name;
+
+	other.klass = nullptr;
+	other.image = nullptr;
+	other.assembly = nullptr;
+	other.Klass_Namespace = nullptr;
+	other.Klass_Name = nullptr;
+	other.Klass_Full_Name = nullptr;
+	other.Klass_OfA_Name = nullptr;
+
+	return *this;
+}
+
+
+
+
 void SageMonoManager::Compile_Scripts(const char* script_dir, const char* output_assembly)
 {
 	std::filesystem::path path(script_dir);
@@ -250,4 +328,20 @@ void SageMonoManager::Compile_Scripts(const char* script_dir, const char* output
 MonoDomain* SageMonoManager::Get_Default_Domain()
 {
 	return Default_Domain;
+}
+
+
+SageMonoManager::MonoKlassInfo* SageMonoManager::Get_Klass_Info(MonoClass* klass)
+{
+	std::string klass_namespace = mono_class_get_namespace(klass);
+	std::string klass_name = mono_class_get_name(klass);
+
+	if (klass_namespace.empty())
+	{
+		return Get_Klass_Info(klass_name.c_str());
+	}
+	else
+	{
+		return Get_Klass_Info(klass_name.c_str(), klass_namespace.c_str());
+	}
 }

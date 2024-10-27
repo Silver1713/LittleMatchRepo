@@ -41,18 +41,18 @@ std::vector<std::pair<std::string, MonoObject*>>& Behaviour::Get_Mono_Instances(
 }
 
 
-void Behaviour::Add_Instance(std::string _klass_name, std::string _namespace)
+MonoObject* Behaviour::Add_Instance(std::string _klass_name, std::string _namespace)
 {
 	SageMonoManager::MonoKlassInfo* klass = SageMonoManager::Get_Klass_Info(_klass_name.c_str(), _namespace.empty() ? nullptr : _namespace.c_str());
 	if (!klass)
 	{
-		return;
+		return nullptr;
 	}
 
 	if (std::strcmp(klass->Klass_OfA_Name, "SageBehaviour") != 0)
 	{
 		std::cout << "Warning:	Class is not of a Behaviour Type, You can only add class that is of SageBehaviour type.\n";
-		return;
+		return nullptr;
 	}
 	MonoObject* instance = SageMonoManager::Create_Instance(klass->klass);
 	SageSystemManager::Get_System<SageScriptSystem>()->Map_Script_Instance_GameObject(instance, parent);
@@ -78,6 +78,7 @@ void Behaviour::Add_Instance(std::string _klass_name, std::string _namespace)
 	mono_instances.emplace_back(std::make_pair(_klass_name, instance));
 
 	SageSystemManager::Get_System<SageScriptSystem>()->Init_CSBehaviour_Instance(instance);
+	return instance;
 
 	
 }

@@ -10,7 +10,12 @@ public class GamePlayBehaviour : SageBehaviour
 {
     void Init()
     {
-        Console.WriteLine("SageBehaviour Init");
+        RigidBody t = gameObject.GetComponent<RigidBody>();
+
+        if (t == null)
+        {
+            SageDebug.Print("Rigidbody is null");
+        }
     }
 
     void Update()

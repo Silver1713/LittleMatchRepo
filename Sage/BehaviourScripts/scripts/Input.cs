@@ -129,9 +129,19 @@ namespace SageEngine
 
             LAST = MENU
         }
-
+        
+        /// <summary>
+        ///  Check for key press or held.
+        /// </summary>
+        /// <param name="key"> The keycode to check </param>
+        /// <returns>A bool to represent if the key is held down </returns>
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern bool GetKey(KeyCode key);
+        /// <summary>
+        /// Check for key press.
+        /// </summary>
+        /// <param name="key"> The keycode to check  </param>
+        /// <returns>A bool to represent if the key is held down </returns>
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern bool GetKeyDown(KeyCode key);
         

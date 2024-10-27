@@ -62,7 +62,7 @@ ToastBox::Vec2& RigidBody::Get_Current_Velocity()
 void RigidBody::ApplyGravity(float _delta_time)
 {
 	// Adjust the current velocity by gravity over time
-	curr_velocity.y -= gravity * _delta_time; // Apply gravity to the vertical velocity
+	curr_velocity += gravity * _delta_time; // Apply gravity to the vertical velocity
 }
 
 void RigidBody::UpdateVelocity(float _delta_time) 
@@ -82,5 +82,28 @@ void RigidBody::AddForce(ToastBox::Vec2 force, ForceMode mode)
 	{
 		curr_velocity += force / mass;
 	}
+}
+
+float RigidBody::Get_Mass() const
+{
+	return mass;
+}
+
+void RigidBody::Set_Mass(float _mass)
+{
+	mass = _mass;
+}
+
+
+
+void RigidBody::Set_Gravity(ToastBox::Vec2 _gravity)
+{
+	gravity = _gravity;
+}
+
+
+ToastBox::Vec2 const& RigidBody::Get_Gravity() const
+{
+	return gravity;
 }
 

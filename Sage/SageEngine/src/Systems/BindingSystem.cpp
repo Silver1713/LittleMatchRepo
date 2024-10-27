@@ -31,7 +31,17 @@ void BindingSystem::Map_Script_Instance_GameObject(MonoObject* _instance, GameOb
 			if (transform)
 			{
 				Create_Component_Shadow(transform);
+
 			}
+
+			RigidBody* rigid_body = _entity->Get_Component<RigidBody>();
+			if (rigid_body)
+			{
+				Create_Component_Shadow(rigid_body);
+			}
+
+
+
 		}
 	}
 
@@ -89,6 +99,7 @@ void BindingSystem::Init()
 
 	GameObjectBinding::Bind();
 	TransformBinding::Bind();
+	RigidBodyBinding::Bind();
 
 
 	
@@ -124,7 +135,20 @@ void BindingSystem::Bind_Rendering_System()
 void BindingSystem::Init_Batch(GameObject* _entity)
 {
 	Create_Game_Object_Shadow(_entity);
-	Create_Component_Shadow(_entity->Get_Component<Transform>());
+
+	for (auto& component : _entity->Get_Components())
+	{
+		ComponentType type = component->Get_Component_Type();
+		switch (type)
+		{
+		case ComponentType::TRANSFORM:
+			Create_Component_Shadow(dynamic_cast<Transform*>(component.get()));
+			break;
+		case ComponentType::RIGIDBODY:
+			Create_Component_Shadow(dynamic_cast<RigidBody*>(component.get()));
+			break;
+		}
+	}
 	
 }
 

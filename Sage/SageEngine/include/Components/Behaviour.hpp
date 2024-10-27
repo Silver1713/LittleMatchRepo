@@ -17,7 +17,7 @@ public:
 
 	std::vector < std::pair<std::string, MonoObject*>>& Get_Mono_Instances();
 
-	void Add_Instance(std::string _klass_name, std::string _namespace);
+	MonoObject* Add_Instance(std::string _klass_name, std::string _namespace);
 	void Remove_Instance(std::string _klass_name);
 
 
