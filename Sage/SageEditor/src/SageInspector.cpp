@@ -246,6 +246,7 @@ namespace Sage_Inspector
         {
             _rigid_body->Apply_Mass(mass);
         }
+        ImGui::Separator();
     }
 
     void Show_Box_Collider2D_Component(BoxCollider2D* _box_collider2D)
@@ -258,7 +259,65 @@ namespace Sage_Inspector
 
     void Show_Image_Component(Image* _image)
     {
-	    
+        // Object dropdown box
+        ImGui::Text("Object Shape");
+        std::vector<std::string> shapes = { "Rect", "Circle" };
+        static int current_shape_index = 0;
+        for (int i = 0; i < shapes.size(); ++i)
+        {
+	        if (_image->Get_Shape() == shapes[i])
+	        {
+                current_shape_index = i;
+                break;
+	        }
+        }
+        if (ImGui::Combo("##ObjectShape", &current_shape_index, [](void* data, int idx, const char** out_text) {
+            const std::vector<std::string>* shapes = static_cast<const std::vector<std::string>*>(data);
+            *out_text = shapes->at(idx).c_str();
+            return true;
+            }, static_cast<void*>(&shapes), shapes.size())) {
+            _image->Set_Shape(shapes[current_shape_index]);
+        }
+        ImGui::Separator();
+
+        // Color picker for images
+        ImGui::Text("Color");
+        float color[4] = { _image->Get_Colour().x, _image->Get_Colour().y, _image->Get_Colour().z, _image->Get_Colour().a };
+        if (ImGui::ColorEdit4("##Color", color))
+        {
+            _image->Set_Colour({color[0], color[1], color[2], color[3]});
+        }
+    }
+
+    void Show_Sprite2D_Component(Sprite2D* _sprited2D)
+    {
+        ImGui::Text("Object Shape");
+        std::vector<std::string> shapes = { "Rect", "Circle" };
+        static int current_shape_index = 0;
+        for (int i = 0; i < shapes.size(); ++i)
+        {
+            if (_sprited2D->Get_Shape() == shapes[i])
+            {
+                current_shape_index = i;
+                break;
+            }
+        }
+        if (ImGui::Combo("##ObjectShape", &current_shape_index, [](void* data, int idx, const char** out_text) {
+            const std::vector<std::string>* shapes = static_cast<const std::vector<std::string>*>(data);
+            *out_text = shapes->at(idx).c_str();
+            return true;
+            }, static_cast<void*>(&shapes), shapes.size())) {
+            _sprited2D->Set_Shape(shapes[current_shape_index]);
+        }
+        ImGui::Separator();
+
+        // Color picker for images
+        ImGui::Text("Color");
+        float color[4] = { _sprited2D->Get_Colour().x, _sprited2D->Get_Colour().y, _sprited2D->Get_Colour().z, _sprited2D->Get_Colour().a };
+        if (ImGui::ColorEdit4("##Color", color))
+        {
+            _sprited2D->Set_Colour({ color[0], color[1], color[2], color[3] });
+        }
     }
     //void DrawRendererComponent(Sprite2D* _sprite_2d) {
     //    if (ImGui::CollapsingHeader("Renderer")) {
@@ -291,8 +350,10 @@ namespace Sage_Inspector
                 Show_UITransform_Component(dynamic_cast<UITransform*>(component.get()));
                 break;
             case SPRITE2D:
+                Show_Sprite2D_Component(dynamic_cast<Sprite2D*>(component.get()));
                 break;
             case IMAGE:
+                Show_Image_Component(dynamic_cast<Image*>(component.get()));
                 break;
             case RENDERER:
                 // Not touch

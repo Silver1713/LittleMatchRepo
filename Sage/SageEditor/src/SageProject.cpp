@@ -38,7 +38,6 @@ namespace Sage_Project
 								std::string command = "start " + sub_dir_path_file.path().string();
 								std::system(command.c_str());
 							}
-							//ImGui::BulletText("%s", sub_dir_path_file.path().filename().string().c_str());
 						}
 					}
 					Display_Directory(sub_dir_path.string());

@@ -230,3 +230,24 @@ SageObject** Image::Get_Object()
 {
 	return &obj;
 }
+
+/*!*****************************************************************************
+  \brief
+	Gets the shape of the object
+
+  \return
+	pointer the string of the shape of the object
+*******************************************************************************/
+std::string Image::Get_Shape()
+{
+	return object_shape;
+}
+
+/*!*****************************************************************************
+  \brief
+	Set the shape of the sageobject
+*******************************************************************************/
+void Image::Set_Shape(std::string _shape)
+{
+	object_shape = _shape;
+}
