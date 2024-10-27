@@ -103,6 +103,9 @@ void Image::Update()
 	obj->transform.scale.y = transform->Get_Scale().y;
 	obj->transform.orientation.x = transform->Get_Rotation().x;
 	obj->transform.orientation.y = transform->Get_Rotation().y;
+
+	//need to update color also
+
 	obj->Update();
 }
 /*!*****************************************************************************
@@ -226,4 +229,25 @@ void Image::Set_Transparency(float _a)
 SageObject** Image::Get_Object()
 {
 	return &obj;
+}
+
+/*!*****************************************************************************
+  \brief
+	Gets the shape of the object
+
+  \return
+	pointer the string of the shape of the object
+*******************************************************************************/
+std::string Image::Get_Shape()
+{
+	return object_shape;
+}
+
+/*!*****************************************************************************
+  \brief
+	Set the shape of the sageobject
+*******************************************************************************/
+void Image::Set_Shape(std::string _shape)
+{
+	object_shape = _shape;
 }

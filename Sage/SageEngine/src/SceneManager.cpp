@@ -45,6 +45,7 @@ namespace SM {
 	const float fade_time{ 0.5f };
 
 	static GameObject* fade_screen{ nullptr };
+	static std::string prev_level_ID{};
 	static std::string level_ID{};
 	static Assets::Levels::Level current_level;	
 
@@ -171,9 +172,10 @@ namespace SM {
 				}
 			}
 		}
-
+		
+		fade_screen = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen",2U);
+		scene_faded_in = false;
 		SM::fp_load();
-		fade_screen = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen");
 	}
 
 	/*!*****************************************************************************
@@ -183,7 +185,6 @@ namespace SM {
 	void Init()
 	{
 		SAGEInputHandler::init();
-
 		SageSystemManager::Init();
 		Game_Objects::Init();
 		SM::fp_init();
@@ -194,8 +195,7 @@ namespace SM {
 		Input Checks for the Scene Manager
 	*******************************************************************************/
 	void Input()
-	{
-		
+	{		
 		SAGEInputHandler::update();
 		SM::fp_input();
 	}
@@ -210,6 +210,12 @@ namespace SM {
 		Fade_Out();
 		SM::fp_update();
 		Game_Objects::Update();
+
+		if (level_ID != prev_level_ID)
+		{
+			Go_To_Next_Scene();
+		}
+		prev_level_ID = level_ID;
 	}
 
 	/*!*****************************************************************************
@@ -217,21 +223,18 @@ namespace SM {
 		Draws the current scene
 	*******************************************************************************/
 	void Draw()
-	{
-		
+	{		
 		Game_Objects::Draw();
 		SM::fp_draw();
-
 	}
 
 	/*!*****************************************************************************
 	  \brief
-		Frees the current scene
+		Frees the current sceneas
 	*******************************************************************************/
 	void Free()
 	{
-		SM::fp_free();
-	
+		SM::fp_free();	
 	}
 
 	/*!*****************************************************************************
@@ -255,7 +258,7 @@ namespace SM {
 	*******************************************************************************/
 	void Set_Current_Level(std::string const& _level_identifier)
 	{
-		current_level = Assets::Levels::Get_Level(_level_identifier);
+		level_ID = _level_identifier;
 	}
 
 	/*!*****************************************************************************
@@ -306,15 +309,30 @@ namespace SM {
 	void Go_To_Next_Scene()
 	{
 		current_level = Assets::Levels::Get_Level(level_ID);
+		if (level_ID == "level_1")
+		{
+			SM::fp_load = Game::Load;
+			SM::fp_init = Game::Init;
+			SM::fp_draw = Game::Draw;
+			SM::fp_input = Game::Input;
+			SM::fp_update = Game::Update;
+			SM::fp_draw = Game::Draw;
+			SM::fp_free = Game::Free;
+			SM::fp_unload = Game::Unload;
+		}
+		else
+		{
+			SM::fp_load = Scene::Load;
+			SM::fp_init = Scene::Init;
+			SM::fp_draw = Scene::Draw;
+			SM::fp_input = Scene::Input;
+			SM::fp_update = Scene::Update;
+			SM::fp_draw = Scene::Draw;
+			SM::fp_free = Scene::Free;
+			SM::fp_unload = Scene::Unload;
+		}
 		SM::Free();
 		SM::Unload();
-		SM::fp_load = fp_load_tmp;
-		SM::fp_init = fp_init_tmp;
-		SM::fp_input = fp_input_tmp;
-		SM::fp_update = fp_update_tmp;
-		SM::fp_draw = fp_draw_tmp;
-		SM::fp_free = fp_free_tmp;
-		SM::fp_unload = fp_unload_tmp;
 		SM::Load();
 		SM::Init();
 
@@ -327,10 +345,12 @@ namespace SM {
 	  \param _level_identifier
 		The string key for what level should be next scene
 	*******************************************************************************/
-	void Startup_Scene(std::string const& new_level_ID)
+	void Startup_Scene(std::string const& _new_level_ID)
 	{
-		current_level = Assets::Levels::Get_Level(new_level_ID);
-		if (new_level_ID == "splash_screen")
+		level_ID = _new_level_ID;
+		prev_level_ID = level_ID;
+		current_level = Assets::Levels::Get_Level(_new_level_ID);
+		if (level_ID == "splash_screen")
 		{
 			SM::fp_load = Splash_Screen::Load;
 			SM::fp_init = Splash_Screen::Init;
@@ -341,7 +361,7 @@ namespace SM {
 			SM::fp_free = Splash_Screen::Free;
 			SM::fp_unload = Splash_Screen::Unload;
 		}
-		else if (new_level_ID == "level_1")
+		else if (level_ID == "level_1")
 		{
 			SM::fp_load = Game::Load;
 			SM::fp_init = Game::Init;
@@ -351,12 +371,9 @@ namespace SM {
 			SM::fp_draw = Game::Draw;
 			SM::fp_free = Game::Free;
 			SM::fp_unload = Game::Unload;
-			SM::Load();
-			SM::Init();
 		}
-		else if (new_level_ID == "editor_scene")
+		else if (level_ID == "editor_scene")
 		{
-			current_level = Assets::Levels::Get_Level(new_level_ID);
 			SM::fp_load = EditorScene::Load;
 			SM::fp_init = EditorScene::Init;
 			SM::fp_draw = EditorScene::Draw;
@@ -365,8 +382,6 @@ namespace SM {
 			SM::fp_draw = EditorScene::Draw;
 			SM::fp_free = EditorScene::Free;
 			SM::fp_unload = EditorScene::Unload;
-			SM::Load();
-			SM::Init();
 		}
 		else
 		{
@@ -412,7 +427,7 @@ namespace SM {
 		if (alpha > 0.0f)
 		{
 			alpha -= dt * (1.0f / fade_time);
-			Sprite2D* s = static_cast<Sprite2D*>(fade_screen->Get_Component<Sprite2D>());
+			Image* s = static_cast<Image*>(fade_screen->Get_Component<Image>());
 			s->Set_Transparency(alpha);
 			return;
 		}

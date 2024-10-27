@@ -19,11 +19,135 @@
 
 #include "KeyInputs.h"
 
+//default functions available to all buttons
+//changing animation state/params
+#include "Components/Animator.hpp"
+//changing scenes
+#include "SceneManager.hpp"
+
+namespace Buttons
+{
+	std::unordered_map<std::string, void(*)(GameObject*)> button_functions =
+	{
+		{"Default_Button_Update", Default_Button_Update},
+		{"Default_Click", Default_Click},
+		{"Go_To_Splash_Screen", Go_To_Splash_Screen},
+		{"Go_To_Main_Menu", Go_To_Main_Menu},
+		{"Go_To_Level_1", Go_To_Level_1},
+		{"Exit_Game", Exit_Game }
+	};
+
+	/*!*****************************************************************************
+	  \brief
+		Gets the function from the map of button functions
+	*******************************************************************************/
+	void(*Get_Button_Function(std::string const& _key))(GameObject*)
+	{
+		if (button_functions.find(_key) != button_functions.end())
+		{
+			return button_functions[_key];
+		}
+		else 
+		{
+			return nullptr;
+		}		
+	}
+
+	/*!*****************************************************************************
+	  \brief
+		Default behaviour of button updating its status when event is triggered
+	  \param _caller
+		the caller
+	*******************************************************************************/
+	void Default_Button_Update(GameObject* _caller)
+	{
+		Sprite2D* sprite = _caller->Get_Component<Sprite2D>();
+		Button* button = _caller->Get_Component<Button>();
+		Image* image = _caller->Get_Component<Image>();
+		if (button)
+		{
+			if (button->Is_Hovered())
+			{
+				if (sprite)
+				{
+					sprite->Set_Transparency(0.75f);
+				}
+				else if (image)
+				{
+					image->Set_Transparency(0.75f);
+				}
+			}
+			else
+			{
+				if (sprite)
+				{
+					sprite->Set_Transparency(1.f);
+				}
+				else if (image)
+				{
+					image->Set_Transparency(1.f);
+				}
+			}
+		}
+	}
+
+	/*!*****************************************************************************
+	  \brief
+		Default behaviour of button updating its status when clicked
+	  \param _caller
+		the caller
+	*******************************************************************************/
+	void Default_Click(GameObject* _caller)
+	{
+		Sprite2D* sprite = _caller->Get_Component<Sprite2D>();
+		Button* button = _caller->Get_Component<Button>();
+		Image* image = _caller->Get_Component<Image>();
+		if (button->Is_Clicked())
+		{
+			if (sprite)
+			{
+				sprite->Set_Transparency(0.2f);
+			}
+			else if (image)
+			{
+				image->Set_Transparency(0.2f);
+			}
+		}
+	}
+
+	/*!*****************************************************************************
+	  \brief
+		Function to go to a specific scene
+	  \param _caller
+		the caller
+	*******************************************************************************/
+	void Go_To_Splash_Screen(GameObject* _caller)
+	{
+		Default_Click(_caller);
+		SM::Set_Current_Level("splash_screen");
+	}
+	void Go_To_Main_Menu(GameObject* _caller)
+	{
+		Default_Click(_caller);
+		SM::Set_Current_Level("main_menu");
+	}
+	void Go_To_Level_1(GameObject* _caller)
+	{
+		Default_Click(_caller);
+		SM::Set_Current_Level("level_1");
+	}
+	void Exit_Game(GameObject* _caller)
+	{
+		Default_Click(_caller);
+		SM::Exit_Game();
+	}
+}
+
 /*!*****************************************************************************
   \brief
 	Default constructor for Button
 *******************************************************************************/
-Button::Button() : on_click{ Default_Click }, on_hover_enter{ Default_Button_Update }, on_hover{ Default_Button_Update }, on_hover_exit{ Default_Button_Update } {}
+Button::Button() : on_click{ Buttons::Default_Click }, on_hover_enter{ Buttons::Default_Button_Update }, on_hover{ Buttons::Default_Button_Update }, on_hover_exit{ Buttons::Default_Button_Update } {}
 
 /*!*****************************************************************************
   \brief
@@ -46,6 +170,30 @@ Button::Button() : on_click{ Default_Click }, on_hover_enter{ Default_Button_Upd
 Button::Button(Function_Ptr _on_click, Function_Ptr _on_click_hold, Function_Ptr _on_click_release, Function_Ptr _on_hover_enter, Function_Ptr _on_hover, Function_Ptr _on_hover_exit)
 	: on_click{ _on_click }, on_click_hold{ _on_click_hold }, on_click_release{ _on_click_release }, on_hover_enter{ _on_hover_enter }, on_hover{ _on_hover }, on_hover_exit{ _on_hover_exit }
 {}
+
+/*!*****************************************************************************
+  \brief
+	Constructor for Button that creates the Button that triggers functions
+	that has a signature like "void Name(GameObject* _caller)" based on events that happen to the
+	button. Instead, this constructor takes the string that represents each function pointer to
+	be initialized with
+  \param _on_click
+	key of the function that triggers on click
+  \param _on_click_hold
+	key of the function that triggers on held click
+  \param _on_click_release
+	key of the function that triggers on released click
+  \param _on_hover_enter
+	key of the function that triggers on entering hover state
+  \param _on_hover
+	key of the function that triggers on hover
+  \param _on_hover_exit
+	key of the function that triggers on hover exit
+*******************************************************************************/
+Button::Button(std::string const& _on_click, std::string const& _on_click_hold, std::string const& _on_click_release, std::string const& _on_hover_enter, std::string const& _on_hover, std::string const& _on_hover_exit)
+	: on_click{ Buttons::Get_Button_Function(_on_click)}, on_click_hold{ Buttons::Get_Button_Function(_on_click_hold) }, on_click_release{ Buttons::Get_Button_Function(_on_click_release) }, on_hover_enter{ Buttons::Get_Button_Function(_on_hover_enter) }, on_hover{ Buttons::Get_Button_Function(_on_hover) }, on_hover_exit{ Buttons::Get_Button_Function(_on_hover_exit) }
+{}
+
 
 /*!*****************************************************************************
   \brief
@@ -123,7 +271,7 @@ void Button::Input()
 			On_Click();
 		}
 
-		if (SAGEInputHandler::Get_Mouse(SAGE_MOUSE_BUTTON_LEFT) || SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
+		if (SAGEInputHandler::Get_Mouse(SAGE_MOUSE_BUTTON_LEFT))
 		{
 			On_Click_Hold();
 		}
@@ -353,65 +501,3 @@ void Button::Set_On_Hover_Exit(Function_Ptr _new_on_hover_exit)
 	the enum representating what component this is
 *******************************************************************************/
 ComponentType Button::Get_Component_Type() { return BUTTON; }
-
-/*!*****************************************************************************
-  \brief
-	Default behaviour of button updating its status when event is triggered
-  \param _caller
-	the caller
-*******************************************************************************/
-void Default_Button_Update(GameObject* _caller)
-{
-	Sprite2D* sprite = _caller->Get_Component<Sprite2D>();
-	Button* button = _caller->Get_Component<Button>();
-	Image* image = _caller->Get_Component<Image>();
-	if (button)
-	{
-		if (button->Is_Hovered())
-		{
-			if (sprite)
-			{
-				sprite->Set_Transparency(0.75f);
-			}
-			else if (image)
-			{
-				image->Set_Transparency(0.75f);
-			}			
-		}
-		else
-		{
-			if (sprite)
-			{
-				sprite->Set_Transparency(1.f);
-			}
-			else if (image)
-			{
-				image->Set_Transparency(1.f);
-			}
-		}
-	}
-}
-
-/*!*****************************************************************************
-  \brief
-	Default behaviour of button updating its status when clicked
-  \param _caller
-	the caller
-*******************************************************************************/
-void Default_Click(GameObject* _caller)
-{
-	Sprite2D* sprite = _caller->Get_Component<Sprite2D>();
-	Button* button = _caller->Get_Component<Button>();
-	Image* image = _caller->Get_Component<Image>();
-	if (button->Is_Clicked())
-	{
-		if (sprite)
-		{
-			sprite->Set_Transparency(0.2f);
-		}
-		else if (image)
-		{
-			image->Set_Transparency(0.2f);
-		}
-	}
-}

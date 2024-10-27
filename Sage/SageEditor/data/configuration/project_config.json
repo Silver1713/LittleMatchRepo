@@ -6,7 +6,7 @@
         "UseWindowedFullScreen": true
     },
     "Other_Configurations":{
-        "Editor_Startup_Scene": "editor_scene",
+        "Editor_Startup_Scene": "level_1",
         "Game_Startup_Scene": "splash_screen"
     }
 }

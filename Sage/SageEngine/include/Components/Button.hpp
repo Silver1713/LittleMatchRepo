@@ -17,11 +17,46 @@
 #include "Components/UITransform.hpp"
 #include <vector>
 
+namespace Buttons
+{	
+	/*!*****************************************************************************
+	  \brief
+		Gets the function from the map of button functions
+	*******************************************************************************/
+	void(*Get_Button_Function(std::string const& _key))(GameObject*);
+
+	/*!*****************************************************************************
+	  \brief
+		Default behaviour of button updating its status when event is triggered
+	  \param _caller
+		the caller
+	*******************************************************************************/
+	void Default_Button_Update(GameObject* _caller);
+
+	/*!*****************************************************************************
+	  \brief
+		Default behaviour of button updating its status when clicked
+	  \param _caller
+		the caller
+	*******************************************************************************/
+	void Default_Click(GameObject* _caller);
+
+	/*!*****************************************************************************
+	  \brief
+		Function to go to a specific scene
+	  \param _caller
+		the caller
+	*******************************************************************************/
+	void Go_To_Splash_Screen(GameObject* _caller);
+	void Go_To_Main_Menu(GameObject* _caller);	
+	void Go_To_Level_1(GameObject* _caller);
+	void Exit_Game(GameObject* _caller);
+}
+
 class Button : public Component
 {
 private:
 	typedef void(*Function_Ptr)(GameObject*);
-
 	Transform* transform{ nullptr };
 	UITransform* ui_transform{ nullptr };
 	Sprite2D* sprite{ nullptr };
@@ -69,6 +104,27 @@ public:
 		function that triggers on hover exit
 	*******************************************************************************/
 	Button(Function_Ptr _on_click, Function_Ptr _on_click_hold, Function_Ptr _on_click_release, Function_Ptr _on_hover_enter, Function_Ptr _on_hover, Function_Ptr _on_hover_exit);
+
+	/*!*****************************************************************************
+	  \brief
+		Constructor for Button that creates the Button that triggers functions
+		that has a signature like "void Name(GameObject* _caller)" based on events that happen to the
+		button. Instead, this constructor takes the string that represents each function pointer to
+		be initialized with
+	  \param _on_click
+		key of the function that triggers on click
+	  \param _on_click_hold
+		key of the function that triggers on held click
+	  \param _on_click_release
+		key of the function that triggers on released click
+	  \param _on_hover_enter
+		key of the function that triggers on entering hover state
+	  \param _on_hover
+		key of the function that triggers on hover
+	  \param _on_hover_exit
+		key of the function that triggers on hover exit
+	*******************************************************************************/
+	Button(std::string const& _on_click, std::string const& _on_click_hold, std::string const& _on_click_release, std::string const& _on_hover_enter, std::string const& _on_hover, std::string const& _on_hover_exit);
 
 	/*!*****************************************************************************
 	  \brief
@@ -219,20 +275,3 @@ public:
 	*******************************************************************************/
 	ComponentType Get_Component_Type() override;
 };
-
-
-/*!*****************************************************************************
-  \brief
-	Default behaviour of button updating its status when event is triggered
-  \param _caller
-	the caller
-*******************************************************************************/
-void Default_Button_Update(GameObject* _caller);
-
-/*!*****************************************************************************
-  \brief
-	Default behaviour of button updating its status when clicked
-  \param _caller
-	the caller
-*******************************************************************************/
-void Default_Click(GameObject* _caller);
