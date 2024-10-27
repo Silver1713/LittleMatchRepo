@@ -5,6 +5,7 @@
 
 #include "BindingSystem.hpp"
 #include "SageSystemManager.hpp"
+#include "ScriptInstance.hpp"
 #include "Systems/SageScripting.hpp"
 
 
@@ -40,6 +41,10 @@ std::vector<std::pair<std::string, MonoObject*>>& Behaviour::Get_Mono_Instances(
 	return mono_instances;
 }
 
+std::vector<std::pair<std::string, ScriptInstance>>& Behaviour::Get_Script_Instances()
+{
+	return script_instances;
+}
 
 MonoObject* Behaviour::Add_Instance(std::string _klass_name, std::string _namespace)
 {
@@ -72,9 +77,9 @@ MonoObject* Behaviour::Add_Instance(std::string _klass_name, std::string _namesp
 
 	mono_field_set_value(instance, field, transform);
 
+	ScriptInstance script_instance = ScriptInstance(instance);
 	
-
-
+	script_instances.emplace_back(std::make_pair(_klass_name, script_instance));
 	mono_instances.emplace_back(std::make_pair(_klass_name, instance));
 
 	SageSystemManager::Get_System<SageScriptSystem>()->Init_CSBehaviour_Instance(instance);

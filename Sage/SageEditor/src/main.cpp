@@ -101,7 +101,7 @@ int main(int, char**)
     {
 
         update();
-		SageEngine::Update();
+		//SageEngine::Update();
 
         draw();
 		SageEngine::Draw(true);

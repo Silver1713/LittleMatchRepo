@@ -26,6 +26,7 @@ namespace Sage_Inspector
     , "PHYSICS", "AUDIO", "BEHAVIOUR", "BUTTON", "NUM_OF_TYPES_OF_COMPONENTS"};*/
 
     void Show_Transform_Component(Transform* _transform_component) {
+		bool changed = false;
         if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
             if (ImGui::BeginTable("transform_table_width", 4, ImGuiTableFlags_Borders))
             {
@@ -47,18 +48,21 @@ namespace Sage_Inspector
                 float pos_x = _transform_component->Get_Position().x;
                 if (ImGui::InputFloat("##PositionX", &pos_x))
                 {
+					changed = true;
                     _transform_component->Get_Position().x = pos_x;
                 }
                 ImGui::TableSetColumnIndex(2);
                 float pos_y = _transform_component->Get_Position().y;
                 if (ImGui::InputFloat("##PositionY", &pos_y))
                 {
+					changed = true;
                     _transform_component->Get_Position().y = pos_y;
                 }
                 ImGui::TableSetColumnIndex(3);
                 float pos_z = _transform_component->Get_Position().z;
                 if (ImGui::InputFloat("##PositionZ", &pos_z))
                 {
+					changed = true;
                     _transform_component->Get_Position().z = pos_z;
                 }
 
@@ -70,18 +74,21 @@ namespace Sage_Inspector
                 float rot_x = _transform_component->Get_Rotation().x;
                 if (ImGui::InputFloat("##RotationX", &rot_x))
                 {
+					changed = true;
                     _transform_component->Get_Rotation().x = rot_x;
                 }
                 ImGui::TableSetColumnIndex(2);
                 float rot_y = _transform_component->Get_Rotation().y;
                 if (ImGui::InputFloat("##RotationY", &rot_y))
                 {
+					changed = true;
                     _transform_component->Get_Rotation().y = rot_y;
                 }
                 ImGui::TableSetColumnIndex(3);
                 float rot_z = _transform_component->Get_Rotation().z;
                 if (ImGui::InputFloat("##ROTATIONZ", &rot_z))
                 {
+					changed = true;
                     _transform_component->Get_Rotation().z = rot_z;
                 }
 
@@ -93,29 +100,42 @@ namespace Sage_Inspector
                 float scale_x = _transform_component->Get_Scale().x;
                 if (ImGui::InputFloat("##ScaleX", &scale_x))
                 {
+					changed = true;
                     _transform_component->Get_Scale().x = scale_x;
                 }
                 ImGui::TableSetColumnIndex(2);
                 float scale_y = _transform_component->Get_Scale().y;
                 if (ImGui::InputFloat("##ScaleY", &scale_y))
                 {
+					changed = true;
                     _transform_component->Get_Scale().y = scale_y;
                 }
                 ImGui::TableSetColumnIndex(3);
                 float scale_z = _transform_component->Get_Scale().z;
                 if (ImGui::InputFloat("##ScaleZ", &scale_z))
                 {
+					changed = true;
                     _transform_component->Get_Scale().z = scale_z;
                 }
                 ImGui::EndTable();
                 //transform_component->Get_Position().x
+
+                if (changed)
+                {
+					Sprite2D* sprite = _transform_component->Get_Parent()->Get_Component<Sprite2D>();
+					if (sprite)
+					{
+						sprite->Update();
+					}
+                }
             }
         }
 		ImGui::Separator();
     }
 
     void Show_UITransform_Component(UITransform* _ui_transform) {
-        if (ImGui::CollapsingHeader("UI Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
+		bool changed = false;
+    	if (ImGui::CollapsingHeader("UI Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
             if (ImGui::BeginTable("uitransform_table", 4, ImGuiTableFlags_Borders))
             {
                 ImGui::TableNextRow();
@@ -136,18 +156,21 @@ namespace Sage_Inspector
                 float pos_x = _ui_transform->Get_Position().x;
                 if (ImGui::InputFloat("##UIPositionX", &pos_x))
                 {
+					changed = true;
                     _ui_transform->Get_Position().x = pos_x;
                 }
                 ImGui::TableSetColumnIndex(2);
                 float pos_y = _ui_transform->Get_Position().y;
                 if (ImGui::InputFloat("##UIPositionY", &pos_y))
                 {
+					changed = true;
                     _ui_transform->Get_Position().y = pos_y;
                 }
                 ImGui::TableSetColumnIndex(3);
                 float pos_z = _ui_transform->Get_Position().z;
                 if (ImGui::InputFloat("##UIPositionZ", &pos_z))
                 {
+					changed = true;
                     _ui_transform->Get_Position().z = pos_z;
                 }
 
@@ -159,18 +182,21 @@ namespace Sage_Inspector
                 float rot_x = _ui_transform->Get_Rotation().x;
                 if (ImGui::InputFloat("##UIRotationX", &rot_x))
                 {
+					changed = true;
                     _ui_transform->Get_Rotation().x = rot_x;
                 }
                 ImGui::TableSetColumnIndex(2);
                 float rot_y = _ui_transform->Get_Rotation().y;
                 if (ImGui::InputFloat("##UIRotationY", &rot_y))
                 {
+					changed = true;
                     _ui_transform->Get_Rotation().y = rot_y;
                 }
                 ImGui::TableSetColumnIndex(3);
                 float rot_z = _ui_transform->Get_Rotation().z;
                 if (ImGui::InputFloat("##UIRotationZ", &rot_z))
                 {
+					changed = true;
                     _ui_transform->Get_Position().z = rot_z;
                 }
 
@@ -182,21 +208,34 @@ namespace Sage_Inspector
                 float scale_x = _ui_transform->Get_Scale().x;
                 if (ImGui::InputFloat("##UIScaleX", &scale_x))
                 {
+					changed = true;
                     _ui_transform->Get_Scale().x = scale_x;
                 }
                 ImGui::TableSetColumnIndex(2);
                 float scale_y = _ui_transform->Get_Scale().y;
                 if (ImGui::InputFloat("##UIScaleY", &scale_y))
                 {
+                    changed = true;
                     _ui_transform->Get_Scale().y = scale_y;
                 }
                 ImGui::TableSetColumnIndex(3);
                 float scale_z = _ui_transform->Get_Scale().z;
                 if (ImGui::InputFloat("##UIScaleZ", &scale_z))
                 {
+                    changed = true;
                     _ui_transform->Get_Scale().z = scale_z;
                 }
                 ImGui::EndTable();
+
+
+                if (changed)
+                {
+                    Image* sprite = _ui_transform->Get_Parent()->Get_Component<Image>();
+                    if (sprite)
+                    {
+                        sprite->Update();
+                    }
+                }
             }
         }
 		ImGui::Separator();

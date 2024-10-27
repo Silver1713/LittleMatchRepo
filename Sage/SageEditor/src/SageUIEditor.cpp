@@ -317,17 +317,18 @@ namespace SageUIEditor
             //This example shows the reordering of GameObjects on the Hierarchy. Simple drag and drop.
             //Hardcoded array of GameObjects
             static const char* item_names[] = { "Player", "Empty GameObject 2", "Empty GameObject 3" };
-            
-            for (int n = 0; n < IM_ARRAYSIZE(item_names); n++)
+			auto& gameObjects = Game_Objects::Get_Game_Objects();
+            int n{};
+            for (auto& object : gameObjects)
             {
-                const char* item = item_names[n];
+				const char* item = object.second->Get_ID().c_str(); 
                 ImGui::Selectable(item);
                 
                 if (ImGui::IsItemActive())
                 {
                     if (ImGui::IsItemHovered())
                     {
-                        EditorStateManager::Add_Selected_Object(Game_Objects::Get_Game_Object("Player"));
+                        EditorStateManager::Select_Object(object.second.get());
                         
                         
                         int n_next = n + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
@@ -339,6 +340,7 @@ namespace SageUIEditor
                         }
                     }
                 }
+				n++;
                     
             }
             ImGui::PopItemFlag();

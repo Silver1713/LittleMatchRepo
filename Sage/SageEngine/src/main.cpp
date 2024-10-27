@@ -58,6 +58,7 @@ int main()
 
 	while (!SageHelper::sage_ptr_window->Should_Window_Close())
 	{
+		SageEngine::Input();
 		       
 		SageEngine::Update();
 

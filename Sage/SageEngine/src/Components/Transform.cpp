@@ -71,6 +71,7 @@ Transform::Transform(std::initializer_list<float> const& _pos, std::initializer_
 void Transform::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
+	Update();
 }
 
 /*!*****************************************************************************

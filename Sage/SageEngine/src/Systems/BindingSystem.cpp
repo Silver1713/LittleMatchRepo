@@ -118,8 +118,8 @@ void BindingSystem::Exit()
 
 void BindingSystem::Bind_Input_System()
 {
-	SageBindings::Add_Internal_Call("SageEngine.Input::Get_Key", GLFWInputHandler::Get_Key);
-	SageBindings::Add_Internal_Call("SageEngine.Input::Get_Key_Pressed", GLFWInputHandler::Get_Key_Pressed);
+	SageBindings::Add_Internal_Call("SageEngine.Input::GetKeyInternal", GLFWInputHandler::Get_Key);
+	SageBindings::Add_Internal_Call("SageEngine.Input::GetKeyOnce", GLFWInputHandler::Get_Key_Pressed);
 	SageBindings::Add_Internal_Call("SageEngine.Input::Get_Mouse_Pos", GLFWInputHandler::Get_Mouse_Pos);
 }
 

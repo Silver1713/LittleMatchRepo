@@ -136,15 +136,26 @@ namespace SageEngine
         /// <param name="key"> The keycode to check </param>
         /// <returns>A bool to represent if the key is held down </returns>
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern bool GetKey(KeyCode key);
+        private static extern bool GetKeyInternal(int key);
         /// <summary>
         /// Check for key press.
         /// </summary>
         /// <param name="key"> The keycode to check  </param>
         /// <returns>A bool to represent if the key is held down </returns>
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern bool GetKeyDown(KeyCode key);
+        private static extern bool GetKeyOnce(int key);
         
+
+        public static bool GetKey(KeyCode key)
+        {
+            return GetKeyInternal((int)key);
+        }
+
+        public static bool GetKeyPress(KeyCode key)
+        {
+            return GetKeyOnce((int)key);
+        }
+
 
     }
 }

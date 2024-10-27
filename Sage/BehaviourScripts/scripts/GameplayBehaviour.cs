@@ -20,7 +20,10 @@ public class GamePlayBehaviour : SageBehaviour
 
     void Update()
     {
-        Vector2D position = transform.position;
+        if (Input.GetKey(Input.KeyCode.D))
+        {
+            SageDebug.Print("D is pressed");
+        }
         
 
         //SageDebug.Print("[" + position.x + "," + position.y + "]");

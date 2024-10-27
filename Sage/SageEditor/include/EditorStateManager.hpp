@@ -15,6 +15,7 @@ struct EditorStateManager
 	static std::vector<GameObject*>& Get_Selected_Objects();
 
 	static void Add_Selected_Object(GameObject* _object);
+	static void Select_Object(GameObject* _object);
 
 	static void Clear_Selected_Objects();
 
