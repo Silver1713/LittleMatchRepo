@@ -50,10 +50,11 @@ namespace SageEditor
     {
         if (show_inspector_window)
         {
-            /*if (selected_game_object)
+            if (SageHierarchy::selectedObject)
             {
-                Sage_Inspector::ShowInspector();
-            }*/
+                Sage_Inspector::ShowInspector(SageHierarchy::selectedObject);
+                std::cout << "Selected Game Object: " << SageHierarchy::selectedObject->Get_ID() << std::endl;
+            }
             // Sagecomponent.init
             ImGui::Begin("Inspector");
             //Inspector();
