@@ -15,7 +15,7 @@
     ],
 
     "Level_Name": "main_menu",
-    "Num_Prefabs": 6,
+    "Num_Prefabs": 5,
     "Prefabs":
     [
       {
@@ -24,43 +24,31 @@
         "Scale": [3840,2160,0]
       },
       {
-        "Prefab_ID": "GUI_SQUARE",
-        "Identifier": "Play",
-        "Pos": [960,0,0],
+        "Prefab_ID": "GUI_GO_TO_LEVEL_1_BUTTON",
+        "Identifier": "Play_Button",
+        "Pos": [960,350,0],
         "Scale": [200,75,0],
-        "RGBA" : [1,1,1,1],
+        "Z_Order": 1
+      },
+      {
+        "Prefab_ID": "GUI_GO_TO_MAIN_MENU_BUTTON",
+        "Identifier": "Main_Menu_Button",
+        "Pos": [960,450,0],
+        "Scale": [200,75,0],
         "Z_Order": 1
       },
       {
         "Prefab_ID": "GUI_SQUARE",
-        "Identifier": "How to play",
-        "Pos": [960,100,0],
+        "Identifier": "Credits_Button",
+        "Pos": [960,650,0],
         "Scale": [200,75,0],
-        "RGBA" : [1,1,1,1],
         "Z_Order": 1
       },
       {
-        "Prefab_ID": "GUI_SQUARE",
-        "Identifier": "Settings",
-        "Pos": [960,200,0],
+        "Prefab_ID": "GUI_EXIT_GAME_BUTTON",
+        "Identifier": "Exit_Button",
+        "Pos": [960,750,0],
         "Scale": [200,75,0],
-        "RGBA" : [1,1,1,1],
-        "Z_Order": 1
-      },
-      {
-        "Prefab_ID": "GUI_SQUARE",
-        "Identifier": "Credits",
-        "Pos": [960,300,0],
-        "Scale": [200,75,0],
-        "RGBA" : [1,1,1,1],
-        "Z_Order": 1
-      },
-      {
-        "Prefab_ID": "GUI_SQUARE",
-        "Identifier": "Exit",
-        "Pos": [960,400,0],
-        "Scale": [200,75,0],
-        "RGBA" : [1,1,1,1],
         "Z_Order": 1
       }
     ]

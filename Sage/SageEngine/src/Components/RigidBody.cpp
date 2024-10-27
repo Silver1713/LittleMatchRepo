@@ -49,7 +49,12 @@ void RigidBody::Set_Gravity_Disable(bool _is_static)
 	enable_gravity = !_is_static;
 }
 
-ToastBox::Vec2 const& RigidBody::Get_Velocity()
+ToastBox::Vec2 const& RigidBody::Get_Velocity() const
+{
+	return velocity;
+}
+
+ToastBox::Vec2& RigidBody::Get_Velocity()
 {
 	return velocity;
 }
@@ -84,26 +89,40 @@ void RigidBody::AddForce(ToastBox::Vec2 force, ForceMode mode)
 	}
 }
 
+// Return Gravity bool flag
+bool RigidBody::Gravity_Flag() const
+{
+	return enable_gravity;
+}
+
+// Return Gravity bool flag
+bool RigidBody::Gravity_Flag()
+{
+	return enable_gravity;
+}
+
+// Setter Gravity Bool Flag
+void RigidBody::Set_Gravity_Flag(bool flag)
+{
+	enable_gravity = flag;
+}
+
 float RigidBody::Get_Mass() const
 {
 	return mass;
 }
 
-void RigidBody::Set_Mass(float _mass)
+void RigidBody::Apply_Mass(float new_mass)
 {
-	mass = _mass;
+	mass = new_mass;
 }
 
-
-
-void RigidBody::Set_Gravity(ToastBox::Vec2 _gravity)
-{
-	gravity = _gravity;
-}
-
-
-ToastBox::Vec2 const& RigidBody::Get_Gravity() const
+float RigidBody::Get_Gravity() const
 {
 	return gravity;
 }
 
+void RigidBody::Apply_New_Gravity(float new_gravity)
+{
+	gravity = new_gravity;
+}

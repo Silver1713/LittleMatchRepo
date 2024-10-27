@@ -78,10 +78,10 @@
         "Count": 2500
       },
       {
-        "Prefab_ID": "GUI_SQUARE",
-        "Identifier": "GUI_Top",
-        "Pos": [960,540,0],
-        "Scale": [200,200,0],
+        "Prefab_ID": "GUI_GO_TO_MAIN_MENU_BUTTON",
+        "Identifier": "Go_To_Main_Menu_Button",
+        "Pos": [960,100,0],
+        "Scale": [150,50,0],
         "RGBA" : [1,1,1,1],
         "Z_Order": 1
       }

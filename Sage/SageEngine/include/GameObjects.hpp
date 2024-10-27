@@ -23,6 +23,8 @@ class GameObject
 {
 protected:
 	std::vector<std::unique_ptr<Component>> components;
+	std::unordered_map<std::string,GameObject*> children;
+	GameObject* parent{ nullptr };
 	std::string identifier{};
 	bool is_enabled{true};
 	unsigned int z_order{};
@@ -115,7 +117,15 @@ public:
 	  \param _c
 		Component to be added
 	*******************************************************************************/
-	void Add_Component(std::unique_ptr<Component> _c);
+	void Add_Component(std::unique_ptr<Component> _c);	
+
+	/*!*****************************************************************************
+	  \brief
+		Clears all gameobjects
+	  \return
+		Returns the vector of components that the gameobject posseses
+	*******************************************************************************/
+	std::vector<std::unique_ptr<Component>>& Get_Component_List();
 
 	/*!*****************************************************************************
 	  \brief
@@ -128,11 +138,45 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
-		Get the component of the gameobject
-	  \return
-		The components list
+		Sets the parent
+	  \param _new_parent
+		pointer to the new parent gameobject
 	*******************************************************************************/
-	std::vector<std::unique_ptr<Component>>& Get_Components();
+	void Set_Parent(GameObject* const _new_parent);
+
+	/*!*****************************************************************************
+	  \brief
+		Gets the parent
+	  \return
+		pointer to the parent gameobject
+	*******************************************************************************/
+	GameObject* Get_Parent();
+
+	/*!*****************************************************************************
+	  \brief
+		Adds a gameobject to be a child to this gameobject
+	  \param _new_child
+		the gameobject to add
+	*******************************************************************************/
+	void Add_Child(GameObject* const _new_child);
+
+	/*!*****************************************************************************
+	  \brief
+		Removes a child from the map of children gameobjects of this gameobject
+	  \param _identifier
+		the name of the child that is to be removed
+	*******************************************************************************/
+	void Remove_Child(std::string const& _identifier);
+
+	/*!*****************************************************************************
+	  \brief
+		Gets the child with the given name
+	  \param _identifier
+		the name of the child that is to be gotten
+	  \return
+		the poitner to the gameobject if it exists, nullptr if not
+	*******************************************************************************/
+	GameObject* Get_Child(std::string const& _identifier);
 
 };
 

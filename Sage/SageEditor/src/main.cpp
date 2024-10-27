@@ -15,6 +15,9 @@
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
 
+#include "EditorStateManager.hpp"
+#include "GameObjects.hpp"
+
 #include "KeyInputs.h"
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -133,8 +136,7 @@ int main(int, char**)
 
 int init()
 {
-	
-	
+    //EditorStateManager::Add_Selected_Object(Game_Objects::Get_Game_Object("Player"));
 
     // GL 3.0 + GLSL 130
     const char* glsl_version = "#version 450";

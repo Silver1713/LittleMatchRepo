@@ -103,6 +103,8 @@ void Sprite2D::Update()
 	obj->transform.scale.y = transform->Get_Scale().y;
 	obj->transform.orientation.x = transform->Get_Rotation().x;
 	obj->transform.orientation.y = transform->Get_Rotation().y;
+
+	//need to update color also
 	obj->Update();
 }
 /*!*****************************************************************************
@@ -241,4 +243,25 @@ void Sprite2D::Set_Transparency(float _a)
 SageObject** Sprite2D::Get_Object()
 {
 	return &obj;
+}
+
+/*!*****************************************************************************
+  \brief
+	Gets the shape of the sageobject
+
+  \return
+	a string containing defining the shape of the object
+*******************************************************************************/
+std::string Sprite2D::Get_Shape()
+{
+	return object_shape;
+}
+
+/*!*****************************************************************************
+  \brief
+	Set the shape of the sageobject
+*******************************************************************************/
+void Sprite2D::Set_Shape(std::string _shape)
+{
+	object_shape = _shape;
 }

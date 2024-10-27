@@ -11,24 +11,40 @@
         "Object_Shape": "If not specified, will do Rect. Otherwise can do Circle",
         "Has_Collider": false,
         "Has_Physics": false,
-        "Physics":
-        [
-          {
-            "Velocity": [0,0,0]
-          }
-        ],
+        "Physics":      
+        {
+          "Velocity": [0,0,0]
+        },        
         "Has_Animator": false,
         "Animator":
+        {
+          "Animation_Set_ID": "the ID is in serialization/animations/*.json"
+        },
+        "Is_Button": false,
+        "Button":
+        {
+          "On_Click": "",
+          "On_Click_Hold": "",
+          "On_Click_Release": "",
+          "On_Hover_Enter": "",
+          "On_Hover": "",
+          "On_Hover_Exit": ""
+        },                 
+        "Has_Children": false,
+        "Num_Children": 0,
+        "Children":
         [
           {
-            "Animation_Set_ID": "the ID is in serialization/animations/*.json"
+            "Prefab_ID":"prefab ID of first child"
+          },
+          {
+            "Prefab_ID":"second child etc etc..."
           }
-        ],
-        "Is_Button": false
+        ]
       }
     ],
 
-    "Num_Prefabs": 9,
+    "Num_Prefabs": 13,
     "Prefabs":
     [
       {
@@ -43,7 +59,8 @@
       },
       {
         "ID": "FADE_SCREEN",
-        "Scale": [1920, 1080,0],
+        "Transform_Type":"Screen",
+        "Scale": [3840, 2160,0],
         "RGBA" : [0,0,0,1]
       },
       {
@@ -70,23 +87,63 @@
         "Is_Button": true
       },
       {
+        "ID": "GUI_GO_TO_SPLASH_SCREEN_BUTTON",
+        "Transform_Type":"Screen",
+        "Sprite_Texture_ID": "SQUARE",
+        "RGBA" : [0.75,0,0,1],
+        "Is_Button": true,
+        "Button":
+        {
+          "On_Click": "Go_To_Splash_Screen"
+        }
+      },
+      {
+        "ID": "GUI_GO_TO_MAIN_MENU_BUTTON",
+        "Transform_Type":"Screen",
+        "Sprite_Texture_ID": "SQUARE",
+        "RGBA" : [0.75,0,0,1],
+        "Is_Button": true,
+        "Button":
+        {
+          "On_Click": "Go_To_Main_Menu"
+        }        
+      },
+      {
+        "ID": "GUI_GO_TO_LEVEL_1_BUTTON",
+        "Transform_Type":"Screen",
+        "Sprite_Texture_ID": "SQUARE",
+        "RGBA" : [0.75,0,0,1],
+        "Is_Button": true,
+        "Button":
+        {
+          "On_Click": "Go_To_Level_1"
+        }
+      },
+      {
+        "ID": "GUI_EXIT_GAME_BUTTON",
+        "Transform_Type":"Screen",
+        "Sprite_Texture_ID": "SQUARE",
+        "RGBA" : [0.75,0,0,1],
+        "Is_Button": true,
+        "Button":
+        {
+          "On_Click": "Exit_Game"
+        }
+      },
+      {
         "ID": "PLAYER",
         "Sprite_Texture_ID": "SPEARMAN_IDLE_0",
         "Has_Collider": true,
         "Has_Physics": true,
         "Physics":
-        [
-          {
-            "Velocity": [300,200,0]
-          }
-        ],
+        {
+          "Velocity": [300,200,0]
+        },
         "Has_Animator": true,
         "Animator":
-        [
-          {
-            "Animation_Set_ID": "SPEARMAN"
-          }
-        ]        
+        {
+          "Animation_Set_ID": "SPEARMAN"
+        }
       }
     ]
   }
