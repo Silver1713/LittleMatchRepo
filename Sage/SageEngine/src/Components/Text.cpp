@@ -16,7 +16,7 @@
 /*!*****************************************************************************
   \brief
 	Initializes the component and assigns the parent to the gameobject that
-	created this component. Provides a space if any audio components need to
+	created this component. Provides a space if any text components need to
 	be initialized per gameobject
 
   \param _parent
@@ -29,7 +29,7 @@ void Text::Init(GameObject* _parent)
 
 /*!*****************************************************************************
   \brief
-	Updates any audio this component uses
+	Updates any text this component uses
 *******************************************************************************/
 void Text::Update()
 {
@@ -52,4 +52,4 @@ void Text::Exit()
   \return
 	the enum representating what component this is
 *******************************************************************************/
-ComponentType Text::Get_Component_Type() { return AUDIO; }
+ComponentType Text::Get_Component_Type() { return TEXT; }
