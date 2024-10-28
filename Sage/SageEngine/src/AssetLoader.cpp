@@ -834,7 +834,7 @@ namespace Assets
 								else 
 								{
 									l.z_orders.push_back(0);
-								}	
+								}
 							}
 							catch (...)
 							{
