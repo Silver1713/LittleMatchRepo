@@ -158,6 +158,10 @@ void SageEngine::Init(const char* editor_config_path)
     }
 }
 
+void SageEngine::Input()
+{
+    SM::Input();
+}
 
 
 void SageEngine::Update()
@@ -170,7 +174,7 @@ void SageEngine::Update()
         PhysicsUpdate();
         accumulator -= physics_update_target;
     }
-    SM::Input();
+    
     SM::Update();
 
     SageAudio::Update();

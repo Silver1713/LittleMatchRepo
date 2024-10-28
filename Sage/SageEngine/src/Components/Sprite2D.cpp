@@ -244,3 +244,24 @@ SageObject** Sprite2D::Get_Object()
 {
 	return &obj;
 }
+
+/*!*****************************************************************************
+  \brief
+	Gets the shape of the sageobject
+
+  \return
+	a string containing defining the shape of the object
+*******************************************************************************/
+std::string Sprite2D::Get_Shape()
+{
+	return object_shape;
+}
+
+/*!*****************************************************************************
+  \brief
+	Set the shape of the sageobject
+*******************************************************************************/
+void Sprite2D::Set_Shape(std::string _shape)
+{
+	object_shape = _shape;
+}

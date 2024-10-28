@@ -41,7 +41,7 @@ void RigidBody::Update()
 
 void RigidBody::Exit() {}
 
-ComponentType RigidBody::Get_Component_Type() { return PHYSICS; }
+ComponentType RigidBody::Get_Component_Type() { return RIGIDBODY; }
 
 void RigidBody::Set_Gravity_Disable(bool _is_static)
 {
@@ -49,7 +49,12 @@ void RigidBody::Set_Gravity_Disable(bool _is_static)
 	enable_gravity = !_is_static;
 }
 
-ToastBox::Vec2 const& RigidBody::Get_Velocity()
+ToastBox::Vec2 const& RigidBody::Get_Velocity() const
+{
+	return velocity;
+}
+
+ToastBox::Vec2& RigidBody::Get_Velocity()
 {
 	return velocity;
 }
@@ -62,7 +67,7 @@ ToastBox::Vec2& RigidBody::Get_Current_Velocity()
 void RigidBody::ApplyGravity(float _delta_time)
 {
 	// Adjust the current velocity by gravity over time
-	curr_velocity.y -= gravity * _delta_time; // Apply gravity to the vertical velocity
+	curr_velocity += gravity * _delta_time; // Apply gravity to the vertical velocity
 }
 
 void RigidBody::UpdateVelocity(float _delta_time) 
@@ -83,4 +88,53 @@ void RigidBody::AddForce(ToastBox::Vec2 force, ForceMode mode)
 		curr_velocity += force / mass;
 	}
 }
+
+// Return Gravity bool flag
+bool RigidBody::Gravity_Flag() const
+{
+	return enable_gravity;
+}
+
+// Return Gravity bool flag
+bool RigidBody::Gravity_Flag()
+{
+	return enable_gravity;
+}
+
+// Setter Gravity Bool Flag
+void RigidBody::Set_Gravity_Flag(bool flag)
+{
+	enable_gravity = flag;
+}
+
+float RigidBody::Get_Mass() const
+{
+	return mass;
+}
+
+void RigidBody::Apply_Mass(float new_mass)
+{
+	mass = new_mass;
+}
+
+ToastBox::Vec2 const& RigidBody::Get_Gravity() const
+{
+	return gravity;
+}
+
+void RigidBody::Apply_New_Gravity(ToastBox::Vec2 new_gravity)
+{
+	gravity = new_gravity;
+}
+
+void RigidBody::Set_Mass(float _mass)
+{
+	mass = _mass;
+}
+
+void RigidBody::Set_Gravity(ToastBox::Vec2 _gravity)
+{
+	gravity = _gravity;
+}
+
 

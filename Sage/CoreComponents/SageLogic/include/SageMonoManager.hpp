@@ -20,11 +20,23 @@ struct SageMonoManager
 		MonoImage* image;
 		MonoAssembly* assembly;
 
-		const char* Klass_Namespace; // Namespace
-		const char* Klass_Name; // Class Name
-		const char* Klass_Full_Name; // Full Name
-		const char* Klass_OfA_Name; // The Name of the Base Class, if any
+		const char* Klass_Namespace{}; // Namespace
+		const char* Klass_Name{}; // Class Name
+		char * Klass_Full_Name{}; // Full Name
+		const char* Klass_OfA_Name{}; // The Name of the Base Class, if any
 
+		MonoKlassInfo();
+
+		MonoKlassInfo(const MonoKlassInfo& other) = delete;
+		MonoKlassInfo& operator=(const MonoKlassInfo& other) = delete;
+
+
+		MonoKlassInfo(MonoKlassInfo&& other);
+		MonoKlassInfo& operator=(MonoKlassInfo&& other);
+
+
+
+		~MonoKlassInfo();
 	};
 
 
@@ -76,7 +88,7 @@ struct SageMonoManager
 	//------Retrieval-----
 
 	static MonoKlassInfo* Get_Klass_Info(const char* _klass_name, const char* _namespace=nullptr);
-
+	static MonoKlassInfo* Get_Klass_Info(MonoClass* klass);
 
 	//---Compilation of Scripts
 	static void Compile_Scripts(const char* script_dir, const char* output_assembly);

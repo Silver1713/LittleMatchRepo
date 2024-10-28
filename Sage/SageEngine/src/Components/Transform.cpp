@@ -71,6 +71,7 @@ Transform::Transform(std::initializer_list<float> const& _pos, std::initializer_
 void Transform::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
+	Update();
 }
 
 /*!*****************************************************************************
@@ -145,11 +146,21 @@ void Transform::Set_Position(std::initializer_list<float> const& _new_pos)
   \return
 	the position member
 *******************************************************************************/
-ToastBox::Vec3 const& Transform::Get_Position()
+ToastBox::Vec3 const& Transform::Get_Position() const
 {
 	return position;
 }
+/*!*****************************************************************************
+  \brief
+	Gets the position member
 
+  \return
+	the position member
+*******************************************************************************/
+ToastBox::Vec3& Transform::Get_Position()
+{
+	return position;
+}
 /*!*****************************************************************************
   \brief
 	Sets the prev position member to the _new_prev_pos
@@ -223,11 +234,21 @@ void Transform::Set_Rotation(std::initializer_list<float> const& _new_rot)
   \return
 	the rotation member
 *******************************************************************************/
-ToastBox::Vec3 const& Transform::Get_Rotation()
+ToastBox::Vec3 const& Transform::Get_Rotation() const
 {
 	return rotation;
 }
+/*!*****************************************************************************
+  \brief
+	Gets the rotation member
 
+  \return
+	the rotation member
+*******************************************************************************/
+ToastBox::Vec3& Transform::Get_Rotation()
+{
+	return rotation;
+}
 /*!*****************************************************************************
   \brief
 	Sets the scale member to the _new_scale
@@ -262,7 +283,18 @@ void Transform::Set_Scale(std::initializer_list<float> const& _new_scale)
   \return
 	the scale member
 *******************************************************************************/
-ToastBox::Vec3 const& Transform::Get_Scale()
+ToastBox::Vec3 const& Transform::Get_Scale() const
+{
+	return scale;
+}
+/*!*****************************************************************************
+  \brief
+	Gets the scale member
+
+  \return
+	the scale member
+*******************************************************************************/
+ToastBox::Vec3& Transform::Get_Scale()
 {
 	return scale;
 }
