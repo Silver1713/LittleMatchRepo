@@ -27,7 +27,7 @@ echo ========================================================
 set /p choice=Select Option: 
 
 if %choice%==1 goto generatecleanvs2022
-if %choice%==2 goto generatesvs2022
+if %choice%==2 goto generatevs2022
 if %choice%==3 goto cleanvs2022
 if %choice%==4 goto generatecleanvs2019
 if %choice%==5 goto generatevs2019

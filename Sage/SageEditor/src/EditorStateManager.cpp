@@ -33,3 +33,8 @@ void EditorStateManager::Clear_Selected_Objects()
 
 
 
+void EditorStateManager::Select_Object(GameObject* _object)
+{
+	Clear_Selected_Objects();
+	Add_Selected_Object(_object);
+}

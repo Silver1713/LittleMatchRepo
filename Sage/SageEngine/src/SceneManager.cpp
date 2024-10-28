@@ -195,8 +195,9 @@ namespace SM {
 		Input Checks for the Scene Manager
 	*******************************************************************************/
 	void Input()
-	{		
-		SAGEInputHandler::update();
+	{
+		
+		
 		SM::fp_input();
 	}
 
@@ -206,6 +207,7 @@ namespace SM {
 	*******************************************************************************/
 	void Update()
 	{
+		SAGEInputHandler::update();
 		Fade_In();
 		Fade_Out();
 		SM::fp_update();

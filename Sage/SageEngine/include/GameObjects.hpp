@@ -178,6 +178,9 @@ public:
 	*******************************************************************************/
 	GameObject* Get_Child(std::string const& _identifier);
 
+
+	std::vector<std::unique_ptr<Component>>& Get_Components();
+
 };
 
 // The central gameobject manager that iterates through all active gameobjects

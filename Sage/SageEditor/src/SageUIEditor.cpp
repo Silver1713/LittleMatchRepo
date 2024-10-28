@@ -1,3 +1,4 @@
+#include "SageUIEditor.hpp"
 #include "../../SageEngine/include/Game.hpp"
 #include <windows.h>
 #include <commdlg.h>
@@ -23,7 +24,7 @@ static bool show_game_window = true;
 static bool exit_requested = true;
 static bool show_assets_window = false;
 
-namespace SageEditor
+namespace SageUIEditor
 {
     ImGuiTextFilter     Filter;
 
@@ -536,4 +537,22 @@ namespace SageEditor
 
         ImGui::ShowDemoWindow();
     }
+
+
+    namespace IMGUI_Elements
+    {
+		IMGUI_Vector2::IMGUI_Vector2(float* _value) : active(false), hovered(false), onChanged(false), onClick(false)
+	   {
+           
+           onChanged = ImGui::InputFloat2("##Vector2", _value);
+           active = ImGui::IsItemActive();
+           hovered = ImGui::IsItemHovered();
+           onClick = ImGui::IsItemClicked();
+          
+	   }
+
+
+    }
+
+
 }

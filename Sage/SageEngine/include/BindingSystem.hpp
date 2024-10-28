@@ -86,6 +86,13 @@ void BindingSystem::Create_Component_Shadow(T* component)
 		cs_to_cpp_mapping[component_instance] = index;
 		//mono_runtime_object_init(component_instance);
 		break;
+	case ComponentType::RIGIDBODY:
+		// Create rigidbody shadow
+		component_instance = SageMonoManager::Create_Instance(SageMonoManager::Get_Klass_Info("RigidBody", "SageEngine")->klass);
+		mono_entities[index].components[ComponentType::RIGIDBODY] = component_instance;
+		cs_to_cpp_mapping[component_instance] = index;
+		//mono_runtime_object_init(component_instance);
+		break;
 	default:
 		// Invalid component
 		component_instance = nullptr;
