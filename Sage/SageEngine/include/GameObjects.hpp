@@ -127,11 +127,6 @@ public:
 	*******************************************************************************/
 	std::vector<std::unique_ptr<Component>>& Get_Component_List();
 
-	std::vector<std::unique_ptr<Component>>& Get_Component_List()
-	{
-		return components;
-	}
-
 	/*!*****************************************************************************
 	  \brief
 		Gets the component of the specified type T belonging to the gameobject

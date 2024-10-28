@@ -26,7 +26,7 @@ void RigidBody::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
 	transform = static_cast<Transform*>(Get_Parent()->Get_Component<Transform>());
-	curr_velocity = velocity * (float)SageTimer::delta_time;
+	//curr_velocity = velocity * (float)SageTimer::delta_time;
 }
 
 void RigidBody::Update()

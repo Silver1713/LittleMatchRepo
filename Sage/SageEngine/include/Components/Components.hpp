@@ -17,6 +17,7 @@
 #include "Components/UITransform.hpp"
 #include "Components/Image.hpp"
 #include "Components/Audio.hpp"
+#include "Components/Text.hpp"
 #include "Components/Sprite2D.hpp"
 #include "Components/Animator.hpp"
 #include "Components/RigidBody.hpp"
