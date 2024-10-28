@@ -124,7 +124,15 @@ public:
 	  \return
 		the position member
 	*******************************************************************************/
-	ToastBox::Vec3 const& Get_Position();
+	ToastBox::Vec3 const& Get_Position() const;
+	/*!*****************************************************************************
+	  \brief
+		Gets the position member
+
+	  \return
+		the position member
+	*******************************************************************************/
+	ToastBox::Vec3& Get_Position();
 	/*!*****************************************************************************
 	  \brief
 		Sets the prev position member to the _new_prev_pos
@@ -174,8 +182,15 @@ public:
 	  \return
 		the rotation member
 	*******************************************************************************/
-	ToastBox::Vec3 const& Get_Rotation();
+	ToastBox::Vec3 const& Get_Rotation() const;
+	/*!*****************************************************************************
+	  \brief
+		Gets the rotation member
 
+	  \return
+		the rotation member
+	*******************************************************************************/
+	ToastBox::Vec3& Get_Rotation();
 	/*!*****************************************************************************
 	  \brief
 		Sets the scale member to the _new_scale
@@ -199,8 +214,15 @@ public:
 	  \return
 		the scale member
 	*******************************************************************************/
-	ToastBox::Vec3 const& Get_Scale();
+	ToastBox::Vec3 const& Get_Scale() const;
+	/*!*****************************************************************************
+	  \brief
+		Gets the scale member
 
+	  \return
+		the scale member
+	*******************************************************************************/
+	ToastBox::Vec3& Get_Scale();
 	/*!*****************************************************************************
 	  \brief
 		Adds _delta_pos to the current position

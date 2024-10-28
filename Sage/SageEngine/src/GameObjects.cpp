@@ -76,7 +76,7 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Draw()
 	{
-		std::cout << "Drawing\n";
+		//std::cout << "Drawing\n";
 		SageRenderer::Clear_Color({ 1,1,1,1 });
 
 		for (unsigned int current_z{}; current_z <= max_z_orders; ++current_z)
@@ -452,6 +452,17 @@ void GameObject::Add_Component(std::unique_ptr<Component> _c)
 
 /*!*****************************************************************************
   \brief
+	Clears all gameobjects
+  \return
+	Returns the vector of components that the gameobject posseses
+*******************************************************************************/
+std::vector<std::unique_ptr<Component>>& GameObject::Get_Component_List()
+{
+	return components;
+}
+
+/*!*****************************************************************************
+  \brief
 	Sets the parent
   \param _new_parent
 	pointer to the new parent gameobject
@@ -554,4 +565,9 @@ GameObject* GameObject::Get_Child(std::string const& _identifier)
 		return children[_identifier];
 	}
 	return nullptr;
+}
+
+std::vector<std::unique_ptr<Component>>& GameObject::Get_Components()
+{
+	return components;
 }

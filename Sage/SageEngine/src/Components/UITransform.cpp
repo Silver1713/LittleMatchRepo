@@ -143,11 +143,21 @@ void UITransform::Set_Position(std::initializer_list<float> const& _new_pos)
   \return
 	the position member
 *******************************************************************************/
-ToastBox::Vec3 const& UITransform::Get_Position()
+ToastBox::Vec3 const& UITransform::Get_Position() const
 {
 	return position;
 }
+/*!*****************************************************************************
+  \brief
+	Gets the position member
 
+  \return
+	the position member
+*******************************************************************************/
+ToastBox::Vec3& UITransform::Get_Position()
+{
+	return position;
+}
 /*!*****************************************************************************
   \brief
 	Sets the prev position member to the _new_prev_pos
@@ -221,11 +231,22 @@ void UITransform::Set_Rotation(std::initializer_list<float> const& _new_rot)
   \return
 	the rotation member
 *******************************************************************************/
-ToastBox::Vec3 const& UITransform::Get_Rotation()
+ToastBox::Vec3 const& UITransform::Get_Rotation() const
 {
 	return rotation;
 }
 
+/*!*****************************************************************************
+  \brief
+	Gets the rotation member
+
+  \return
+	the rotation member
+*******************************************************************************/
+ToastBox::Vec3& UITransform::Get_Rotation()
+{
+	return rotation;
+}
 /*!*****************************************************************************
   \brief
 	Sets the scale member to the _new_scale
@@ -260,7 +281,19 @@ void UITransform::Set_Scale(std::initializer_list<float> const& _new_scale)
   \return
 	the scale member
 *******************************************************************************/
-ToastBox::Vec3 const& UITransform::Get_Scale()
+ToastBox::Vec3 const& UITransform::Get_Scale() const
+{
+	return scale;
+}
+
+/*!*****************************************************************************
+  \brief
+	Gets the scale member
+
+  \return
+	the scale member
+*******************************************************************************/
+ToastBox::Vec3& UITransform::Get_Scale()
 {
 	return scale;
 }

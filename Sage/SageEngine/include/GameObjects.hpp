@@ -117,7 +117,15 @@ public:
 	  \param _c
 		Component to be added
 	*******************************************************************************/
-	void Add_Component(std::unique_ptr<Component> _c);
+	void Add_Component(std::unique_ptr<Component> _c);	
+
+	/*!*****************************************************************************
+	  \brief
+		Clears all gameobjects
+	  \return
+		Returns the vector of components that the gameobject posseses
+	*******************************************************************************/
+	std::vector<std::unique_ptr<Component>>& Get_Component_List();
 
 	std::vector<std::unique_ptr<Component>>& Get_Component_List()
 	{
@@ -190,6 +198,9 @@ public:
 		the poitner to the gameobject if it exists, nullptr if not
 	*******************************************************************************/
 	GameObject* Get_Child(std::string const& _identifier);
+
+
+	std::vector<std::unique_ptr<Component>>& Get_Components();
 
 };
 

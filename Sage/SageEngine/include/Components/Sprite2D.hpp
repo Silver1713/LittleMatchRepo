@@ -148,4 +148,19 @@ public:
 		pointer to the pointer to the sageobject
 	*******************************************************************************/
 	SageObject** Get_Object();
+
+	/*!*****************************************************************************
+	  \brief
+		Gets the shape of the sageobject
+
+	  \return
+		a string containing defining the shape of the object
+	*******************************************************************************/
+	std::string Get_Shape();
+
+	/*!*****************************************************************************
+	  \brief
+		Set the shape of the sageobject
+	*******************************************************************************/
+	void Set_Shape(std::string _shape);
 };

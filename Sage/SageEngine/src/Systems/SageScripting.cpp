@@ -40,11 +40,12 @@ void SageScriptSystem::Update()
 	for (auto& entity : scriptable_entities)
 	{
 		Behaviour* scriptableComponent = entity.second;
-		std::vector<std::pair<std::string, MonoObject*> >& instances = scriptableComponent->Get_Mono_Instances();
+		auto& instances = scriptableComponent->Get_Script_Instances();
 
 		for (auto& instance : instances)
 		{
-			Invoke_Method_In_Instance(instance.second, "Update()");
+			
+			Invoke_Method_In_Instance(instance.second.instance, "Update()");
 		}
 	}
 }
@@ -58,11 +59,11 @@ void SageScriptSystem::Update_Entity(GameObject* _entity)
 		return;
 	}
 
-	std::vector<std::pair<std::string, MonoObject*>>& instances = behaviour->Get_Mono_Instances();
+	auto& instances = behaviour->Get_Script_Instances();
 
 	for (auto& instance : instances)
 	{
-		Invoke_Method_In_Instance(instance.second, "Update()");
+		Invoke_Method(instance.second.instance, instance.second.update_method);
 	}
 }
 
@@ -79,57 +80,88 @@ SageScriptSystem::~SageScriptSystem()
 
 void SageScriptSystem::Invoke_Method_In_Instance(MonoObject* mono_object, const char* _method_name, const char* _args)
 {
-	bool found = false;
-	MonoClass* klass = mono_object_get_class(mono_object);
-	MonoMethod* method = nullptr;
-	if (methods.contains(klass))
-	{
-		auto& method_map = methods[klass];
-		if (method_map.contains(_method_name))
+	
+		bool found = false;
+		MonoObject* exception = nullptr;
+		MonoClass* klass = mono_object_get_class(mono_object);
+		MonoMethod* method = nullptr;
+		if (methods.contains(klass))
 		{
-			method = method_map[_method_name];
-			found = true;
+			auto& method_map = methods[klass];
+			if (method_map.contains(_method_name))
+			{
+				method = method_map[_method_name];
+				found = true;
+			}
 		}
-	}
-	else
-	{
-		found = false;
-	}
+		else
+		{
+			found = false;
+		}
 
 
-	if (!found)
-	{
-		const char* ns = mono_class_get_namespace(klass);
+		if (!found)
+		{
+			const char* ns = mono_class_get_namespace(klass);
 
-		const char* class_name = mono_class_get_name(klass);
-		std::string quantified_method_name = std::string(ns) + "." + std::string(class_name) + ":" + _method_name;
+			const char* class_name = mono_class_get_name(klass);
+			std::string quantified_method_name = std::string(ns) + "." + std::string(class_name) + ":" + _method_name;
 
-		MonoImage* image = mono_class_get_image(klass);
-		MonoMethodDesc* desc = mono_method_desc_new(quantified_method_name.c_str(), 1);
-		method = mono_method_desc_search_in_image(desc, image);
-		if (!method)
+			MonoImage* image = mono_class_get_image(klass);
+			MonoMethodDesc* desc = mono_method_desc_new(quantified_method_name.c_str(), 1);
+			method = mono_method_desc_search_in_image(desc, image);
+			if (!method)
+			{
+
+				return;
+			}
+			methods[klass][_method_name] = method;
+		}
+
+
+		// Invoke
+		if (_args)
+		{
+			MonoArray* args_array = mono_array_new(SageMonoManager::Default_Domain, mono_get_string_class(), 1);
+			mono_array_set(args_array, MonoString*, 0, mono_string_new(SageMonoManager::Default_Domain, _args));
+			mono_runtime_invoke(method, mono_object, reinterpret_cast<void**>(&args_array), &exception);
+		}
+		else
 		{
 			
-			return;
+			mono_runtime_invoke(method, mono_object, nullptr, &exception);
+
+			
+
+			
+			
 		}
-		methods[klass][_method_name] = method;
+
+	if (exception)
+	{
+		mono_print_unhandled_exception(exception);
 	}
+	
 
 
-	// Invoke
+}
+
+
+void SageScriptSystem::Invoke_Method(MonoObject* mono_instance, MonoMethod* _method, const char* _args)
+{
 	if (_args)
 	{
 		MonoArray* args_array = mono_array_new(SageMonoManager::Default_Domain, mono_get_string_class(), 1);
 		mono_array_set(args_array, MonoString*, 0, mono_string_new(SageMonoManager::Default_Domain, _args));
-		mono_runtime_invoke(method, mono_object, reinterpret_cast<void**>(&args_array), nullptr);
+		mono_runtime_invoke(_method, mono_instance, reinterpret_cast<void**>(&args_array), nullptr);
 	}
 	else
 	{
-		mono_runtime_invoke(method, mono_object, nullptr, nullptr);
+		mono_runtime_invoke(_method, mono_instance, nullptr, nullptr);
 	}
 
-
 }
+
 
 void SageScriptSystem::Add_Script_Instance_Environment(const char* name, Behaviour* _behaviour)
 {

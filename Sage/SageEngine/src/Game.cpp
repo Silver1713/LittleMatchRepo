@@ -94,6 +94,8 @@ namespace Game {
 			transform_cache["Square_" + std::to_string(i)]->Set_Rotation(rot);
 			transform_cache["Square_" + std::to_string(i)]->Set_Scale(scale);
 
+			
+
 			Sprite2D* s = static_cast<Sprite2D*>(g->Get_Component<Sprite2D>());
 			s->Set_Colour({ col[0],col[1],col[2] });
 
@@ -108,6 +110,7 @@ namespace Game {
 	void Init()
 	{
 		camera.init({ 50,0 }, { static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
+		camera.update();
 		vp.set_dims({ static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) });
 		vp.calculate_viewport_xform();
 
@@ -428,9 +431,6 @@ namespace Game {
 							}
 							transform->Set_Position({ pos.x, curr_vel.y * time + prevPos.y, pos.z });
 						}
-
-
-						
 					}
 
 			}
