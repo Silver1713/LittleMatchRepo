@@ -209,7 +209,7 @@ void update()
 
 void draw()
 {
-    // Halis's Code and Hui Zong's Code
+    //[HALIS] [HUI ZONG]
     SageUIEditor::RenderGUI();
 
     // Rendering
@@ -224,5 +224,5 @@ void draw()
 
 void exit()
 {
-	
+    //SageEditor::CleanUpScene();
 }

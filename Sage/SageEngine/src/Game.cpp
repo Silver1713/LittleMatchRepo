@@ -264,12 +264,22 @@ namespace Game {
 
 		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_8))
 		{
-			SageAudio::Play_Sound("sfx_spear", NO_LOOP);
+			SageAudio::Play_Sound("sfx_claw", NO_LOOP);
 		}
 
 		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_9))
 		{
-			SageAudio::Play_Sound("sfx_crossbow", NO_LOOP);
+			SageAudio::Play_Sound("sfx_thrower", NO_LOOP);
+		}
+
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_P))
+		{
+			SageAudio::Pause_Audio();
+		}
+
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_O))
+		{
+			SageAudio::Stop_All_Audio();
 		}
 
 
