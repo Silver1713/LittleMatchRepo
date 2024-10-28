@@ -10,9 +10,6 @@ namespace SageHierarchy
     extern std::vector<GameObject*> gameObjects;
     extern GameObject* selectedObject; // Pointer to the selected object.
 
-    // Function declarations for managing the hierarchy.
-    void LoadLevel(const std::string& levelName);
-
     void UpdateGameObjectsFromScene();
     void CreateNewGameObject();
     void CreateGameObjectFromPrefab(const Assets::Prefabs::Prefab& prefab);
