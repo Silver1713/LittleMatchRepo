@@ -76,11 +76,14 @@ namespace SageAudio
 	/*!*****************************************************************************
 	  \brief
 		Pauses all game audio excluding user interface sounds.
-
-	  \param _is_paused
-		Boolean to set if pause is true or false.
 	*******************************************************************************/
-	void Set_Pause(bool _is_paused);
+	void Pause_Audio();
+
+	/*!*****************************************************************************
+	  \brief
+		Stops all game audio currently playing.
+	*******************************************************************************/
+	void Stop_All_Audio();
 
 	/*!*****************************************************************************
 	  \brief

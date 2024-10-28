@@ -51,23 +51,12 @@ namespace SageUIEditor
     {
         if (show_inspector_window)
         {
-            /*if (selected_game_object)
-            {
-                Sage_Inspector::ShowInspector();
-            }*/
-            // Sagecomponent.init
             ImGui::Begin("Inspector");
-            GameObject* test = EditorStateManager::Get_Selection();
-            if (test != nullptr)
-            {
-                Sage_Inspector::ShowInspector(test);
-            }
-            SageHierarchy::selectedObject = EditorStateManager::Get_Selection();
             if (SageHierarchy::selectedObject != nullptr)
             {
+                EditorStateManager::Select_Object(SageHierarchy::selectedObject);
                 Sage_Inspector::ShowInspector(SageHierarchy::selectedObject);
             }
-            //Inspector();
             ImGui::Text("This is the Inspector window.");
             ImGui::End();
         }
