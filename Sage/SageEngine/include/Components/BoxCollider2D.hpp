@@ -143,7 +143,8 @@ public:
 	  \param other
 		The other GameObject involved in the collision.
 	*******************************************************************************/
-	void Handle_Collision(GameObject* _other);
+	void Handle_Collision(GameObject* _other, float _collision_time, float _delta_time);
+
 
 	/*!*****************************************************************************
 	  \brief

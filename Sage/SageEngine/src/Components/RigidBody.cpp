@@ -137,4 +137,10 @@ void RigidBody::Set_Gravity(ToastBox::Vec2 _gravity)
 	gravity = _gravity;
 }
 
+void RigidBody::Set_Current_Velocity(const ToastBox::Vec2& newVelocity)
+{
+	curr_velocity = newVelocity;
+}
+
+
 

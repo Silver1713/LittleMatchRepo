@@ -63,8 +63,6 @@ public:
 
 	bool Gravity_Flag();
 
-
-
 	void Set_Mass(float _mass);
 
 	float Get_Mass() const;
@@ -85,4 +83,7 @@ public:
 	// Get and Set gravity
 
 	void Apply_New_Gravity(ToastBox::Vec2 new_gravity);
+
+	void Set_Current_Velocity(const ToastBox::Vec2& newVelocity);
+
 };

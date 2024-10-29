@@ -71,6 +71,8 @@ void BoxCollider2D::Update(float _delta_time)
     // Check for collisions with other objects
     Check_Collisions(_delta_time);
 }
+
+
 /*!*****************************************************************************
   \brief
     A basic update function that only transforms the AABB and calculates the model matrix.
@@ -133,13 +135,17 @@ void BoxCollider2D::Check_Collisions(float _delta_time)
         BoxCollider2D* other_collider = static_cast<BoxCollider2D*>(other->Get_Component<BoxCollider2D>());
         if (!other_collider) continue;
 
-        // Check for collision with the swept AABB
+        float t_first = 0.0f;  // Time of first potential collision
+
+        // Use the Check_Swept_Collision method to handle the actual swept volume check
         if (Check_Swept_Collision(swept_AABB, *other_collider))
         {
-            Handle_Collision(other);
+            // Calculate or determine the collision time if needed
+            Handle_Collision(other, t_first, _delta_time);
         }
     }
 }
+
 /*!****************************************************************************
   \brief
     Performs collision detection between two AABBs using relative velocity.
@@ -290,27 +296,89 @@ bool BoxCollider2D::Collision_Intersection_Rect_Rect(const AABB& _aabb1,        
     return true;
 }
 
-/*!*****************************************************************************
-  \brief
-    Handles the response when a collision is detected.
-  \param other
-    The other GameObject involved in the collision.
-*******************************************************************************/
-void BoxCollider2D::Handle_Collision(GameObject* _other)
-{
-    // Option 1: Use a type identifier if available
-    std::cout << "Collision detected between objects of type "
-        << typeid(*parent).name() << " and "
-        << typeid(*_other).name() << std::endl;
+///*!**************************************************************************
+//\brief
+//  Handles the response when a collision is detected.
+//\param other - The other GameObject involved in the collision.
+//\param collisionTime - The time at which the collision occurred within the frame.
+//\param deltaTime - The total time of the current frame.
+//***************************************************************************/
+//void BoxCollider2D::Handle_Collision(GameObject* _other, float _collision_time, float _delta_time)
+//{
+//    // Option 1: Use a type identifier if available
+//    std::cout << "Collision detected between objects of type "
+//        << typeid(*parent).name() << " and "
+//        << typeid(*_other).name() << std::endl;
+//
+//    // Retrieve the physics component
+//    RigidBody* physics = static_cast<RigidBody*>(parent->Get_Component<RigidBody>());
+//    if (physics)
+//    {
+//        // Calculate the movement that occurred after the collision
+//        float remainingTime = _delta_time - _collision_time;
+//
+//        ToastBox::Vec2 movementAfterCollision = {
+//            physics->Get_Current_Velocity().x * remainingTime,
+//            physics->Get_Current_Velocity().y * remainingTime
+//        };
+//
+//        // Update the position to remove any movement after the collision
+//        Transform* transform = static_cast<Transform*>(parent->Get_Component<Transform>());
+//        if (transform)
+//        {
+//            ToastBox::Vec3 pos = transform->Get_Position();
+//            pos.x -= movementAfterCollision.x;
+//            pos.y -= movementAfterCollision.y;
+//            transform->Set_Position(pos);
+//        }
+//
+//        // Set velocity to zero to stop all movement
+//        physics->Set_Current_Velocity({ 0, 0 });
+//    }
+//}
 
-    // Stop movement if there's a physics component
+
+/*!**************************************************************************
+\brief
+  Handles the response when a collision is detected.
+\param other - The other GameObject involved in the collision.
+\param collisionTime - The time at which the collision occurred within the frame.
+\param deltaTime - The total time of the current frame.
+***************************************************************************/
+void BoxCollider2D::Handle_Collision(GameObject* _other, float _collision_time, float _delta_time)
+{
     RigidBody* physics = static_cast<RigidBody*>(parent->Get_Component<RigidBody>());
-    if (physics)
+    if (!physics) return;
+
+    // Get current velocity and calculate remaining time
+    ToastBox::Vec2 currentVelocity = physics->Get_Current_Velocity();
+    float remainingTime = _delta_time - _collision_time;
+
+    // Calculate deceleration rate based on remaining time
+    ToastBox::Vec2 deceleration = currentVelocity / remainingTime;
+
+    // Update position to collision point
+    Transform* transform = static_cast<Transform*>(parent->Get_Component<Transform>());
+    if (transform)
     {
-        physics->Get_Current_Velocity().x = 0;
-        physics->Get_Current_Velocity().y = 0;
+        // Move to collision point
+        ToastBox::Vec3 collisionPosition = {
+            transform->Get_Position().x + currentVelocity.x * _collision_time,
+            transform->Get_Position().y + currentVelocity.y * _collision_time,
+            transform->Get_Position().z
+        };
+        transform->Set_Position(collisionPosition);
+
+        // Gradually reduce velocity over remaining time
+        ToastBox::Vec2 newVelocity = {
+            currentVelocity.x - (deceleration.x * remainingTime),
+            currentVelocity.y - (deceleration.y * remainingTime)
+        };
+
+        physics->Set_Current_Velocity(newVelocity);
     }
 }
+
 
 /*!****************************************************************************
   \brief
