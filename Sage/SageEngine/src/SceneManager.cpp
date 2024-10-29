@@ -20,6 +20,7 @@
 #include "KeyInputs.h"
 #include "SceneManager.hpp"
 #include "GameObjects.hpp"
+#include "SageAudio.hpp"
 
 #include <iostream>
 
@@ -236,6 +237,7 @@ namespace SM {
 	*******************************************************************************/
 	void Free()
 	{
+		SageAudio::Stop_All_Audio();
 		SM::fp_free();	
 	}
 
@@ -337,6 +339,8 @@ namespace SM {
 		SM::Unload();
 		SM::Load();
 		SM::Init();
+
+		std::cout << "Moving to next scene: " << level_ID << std::endl;
 	}
 	/*!*****************************************************************************
 	  \brief

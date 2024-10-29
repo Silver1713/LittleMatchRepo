@@ -96,6 +96,7 @@ void Sprite2D::Init(GameObject* _parent)
 *******************************************************************************/
 void Sprite2D::Update()
 {
+	if (!is_enabled) { return; }
 	//updates the sageobject with the current transforms of the Transform component
 	obj->transform.position.x = transform->Get_Position().x;
 	obj->transform.position.y = transform->Get_Position().y;
@@ -103,7 +104,7 @@ void Sprite2D::Update()
 	obj->transform.scale.y = transform->Get_Scale().y;
 	obj->transform.orientation.x = transform->Get_Rotation().x;
 	obj->transform.orientation.y = transform->Get_Rotation().y;
-
+	obj->material.color = {colour[0],colour[1],colour[2],colour[3]};
 	//need to update color also
 	obj->Update();
 }
