@@ -103,7 +103,7 @@ void Image::Update()
 	obj->transform.scale.y = transform->Get_Scale().y;
 	obj->transform.orientation.x = transform->Get_Rotation().x;
 	obj->transform.orientation.y = transform->Get_Rotation().y;
-
+	obj->material.color = { colour[0],colour[1],colour[2],colour[3] };
 	//need to update color also
 
 	obj->Update();
@@ -150,6 +150,8 @@ ComponentType Image::Get_Component_Type() { return IMAGE; }
 void Image::Set_Texture_ID(std::string const& _ID)
 {
 	sprite_texture_ID = _ID;
+	SageTexture* texture = &Assets::Textures::Get_Texture(sprite_texture_ID);
+	obj->Attach_Texture(texture);
 }
 
 /*!*****************************************************************************
@@ -167,7 +169,7 @@ void Image::Set_Colour(ToastBox::Vec4 const& _new_col)
 		if (obj)
 		{
 			obj->GetMaterial().color[i] = colour[i];
-		}		
+		}
 	}
 
 }

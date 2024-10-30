@@ -123,6 +123,7 @@ void Animator::Init(GameObject* _parent)
 *******************************************************************************/
 void Animator::Update()
 {
+	if (!is_enabled) { return; }
 	for (auto& t : animation_set.transitions)
 	{
 		if (t.to_state == current_state.name)

@@ -88,3 +88,27 @@ void Component::Set_Parent(GameObject* const _parent)
 {
 	parent = _parent;
 }
+
+/*!*****************************************************************************
+  \brief
+	Enable or disable the component
+
+  \param _is_enabled
+	enabled or disabled
+*******************************************************************************/
+void Component::Set_Enabled(bool const _is_enabled)
+{
+	is_enabled = _is_enabled;
+}
+
+/*!*****************************************************************************
+  \brief
+	Gets the active state of the component
+
+  \return
+	whether is enabled or disabled
+*******************************************************************************/
+bool const Component::Get_Enabled() const
+{
+	return is_enabled;
+}

@@ -103,7 +103,7 @@ void Sprite2D::Update()
 	obj->transform.scale.y = transform->Get_Scale().y;
 	obj->transform.orientation.x = transform->Get_Rotation().x;
 	obj->transform.orientation.y = transform->Get_Rotation().y;
-
+	obj->material.color = {colour[0],colour[1],colour[2],colour[3]};
 	//need to update color also
 	obj->Update();
 }
@@ -163,6 +163,8 @@ ComponentType Sprite2D::Get_Component_Type() { return SPRITE2D; }
 void Sprite2D::Set_Texture_ID(std::string const& _ID)
 {
 	sprite_texture_ID = _ID;
+	SageTexture* texture = &Assets::Textures::Get_Texture(sprite_texture_ID);
+	obj->Attach_Texture(texture);
 }
 
 /*!*****************************************************************************
