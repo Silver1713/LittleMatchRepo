@@ -167,6 +167,18 @@ void Sprite2D::Set_Texture_ID(std::string const& _ID)
 
 /*!*****************************************************************************
   \brief
+	This function get the texture ID
+
+  \return
+	the texture id
+*******************************************************************************/
+std::string Sprite2D:: Get_Texture_ID()
+{
+	return sprite_texture_ID;
+}
+
+/*!*****************************************************************************
+  \brief
 	This function changes the color of the sprite
 
   \param _new_col

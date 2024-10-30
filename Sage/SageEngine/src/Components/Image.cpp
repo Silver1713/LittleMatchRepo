@@ -154,6 +154,18 @@ void Image::Set_Texture_ID(std::string const& _ID)
 
 /*!*****************************************************************************
   \brief
+	This function changes the texture ID
+
+  \param _ID
+	the ID of the replacing texture
+*******************************************************************************/
+std::string Image::Get_Texture_ID()
+{
+	return sprite_texture_ID;
+}
+
+/*!*****************************************************************************
+  \brief
 	This function changes the color of the sprite
 
   \param _new_col
@@ -251,3 +263,4 @@ void Image::Set_Shape(std::string _shape)
 {
 	object_shape = _shape;
 }
+

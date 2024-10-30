@@ -138,6 +138,14 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
+		Check if the game object has a particular component
+	  \return
+		bool true if it has a component otherwise bool false
+	*******************************************************************************/
+	bool Has_Component(const std::shared_ptr<GameObject>& _game_object, ComponentType _component_type) const;
+
+	/*!*****************************************************************************
+	  \brief
 		Sets the parent
 	  \param _new_parent
 		pointer to the new parent gameobject
@@ -280,3 +288,24 @@ T* GameObject::Get_Component()
 	}
 	return nullptr;
 }
+
+/*!*****************************************************************************
+  \brief
+	Check if the game object has a particular component
+  \return
+	bool true if it has a component otherwise bool false
+*******************************************************************************/
+//bool GameObject::Has_Component(const std::shared_ptr<GameObject>& _game_object, ComponentType _component_type) const
+//{
+//	for (const auto& component : components)
+//	{
+//		if (component->Get_Component_Type() == _component_type)
+//		{
+//			return true;
+//		}
+//	}
+//	return false;
+//}
+
+
+

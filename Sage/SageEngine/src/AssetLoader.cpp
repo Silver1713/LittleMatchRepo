@@ -32,6 +32,9 @@
 #include "SageAudio.hpp"
 
 #include <ft2build.h>
+
+#include "../../SageEditor/include/SageInspector.hpp"
+
 #include FT_FREETYPE_H
 
 //Every file is an asset, which is broken down into categories
@@ -99,6 +102,8 @@ namespace Assets
 										t.width = std::stof(source.comma_seperated_data[i].associated_data[WIDTH]);
 										t.height = std::stof(source.comma_seperated_data[i].associated_data[HEIGHT]);
 										textures[source.comma_seperated_data[i].associated_data[ID] + '_' + entry.path().stem().string()] = t;
+										std::string texture_key = source.comma_seperated_data[i].associated_data[ID] + '_' + entry.path().stem().string();
+										Sage_Inspector::texture_list.push_back(texture_key);
 									}
 								}
 							}
@@ -115,6 +120,8 @@ namespace Assets
 						t.width = std::stof(source.comma_seperated_data[i].associated_data[WIDTH]);
 						t.height = std::stof(source.comma_seperated_data[i].associated_data[HEIGHT]);
 						textures[source.comma_seperated_data[i].associated_data[ID]] = t;
+						std::string texture_key = source.comma_seperated_data[i].associated_data[ID];
+						Sage_Inspector::texture_list.push_back(texture_key);
 					}					
 				}
 				catch (const std::invalid_argument& e)

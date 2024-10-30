@@ -1,29 +1,11 @@
 #include "SageInspector.hpp"
 
+#include <iostream>
+
 #include "SageUIEditor.hpp"
 
 namespace Sage_Inspector
 {
-    
-    std::vector<std::unique_ptr<Component>> Component_List;
-    //typedef enum {
-    //    COMPONENT,
-    //    TRANSFORM,
-    //    UITRANSFORM,
-    //    SPRITE2D,
-    //    IMAGE,
-    //    RENDERER,
-    //    ANIMATOR,
-    //    BOXCOLLIDER2D,
-    //    PHYSICS,
-    //    AUDIO,
-    //    BEHAVIOUR,
-    //    BUTTON,
-    //    NUM_OF_TYPES_OF_COMPONENTS
-    //} ComponentType;
-    // Pseudo test
-    /*std::vector<const char*> componentNames = { "COMPONENT", "TRANSFORM", "UITRANSFORM", "SPRITE2D", "IMAGE", "RENDERER", "ANIMATOR", "BOXCOLLIDER2D"
-    , "PHYSICS", "AUDIO", "BEHAVIOUR", "BUTTON", "NUM_OF_TYPES_OF_COMPONENTS"};*/
 
     void Show_Transform_Component(Transform* _transform_component) {
 		bool changed = false;
@@ -248,8 +230,7 @@ namespace Sage_Inspector
             {
                 // Velocity Row
                 ImGui::TableNextRow();
-                ImGui::TableSetColumnIndex(0);
-                ImGui::Text("Velocity");
+                //ImGui::Text("Velocity");
                 ImGui::TableSetColumnIndex(1);
                 ImGui::Text("X");
                 ImGui::TableSetColumnIndex(2);
@@ -312,6 +293,15 @@ namespace Sage_Inspector
 
     void Show_Image_Component(Image* _image)
     {
+        ImGui::Text("Image Component");
+        ImGui::Text("Texture ID");
+        char texture_id_buffer[128];
+        strncpy(texture_id_buffer, _image->Get_Texture_ID().c_str(), sizeof(texture_id_buffer));
+        if (ImGui::InputText("##Texture ID", texture_id_buffer, sizeof(texture_id_buffer)))
+        {
+            _image->Set_Texture_ID(std::string(texture_id_buffer));
+        }
+        
         // Object dropdown box
         ImGui::Text("Object Shape");
         std::vector<std::string> shapes = { "Rect", "Circle" };
@@ -341,9 +331,37 @@ namespace Sage_Inspector
             _image->Set_Colour({color[0], color[1], color[2], color[3]});
         }
     }
-
-    void Show_Sprite2D_Component(Sprite2D* _sprited2D)
+     
+    void Show_Sprite2D_Component(Sprite2D* _sprite2D)
     {
+        ImGui::Text("Image Component");
+        ImGui::Text("Texture ID: %s", _sprite2D->Get_Texture_ID().c_str());
+        ImGui::SameLine();
+        if (ImGui::Button("Open"))
+        {
+            ImGui::OpenPopup("Select Texture");
+        }
+
+        if (ImGui::BeginPopup("Select Texture"))
+        {
+            for (const auto& texture_id : texture_list)
+            {
+	            if (ImGui::Selectable(texture_id.c_str()))
+	            {
+                    //std::cout << "%s" << texture_id << std::endl;
+                    _sprite2D->Set_Texture_ID(texture_id);
+	            }
+            }
+            ImGui::EndPopup();
+        }
+
+        /*char texture_id_buffer[128];
+        strncpy(texture_id_buffer, _sprited2D->Get_Texture_ID().c_str(), sizeof(texture_id_buffer));
+        if (ImGui::InputText("##Texture ID", texture_id_buffer, sizeof(texture_id_buffer)))
+        {
+            _sprited2D->Set_Texture_ID(std::string(texture_id_buffer));
+        }*/
+
         if (ImGui::CollapsingHeader("Sprite2D", ImGuiTreeNodeFlags_DefaultOpen)) {
             // Object dropdown box
             ImGui::Text("Object Shape");
@@ -351,7 +369,7 @@ namespace Sage_Inspector
             static int current_shape_index = 0;
             for (int i = 0; i < shapes.size(); ++i)
             {
-                if (_sprited2D->Get_Shape() == shapes[i])
+                if (_sprite2D->Get_Shape() == shapes[i])
                 {
                     current_shape_index = i;
                     break;
@@ -362,16 +380,16 @@ namespace Sage_Inspector
                 *out_text = shapes->at(idx).c_str();
                 return true;
             }, static_cast<void*>(&shapes), shapes.size())) {
-                _sprited2D->Set_Shape(shapes[current_shape_index]);
+                _sprite2D->Set_Shape(shapes[current_shape_index]);
             }
             ImGui::Separator();
 
             // Color picker for images
             ImGui::Text("Color");
-            float color[4] = { _sprited2D->Get_Colour().x, _sprited2D->Get_Colour().y, _sprited2D->Get_Colour().z, _sprited2D->Get_Colour().a };
+            float color[4] = { _sprite2D->Get_Colour().x, _sprite2D->Get_Colour().y, _sprite2D->Get_Colour().z, _sprite2D->Get_Colour().a };
             if (ImGui::ColorEdit4("##Color", color))
             {
-                _sprited2D->Set_Colour({ color[0], color[1], color[2], color[3] });
+                _sprite2D->Set_Colour({ color[0], color[1], color[2], color[3] });
             }
         }
 		ImGui::Separator();

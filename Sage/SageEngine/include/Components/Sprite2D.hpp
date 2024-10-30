@@ -106,6 +106,15 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
+		This function get the texture ID
+
+	  \return
+		the texture id
+	*******************************************************************************/
+	std::string Get_Texture_ID();
+
+	/*!*****************************************************************************
+	  \brief
 		This function changes the color of the sprite
 
 	  \param _new_col
