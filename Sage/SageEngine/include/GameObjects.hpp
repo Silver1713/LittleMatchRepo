@@ -117,7 +117,15 @@ public:
 	  \param _c
 		Component to be added
 	*******************************************************************************/
-	void Add_Component(std::unique_ptr<Component> _c);	
+	void Add_Component(std::unique_ptr<Component> _c);
+
+	/*!*****************************************************************************
+	  \brief
+		Remove component from the gameobject
+	  \param _c
+		Component to be added
+	*******************************************************************************/
+	void Remove_Component(ComponentType _c);
 
 	/*!*****************************************************************************
 	  \brief

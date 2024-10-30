@@ -18,6 +18,8 @@
 
 #include <iostream>
 
+#include "SageModelManager.hpp"
+
 /*!*****************************************************************************
   \brief
 	Default constructor for Sprite2D
@@ -275,7 +277,18 @@ std::string Sprite2D::Get_Shape()
   \brief
 	Set the shape of the sageobject
 *******************************************************************************/
-void Sprite2D::Set_Shape(std::string _shape)
+void Sprite2D::Change_Shape(std::string const& _shape)
 {
 	object_shape = _shape;
+	SageModel* model;
+	if (_shape == "Rect")
+	{
+		model = &SageModelManager::models["PRIMITIVE_RECT"];
+	}
+	else if (_shape == "Circle")
+	{
+		model = &SageModelManager::models["PRIMITIVE_CIRCLE"];
+	}
+	obj->Change_Shape(model);
+
 }

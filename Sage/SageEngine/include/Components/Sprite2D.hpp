@@ -171,5 +171,5 @@ public:
 	  \brief
 		Set the shape of the sageobject
 	*******************************************************************************/
-	void Set_Shape(std::string _shape);
+	void Change_Shape(std::string const& _shape);
 };

@@ -312,8 +312,6 @@ void GameObject::Init()
 			std::cout << "Behaviour Component Added\n";
 		}
 	}
-
-
 }
 
 /*!*****************************************************************************
@@ -448,6 +446,24 @@ void GameObject::Disable()
 void GameObject::Add_Component(std::unique_ptr<Component> _c)
 {
 	components.push_back(std::move(_c));
+}
+
+/*!*****************************************************************************
+  \brief
+	Remove component from the gameobject
+  \param _c
+	Component to be added
+*******************************************************************************/
+void GameObject::Remove_Component(ComponentType _c)
+{
+	for (auto it = components.begin(); it != components.end(); ++it)
+	{
+		if ((*it)->Get_Component_Type() == _c)
+		{
+			components.erase(it);
+			break;
+		}
+	}
 }
 
 /*!*****************************************************************************
