@@ -174,7 +174,7 @@ namespace SM {
 			}
 		}
 		
-		fade_screen = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen",2U);
+		fade_screen = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen",0);
 		scene_faded_in = false;
 		SM::fp_load();
 	}
