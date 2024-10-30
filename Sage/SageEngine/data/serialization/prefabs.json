@@ -79,7 +79,7 @@
       {
         "ID": "FADE_SCREEN",
         "Transform_Type":"Screen",
-        "Scale": [3840, 2160,0],
+        "Scale": [0, 0,0],
         "RGBA" : [0,0,0,1]
       },
       {

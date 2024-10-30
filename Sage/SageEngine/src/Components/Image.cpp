@@ -150,6 +150,8 @@ ComponentType Image::Get_Component_Type() { return IMAGE; }
 void Image::Set_Texture_ID(std::string const& _ID)
 {
 	sprite_texture_ID = _ID;
+	SageTexture* texture = &Assets::Textures::Get_Texture(sprite_texture_ID);
+	obj->Attach_Texture(texture);
 }
 
 /*!*****************************************************************************
