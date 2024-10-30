@@ -79,62 +79,76 @@ namespace SageAudio
 	*******************************************************************************/
 	void Play_Sound(const std::string& _filename, Sound_Mode _mode)
 	{
-		size_t i{ 0 };
-		for (const auto& [category, filenames] : Assets::Audio::Get_Audio())
+		if (!paused)
 		{
-			for (const auto& filename : filenames)
+			size_t i{ 0 };
+			for (const auto& [category, filenames] : Assets::Audio::Get_Audio())
 			{
-				if (filename == _filename)
+				for (const auto& filename : filenames)
 				{
-					result = p_sound[i]->setMode(Mode_Selector(_mode));
-					FMOD_ErrorCheck(result);
-					if (_filename.starts_with("bgm_"))
+					if (filename == _filename)
 					{
-						result = p_system->playSound(p_sound[i], channel_group[0], false, nullptr);
+						result = p_sound[i]->setMode(Mode_Selector(_mode));
 						FMOD_ErrorCheck(result);
-						std::cout << "Playing BGM: " << _filename << " with " << Mode_Getter(_mode) << std::endl;
-						return;
+						if (_filename.starts_with("bgm_"))
+						{
+							result = p_system->playSound(p_sound[i], channel_group[0], false, nullptr);
+							FMOD_ErrorCheck(result);
+							std::cout << "Playing BGM: " << _filename << " with " << Mode_Getter(_mode) << std::endl;
+							return;
+						}
+						else if (_filename.starts_with("sfx_"))
+						{
+							result = p_system->playSound(p_sound[i], channel_group[1], false, nullptr);
+							FMOD_ErrorCheck(result);
+							std::cout << "Playing SFX: " << _filename << " with " << Mode_Getter(_mode) << std::endl;
+							return;
+						}
+						else if (_filename.starts_with("ui_"))
+						{
+							result = p_system->playSound(p_sound[i], channel_group[2], false, nullptr);
+							FMOD_ErrorCheck(result);
+							std::cout << "Playing UI sound: " << _filename << " with " << Mode_Getter(_mode) << std::endl;
+							return;
+						}
+						else if (_filename.starts_with("ambient_"))
+						{
+							result = p_system->playSound(p_sound[i], channel_group[3], false, nullptr);
+							FMOD_ErrorCheck(result);
+							std::cout << "Playing Ambient sound: " << _filename << " with " << Mode_Getter(_mode) << std::endl;
+							return;
+						}
 					}
-					else if (_filename.starts_with("sfx_"))
-					{
-						result = p_system->playSound(p_sound[i], channel_group[1], false, nullptr);
-						FMOD_ErrorCheck(result);
-						std::cout << "Playing SFX: " << _filename << " with " << Mode_Getter(_mode) << std::endl;
-						return;
-					}
-					else if (_filename.starts_with("ui_"))
-					{
-						result = p_system->playSound(p_sound[i], channel_group[2], false, nullptr);
-						FMOD_ErrorCheck(result);
-						std::cout << "Playing UI sound: " << _filename << " with " << Mode_Getter(_mode) << std::endl;
-						return;
-					}
-					else if (_filename.starts_with("ambient_"))
-					{
-						result = p_system->playSound(p_sound[i], channel_group[3], false, nullptr);
-						FMOD_ErrorCheck(result);
-						std::cout << "Playing Ambient sound: " << _filename << " with " << Mode_Getter(_mode) << std::endl;
-						return;
-					}
+					++i;
 				}
-				++i;
 			}
+			std::cerr << "ERROR: " << _filename << " doesn't exist!" << std::endl;
 		}
-		std::cerr << "ERROR: " << _filename << " doesn't exist!" << std::endl;
+		else
+		{
+			std::cout << "WARNING: Playing audio on a paused channel!" << std::endl;
+		}
 	}
 
 	/*!*****************************************************************************
 	  \brief
 		Pauses all game audio excluding user interface sounds.
-
-	  \param _is_paused
-		Boolean to set if pause is true or false.
 	*******************************************************************************/
-	void Set_Pause(bool _is_paused)
+	void Pause_Audio()
 	{
-		channel_group[0]->setPaused(_is_paused);
-		channel_group[1]->setPaused(_is_paused);
-		channel_group[3]->setPaused(_is_paused);
+		paused = !paused;
+		channel_group[0]->setPaused(paused);
+		channel_group[1]->setPaused(paused);
+		channel_group[3]->setPaused(paused);
+	}
+
+	/*!*****************************************************************************
+	  \brief
+		Stops all game audio currently playing.
+	*******************************************************************************/
+	void Stop_All_Audio()
+	{
+		channel_group[4]->stop();
 	}
 
 	/*!*****************************************************************************

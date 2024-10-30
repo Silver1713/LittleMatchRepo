@@ -120,6 +120,8 @@ SageObject& SageObjectManager::Create_Primitive_Object(char const* _name, Primit
 		obj.transform.scale = _scale;
 		obj.transform.orientation = _orientation;
 
+		obj.transform.Calculate_Model_Matrix();
+
 		obj.GetMaterial().color = _color;
 		obj.GetMaterial().border_color = _border_color;
 		obj.GetMaterial().border_width = _border_width;

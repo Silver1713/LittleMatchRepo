@@ -139,7 +139,7 @@ namespace Buttons
 	void Exit_Game(GameObject* _caller)
 	{
 		Default_Click(_caller);
-		SM::Exit_Game();
+		//SM::Exit_Game();
 	}
 }
 
@@ -255,6 +255,7 @@ void Button::Init(GameObject* _parent)
 *******************************************************************************/
 void Button::Input()
 {
+	if (!is_enabled) { return; }
 	if (Within_Bounds())
 	{
 		if (!is_hovered)
@@ -295,6 +296,7 @@ void Button::Input()
 *******************************************************************************/
 void Button::Update()
 {
+	if (!is_enabled) { return; }
 	mouse_pos.x = static_cast<float>(SAGEInputHandler::Get_Mouse_X());
 	mouse_pos.y = static_cast<float>(SAGEInputHandler::Get_Mouse_Y());
 }

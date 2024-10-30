@@ -212,7 +212,9 @@ namespace Assets
 			}
 			file.close();
 
-			for (unsigned int i{}; i < prefabs_json["Num_Prefabs"].as<SageJSON::SageJSON::NumberValue>(); ++i)
+			unsigned int num_prefabs{ static_cast<unsigned int>(prefabs_json["Prefabs"].as<SageJSON::SageJSON::JSONList>().size()) };
+
+			for (unsigned int i{}; i < num_prefabs; ++i)
 			{
 				Prefab p;
 				p.prefab_ID = prefabs_json["Prefabs"][i]["ID"].as<SageJSON::SageJSON::StringValue>();				
@@ -243,7 +245,7 @@ namespace Assets
 							p.colour[j] = static_cast<float>(prefabs_json["Prefabs"][i]["RGBA"][j].as<SageJSON::SageJSON::NumberValue>());
 						}
 					}
-					if (prefabs_json["Prefabs"][i]["Physics"]["Velocity"].key_exists<SageJSON::SageJSON::NumberValue>())
+					if (prefabs_json["Prefabs"][i]["Physics"]["Velocity"][0].key_exists<SageJSON::SageJSON::NumberValue>())
 					{
 						for (unsigned int j{}; j < 3; ++j)
 						{
@@ -303,15 +305,52 @@ namespace Assets
 							{
 								p.on_hover_exit = prefabs_json["Prefabs"][i]["Button"]["On_Hover_Exit"].as<SageJSON::SageJSON::StringValue>();
 							}
+							if (prefabs_json["Prefabs"][i]["Has_Behaviour"].key_exists<SageJSON::SageJSON::BoolValue>())
+							{
+								p.has_behaviour = prefabs_json["Prefabs"][i]["Has_Behaviour"].as<SageJSON::SageJSON::BoolValue>();
+								if (p.has_behaviour)
+								{
+									p.num_behaviour = static_cast<unsigned int>(prefabs_json["Prefabs"][i]["Behaviour_List"].as<SageJSON::SageJSON::NumberValue>());
+									for (unsigned int j{}; j < p.num_behaviour; ++j)
+									{
+										p.cs_class_name.push_back(prefabs_json["Prefabs"][i]["Behaviour_List"][j]["CS_Class_Name"].as<SageJSON::SageJSON::StringValue>());
+										if (prefabs_json["Prefabs"][i]["Behaviour_List"][j]["CS_Namespace"].key_exists<SageJSON::SageJSON::StringValue>())
+										{
+											p.cs_namespace.push_back(prefabs_json["Prefabs"][i]["Behaviour_List"][j]["CS_Namespace"].as<SageJSON::SageJSON::StringValue>());
+										}
+									}
+								}								
+							}
+						}
+					}
+					if (prefabs_json["Prefabs"][i]["Is_Slider"].key_exists<SageJSON::SageJSON::BoolValue>())
+					{
+						p.is_slider = prefabs_json["Prefabs"][i]["Is_Slider"].as<SageJSON::SageJSON::BoolValue>();
+						if (p.is_slider)
+						{
+							p.slider_children_ID["Frame"] = prefabs_json["Prefabs"][i]["Slider"]["Frame_Prefab_ID"].as<SageJSON::SageJSON::StringValue>();
+							p.slider_children_ID["Fill"] = prefabs_json["Prefabs"][i]["Slider"]["Fill_Prefab_ID"].as<SageJSON::SageJSON::StringValue>();
+							p.slider_children_ID["BG"] = prefabs_json["Prefabs"][i]["Slider"]["BG_Prefab_ID"].as<SageJSON::SageJSON::StringValue>();
+							if (prefabs_json["Prefabs"][i]["Slider"]["Init"].key_exists<SageJSON::SageJSON::StringValue>())
+							{
+								p.slider_init = prefabs_json["Prefabs"][i]["Slider"]["Init"].as<SageJSON::SageJSON::StringValue>();
+							}
+							if (prefabs_json["Prefabs"][i]["Slider"]["Update"].key_exists<SageJSON::SageJSON::StringValue>())
+							{
+								p.slider_update = prefabs_json["Prefabs"][i]["Slider"]["Update"].as<SageJSON::SageJSON::StringValue>();
+							}
 						}
 					}
 					if (prefabs_json["Prefabs"][i]["Has_Children"].key_exists<SageJSON::SageJSON::BoolValue>())
 					{
 						p.has_children = prefabs_json["Prefabs"][i]["Has_Children"].as<SageJSON::SageJSON::BoolValue>();
-						p.num_children = static_cast<unsigned int>(prefabs_json["Prefabs"][i]["Num_Children"].as<SageJSON::SageJSON::NumberValue>());
-						for (unsigned int j{}; j < p.num_children; ++j)
+						if (p.has_children)
 						{
-							p.children_IDs.push_back(prefabs_json["Prefabs"][i]["Children"][j]["Prefab_ID"].as<SageJSON::SageJSON::StringValue>());
+							p.num_children = static_cast<unsigned int>(prefabs_json["Children"].as<SageJSON::SageJSON::JSONList>().size());
+							for (unsigned int j{}; j < p.num_children; ++j)
+							{
+								p.children_IDs.push_back(prefabs_json["Prefabs"][i]["Children"][j]["Prefab_ID"].as<SageJSON::SageJSON::StringValue>());
+							}
 						}
 					}
 					
@@ -365,6 +404,59 @@ namespace Assets
 				Init();
 			}
 			return generated_prefabs;
+		}
+
+		//[HALIS]
+		void Save_Prefabs(const std::string& file_path) {
+			//SageJSON::SageJSON prefabs_json;
+			//prefabs_json["Num_Prefabs"] = generated_prefabs.size();
+
+			//unsigned int index = 0;
+			//for (const auto& pair : generated_prefabs) {
+			//	const Prefab& p = pair.second;
+			//	prefabs_json["Prefabs"][index]["ID"] = p.prefab_ID;
+			//	prefabs_json["Prefabs"][index]["Transform_Type"] = p.transform_type;
+
+			//	// Add position
+			//	prefabs_json["Prefabs"][index]["Pos"][0] = p.positions.x; // Assuming you have access to x, y, z
+			//	prefabs_json["Prefabs"][index]["Pos"][1] = p.positions.y;
+			//	prefabs_json["Prefabs"][index]["Pos"][2] = p.positions.z;
+
+			//	// Add scale
+			//	prefabs_json["Prefabs"][index]["Scale"][0] = p.scale.x;
+			//	prefabs_json["Prefabs"][index]["Scale"][1] = p.scale.y;
+			//	prefabs_json["Prefabs"][index]["Scale"][2] = p.scale.z;
+
+			//	// Add color
+			//	prefabs_json["Prefabs"][index]["RGBA"][0] = p.colour.r; // Assuming you have access to r, g, b, a
+			//	prefabs_json["Prefabs"][index]["RGBA"][1] = p.colour.g;
+			//	prefabs_json["Prefabs"][index]["RGBA"][2] = p.colour.b;
+			//	prefabs_json["Prefabs"][index]["RGBA"][3] = p.colour.a;
+
+			//	// Add velocity
+			//	prefabs_json["Prefabs"][index]["Physics"]["Velocity"][0] = p.velocity.x;
+			//	prefabs_json["Prefabs"][index]["Physics"]["Velocity"][1] = p.velocity.y;
+			//	prefabs_json["Prefabs"][index]["Physics"]["Velocity"][2] = p.velocity.z;
+
+			//	// Add other attributes...
+			//	prefabs_json["Prefabs"][index]["Sprite_Texture_ID"] = p.sprite_texture_ID;
+			//	prefabs_json["Prefabs"][index]["Object_Shape"] = p.object_shape;
+			//	prefabs_json["Prefabs"][index]["Has_Physics"] = p.has_physics;
+			//	prefabs_json["Prefabs"][index]["Has_Collider"] = p.has_collider;
+			//	prefabs_json["Prefabs"][index]["Has_Animator"] = p.has_animator;
+			//	prefabs_json["Prefabs"][index]["Is_Button"] = p.is_button;
+
+			//	if (p.has_animator) {
+			//		prefabs_json["Prefabs"][index]["Animator"][0]["Animation_Set_ID"] = p.animation_set_ID;
+			//	}
+
+			//	index++;
+			//}
+
+			//// Save to file
+			//std::ofstream file(file_path);
+			//file << prefabs_json; // This should correctly serialize the prefabs_json object
+			//file.close();
 		}
 	}
 
@@ -712,7 +804,10 @@ namespace Assets
 						file.close();
 
 						Level l;
-						for (unsigned int i{}; i < current_level_json["Num_Prefabs"].as<SageJSON::SageJSON::NumberValue>(); ++i) 
+
+						unsigned int num_prefabs{ static_cast<unsigned int>(current_level_json["Prefabs"].as<SageJSON::SageJSON::JSONList>().size()) };
+
+						for (unsigned int i{}; i < num_prefabs; ++i)
 						{
 							try
 							{
@@ -792,7 +887,7 @@ namespace Assets
 								else 
 								{
 									l.z_orders.push_back(0);
-								}	
+								}
 							}
 							catch (...)
 							{

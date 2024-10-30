@@ -24,7 +24,7 @@ void TransformBinding::Unbind()
 	
 }
 
-void TransformBinding::getPosition(MonoObject* obj, CSVector2D* out)
+void TransformBinding::getPosition(MonoObject* obj, BindingStruct::CSVector2D* out)
 {
 	GameObject* entity = BindingSystem::Get_GameObject_From_Instance(obj);
 	if (!entity) return;
@@ -32,7 +32,7 @@ void TransformBinding::getPosition(MonoObject* obj, CSVector2D* out)
 	SageMonoManager::MonoKlassInfo* klassInfo = SageMonoManager::Get_Klass_Info("Vector2D", "SageEngine.Math");
 	if (!klassInfo || !klassInfo->klass) return;
 	// Create a shadow object
-	CSVector2D vector{};
+	BindingStruct::CSVector2D vector{};
 	
 	
 
@@ -67,7 +67,7 @@ MonoObject* TransformBinding::getScale(MonoObject* obj)
 	SageMonoManager::MonoKlassInfo* klassInfo = SageMonoManager::Get_Klass_Info("Vector2D", "SageEngine.Math");
 	if (!klassInfo || !klassInfo->klass) return {};
 	// Create a shadow object
-	CSVector2D vector{};
+	BindingStruct::CSVector2D vector{};
 
 	// Get Transform Component
 	Transform* transform = entity->Get_Component<Transform>();
@@ -84,7 +84,7 @@ MonoObject* TransformBinding::getScale(MonoObject* obj)
 	return boxed;
 }
 
-void TransformBinding::setPosition(MonoObject* obj, CSVector2D* position)
+void TransformBinding::setPosition(MonoObject* obj, BindingStruct::CSVector2D* position)
 {
 	std::string name = mono_class_get_name(mono_object_get_class(obj));
 	if (!position) return;

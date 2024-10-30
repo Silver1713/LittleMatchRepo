@@ -35,7 +35,6 @@
 
 namespace Game {
 	//TESTS
-	static unsigned int const game_objects_to_create{ 2500 };
 	static ToastBox::Vec3 const min_pos{ -960.0f,-540.0f,0.0f }, max_pos{ 1920.0f,1080.0f,0.0f };
 	static ToastBox::Vec3 const min_rot{ 0.0f,0.0f,0.0f }, max_rot{ 360.0f,360.0f,0.0f };
 	static ToastBox::Vec3 const min_scale{ 1.0f,1.0f,0.0f }, max_scale{ 10.0f,10.0f,0.0f };
@@ -75,30 +74,6 @@ namespace Game {
 				collider_cache[object.first] = collider;
 			}
 		}
-
-		//Creates 2.5k instantiated "WHITE" prefab to test
-		for (unsigned int i{}; i < game_objects_to_create; ++i)
-		{
-			//game_objects[std::to_string(i)] = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("SQUARE"), "Square_" + std::to_string(i));
-			GameObject* g = Game_Objects::Get_Game_Object("Square_" + std::to_string(i));
-			game_objects[g->Get_ID()] = g;
-			transform_cache["Square_" + std::to_string(i)] = static_cast<Transform*>(g->Get_Component<Transform>());
-
-			//randomize properties
-			ToastBox::Vec3 pos{ (float)(std::rand() % (int)max_pos.x + (int)min_pos.x), (float)(std::rand() % (int)max_pos.y + (int)min_pos.y),0.0f };
-			ToastBox::Vec3 rot{ (float)(std::rand() % (int)max_rot.x + (int)min_rot.x), (float)(std::rand() % (int)max_rot.y + (int)min_rot.y),0.0f };
-			ToastBox::Vec3 scale{ (float)(std::rand() % (int)max_scale.x + (int)min_scale.x), (float)(std::rand() % (int)max_scale.y + (int)min_scale.y),0.0f };
-			ToastBox::Vec3 col{ (float)(std::rand() % (int)max_col.x + (int)min_col.x) / 100.0f, (float)(std::rand() % (int)max_col.y + (int)min_col.y) / 100.0f,(float)(std::rand() % (int)max_col.z + (int)min_col.z) / 100.0f };
-
-			transform_cache["Square_" + std::to_string(i)]->Set_Position(pos);
-			transform_cache["Square_" + std::to_string(i)]->Set_Rotation(rot);
-			transform_cache["Square_" + std::to_string(i)]->Set_Scale(scale);
-
-			Sprite2D* s = static_cast<Sprite2D*>(g->Get_Component<Sprite2D>());
-			s->Set_Colour({ col[0],col[1],col[2] });
-
-			g->Disable();
-		}
 	}
 
 	/*!*****************************************************************************
@@ -108,6 +83,7 @@ namespace Game {
 	void Init()
 	{
 		camera.init({ 50,0 }, { static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) }, 0.f, SageCamera::SageCameraType::SAGE_ORTHO);
+		camera.update();
 		vp.set_dims({ static_cast<float>(SageHelper::WINDOW_WIDTH),  static_cast<float>(SageHelper::WINDOW_HEIGHT) });
 		vp.calculate_viewport_xform();
 
@@ -127,7 +103,7 @@ namespace Game {
 		SageAudio::Play_Sound("bgm_main_menu", LOOP);
 		SageAudio::Play_Sound("ambient_rain", LOOP);
 
-		plrphy->AddForce({ 0,500 }, RigidBody::ForceMode::Impulse);
+		//plrphy->AddForce({ 0,500 }, RigidBody::ForceMode::Impulse);
 
 	}
 
@@ -137,32 +113,31 @@ namespace Game {
 	*******************************************************************************/
 	void Input()
 	{
-		float move_speed = 300.f;
 		RigidBody* plrphy = static_cast<RigidBody*>(Game_Objects::Get_Game_Object("Player")->Get_Component<RigidBody>());
 		//tests
 
 		ToastBox::Vec2& curr_velocity = plrphy->Get_Current_Velocity();
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_W))
 		{
-			curr_velocity.y = move_speed;
+			curr_velocity.y = plrphy->Get_Velocity().y;
 			animator_cache["Player"]->Reset_Parameters();
 			animator_cache["Player"]->Set_Parameter("is_walking", 1.f);
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_A))
 		{
-			curr_velocity.x = -move_speed;
+			curr_velocity.x = -plrphy->Get_Velocity().x;
 			animator_cache["Player"]->Reset_Parameters();
 			animator_cache["Player"]->Set_Parameter("is_idle", 1.f);
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_S))
 		{
-			curr_velocity.y = -move_speed;
+			curr_velocity.y = -plrphy->Get_Velocity().y;
 			animator_cache["Player"]->Reset_Parameters();
 			animator_cache["Player"]->Set_Parameter("is_attacking", 1.f);
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_D))
 		{
-			curr_velocity.x = move_speed;
+			curr_velocity.x = plrphy->Get_Velocity().x;
 			animator_cache["Player"]->Reset_Parameters();
 			animator_cache["Player"]->Set_Parameter("is_dead", 1.f);
 		}
@@ -217,32 +192,6 @@ namespace Game {
 			plrphy->Set_Gravity_Disable(g);
 		}
 
-
-
-		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_1))
-		{
-			if (game_objects["Square_0"]->Is_Enabled())
-			{
-				return;
-			}
-
-			for (unsigned int i{}; i < game_objects_to_create; ++i)
-			{
-				game_objects["Square_" + std::to_string(i)]->Enable();
-			}
-		}
-		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_2))
-		{
-			if (!game_objects["Square_0"]->Is_Enabled())
-			{
-				return;
-			}
-
-			for (unsigned int i{}; i < game_objects_to_create; ++i)
-			{
-				game_objects["Square_" + std::to_string(i)]->Disable();
-			}
-		}
 		if (SAGEInputHandler::Get_Mouse_Clicked(SAGE_MOUSE_BUTTON_LEFT))
 		{
 			double x, y;
@@ -315,12 +264,22 @@ namespace Game {
 
 		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_8))
 		{
-			SageAudio::Play_Sound("sfx_spear", NO_LOOP);
+			SageAudio::Play_Sound("sfx_claw", NO_LOOP);
 		}
 
 		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_9))
 		{
-			SageAudio::Play_Sound("sfx_crossbow", NO_LOOP);
+			SageAudio::Play_Sound("sfx_thrower", NO_LOOP);
+		}
+
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_P))
+		{
+			SageAudio::Pause_Audio();
+		}
+
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_O))
+		{
+			SageAudio::Stop_All_Audio();
 		}
 
 
@@ -429,9 +388,6 @@ namespace Game {
 							}
 							transform->Set_Position({ pos.x, curr_vel.y * time + prevPos.y, pos.z });
 						}
-
-
-						
 					}
 
 			}
@@ -445,17 +401,7 @@ namespace Game {
 			}
 		}
 
-		//rotates the 2.5k objects
-		for (unsigned int i{}; i < game_objects_to_create; ++i)
-		{
-			transform_cache["Square_" + std::to_string(i)]->Rotate({(float)SageHelper::delta_time * 5.0f,0.f,0.0f});
-		}
-
 		camera.update();
-
-
-
-
 	}
 
 	/*!*****************************************************************************

@@ -20,6 +20,7 @@
 #include "KeyInputs.h"
 #include "SceneManager.hpp"
 #include "GameObjects.hpp"
+#include "SageAudio.hpp"
 
 #include <iostream>
 
@@ -195,8 +196,9 @@ namespace SM {
 		Input Checks for the Scene Manager
 	*******************************************************************************/
 	void Input()
-	{		
-		SAGEInputHandler::update();
+	{
+		
+		
 		SM::fp_input();
 	}
 
@@ -206,6 +208,7 @@ namespace SM {
 	*******************************************************************************/
 	void Update()
 	{
+		SAGEInputHandler::update();
 		Fade_In();
 		Fade_Out();
 		SM::fp_update();
@@ -234,6 +237,7 @@ namespace SM {
 	*******************************************************************************/
 	void Free()
 	{
+		SageAudio::Stop_All_Audio();
 		SM::fp_free();	
 	}
 
@@ -335,6 +339,8 @@ namespace SM {
 		SM::Unload();
 		SM::Load();
 		SM::Init();
+
+		std::cout << "Moving to next scene: " << level_ID << std::endl;
 	}
 	/*!*****************************************************************************
 	  \brief

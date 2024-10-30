@@ -71,6 +71,7 @@ Transform::Transform(std::initializer_list<float> const& _pos, std::initializer_
 void Transform::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
+	Update();
 }
 
 /*!*****************************************************************************
@@ -78,7 +79,7 @@ void Transform::Init(GameObject* _parent)
 	Updates members of Transform separately from the set functions
 *******************************************************************************/
 void Transform::Update()
-{
+{	
 	// update model matrix
 
 	ToastBox::Matrix3x3 translation_matrix{};

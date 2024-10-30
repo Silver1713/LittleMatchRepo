@@ -10,12 +10,20 @@ public class GamePlayBehaviour : SageBehaviour
 {
     void Init()
     {
-        Console.WriteLine("SageBehaviour Init");
+        RigidBody t = gameObject.GetComponent<RigidBody>();
+       //GetComponent<RigidBody>().gravity = new Vector2D(2000.0f, -9.8f);
+        if (t == null)
+        {
+            SageDebug.Print("Rigidbody is null");
+        }
     }
 
     void Update()
     {
-        Vector2D position = transform.position;
+        if (Input.GetKey(Input.KeyCode.D))
+        {
+            SageDebug.Print("D is pressed");
+        }
         
 
         //SageDebug.Print("[" + position.x + "," + position.y + "]");

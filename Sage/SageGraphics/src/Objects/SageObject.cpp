@@ -53,6 +53,8 @@ void SageObject::Init(char const* _name, SageModel* _model)
 	is_enabled = true;
 
 	Set_Alpha(1.f);
+
+	
 }
 
 
@@ -76,9 +78,8 @@ void SageObject::Attach_Texture(SageTexture* _texture)
 
 void SageObject::Update()
 {
+	
 	transform.Calculate_Model_Matrix();
-	transform.orientation.x += static_cast<float>(transform.orientation.y * SageHelper::delta_time);
-
 }
 
 
@@ -98,6 +99,7 @@ glm::mat3x3 SageObject::SageTransform2D::Calculate_Model_Matrix()
 // Draw with default shader
 void SageObject::Draw(SageViewport* vp)
 {
+	
 	SageShader* shader = obj_mesh.model_ref->Get_Shader_Program();
 	SageViewport* viewport = vp;
 
