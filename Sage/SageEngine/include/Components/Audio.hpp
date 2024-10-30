@@ -13,6 +13,7 @@
 /* End Header **************************************************************************/
 #pragma once
 #include "Component.hpp"
+#include "SageAudio.hpp"
 
 //Derived component class audio
 class Audio : public Component
