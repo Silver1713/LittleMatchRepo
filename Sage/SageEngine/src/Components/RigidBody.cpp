@@ -143,5 +143,24 @@ void RigidBody::Set_Current_Velocity(const ToastBox::Vec2& newVelocity)
 	curr_velocity = newVelocity;
 }
 
+float RigidBody::Get_Restitution() const 
+{ 
+	return restitution; 
+}
+
+void RigidBody::Set_Restitution(float _restitution)
+{ 
+	restitution = _restitution; 
+}
+
+float RigidBody::Get_Friction() const
+{ 
+	return friction; 
+}
+
+void RigidBody::Set_Friction(float _friction)
+{ 
+	friction = _friction; 
+}
 
 

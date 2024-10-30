@@ -27,6 +27,8 @@ private:
 	bool enable_gravity{ true }; // disable physics
 	float mass{ 1.0f };
 	ToastBox::Vec2 gravity{ 0,-200.f };
+	float restitution{ 0.5f };
+	float friction{ 0.5f };
 
 
 public:
@@ -35,16 +37,18 @@ public:
 		Force,
 		Impulse
 	};
+
 	RigidBody();
 	RigidBody(ToastBox::Vec2 _velocity);
 
 	void Init(GameObject* _parent) override;
-	
 	void Update() override;
 	void Exit() override;
+
 	ToastBox::Vec2 const& Get_Velocity() const;
 	ToastBox::Vec2& Get_Velocity();
 	ToastBox::Vec2& Get_Current_Velocity();
+
 	ComponentType Get_Component_Type() override;
 
 	// setters for physics
@@ -86,4 +90,13 @@ public:
 
 	void Set_Current_Velocity(const ToastBox::Vec2& newVelocity);
 
+
+	// Restitution and friction accessors and mutators
+	float Get_Restitution() const;
+
+	void Set_Restitution(float _restitution);
+
+	float Get_Friction() const;
+
+	void Set_Friction(float _friction);
 };

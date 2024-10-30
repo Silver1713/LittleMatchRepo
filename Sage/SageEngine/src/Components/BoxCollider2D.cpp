@@ -340,45 +340,125 @@ bool BoxCollider2D::Collision_Intersection_Rect_Rect(const AABB& _aabb1,        
 
 
 /*!**************************************************************************
-\brief
+\brief // time based version
   Handles the response when a collision is detected.
 \param other - The other GameObject involved in the collision.
 \param collisionTime - The time at which the collision occurred within the frame.
 \param deltaTime - The total time of the current frame.
 ***************************************************************************/
+//void BoxCollider2D::Handle_Collision(GameObject* _other, float _collision_time, float _delta_time)
+//{
+//    RigidBody* physics = static_cast<RigidBody*>(parent->Get_Component<RigidBody>());
+//    if (!physics) return;
+//
+//    // Get current velocity and calculate remaining time
+//    ToastBox::Vec2 currentVelocity = physics->Get_Current_Velocity();
+//    float remainingTime = _delta_time - _collision_time;
+//
+//    // Calculate deceleration rate based on remaining time
+//    ToastBox::Vec2 deceleration = currentVelocity / remainingTime;
+//
+//    // Update position to collision point
+//    Transform* transform = static_cast<Transform*>(parent->Get_Component<Transform>());
+//    if (transform)
+//    {
+//        // Move to collision point
+//        ToastBox::Vec3 collisionPosition = {
+//            transform->Get_Position().x + currentVelocity.x * _collision_time,
+//            transform->Get_Position().y + currentVelocity.y * _collision_time,
+//            transform->Get_Position().z
+//        };
+//        transform->Set_Position(collisionPosition);
+//
+//        // Gradually reduce velocity over remaining time
+//        ToastBox::Vec2 newVelocity = {
+//            currentVelocity.x - (deceleration.x * remainingTime),
+//            currentVelocity.y - (deceleration.y * remainingTime)
+//        };
+//
+//        physics->Set_Current_Velocity(newVelocity);
+//    }
+//}
+
+
 void BoxCollider2D::Handle_Collision(GameObject* _other, float _collision_time, float _delta_time)
 {
+    // Get physics components
     RigidBody* physics = static_cast<RigidBody*>(parent->Get_Component<RigidBody>());
-    if (!physics) return;
+    RigidBody* otherPhysics = static_cast<RigidBody*>(_other->Get_Component<RigidBody>());
 
-    // Get current velocity and calculate remaining time
-    ToastBox::Vec2 currentVelocity = physics->Get_Current_Velocity();
-    float remainingTime = _delta_time - _collision_time;
-
-    // Calculate deceleration rate based on remaining time
-    ToastBox::Vec2 deceleration = currentVelocity / remainingTime;
-
-    // Update position to collision point
-    Transform* transform = static_cast<Transform*>(parent->Get_Component<Transform>());
-    if (transform)
-    {
-        // Move to collision point
-        ToastBox::Vec3 collisionPosition = {
-            transform->Get_Position().x + currentVelocity.x * _collision_time,
-            transform->Get_Position().y + currentVelocity.y * _collision_time,
-            transform->Get_Position().z
-        };
-        transform->Set_Position(collisionPosition);
-
-        // Gradually reduce velocity over remaining time
-        ToastBox::Vec2 newVelocity = {
-            currentVelocity.x - (deceleration.x * remainingTime),
-            currentVelocity.y - (deceleration.y * remainingTime)
-        };
-
-        physics->Set_Current_Velocity(newVelocity);
+    // Early return if any physics component is missing or has zero mass
+    if (!physics || !otherPhysics || physics->Get_Mass() <= 0.0f || otherPhysics->Get_Mass() <= 0.0f) {
+        return;
     }
+
+    // Get transform components
+    Transform* transform = static_cast<Transform*>(parent->Get_Component<Transform>());
+    Transform* otherTransform = static_cast<Transform*>(_other->Get_Component<Transform>());
+
+    if (!transform || !otherTransform) {
+        return;
+    }
+
+    // Calculate collision properties
+    ToastBox::Vec2 relativeVelocity = otherPhysics->Get_Current_Velocity() - physics->Get_Current_Velocity();
+
+    // Calculate collision normal based on positions
+    ToastBox::Vec3 positionDiff = transform->Get_Position() - otherTransform->Get_Position();
+    ToastBox::Vec2 difference(positionDiff.x, positionDiff.y);
+    ToastBox::Vec2 collisionNormal;
+
+    // Only proceed if we can normalize the difference vector
+    if (difference.Magnitude() > 0.0001f) {
+        difference.Normalize(collisionNormal, difference);
+
+        // Calculate impulse scalar using restitution
+        float restitution = std::min(physics->Get_Restitution(), otherPhysics->Get_Restitution());
+        float impulseScalar = -(1.0f + restitution) * relativeVelocity.Product_Scalar(collisionNormal);
+        impulseScalar /= (1.0f / physics->Get_Mass() + 1.0f / otherPhysics->Get_Mass());
+
+        // Apply impulse to velocities
+        ToastBox::Vec2 impulse = collisionNormal * impulseScalar;
+        physics->Set_Current_Velocity(physics->Get_Current_Velocity() +
+            (impulse / physics->Get_Mass()));
+        otherPhysics->Set_Current_Velocity(otherPhysics->Get_Current_Velocity() -
+            (impulse / otherPhysics->Get_Mass()));
+
+        // Handle friction
+        float frictionCoeff = std::min(physics->Get_Friction(), otherPhysics->Get_Friction());
+
+        // Calculate tangential component of relative velocity
+        float normalVelocityMag = relativeVelocity.Product_Scalar(collisionNormal);
+        ToastBox::Vec2 tangentVelocity = relativeVelocity - (collisionNormal * normalVelocityMag);
+
+        // Only apply friction if there's tangential velocity
+        if (tangentVelocity.Magnitude() > 0.0001f) {
+            ToastBox::Vec2 frictionDirection;
+            tangentVelocity.Normalize(frictionDirection, tangentVelocity);
+
+            // Calculate and apply friction impulse
+            float frictionImpulseMag = -frictionCoeff * impulseScalar;
+            ToastBox::Vec2 frictionImpulse = frictionDirection * frictionImpulseMag;
+
+            physics->Set_Current_Velocity(physics->Get_Current_Velocity() +
+                (frictionImpulse / physics->Get_Mass()));
+            otherPhysics->Set_Current_Velocity(otherPhysics->Get_Current_Velocity() -
+                (frictionImpulse / otherPhysics->Get_Mass()));
+        }
+
+        // Move objects to collision point to prevent interpenetration
+        ToastBox::Vec3 newPos = transform->Get_Position();
+        newPos.x += physics->Get_Current_Velocity().x * _collision_time;
+        newPos.y += physics->Get_Current_Velocity().y * _collision_time;
+        transform->Set_Position(newPos);
+    }
+
+    // Trigger collision callbacks if registered
+    On_Collide(static_cast<BoxCollider2D*>(_other->Get_Component<BoxCollider2D>()));
 }
+
+
+
 
 
 /*!****************************************************************************
