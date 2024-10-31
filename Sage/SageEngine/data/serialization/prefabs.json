@@ -79,7 +79,7 @@
       {
         "ID": "FADE_SCREEN",
         "Transform_Type":"Screen",
-        "Scale": [3840, 2160,0],
+        "Scale": [0, 0,0],
         "RGBA" : [0,0,0,1]
       },
       {
@@ -106,14 +106,14 @@
         "Is_Button": true
       },
       {
-        "ID": "GUI_GO_TO_SPLASH_SCREEN_BUTTON",
+        "ID": "GUI_RESTART_BUTTON",
         "Transform_Type":"Screen",
         "Sprite_Texture_ID": "SQUARE",
         "RGBA" : [0.75,0,0,1],
         "Is_Button": true,
         "Button":
         {
-          "On_Click": "Go_To_Splash_Screen"
+          "On_Click": "Restart_Scene"
         }
       },
       {

@@ -78,7 +78,6 @@ void UITransform::Init(GameObject* _parent)
 *******************************************************************************/
 void UITransform::Update()
 {
-	if (!is_enabled) { return; }
 	// update model matrix
 
 	ToastBox::Matrix3x3 translation_matrix{};

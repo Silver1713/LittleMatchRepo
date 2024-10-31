@@ -106,6 +106,15 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
+		This function get the texture ID
+
+	  \return
+		the texture id
+	*******************************************************************************/
+	std::string Get_Texture_ID();
+
+	/*!*****************************************************************************
+	  \brief
 		This function changes the color of the sprite
 
 	  \param _new_col
@@ -162,5 +171,5 @@ public:
 	  \brief
 		Set the shape of the sageobject
 	*******************************************************************************/
-	void Set_Shape(std::string _shape);
+	void Change_Shape(std::string const& _shape);
 };

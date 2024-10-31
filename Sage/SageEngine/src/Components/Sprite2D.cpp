@@ -18,6 +18,8 @@
 
 #include <iostream>
 
+#include "SageModelManager.hpp"
+
 /*!*****************************************************************************
   \brief
 	Default constructor for Sprite2D
@@ -96,7 +98,6 @@ void Sprite2D::Init(GameObject* _parent)
 *******************************************************************************/
 void Sprite2D::Update()
 {
-	if (!is_enabled) { return; }
 	//updates the sageobject with the current transforms of the Transform component
 	obj->transform.position.x = transform->Get_Position().x;
 	obj->transform.position.y = transform->Get_Position().y;
@@ -164,6 +165,20 @@ ComponentType Sprite2D::Get_Component_Type() { return SPRITE2D; }
 void Sprite2D::Set_Texture_ID(std::string const& _ID)
 {
 	sprite_texture_ID = _ID;
+	SageTexture* texture = &Assets::Textures::Get_Texture(sprite_texture_ID);
+	obj->Attach_Texture(texture);
+}
+
+/*!*****************************************************************************
+  \brief
+	This function get the texture ID
+
+  \return
+	the texture id
+*******************************************************************************/
+std::string Sprite2D:: Get_Texture_ID()
+{
+	return sprite_texture_ID;
 }
 
 /*!*****************************************************************************
@@ -262,7 +277,18 @@ std::string Sprite2D::Get_Shape()
   \brief
 	Set the shape of the sageobject
 *******************************************************************************/
-void Sprite2D::Set_Shape(std::string _shape)
+void Sprite2D::Change_Shape(std::string const& _shape)
 {
 	object_shape = _shape;
+	SageModel* model;
+	if (_shape == "Rect")
+	{
+		model = &SageModelManager::models["PRIMITIVE_RECT"];
+	}
+	else if (_shape == "Circle")
+	{
+		model = &SageModelManager::models["PRIMITIVE_CIRCLE"];
+	}
+	obj->Change_Shape(model);
+
 }

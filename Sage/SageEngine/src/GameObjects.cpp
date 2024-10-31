@@ -14,6 +14,7 @@
 */
 /* End Header **************************************************************************/
 #include "GameObjects.hpp"
+#include "SceneManager.hpp"
 #include "Components/Components.hpp"
 #include "SageObjectManager.hpp"
 
@@ -59,7 +60,6 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Update()
 	{
-
 		for (auto& _g : g_game_objects)
 		{
 			if (_g.second)
@@ -312,8 +312,6 @@ void GameObject::Init()
 			std::cout << "Behaviour Component Added\n";
 		}
 	}
-
-
 }
 
 /*!*****************************************************************************
@@ -339,7 +337,12 @@ void GameObject::Input()
 *******************************************************************************/
 void GameObject::Update()
 {
-	if (components.empty() || (!is_enabled))
+	if (components.empty())
+	{
+		return;
+	}
+
+	if (!is_enabled)
 	{
 		return;
 	}
@@ -448,6 +451,24 @@ void GameObject::Disable()
 void GameObject::Add_Component(std::unique_ptr<Component> _c)
 {
 	components.push_back(std::move(_c));
+}
+
+/*!*****************************************************************************
+  \brief
+	Remove component from the gameobject
+  \param _c
+	Component to be added
+*******************************************************************************/
+void GameObject::Remove_Component(ComponentType _c)
+{
+	for (auto it = components.begin(); it != components.end(); ++it)
+	{
+		if ((*it)->Get_Component_Type() == _c)
+		{
+			components.erase(it);
+			break;
+		}
+	}
 }
 
 /*!*****************************************************************************

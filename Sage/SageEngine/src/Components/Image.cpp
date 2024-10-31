@@ -18,6 +18,8 @@
 
 #include <iostream>
 
+#include "SageModelManager.hpp"
+
 /*!*****************************************************************************
   \brief
 	Default constructor for Image
@@ -96,7 +98,6 @@ void Image::Init(GameObject* _parent)
 *******************************************************************************/
 void Image::Update()
 {
-	if (!is_enabled) { return; }
 	//updates the sageobject with the current transforms of the Transform component
 	obj->transform.position.x = transform->Get_Position().x;
 	obj->transform.position.y = transform->Get_Position().y;
@@ -151,6 +152,20 @@ ComponentType Image::Get_Component_Type() { return IMAGE; }
 void Image::Set_Texture_ID(std::string const& _ID)
 {
 	sprite_texture_ID = _ID;
+	SageTexture* texture = &Assets::Textures::Get_Texture(sprite_texture_ID);
+	obj->Attach_Texture(texture);
+}
+
+/*!*****************************************************************************
+  \brief
+	This function changes the texture ID
+
+  \param _ID
+	the ID of the replacing texture
+*******************************************************************************/
+std::string Image::Get_Texture_ID()
+{
+	return sprite_texture_ID;
 }
 
 /*!*****************************************************************************
@@ -248,7 +263,18 @@ std::string Image::Get_Shape()
   \brief
 	Set the shape of the sageobject
 *******************************************************************************/
-void Image::Set_Shape(std::string _shape)
-{
+void Image::Change_Shape(std::string const& _shape)
+{	
 	object_shape = _shape;
+	SageModel* model;
+	if (_shape == "Rect")
+	{
+		model = &SageModelManager::models["PRIMITIVE_RECT"];
+	}
+	else if (_shape == "Circle")
+	{
+		model = &SageModelManager::models["PRIMITIVE_CIRCLE"];
+	}
+	obj->Change_Shape(model);
+	
 }

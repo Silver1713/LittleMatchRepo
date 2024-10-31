@@ -79,8 +79,7 @@ void Transform::Init(GameObject* _parent)
 	Updates members of Transform separately from the set functions
 *******************************************************************************/
 void Transform::Update()
-{
-	if (!is_enabled) { return; }
+{	
 	// update model matrix
 
 	ToastBox::Matrix3x3 translation_matrix{};
