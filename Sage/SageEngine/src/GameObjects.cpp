@@ -151,6 +151,22 @@ namespace Game_Objects
 		return &g_game_objects[_identifier];
 	}
 
+	//[HALIS]
+	void Delete_Game_Object(GameObject* _object) {
+		if (!_object)
+		{
+			return;
+		}
+
+		auto it = g_game_objects.find(_object->Get_ID());
+		if (it != g_game_objects.end())
+		{
+			auto& vector = _object->Get_Component<UITransform>() ? screen_space_game_objects : world_space_game_objects;
+			vector.erase(std::remove(vector.begin(), vector.end(), &it->second), vector.end());
+			g_game_objects.erase(it);
+		}
+	}
+
 	/*!*****************************************************************************
 	  \brief
 		Gets a reference to the map of all gameobjects
@@ -388,6 +404,32 @@ void GameObject::Exit()
 	{
 		_c->Exit();
 	}
+}
+
+//[HALIS]
+void GameObject::Set_ID(std::string const& new_id) {
+	// Check if new_id already exists to avoid conflicts
+	if (Game_Objects::g_game_objects.find(new_id) != Game_Objects::g_game_objects.end()) {
+		std::cerr << "Error: A GameObject with the ID \"" << new_id << "\" already exists." << std::endl;
+		return;
+	}
+
+	// Find the current object in the map
+	auto it = Game_Objects::g_game_objects.find(identifier);
+	if (it == Game_Objects::g_game_objects.end()) {
+		std::cerr << "Error: GameObject with ID \"" << identifier << "\" not found in g_game_objects." << std::endl;
+		return;
+	}
+
+	// Temporarily store the unique_ptr for reassignment
+	auto tempPtr = std::move(it->second);
+
+	// Erase the old entry and update the identifier
+	Game_Objects::g_game_objects.erase(it);
+	identifier = new_id;
+
+	// Reinsert with the new ID
+	Game_Objects::g_game_objects[new_id] = std::move(tempPtr);
 }
 
 /*!*****************************************************************************

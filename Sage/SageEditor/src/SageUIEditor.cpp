@@ -52,10 +52,10 @@ namespace SageUIEditor
         if (show_inspector_window)
         {
             ImGui::Begin("Inspector");
-            if (SageHierarchy::selectedObject != nullptr)
+            if (SageHierarchy::selected_object != nullptr)
             {
-                EditorStateManager::Select_Object(SageHierarchy::selectedObject);
-                Sage_Inspector::ShowInspector(SageHierarchy::selectedObject);
+                EditorStateManager::Select_Object(SageHierarchy::selected_object);
+                Sage_Inspector::ShowInspector(SageHierarchy::selected_object);
             }
             ImGui::Text("This is the Inspector window.");
             ImGui::End();
@@ -245,70 +245,6 @@ namespace SageUIEditor
     ////            ImGui::EndTable();
     ////#pragma endregion
     //    }
-
-    ////Draws Inspector dockspace
-    //void Inspector()
-    //{
-    //    // Right side: draw properties
-    //    ImGui::BeginGroup();
-    //    if (TreeNode* node = selected_node)
-    //    {
-    //        //This is how renaming works on the Inspector that is supposed to change in the Hierarchy.
-    //        if (ImGui::InputText("###name", node->Name, IM_ARRAYSIZE(node->Name), ImGuiInputTextFlags_EnterReturnsTrue))
-    //        {
-    //            /*RenamingDoc = doc;
-    //            RenamingStarted = true;*/
-    //        }
-    //        ImGui::Separator();
-    //        if (ImGui::BeginTable("##properties", 2, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY))
-    //        {
-    //            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed);
-    //            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch, 2.0f); // Default twice larger
-    //            if (node->HasData)
-    //            {
-    //                // In a typical application, the structure description would be derived from a data-driven system.
-    //                // - We try to mimic this with our ExampleMemberInfo structure and the ExampleTreeNodeMemberInfos[] array.
-    //                // - Limits and some details are hard-coded to simplify the demo.
-    //                for (const ComponentInfo& field_desc : component_infos)
-    //                {
-    //                    ImGui::TableNextRow();
-    //                    ImGui::PushID(field_desc.Name);
-    //                    ImGui::TableNextColumn();
-    //                    ImGui::AlignTextToFramePadding();
-    //                    ImGui::TextUnformatted(field_desc.Name);
-    //                    ImGui::TableNextColumn();
-    //                    void* field_ptr = (void*)(((unsigned char*)node) + field_desc.Offset);
-    //                    switch (field_desc.DataType)
-    //                    {
-    //                    case ImGuiDataType_Bool:
-    //                    {
-    //                        IM_ASSERT(field_desc.DataCount == 1);
-    //                        ImGui::Checkbox("##Editor", (bool*)field_ptr);
-    //                        break;
-    //                    }
-    //                    case ImGuiDataType_S32:
-    //                    {
-    //                        int v_min = INT_MIN, v_max = INT_MAX;
-    //                        ImGui::SetNextItemWidth(-FLT_MIN);
-    //                        ImGui::DragScalarN("##Editor", field_desc.DataType, field_ptr, field_desc.DataCount, 1.0f, &v_min, &v_max);
-    //                        break;
-    //                    }
-    //                    case ImGuiDataType_Float:
-    //                    {
-    //                        float v_min = 0.0f, v_max = 1.0f;
-    //                        ImGui::SetNextItemWidth(-FLT_MIN);
-    //                        ImGui::SliderScalarN("##Editor", field_desc.DataType, field_ptr, field_desc.DataCount, &v_min, &v_max);
-    //                        break;
-    //                    }
-    //                    }
-    //                    ImGui::PopID();
-    //                }
-    //            }
-    //            ImGui::EndTable();
-    //        }
-    //    }
-    //    ImGui::EndGroup();
-    //}
 
     void RenderInspectorWindow() {
         //if (selectedObject) {
@@ -510,7 +446,6 @@ namespace SageUIEditor
         Show_Scene_Window();
         Show_Game_Window();
         Show_Inspector_Window();
-        SageHierarchy::UpdateGameObjectsFromScene();
         Show_Hierarchy_Window();
         Show_Console_Window();
         Show_Project_Window();

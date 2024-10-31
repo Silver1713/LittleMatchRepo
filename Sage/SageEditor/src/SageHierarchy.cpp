@@ -5,107 +5,128 @@
 namespace SageHierarchy
 {
     // Definition of the list of GameObjects.
-    std::vector<GameObject*> gameObjects;
-    extern GameObject* selectedObject = nullptr;
+    std::vector<GameObject*> game_object_list;
+    extern GameObject* selected_object = nullptr;
 
-    void UpdateGameObjectsFromScene()
+    void Update_Hierarchy()
     {
-        // Clear the current list
-        gameObjects.clear();
-
-        // Get the latest game objects from the SceneManager/Game_Objects
-        auto& gameObjectMap = Game_Objects::Get_Game_Objects();
-
-        // Populate the gameObjects vector with raw pointers to GameObject instances
-        for (auto& [id, gameObjectPtr] : gameObjectMap)
+        game_object_list.clear();
+        auto& game_object_map = Game_Objects::Get_Game_Objects();
+        for (auto& [id, game_object] : game_object_map)
         {
-            gameObjects.push_back(gameObjectPtr.get());
+            game_object_list.push_back(game_object.get());
         }
-
-        std::cout << "Number of game objects: " << gameObjects.size() << std::endl;
     }
 
-    void CreateNewGameObject() {
+    void Create_Empty() {
         int i = 1;
-        std::string baseName = "Empty Game Object ";
-        std::string newName;
+        std::string base_name = "Empty Game Object ";
+        std::string new_name;
 
-        // Loop to find an unused identifier
-        while (true) {
-            newName = baseName + std::to_string(i);
-            bool nameExists = false;
+        while (true)
+        {
+            new_name = base_name + std::to_string(i);
+            bool name_exists = false;
 
-            for (const auto gameObject : gameObjects) {
-                if (gameObject->Get_ID() == newName) {
-                    nameExists = true;
+            for (const auto gameObject : game_object_list)
+            {
+                if (gameObject->Get_ID() == new_name)
+                {
+                    name_exists = true;
                     break;
                 }
             }
-
-            if (!nameExists) {
-                break; // Found a unique name
+            if (!name_exists)
+            {
+                break;
             }
 
-            i++; // Increment to try the next suffix
+            i++;
         }
 
-        // Create the new GameObject with a unique identifier
-        Game_Objects::Instantiate(Prefabs::Get_Prefab("EMPTY"), newName);
-
-        // Refresh the list to include the new object
-        UpdateGameObjectsFromScene();
+        Game_Objects::Instantiate(Prefabs::Get_Prefab("EMPTY"), new_name);
+        Update_Hierarchy();
     }
 
-
-    void CreateGameObjectFromPrefab(const Assets::Prefabs::Prefab& prefab) {
-        // Instantiate directly adds to g_game_objects map, so no push_back needed here
-        Game_Objects::Instantiate(prefab, prefab.prefab_ID);
-        UpdateGameObjectsFromScene(); // Refresh the list to include the prefab object
+    void Create_Prefab(const Assets::Prefabs::Prefab& _prefab)
+    {
+        Game_Objects::Instantiate(_prefab, _prefab.prefab_ID);
+        Update_Hierarchy();
     }
 
-    void DrawHierarchy(GameObject* object) {
-        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
-        if (object->Get_Z_Order() > 0) { // Replace with actual child check if applicable
-            flags |= ImGuiTreeNodeFlags_Leaf; // Mark as leaf if there are no children.
-        }
-        if (object == selectedObject) {
-            flags |= ImGuiTreeNodeFlags_Selected; // Highlight selected object.
-        }
-
-        bool nodeOpen = ImGui::TreeNodeEx((void*)(intptr_t)object->Get_ID().c_str(), flags, "%s", object->Get_ID().c_str());
-
-        // Handle selection.
-        if (ImGui::IsItemClicked()) {
-            selectedObject = object; // Update the selected object when clicked.
+    void Draw_Node(GameObject* _object)
+    {
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf;
+        if (_object == selected_object)
+        {
+            flags |= ImGuiTreeNodeFlags_Selected;
         }
 
-        //// Handle renaming with F2.
-        //if (selectedObject == object && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_F2))) {
-        //    ImGui::OpenPopup("Rename GameObject");
-        //}
-        //// Renaming popup.
-        //if (ImGui::BeginPopup("Rename GameObject")) {
-        //    static char newName[64] = "";
-        //    if (ImGui::InputText("New Name", newName, IM_ARRAYSIZE(newName), ImGuiInputTextFlags_EnterReturnsTrue)) {
-        //        object->identifier = newName; // Assuming identifier can be directly set
-        //        ImGui::CloseCurrentPopup();
-        //    }
-        //    ImGui::EndPopup();
-        //}
+        bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)_object->Get_ID().c_str(), flags, "%s", _object->Get_ID().c_str());
 
-        if (nodeOpen) {
-            // If you have child GameObjects, you'd want to iterate and draw them here
+        if (ImGui::IsItemClicked())
+        {
+            selected_object = _object;
+        }
+
+        if (selected_object == _object && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_F2)))
+        {
+            ImGui::OpenPopup("Rename GameObject");
+        }
+        if (ImGui::BeginPopup("Rename GameObject"))
+        {
+            static char new_name[32] = "";
+            if (ImGui::InputText("New Name", new_name, IM_ARRAYSIZE(new_name), ImGuiInputTextFlags_EnterReturnsTrue))
+            {
+                _object->Set_ID(new_name);
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::EndPopup();
+        }
+
+        if (node_open)
+        {
             ImGui::TreePop();
         }
     }
 
-    void Hierarchy() {
-        if (ImGui::Button("Add GameObject")) {
-            CreateNewGameObject();
+    void Hierarchy()
+    {
+        //Update_Hierarchy(); need to call this in scene manager change scene
+
+        if (ImGui::Button("Add GameObject"))
+        {
+            Create_Empty();
         }
 
-        for (const auto& gameObject : gameObjects) {
-            DrawHierarchy(gameObject);
+        // Check for deletion
+        if (selected_object && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Delete)))
+        {
+            Game_Objects::Delete_Game_Object(selected_object);
+            selected_object = nullptr;
+        }
+
+        // Iterate and draw each GameObject node, allowing for reordering via drag-and-drop
+        for (int i = 0; i < game_object_list.size(); ++i)
+        {
+            GameObject* currentObject = game_object_list[i];
+            Draw_Node(currentObject);
+
+            // Begin drag-and-drop reordering
+            if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
+            {
+                float dragY = ImGui::GetMouseDragDelta(0).y;
+                int targetIndex = (dragY < 0.f) ? i - 1 : i + 1; // Set target index based on drag direction
+
+                // Only proceed if within bounds and drag distance exceeds threshold
+                if (targetIndex >= 0 && targetIndex < game_object_list.size() &&
+                    std::abs(dragY) > ImGui::GetTextLineHeightWithSpacing())
+                {
+                    std::swap(game_object_list[i], game_object_list[targetIndex]);
+                    ImGui::ResetMouseDragDelta();  // Reset drag state after swap
+                }
+            }
         }
     }
+
 }

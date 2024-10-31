@@ -28,11 +28,11 @@ public:
 
 	void Set_Audio_Clip(std::string const& _id);
 
-	void Set_Mute();
+	void Set_Mute(bool _is_mute);
 
-	void Set_Loop();
+	void Set_Loop(bool _is_loop);
 
-	void Set_Volume();
+	void Set_Volume(float _volume);
 
 	/*!*****************************************************************************
 	  \brief
