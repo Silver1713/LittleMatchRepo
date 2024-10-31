@@ -21,6 +21,7 @@
 #include "SageInstance.hpp"
 #include "SageObject.hpp"
 #include "SagePoint.hpp"
+#include "SageText.hpp"
 #include "SageViewport.hpp"
 
 
@@ -111,6 +112,7 @@ struct RENDER_CONFIG_INTERNAL
 *******************************************************************************/
 struct SageRendererInternal
 {
+	static TextRenderer::SageFont* font;
 	enum //!< Bitmask options for the renderer configuration, currenet options are 4 bits
 	{
 		I_SAGE_ENABLE_ALPHA = 1, //!< Enable transparency
@@ -477,6 +479,9 @@ struct SageRendererInternal
 	*******************************************************************************/
 	static void Clear_Color(ToastBox::Vec4 clr);
 
+	static void Set_Font(TextRenderer::SageFont* active_font);
+	//static void Render_Text(const char* text, float x, float y, float scale, glm::vec4 color);
+	//static void Render_Text(TextRenderer::SageText& text);
 };
 
 
