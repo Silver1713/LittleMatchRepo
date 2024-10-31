@@ -362,8 +362,8 @@ namespace SageUIEditor
                 if (ImGui::MenuItem("New"))
                 {
                     //std::string editor_startup_scene = "main_menu";
-                    //SM::Set_Current_Level(editor_startup_scene);
-                    //SM::Go_To_Next_Scene();
+                    SM::Set_Current_Level("default");
+                    SM::Go_To_Next_Scene();
                 }
                 if (ImGui::MenuItem("Open", "Ctrl+O"))
                 {

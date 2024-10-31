@@ -14,6 +14,7 @@
 */
 /* End Header **************************************************************************/
 #include "GameObjects.hpp"
+#include "SceneManager.hpp"
 #include "Components/Components.hpp"
 #include "SageObjectManager.hpp"
 
@@ -59,7 +60,6 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Update()
 	{
-
 		for (auto& _g : g_game_objects)
 		{
 			if (_g.second)
@@ -337,7 +337,12 @@ void GameObject::Input()
 *******************************************************************************/
 void GameObject::Update()
 {
-	if (components.empty() || (!is_enabled))
+	if (components.empty())
+	{
+		return;
+	}
+
+	if (!is_enabled)
 	{
 		return;
 	}
