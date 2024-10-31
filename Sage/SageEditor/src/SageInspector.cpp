@@ -483,45 +483,6 @@ namespace Sage_Inspector
         }
     }
 
-    void Init_Component(Component* _component)
-    {
-	    switch(_component->Get_Component_Type())
-	    {
-
-	    case TRANSFORM:
-		    {
-            auto* transform = dynamic_cast<Transform*>(_component);
-            if (transform)
-            {
-                transform->Set_Position({ 0.0f, 0.0f, 0.0f });
-                transform->Set_Scale({ 0.0f, 0.0f, 0.0f });
-                transform->Set_Rotation({ 0.0f, 0.0f, 0.0f });
-            }
-            break;
-		    }
-            
-        case UITRANSFORM:
-
-            break;
-        case SPRITE2D:
-
-            break;
-        case IMAGE:
-
-            break;
-        case BOXCOLLIDER2D:
-
-            break;
-        case RIGIDBODY:
-
-            break;
-        default:
-            break;
-	    }
-
-			
-    }
-
 
     void Show_Inspector(GameObject* _game_object) {
         
@@ -584,6 +545,10 @@ namespace Sage_Inspector
             {
                 continue;
             }
+            if (component->Get_Component_Type() == TRANSFORM) // Transform cannot be removed
+            {
+                continue;
+            }
             if (ImGui::Button(("Remove " + std::string(Get_Component_Type_Name((*component).Get_Component_Type()))).c_str()))
             {
                 existing_components.erase(component->Get_Component_Type());
@@ -623,7 +588,7 @@ namespace Sage_Inspector
                 {
                     auto new_component = Create_Component(component_type);
                     if (new_component) {
-                        Init_Component(new_component.get());
+                        new_component->Init(_game_object);
                         _game_object->Add_Component(std::move(new_component));
                         std::cerr << "Added component of type: " << Get_Component_Type_Name(component_type) << "\n";
                     }

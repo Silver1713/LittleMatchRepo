@@ -285,7 +285,7 @@ namespace Game_Objects
 *******************************************************************************/
 template <typename T, typename>
 T* GameObject::Get_Component()
-{
+{	
 	if (components.size() != 0)
 	{
 		for (auto& _c : components)
