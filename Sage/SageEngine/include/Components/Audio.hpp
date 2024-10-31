@@ -13,11 +13,27 @@
 /* End Header **************************************************************************/
 #pragma once
 #include "Component.hpp"
+#include "Transform.hpp"
 #include "SageAudio.hpp"
 
 //Derived component class audio
 class Audio : public Component
 {
+private:
+	typedef void(*Function_Ptr)(GameObject*);
+	Transform* transform{ nullptr };
+
+public:
+	Audio();
+
+	void Set_Audio_Clip(std::string const& _id);
+
+	void Set_Mute();
+
+	void Set_Loop();
+
+	void Set_Volume();
+
 	/*!*****************************************************************************
 	  \brief
 		Initializes the component and assigns the parent to the gameobject that

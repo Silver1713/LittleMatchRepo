@@ -1,38 +1,66 @@
 #include "SageHierarchy.hpp"
 #include <iostream>
+#include "../../SageEngine/src/GameObjects.cpp"
 
 namespace SageHierarchy
 {
     // Definition of the list of GameObjects.
     std::vector<GameObject*> gameObjects;
-    GameObject* selectedObject = nullptr;
+    extern GameObject* selectedObject = nullptr;
 
     void UpdateGameObjectsFromScene()
     {
         // Clear the current list
         gameObjects.clear();
 
-        // Get the game objects from the scene manager
+        // Get the latest game objects from the SceneManager/Game_Objects
         auto& gameObjectMap = Game_Objects::Get_Game_Objects();
 
-        // Iterate through the map and add pointers to the gameObjects vector
+        // Populate the gameObjects vector with raw pointers to GameObject instances
         for (auto& [id, gameObjectPtr] : gameObjectMap)
         {
             gameObjects.push_back(gameObjectPtr.get());
         }
+
+        std::cout << "Number of game objects: " << gameObjects.size() << std::endl;
     }
 
-    // Function to create a new empty GameObject
-    //void CreateNewGameObject() {
-    //    auto* newObject = Game_Objects::Instantiate(/* Pass a default prefab or create an empty instance */);
-    //    gameObjects.push_back(newObject); // Add to the list of GameObjects
-    //}
+    void CreateNewGameObject() {
+        int i = 1;
+        std::string baseName = "Empty Game Object ";
+        std::string newName;
 
-    // Function to create a GameObject from a prefab
+        // Loop to find an unused identifier
+        while (true) {
+            newName = baseName + std::to_string(i);
+            bool nameExists = false;
+
+            for (const auto gameObject : gameObjects) {
+                if (gameObject->Get_ID() == newName) {
+                    nameExists = true;
+                    break;
+                }
+            }
+
+            if (!nameExists) {
+                break; // Found a unique name
+            }
+
+            i++; // Increment to try the next suffix
+        }
+
+        // Create the new GameObject with a unique identifier
+        Game_Objects::Instantiate(Prefabs::Get_Prefab("EMPTY"), newName);
+
+        // Refresh the list to include the new object
+        UpdateGameObjectsFromScene();
+    }
+
+
     void CreateGameObjectFromPrefab(const Assets::Prefabs::Prefab& prefab) {
-        // Create GameObject logic here, e.g.:
-        auto* prefabObject = Game_Objects::Instantiate(prefab, prefab.prefab_ID);
-        gameObjects.push_back(prefabObject); // Add to the list of GameObjects
+        // Instantiate directly adds to g_game_objects map, so no push_back needed here
+        Game_Objects::Instantiate(prefab, prefab.prefab_ID);
+        UpdateGameObjectsFromScene(); // Refresh the list to include the prefab object
     }
 
     void DrawHierarchy(GameObject* object) {
@@ -72,14 +100,11 @@ namespace SageHierarchy
     }
 
     void Hierarchy() {
-        // Button to create a new empty GameObject
         if (ImGui::Button("Add GameObject")) {
-            //CreateNewGameObject(); // Call to create a new empty GameObject
+            CreateNewGameObject();
         }
 
-        //std::cout << "Loading Game Objects..." << std::endl;
         for (const auto& gameObject : gameObjects) {
-            //std::cout << "Loading " << gameObject->Get_ID() << std::endl;
             DrawHierarchy(gameObject);
         }
     }

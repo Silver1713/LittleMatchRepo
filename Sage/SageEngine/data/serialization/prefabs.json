@@ -187,22 +187,23 @@
         "Sprite_Texture_ID": "SPEARMAN_IDLE_0",
         "Has_Collider": true,
         "Has_Physics": true,
-        "Physics":
-        {
-          "Velocity": [300,200,0]
+        "Physics": {
+          "Velocity": [ 300, 200, 0 ]
         },
         "Has_Animator": true,
-        "Animator":
-        {
+        "Animator": {
           "Animation_Set_ID": "SPEARMAN"
         },
         "Has_Behaviour": false,
-        "Behaviour_List" :
-        [
+        "Behaviour_List": [
           {
-            "CS_Class_Name":"PlayerBehaviour"
+            "CS_Class_Name": "PlayerBehaviour"
           }
         ]
+      },
+      {
+        "ID": "EMPTY",
+        "Pos": [ 0, 0, 0 ]
       }
     ]
   }
