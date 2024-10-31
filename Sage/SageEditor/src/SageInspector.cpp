@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <unordered_set>
+#include <vcruntime.h>
 
 #include "SageUIEditor.hpp"
 
@@ -481,12 +482,58 @@ namespace Sage_Inspector
             break;
         }
     }
-    void ShowInspector(GameObject* _game_object) {
+
+    void Init_Component(Component* _component)
+    {
+	    switch(_component->Get_Component_Type())
+	    {
+
+	    case TRANSFORM:
+		    {
+            auto* transform = dynamic_cast<Transform*>(_component);
+            if (transform)
+            {
+                transform->Set_Position({ 0.0f, 0.0f, 0.0f });
+                transform->Set_Scale({ 0.0f, 0.0f, 0.0f });
+                transform->Set_Rotation({ 0.0f, 0.0f, 0.0f });
+            }
+            break;
+		    }
+            
+        case UITRANSFORM:
+
+            break;
+        case SPRITE2D:
+
+            break;
+        case IMAGE:
+
+            break;
+        case BOXCOLLIDER2D:
+
+            break;
+        case RIGIDBODY:
+
+            break;
+        default:
+            break;
+	    }
+
+			
+    }
+
+
+    void Show_Inspector(GameObject* _game_object) {
         
         //ImGui::Button("Add Component");
         std::unordered_set<ComponentType> existing_components;
+        // Iterate over all components in the game object
         for (auto& component : _game_object->Get_Component_List())
         {
+            // Ensure the component is valid
+            if (!component) {
+                continue; // Skip if component is nullptr
+            }
             existing_components.insert(component->Get_Component_Type());
             switch (component.get()->Get_Component_Type())
             {
@@ -531,16 +578,19 @@ namespace Sage_Inspector
             default:
                 break;
             }
+            
+            ImGui::SameLine();
+            if (Get_Component_Type_Name((*component).Get_Component_Type()) == nullptr)
+            {
+                continue;
+            }
+            if (ImGui::Button(("Remove " + std::string(Get_Component_Type_Name((*component).Get_Component_Type()))).c_str()))
+            {
+                existing_components.erase(component->Get_Component_Type());
+                _game_object->Remove_Component(component->Get_Component_Type());
+                break;
+            }
 
-            //ImGui::SameLine();
-            //if (ImGui::Button(("Remove " + std::string(Get_Component_Type_Name((*component).Get_Component_Type()))).c_str()))
-            //{
-            //    component = existing_components.erase(component);
-            //}
-            //{
-            //    _game_object->Remove_Component(component->Get_Component_Type());
-            //    break;
-            //}
         }
         ImGui::Separator();
         ImGui::Text("Add Missing Components: ");
@@ -571,7 +621,15 @@ namespace Sage_Inspector
                 }
                 if (ImGui::Button(Get_Component_Type_Name(component_type)))
                 {
-                    _game_object->Add_Component(Create_Component(component_type));
+                    auto new_component = Create_Component(component_type);
+                    if (new_component) {
+                        Init_Component(new_component.get());
+                        _game_object->Add_Component(std::move(new_component));
+                        std::cerr << "Added component of type: " << Get_Component_Type_Name(component_type) << "\n";
+                    }
+                    else {
+                        std::cerr << "Failed to create component of type: " << Get_Component_Type_Name(component_type) << "\n";
+                    }
                 }
             	
             }

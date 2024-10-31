@@ -56,7 +56,7 @@ namespace SageUIEditor
             if (SageHierarchy::selectedObject != nullptr)
             {
                 EditorStateManager::Select_Object(SageHierarchy::selectedObject);
-                Sage_Inspector::ShowInspector(SageHierarchy::selectedObject);
+                Sage_Inspector::Show_Inspector(SageHierarchy::selectedObject);
             }
             ImGui::Text("This is the Inspector window.");
             ImGui::End();
@@ -364,6 +364,8 @@ namespace SageUIEditor
                     //std::string editor_startup_scene = "main_menu";
                     SM::Set_Current_Level("default");
                     SM::Go_To_Next_Scene();
+                    
+                    
                 }
                 if (ImGui::MenuItem("Open", "Ctrl+O"))
                 {
