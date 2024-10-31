@@ -40,6 +40,12 @@ void APIENTRY SageOpenGLDebugCallback(GLenum source, GLenum type, GLuint id, GLe
 
 void ExampleScene::init()
 {
+	SageShaderManager::Add_Shader_Include("graphic_lib", "../SageGraphics/shaders/");
+	SageRenderer::Init();
+	SageFontManager::Startup();
+	SageFontManager::LoadFont("default", "../SageGraphics/font/TextFont.ttf");
+
+	SageText a = SageFontManager::Create_Text("A");
 	
 
 	//glDebugMessageCallback(SageOpenGLDebugCallback, nullptr);
@@ -77,7 +83,7 @@ void ExampleScene::init()
 	}*/
 
 
-	SageRenderer::Init();
+	
 
 	//_p.Load_Texture("../SageIO/image/digipen_splash_screen.png", SageTexture::TEXTURE_UNIT_TYPE::SAGE_COLOR_TEXTURE_UNIT);
 	v_p = { glm::vec2{0,0}, {SageHelper::WINDOW_WIDTH, SageHelper::WINDOW_HEIGHT} };

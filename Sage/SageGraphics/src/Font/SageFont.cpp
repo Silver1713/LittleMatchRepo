@@ -1,220 +1,157 @@
-﻿///* Start Header ************************************************************************/
-///*!
-//\file		SageFont.cpp
-//\title		Memory's Flame
-//\author		Halis Ilyasa Bin Amat Sarijan, halisilyasa.b, 2301333 (100%)
-//\par		halisilyasa.b@digipen.edu
-//\date		08 September 2024
-//\brief		Contains the functions for creating font.
-//
-//			All content � 2024 DigiPen Institute of Technology Singapore. All rights reserved.
-//*/
-///* End Header **************************************************************************/
-//
-//
-//#include "SageModelManager.hpp"
-//#include "SageShaderManager.hpp"
-//#include "SageFont.hpp"
-//
-//#include <iostream>
-//#include <ostream>
-//
-//namespace TextRenderer
-//{
-//
-//
-//	SageFont::SageFont() : shader{}, model{}, font_texture_handle {}, ssbo_handle{}, font_path{}, font_name{}
-//		, font_size{}, font_face{}, font_library{}, glyph_map{}{}
-//	SageFont::~SageFont() {}
-//
-//
-//
-//	void SageFont::IntializeOpenGLResources()
-//	{
-//		// Get Model
-//		shader = &SageShaderManager::Get_Shader_Program("TEXT_SHADER");
-//		model = &SageModelManager::GetModel("PRIMITIVE_RECT");
-//
-//
-//
-//		glCreateTextures(GL_TEXTURE_2D, 1, &font_texture_handle);
-//		// Set texture parameters
-//		glTextureParameteri(font_texture_handle, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//		glTextureParameteri(font_texture_handle, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-//
-//		glTextureParameteri(font_texture_handle, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//		glTextureParameteri(font_texture_handle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//
-//	}
-//
-//
-//	void SageFont::Load(const char* path, FT_Library* lib)
-//	{
-//		IntializeOpenGLResources();
-//		GLenum err = glGetError();
-//		this->font_path = path;
-//		this->font_library = lib;
-//		font_size = 24; //	Default font size
-//		// Load font face
-//		FT_Error error = FT_New_Face(*font_library, font_path.c_str(), 0, &font_face);
-//		if (error)
-//		{
-//			std::cout << "Error: Could not load font face.\n";
-//			std::exit(1);
-//		}
-//
-//		font_name = font_face->family_name;
-//
-//
-//
-//		// Set font size
-//		FT_Set_Pixel_Sizes(font_face, 0, font_size);
-//
-//
-//
-//	}
-//
-//
-//
-//	SageGlyph SageFont::LoadGlyph(char c)
-//	{
-//		FT_Set_Pixel_Sizes(font_face, 0, font_size);
-//		// Load character glyph
-//		if (FT_Load_Char(font_face, c, FT_LOAD_DEFAULT))
-//		{
-//			std::cout << "Error: Could not load glyph for character " << c << std::endl;
-//			return SageGlyph();
-//		}
-//		if (font_face->glyph->format == FT_GLYPH_FORMAT_OUTLINE) {
-//			// Force rasterize outline to a bitmap
-//			if (FT_Render_Glyph(font_face->glyph, FT_RENDER_MODE_NORMAL)) {
-//				std::cout << "Error: Could not rasterize outline glyph for character " << c << std::endl;
-//				return SageGlyph();
-//			}
-//		}
-//		GLenum err = glGetError();
-//		// Generate texture
-//		unsigned texture_handle;
-//		int a = FT_Get_Char_Index(font_face, c);
-//		//Bitmap dimensions
-//		GLsizei width = font_face->glyph->bitmap.width;
-//		GLsizei height = font_face->glyph->bitmap.rows;
-//
-//
-//
-//		if (!width || !height)
-//		{
-//			return SageGlyph(0, width, height, 0, 0, font_face->glyph->advance.x >> 6);
-//		}
-//		GLenum err5 = glGetError();
-//		if (!font_face->glyph->bitmap.buffer) return{};
-//		glCreateTextures(GL_TEXTURE_2D, 1, &texture_handle);
-//		glTextureStorage2D(texture_handle, 1, GL_R8, width, height);
-//		GLenum err3 = glGetError();
-//		glTextureSubImage2D(texture_handle, 0, 0, 0, width, height, GL_RED, GL_UNSIGNED_BYTE, font_face->glyph->bitmap.buffer);
-//		// Set texture parameters
-//		glTextureParameteri(texture_handle, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//		glTextureParameteri(texture_handle, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-//		GLenum err2 = glGetError();
-//		glTextureParameteri(texture_handle, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//		glTextureParameteri(texture_handle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//
-//		GLenum err1 = glGetError();
-//		// Create glyph
-//		SageGlyph glyph(texture_handle, width, height, font_face->glyph->bitmap_left, font_face->glyph->bitmap_top, font_face->glyph->advance.x >> 6);
-//		// Add glyph to map
-//		AddGlyph(c, glyph);
-//
-//		return glyph;
-//	}
-//
-//
-//
-//	void SageFont::AddGlyph(char c, SageGlyph& glyph)
-//	{
-//		glyph_map[c] = glyph;
-//	}
-//
-//
-//	unsigned SageFont::GetFontSize()
-//	{
-//		return font_size;
-//	}
-//
-//	std::string SageFont::GetFontIdentifier()
-//	{
-//		return font_name;
-//	}
-//
-//	std::string SageFont::GetFontPath()
-//	{
-//		return font_path;
-//	}
-//
-//	void SageFont::SetFontSize(unsigned size)
-//	{
-//		font_size = size;
-//		FT_Set_Pixel_Sizes(font_face, 0, font_size);
-//		UnloadGlyph();
-//	}
-//
-//	void SageFont::UnloadGlyph()
-//	{
-//		for (auto& glyph : glyph_map)
-//		{
-//			if (glyph.second.texture_handle)
-//				glDeleteTextures(1, &glyph.second.texture_handle);
-//		}
-//		glyph_map.clear();
-//	}
-//
-//	SageGlyph& SageFont::GetGlyph(char c)
-//	{
-//		if (!glyph_map.contains(c))
-//		{
-//			LoadGlyph(c);
-//			return glyph_map[c];
-//		}
-//		else return glyph_map[c];
-//	}
-//
-//	void SageFont::Unload()
-//	{
-//		UnloadGlyph();
-//		glDeleteTextures(1, &font_texture_handle);
-//		glDeleteBuffers(1, &ssbo_handle);
-//		FT_Done_Face(font_face);
-//	}
-//
-//
-//	void SageFont::LoadFontPath(const std::string& path)
-//	{
-//		font_path = path;
-//	}
-//
-//
-//
-//	SageModel* SageFont::Get_Mesh()
-//	{
-//		return model;
-//	}
-//
-//	SageShader* SageFont::GetShader()
-//	{
-//		return shader;
-//	}
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//	
-//
-//
-//
-//
-//}
+﻿
+#include <iostream>
+#include <ostream>
+#include "SageModelManager.hpp"
+#include "SageGlyph.hpp"
+
+#include "SageFontManager.hpp"
+#include "SageFont.hpp"
+
+void SageFont::Load_Glyph_And_Create_Atlas()
+{
+	Set_Text_Size(128);
+
+	CreateGLResource(128,10);
+
+	glm::vec2 offset{};
+	int rowHeight = 0;
+	int padding = 10;
+
+
+	for (int i =0; i < 128;i++)
+	{
+		char c = static_cast<char>(i);
+		Add_Load_Glyph(c, offset, rowHeight, padding);
+	}
+
+	is_loaded = true;
+	
+
+
+}
+
+void SageFont::Set_Text_Size(unsigned int size) //Set the font size in the atlas
+{
+	font_size = size;
+	FT_Set_Pixel_Sizes(ft_face, 0, size);
+}
+
+void SageFont::CreateGLResource(int font_size, int padding)
+{
+	Calculate_Dimensions(font_size, padding, 128);
+
+	//Create a texture atlas
+	glCreateTextures(GL_TEXTURE_2D, 1, &font_texture_atlas_id);
+	glTextureStorage2D(font_texture_atlas_id, 1, GL_R8, atlas_width, atlas_height);
+
+	//Load a primitive model
+	model = &SageModelManager::GetModel("PRIMITIVE_RECT");
+
+	
+}
+
+
+void SageFont::Calculate_Dimensions(int font_size, int padding, int number_of_char)
+{
+	int numberGlyph = number_of_char;
+
+	int totalEstimatedArea = (font_size + padding) * (font_size + padding) * numberGlyph;
+
+	int atlas_dimension = static_cast<int>(std::ceil(sqrt(totalEstimatedArea)));
+
+	//Find the nearest power of 2
+	int power_of_2 = 1;
+	while (power_of_2 < atlas_dimension)
+	{
+		power_of_2 *= 2;
+	}
+
+	atlas_width = power_of_2;
+	atlas_height = power_of_2;
+}
+
+
+void SageFont::Add_Load_Glyph(char glyph_char, glm::vec2& offset, int& rowHeight, int padding)
+{
+	// Load the glyph
+	FT_Error load_err = FT_Load_Char(ft_face, glyph_char, FT_LOAD_RENDER);
+	if (load_err) return;
+
+	// Get the glyph
+	FT_GlyphSlot& ft_glyph = ft_face->glyph;
+
+	// Convert the glyph to bitmap
+	FT_Bitmap& bmp = ft_glyph->bitmap;
+	std::cout << "Character: " << glyph_char << " ";
+	std::cout << "Bitmap Width: " << bmp.width << ", Height: " << bmp.rows << std::endl;
+	if (offset.x + bmp.width + padding > atlas_width)
+	{
+		offset.x = 0;
+		offset.y += rowHeight + padding;
+		rowHeight = 0;
+	}
+
+	glTextureSubImage2D(font_texture_atlas_id, 0, offset.x, offset.y, 
+		bmp.width, bmp.rows, 
+		GL_RED, GL_UNSIGNED_BYTE, bmp.buffer);
+
+
+	SageGlyph glyph{};
+
+	glyph.uv = { offset.x / atlas_width, offset.y / atlas_height,
+	(offset.x + bmp.width) / atlas_width, (offset.y + bmp.rows) / atlas_height };
+	glyph.character = glyph_char;
+	glyph.ft_glyph = &ft_glyph;
+	glyph.size = { bmp.width, bmp.rows };
+	glyph.bearing = { ft_glyph->bitmap_left, ft_glyph->bitmap_top };
+	glyph.advance = ft_glyph->advance.x >> 6;
+
+	glyphs[glyph_char] = glyph;
+
+	offset.x += bmp.width + padding;
+
+	if (bmp.rows > rowHeight)
+	{
+		rowHeight = bmp.rows;
+	}
+
+
+
+
+}
+
+
+void SageFont::Load_Font(const char* path)
+{
+	file_path = path;
+
+	FT_Error err = FT_New_Face(*SageFontManager::get_library(), path, 0, &ft_face);
+	if (err)
+	{
+		std::cout << "Error: Failed to load font: " << path << std::endl;
+		return;
+	}
+
+	FT_Set_Pixel_Sizes(ft_face, 0, 128);
+
+	Load_Glyph_And_Create_Atlas();
+}
+
+SageFont::SageFont()
+{
+
+}
+
+SageFont::~SageFont()
+{
+	if (is_loaded)
+	{
+		glDeleteTextures(1, &font_texture_atlas_id);
+	}
+}
+
+
+SageGlyph& SageFont::Get_Glyph(char c)
+{
+	return glyphs[c];
+}
