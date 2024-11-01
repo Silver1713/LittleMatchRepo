@@ -297,8 +297,9 @@ bool BoxCollider2D::Collision_Intersection_Rect_Rect(const AABB& _aabb1,        
     return true;
 }
 
+// code used in M1 (forcifully stop upon collision)
 ///*!**************************************************************************
-//\brief code used for M1
+//\brief
 //  Handles the response when a collision is detected.
 //\param other - The other GameObject involved in the collision.
 //\param collisionTime - The time at which the collision occurred within the frame.
@@ -339,8 +340,9 @@ bool BoxCollider2D::Collision_Intersection_Rect_Rect(const AABB& _aabb1,        
 //}
 
 
+// old time based version without any forces by edwin
 /*!**************************************************************************
-\brief // old time based version by edwin
+\brief
   Handles the response when a collision is detected.
 \param other - The other GameObject involved in the collision.
 \param collisionTime - The time at which the collision occurred within the frame.
