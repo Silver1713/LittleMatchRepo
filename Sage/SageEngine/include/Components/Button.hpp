@@ -47,7 +47,7 @@ namespace Buttons
 	  \param _caller
 		the caller
 	*******************************************************************************/
-	void Go_To_Splash_Screen(GameObject* _caller);
+	void Restart_Scene(GameObject* _caller);
 	void Go_To_Main_Menu(GameObject* _caller);	
 	void Go_To_Level_1(GameObject* _caller);
 	void Exit_Game(GameObject* _caller);

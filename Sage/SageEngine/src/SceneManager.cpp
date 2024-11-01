@@ -36,12 +36,14 @@
 namespace SM {	
 	static bool scene_has_loaded{ false };
 	static bool scene_has_initialized{ false };
+	static bool is_restarting{ false };
 
 	static bool scene_faded_in{ false };
 	static bool scene_faded_out{ true };
 
 	static bool game_running{ true };
-	static bool ignore_safety_bools{ false };
+	static bool ignore_input{ false };
+	static bool ignore_remaining_update{ false };
 
 	const float fade_time{ 0.5f };
 
@@ -74,9 +76,47 @@ namespace SM {
 	  \param _is_ignoring
 		Whether the scene manager should accept inputs
 	*******************************************************************************/
-	void Ignore_Safety_Bools(bool _is_ignoring)
+	void Set_Ignore_Input(bool _is_ignoring)
 	{
-		ignore_safety_bools = _is_ignoring;
+		ignore_input = _is_ignoring;
+	}
+
+	/*!*****************************************************************************
+	  \brief
+		Sets whether the scene should ignore inputs
+
+	  \return
+		Whether the scene manager should ignore input
+	*******************************************************************************/
+	bool Is_Ignoring_Input()
+	{
+		return ignore_input;
+	}
+
+
+	/*!*****************************************************************************
+	  \brief
+		This function specifies if the scene should ignore remaining update just in
+		case the gamestate changed in the middle of gameobject update loop
+
+	  \param _is_ignoring
+		Whether the scene manager should accept inputs
+	*******************************************************************************/
+	void Set_Igore_Remaining_Update(bool _is_ignoring)
+	{
+		ignore_remaining_update = _is_ignoring;
+	}
+
+	/*!*****************************************************************************
+	  \brief
+		Sets whether the scene should ignore remaining update
+
+	  \return
+		Whether the scene manager should ignore input
+	*******************************************************************************/
+	bool Is_Ignoring_Remaining_Update()
+	{
+		return ignore_remaining_update;
 	}
 
 	/*!*****************************************************************************
@@ -213,6 +253,12 @@ namespace SM {
 		Fade_Out();
 		SM::fp_update();
 		Game_Objects::Update();
+
+		if (is_restarting)
+		{
+			is_restarting = false;
+			Go_To_Next_Scene();			
+		}
 
 		if (level_ID != prev_level_ID)
 		{
@@ -354,6 +400,11 @@ namespace SM {
 		level_ID = _new_level_ID;
 		prev_level_ID = level_ID;
 		current_level = Assets::Levels::Get_Level(_new_level_ID);
+		/*if (level_ID == "editor_scene")
+		{
+			EditorScene::Load();
+			EditorScene::Init();
+		}*/
 		if (level_ID == "splash_screen")
 		{
 			SM::fp_load = Splash_Screen::Load;
@@ -408,8 +459,7 @@ namespace SM {
 	*******************************************************************************/
 	void Restart_Scene()
 	{
-		SM::fp_free();
-		scene_has_initialized = false;
+		is_restarting = true;
 	}
 
 	/*!*****************************************************************************

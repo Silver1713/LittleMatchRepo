@@ -80,6 +80,10 @@ SageWindow* window_self;
 ImVec4 clear_color;
 
 // Main code
+namespace Sage_Editor_Main
+{
+	
+}
 int main(int, char**)
 {
     // Setup Dear ImGui context
@@ -100,7 +104,7 @@ int main(int, char**)
 
     while (!glfwWindowShouldClose(window))
     {
-
+        /// KEEP LOOPING
         update();
 		//SageEngine::Update();
 
@@ -192,10 +196,6 @@ void update()
     ImGuiIO& io = ImGui::GetIO();
 
 	SAGEInputHandler::update();
-    
-    
-
-	
 
     if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
     {

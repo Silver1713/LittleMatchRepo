@@ -120,7 +120,15 @@ public:
 	  \param _c
 		Component to be added
 	*******************************************************************************/
-	void Add_Component(std::unique_ptr<Component> _c);	
+	void Add_Component(std::unique_ptr<Component> _c);
+
+	/*!*****************************************************************************
+	  \brief
+		Remove component from the gameobject
+	  \param _c
+		Component to be added
+	*******************************************************************************/
+	void Remove_Component(ComponentType _c);
 
 	/*!*****************************************************************************
 	  \brief
@@ -138,6 +146,14 @@ public:
 	*******************************************************************************/
 	template <typename T, typename = std::enable_if_t<std::is_base_of_v<Component, T>>>
 	T* Get_Component();
+
+	/*!*****************************************************************************
+	  \brief
+		Check if the game object has a particular component
+	  \return
+		bool true if it has a component otherwise bool false
+	*******************************************************************************/
+	bool Has_Component(const std::shared_ptr<GameObject>& _game_object, ComponentType _component_type) const;
 
 	/*!*****************************************************************************
 	  \brief
@@ -279,14 +295,40 @@ namespace Game_Objects
 *******************************************************************************/
 template <typename T, typename>
 T* GameObject::Get_Component()
-{
-	for (auto& _c : components)
+{	
+	if (components.size() != 0)
 	{
-		T* t = dynamic_cast<T*>(_c.get());
-		if (t)
+		for (auto& _c : components)
 		{
-			return t;
+			T* t = dynamic_cast<T*>(_c.get());
+			if (t)
+			{
+				return t;
+			}
 		}
+		
 	}
 	return nullptr;
+	
 }
+
+/*!*****************************************************************************
+  \brief
+	Check if the game object has a particular component
+  \return
+	bool true if it has a component otherwise bool false
+*******************************************************************************/
+//bool GameObject::Has_Component(const std::shared_ptr<GameObject>& _game_object, ComponentType _component_type) const
+//{
+//	for (const auto& component : components)
+//	{
+//		if (component->Get_Component_Type() == _component_type)
+//		{
+//			return true;
+//		}
+//	}
+//	return false;
+//}
+
+
+

@@ -14,6 +14,7 @@
 #include "SageRenderer.hpp"
 #include "SageInspector.hpp"
 #include "SageProject.hpp"
+#include "SceneManager.hpp"
 
 static bool show_hierarchy_window = true;
 static bool show_console_window = true;
@@ -67,50 +68,6 @@ namespace SageUIEditor
         if (show_project_window) {
             Sage_Project::Initialize("../SageEditor/client");
             Sage_Project::Show();
-            //ImGui::Begin("Project");
-
-            //// Split the window into two sections: folder structure (left) and asset view (right)
-            //ImGui::Columns(2, "project_columns", true);  // Create two columns, resizable
-
-            //// Left column: Folder hierarchy
-            //ImGui::BeginChild("FolderHierarchy", ImVec2(0, 0), true);
-
-            //// HARDCODING TESTING LAYOUT
-            //if (ImGui::TreeNode("Assets")) {
-            //    if (ImGui::TreeNode("Scenes")) {
-            //        ImGui::Text("Main Scene");
-            //        ImGui::TreePop();  // Pop the "Scenes" node
-            //    }
-
-            //    if (ImGui::TreeNode("Scripts")) {
-            //        ImGui::Text("PlayerController.cs");
-            //        ImGui::TreePop();  // Pop the "Scripts" node
-            //    }
-
-            //    ImGui::TreePop();  // Pop the "Assets" node
-            //}
-
-            //ImGui::EndChild();  // End left panel (Folder Hierarchy)
-
-            //ImGui::NextColumn();  // Move to the next column
-
-            //// Right column: Asset view
-            //ImGui::BeginChild("AssetView", ImVec2(0, 0), true);
-
-            //ImGui::Text("Assets");  // Title
-            //ImGui::Separator();
-
-            //// Simulating asset grid or list (as icons)
-            //ImGui::BeginGroup();
-
-
-            //ImGui::EndGroup();
-
-            //ImGui::EndChild();  // End right panel (Asset View)
-
-            //ImGui::Columns(1);  // Reset columns
-
-            //ImGui::End();
         }
     }
 
@@ -341,7 +298,11 @@ namespace SageUIEditor
             {
                 if (ImGui::MenuItem("New"))
                 {
-                    // New scene
+                    //std::string editor_startup_scene = "main_menu";
+                    SM::Set_Current_Level("default");
+                    SM::Go_To_Next_Scene();
+                    
+                    
                 }
                 if (ImGui::MenuItem("Open", "Ctrl+O"))
                 {
@@ -354,7 +315,7 @@ namespace SageUIEditor
                 ImGui::Separator();
                 if (ImGui::MenuItem("Exit"))
                 {
-                    exit_requested = true;
+                    std::exit(0);
                 }
                 ImGui::EndMenu();
             }

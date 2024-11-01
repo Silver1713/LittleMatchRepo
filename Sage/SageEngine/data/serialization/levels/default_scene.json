@@ -1,0 +1,23 @@
+{
+    "Example of all currently supported keys and their default values if unspecified":
+    [
+      {
+        "Prefab_ID": "ALL_CAPS_ID",
+        "Identifier": "Name of this instance of gameobject",
+        "Comments": "This will not be processed and is simply a place for developer comments",
+        "Pos": [0,0,0],
+        "Rot": [0,0,0],
+        "Scale": [100,100,0],
+        "RGBA" : [1,1,1,1],
+        "Z_Order" : 0,
+        "Count" : 1
+      }
+    ],
+
+    "Level_Name": "default",
+    "Prefabs":
+    [
+      
+    ]
+  }
+  
