@@ -121,6 +121,27 @@ namespace Game_Objects
 
 	/*!*****************************************************************************
 	  \brief
+		Updates the Game Object List
+	*******************************************************************************/
+	void Update_Game_Object_List()
+	{
+		world_space_game_objects.clear();
+		screen_space_game_objects.clear();
+		for (auto& go : g_game_objects)
+		{			
+			if (go.second.get()->Get_Component<UITransform>())
+			{
+				screen_space_game_objects.push_back(&g_game_objects[go.first]);
+			}
+			else
+			{
+				world_space_game_objects.push_back(&g_game_objects[go.first]);
+			}
+		}
+	}
+
+	/*!*****************************************************************************
+	  \brief
 		Adds the gameobject the map of gameobjects
 
 	  \param _g
@@ -149,6 +170,23 @@ namespace Game_Objects
 			world_space_game_objects.push_back(&g_game_objects[_identifier]);
 		}
 		return &g_game_objects[_identifier];
+	}
+
+	//[HALIS]
+	void Delete_Game_Object(GameObject* _object) {
+		if (!_object)
+		{
+			return;
+		}
+
+		auto it = g_game_objects.find(_object->Get_ID());
+		if (it != g_game_objects.end())
+		{
+			auto& vector = _object->Get_Component<UITransform>() ? screen_space_game_objects : world_space_game_objects;
+			vector.erase(std::remove(vector.begin(), vector.end(), &it->second), vector.end());
+			g_game_objects.erase(it);
+		}
+		Update_Game_Object_List();
 	}
 
 	/*!*****************************************************************************
@@ -391,6 +429,20 @@ void GameObject::Exit()
 	{
 		_c->Exit();
 	}
+}
+
+//[HALIS]
+void GameObject::Set_ID(std::string const& _new_id) {
+	// Check if new_id already exists to avoid conflicts
+	if (Game_Objects::g_game_objects.find(_new_id) != Game_Objects::g_game_objects.end()) {
+		std::cerr << "Error: A GameObject with the ID \"" << _new_id << "\" already exists." << std::endl;
+		return;
+	}	
+
+	Game_Objects::g_game_objects[_new_id] = std::move(Game_Objects::g_game_objects[identifier]);
+	Game_Objects::g_game_objects.erase(identifier);
+	identifier = _new_id;
+	Game_Objects::Update_Game_Object_List();
 }
 
 /*!*****************************************************************************

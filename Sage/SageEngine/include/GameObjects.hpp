@@ -77,6 +77,9 @@ public:
 	*******************************************************************************/
 	void Exit();
 
+	//[HALIS]
+	void Set_ID(std::string const& _id);
+
 	/*!*****************************************************************************
 	  \brief
 		Gets the identifier of this instance of a gameobject
@@ -212,7 +215,6 @@ public:
 
 
 	std::vector<std::unique_ptr<Component>>& Get_Components();
-
 };
 
 // The central gameobject manager that iterates through all active gameobjects
@@ -238,6 +240,14 @@ namespace Game_Objects
 		Clears all gameobjects
 	*******************************************************************************/
 	void Exit();
+	/*!*****************************************************************************
+	  \brief
+		Updates game object list
+	*******************************************************************************/
+	void Update_Game_Object_List();
+
+	//[HALIS]
+	void Delete_Game_Object(GameObject* _object);
 
 	/*!*****************************************************************************
 	  \brief
