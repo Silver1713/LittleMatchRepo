@@ -180,4 +180,15 @@ SageModel& SageModelManager::CreatePrimitiveModel(std::string _name, int _shape,
 	}
 }
 
+SageModel& SageModelManager::GetModel(std::string _name)
+{
+	if (models.contains(_name))
+	{
+		return models[_name];
+	}
+	std::cerr << "Error: Model not found." << '\n';
+	std::exit(EXIT_FAILURE);
+}
+
+
 

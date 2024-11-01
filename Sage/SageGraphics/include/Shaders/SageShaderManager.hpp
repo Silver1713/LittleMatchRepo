@@ -83,6 +83,8 @@ struct SageShaderManager
 		The path to the directories
 	*******************************************************************************/
 	static void Add_Shader_Include(const char * name, const char * dir);
+
+	static  SageShader& Get_Shader_Program(std::string name);
 };
 
 #endif // SAGESHADERMANAGER_HPP
