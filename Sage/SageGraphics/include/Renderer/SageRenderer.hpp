@@ -500,7 +500,7 @@ struct SageRenderer
 	static void Set_Font(TextRenderer::SageFont* font);
 
 	static void Render_Text(const char* text, float x, float y, float scale, ToastBox::Vec4 color);
-	//static void Render_Text(TextRenderer::SageText& text);
+	static void Render_Text(SageText& text);
 };
 
 

@@ -1,12 +1,11 @@
 #ifndef SAGE_FONT_MANAGER_HPP
 #define SAGE_FONT_MANAGER_HPP
+#include "SageFont.hpp"
+#include "SageText.hpp"
+#include <memory>
 #include <string>
 #include "freetype/freetype.h"
 #include <map>
-#include <memory>
-#include "SageFont.hpp"
-#include "SageText.hpp"
-#include "glm/glm.hpp"
 
 
 

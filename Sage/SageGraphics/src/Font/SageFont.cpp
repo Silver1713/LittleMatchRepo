@@ -11,21 +11,21 @@ void SageFont::Load_Glyph_And_Create_Atlas()
 {
 	Set_Text_Size(128);
 
-	CreateGLResource(128,10);
+	CreateGLResource(128, 10);
 
 	glm::vec2 offset{};
 	int rowHeight = 0;
 	int padding = 10;
 
 
-	for (int i =0; i < 128;i++)
+	for (int i = 0; i < 128; i++)
 	{
 		char c = static_cast<char>(i);
 		Add_Load_Glyph(c, offset, rowHeight, padding);
 	}
 
 	is_loaded = true;
-	
+
 
 
 }
@@ -41,13 +41,26 @@ void SageFont::CreateGLResource(int font_size, int padding)
 	Calculate_Dimensions(font_size, padding, 128);
 
 	//Create a texture atlas
+
+	GLenum gerr = glGetError();
 	glCreateTextures(GL_TEXTURE_2D, 1, &font_texture_atlas_id);
 	glTextureStorage2D(font_texture_atlas_id, 1, GL_R8, atlas_width, atlas_height);
+
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+
+
+	GLenum gerr1 = glGetError();
 
 	//Load a primitive model
 	model = &SageModelManager::GetModel("PRIMITIVE_RECT");
 
-	
+
 }
 
 
@@ -90,18 +103,31 @@ void SageFont::Add_Load_Glyph(char glyph_char, glm::vec2& offset, int& rowHeight
 		offset.y += rowHeight + padding;
 		rowHeight = 0;
 	}
+	GLenum err = glGetError();
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	unsigned char* data = (!bmp.buffer ? (new unsigned char[bmp.width * bmp.rows] {}) : bmp.buffer);
 
-	glTextureSubImage2D(font_texture_atlas_id, 0, offset.x, offset.y, 
-		bmp.width, bmp.rows, 
-		GL_RED, GL_UNSIGNED_BYTE, bmp.buffer);
+	if (bmp.buffer == nullptr)
+	{
+		std::fill_n(data, bmp.width * bmp.rows, 255);
+	}
+	glTextureSubImage2D(font_texture_atlas_id, 0, offset.x, offset.y,
+		bmp.width, bmp.rows, GL_RED, 
+		GL_UNSIGNED_BYTE, data);
 
+	if (!bmp.buffer)
+	{
+		delete[] data;
+		data = nullptr;
+	}
 
+	err = glGetError();
 	SageGlyph glyph{};
 
 	glyph.uv = { offset.x / atlas_width, offset.y / atlas_height,
 	(offset.x + bmp.width) / atlas_width, (offset.y + bmp.rows) / atlas_height };
 	glyph.character = glyph_char;
-	glyph.ft_glyph = &ft_glyph;
+	//glyph.ft_glyph = &ft_glyph;
 	glyph.size = { bmp.width, bmp.rows };
 	glyph.bearing = { ft_glyph->bitmap_left, ft_glyph->bitmap_top };
 	glyph.advance = ft_glyph->advance.x >> 6;
@@ -155,3 +181,20 @@ SageGlyph& SageFont::Get_Glyph(char c)
 {
 	return glyphs[c];
 }
+
+
+SageModel* SageFont::Get_Mesh()
+{
+	return model;
+}
+
+unsigned int SageFont::Get_Texture_Atlas_ID()
+{
+	return font_texture_atlas_id;
+}
+
+glm::vec2 SageFont::getatlasSIze()
+{
+	return { atlas_width, atlas_height };
+}
+

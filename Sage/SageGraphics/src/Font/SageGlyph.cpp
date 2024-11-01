@@ -3,7 +3,7 @@
 
 
 
-SageGlyph::SageGlyph(FT_Face* face)
+SageGlyph::SageGlyph() : character(), uv(),size(),bearing(),advance()
 {
 	
 }

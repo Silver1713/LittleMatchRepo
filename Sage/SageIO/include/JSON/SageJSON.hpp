@@ -626,13 +626,15 @@ namespace SageJSON
 		*******************************************************************************/
 		template <typename T>
 		T as();
-		template <typename T>
 		/*!****************************************************************************
 		 \brief Set the AST node found to a value given by the user.
 		 \tparam T the type of the data to be converted to.
 		 \param value the value to be set to the AST node.
 		*******************************************************************************/
+		template <typename T, typename = std::enable_if_t<!std::is_arithmetic_v<T>>>
 		SageJSON& operator=(T const value);
+
+		SageJSON& operator=(double const value);
 		/*!****************************************************************************
 		 \brief Get the AST of the JSON data.
 		*******************************************************************************/
@@ -724,7 +726,9 @@ namespace SageJSON
 		}
 	}
 
-	template <typename T>
+
+
+	template <typename T, typename = std::enable_if_t<!std::is_arithmetic_v<T>>>
 	SageJSON& SageJSON::operator=(T const value)
 	{
 		try
@@ -752,6 +756,10 @@ namespace SageJSON
 			return *this;
 		}
 	}
+
+	
+	
+
 
 
 	template <typename T>

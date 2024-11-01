@@ -550,25 +550,25 @@ void SageRendererInternal::Draw_Filled(SageInstance& instances)
 {
 	// Calculate using the camera or screen
 
-		ToastBox::Matrix3x3 view_proj = camera->Get_Projection_View_Matrix();
-		glm::mat4 view_proj_mat = glm::mat4(1.f);
-		if (default_config.options & I_SAGE_ENABLE_CAMERA)
-		{
-			glm::mat4 view_proj_mat = {
-			view_proj.data()[0], view_proj.data()[1], view_proj.data()[2],0,
-			view_proj.data()[3], view_proj.data()[4], view_proj.data()[5],0,
-			0,0,1,0,
-			view_proj.data()[6], view_proj.data()[7], 0,1,
-			};
-		}
-		else
-		{
-			view_proj_mat[0] = glm::vec4(viewport.get_viewport_xform()[0][0], viewport.get_viewport_xform()[0][1],0, viewport.get_viewport_xform()[0][2]);
-			view_proj_mat[1] = glm::vec4(viewport.get_viewport_xform()[1][0], viewport.get_viewport_xform()[1][1], 0, viewport.get_viewport_xform()[1][2]);
-			view_proj_mat[2] = glm::vec4(0, 0, 1, 0);
-			view_proj_mat[3] = glm::vec4(viewport.get_viewport_xform()[2][0], viewport.get_viewport_xform()[2][1], 0, 1);
-			
-		}
+	ToastBox::Matrix3x3 view_proj = camera->Get_Projection_View_Matrix();
+	glm::mat4 view_proj_mat = glm::mat4(1.f);
+	if (default_config.options & I_SAGE_ENABLE_CAMERA)
+	{
+		glm::mat4 view_proj_mat = {
+		view_proj.data()[0], view_proj.data()[1], view_proj.data()[2],0,
+		view_proj.data()[3], view_proj.data()[4], view_proj.data()[5],0,
+		0,0,1,0,
+		view_proj.data()[6], view_proj.data()[7], 0,1,
+		};
+	}
+	else
+	{
+		view_proj_mat[0] = glm::vec4(viewport.get_viewport_xform()[0][0], viewport.get_viewport_xform()[0][1], 0, viewport.get_viewport_xform()[0][2]);
+		view_proj_mat[1] = glm::vec4(viewport.get_viewport_xform()[1][0], viewport.get_viewport_xform()[1][1], 0, viewport.get_viewport_xform()[1][2]);
+		view_proj_mat[2] = glm::vec4(0, 0, 1, 0);
+		view_proj_mat[3] = glm::vec4(viewport.get_viewport_xform()[2][0], viewport.get_viewport_xform()[2][1], 0, 1);
+
+	}
 
 	for (InstanceData& data : instances)
 	{
@@ -584,7 +584,7 @@ void SageRendererInternal::Draw_Filled(SageInstance& instances)
 			float a = test.x;
 		}
 
-		
+
 
 
 
@@ -596,12 +596,12 @@ void SageRendererInternal::Draw_Filled(SageInstance& instances)
 	glBindVertexArray(instances.Get_Model()->Get_VAO_Handle());
 	shader->Activate();
 
-	
+
 	glDrawElementsInstanced(GL_TRIANGLES, static_cast<int>(instances.Get_Model()->Get_Vertex_Indices().size()), GL_UNSIGNED_SHORT, nullptr, instances.Get_Instance_Count());
 	shader->Deactivate();
 	glBindVertexArray(0);
-	
-	
+
+
 }
 
 
@@ -609,6 +609,64 @@ void SageRendererInternal::Set_Font(TextRenderer::SageFont* active_font)
 {
 	font = active_font;
 }
+
+
+void SageRendererInternal::Render_Text(SageText& text)
+{
+	SageFont& font = *text.Get_Font();
+	SageShader& shader = SageShaderManager::shaders["TEXT_SHADER"];
+	SageModel& model = *font.Get_Mesh();
+
+	ToastBox::Matrix3x3 view_proj = camera->Get_Projection_View_Matrix();
+	glm::mat4 view_proj_mat = glm::mat4(1.f);
+	if (default_config.options & I_SAGE_ENABLE_CAMERA)
+	{
+		glm::mat4 view_proj_mat = {
+		view_proj.data()[0], view_proj.data()[1], view_proj.data()[2],0,
+		view_proj.data()[3], view_proj.data()[4], view_proj.data()[5],0,
+		0,0,1,0,
+		view_proj.data()[6], view_proj.data()[7], 0,1,
+		};
+	}
+	else
+	{
+		view_proj_mat[0] = glm::vec4(viewport.get_viewport_xform()[0][0], viewport.get_viewport_xform()[0][1], 0, viewport.get_viewport_xform()[0][2]);
+		view_proj_mat[1] = glm::vec4(viewport.get_viewport_xform()[1][0], viewport.get_viewport_xform()[1][1], 0, viewport.get_viewport_xform()[1][2]);
+		view_proj_mat[2] = glm::vec4(0, 0, 1, 0);
+		view_proj_mat[3] = glm::vec4(viewport.get_viewport_xform()[2][0], viewport.get_viewport_xform()[2][1], 0, 1);
+
+	}
+
+	glBindVertexArray(model.Get_VAO_Handle());
+	// Enable Alpha - GL_RED
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	shader.Activate();
+	glm::mat4 mdl = view_proj_mat * text.transform.mdl_mtx;
+	shader.Set_Uniform("uTransform", view_proj_mat * text.transform.mdl_mtx);
+	shader.Set_Uniform("uTexture", 0);
+	glBindTextureUnit(0, font.Get_Texture_Atlas_ID());
+
+	//Get font buffer
+
+	std::byte* buffer = (std::byte*)glMapNamedBuffer(font.Get_Texture_Atlas_ID(), GL_READ_BUFFER);
+
+	(buffer);
+
+	glDrawElementsInstanced(GL_TRIANGLES, static_cast<int>(model.Get_Vertex_Indices().size()), GL_UNSIGNED_SHORT, nullptr, text.characters.size());
+	GLenum err = glGetError();
+	if (err) std::cout << "Error: " << err << std::endl;
+	shader.Deactivate();
+	glBindVertexArray(0);
+	
+}
+
+void SageRendererInternal::Render_Text(const char* text, float x, float y, float scale, glm::vec4 color)
+{
+
+
+}
+
 
 //void SageRendererInternal::Render_Text(TextRenderer::SageText& text)
 //{

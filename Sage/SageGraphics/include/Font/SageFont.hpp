@@ -57,5 +57,11 @@ public:
 
 	void Add_Load_Glyph(char glyph_char, glm::vec2& offset, int& rowHeight, int padding);
 
+	SageModel* Get_Mesh();
+
+	unsigned int Get_Texture_Atlas_ID();
+
+	glm::vec2 getatlasSIze();
+
 };
 #endif //SAGEFONT_HPP

@@ -27,7 +27,7 @@ SageCamera camera2d;
 SageInstance instance;
 
 SageFrameBuffer* frame_buffer;
-
+SageText text;
 
 //TextRenderer::SageFontManager fontManager;
 //TextRenderer::SageText text;
@@ -45,7 +45,11 @@ void ExampleScene::init()
 	SageFontManager::Startup();
 	SageFontManager::LoadFont("default", "../SageGraphics/font/TextFont.ttf");
 
-	SageText a = SageFontManager::Create_Text("A");
+	text =  SageFontManager::Create_Text("Score: 000000");
+	text.transform.position = { 0.f,0.f,0.f };
+	text.transform.scale = { 50.f,50.f,0.f };
+
+	text.transform.Calculate_Model_Matrix();
 	
 
 	//glDebugMessageCallback(SageOpenGLDebugCallback, nullptr);
@@ -115,13 +119,16 @@ void ExampleScene::init()
 
 	GLenum err = glGetError();
 
+
+	text.Set_Text("This is a test wording.");
+
 }
 
 void ExampleScene::update()
 {
 	camera2d.update();
 	instance.Update();
-	//text.Update();
+	text.transform.Calculate_Model_Matrix();
 
 	GLenum g = glGetError();
 
@@ -130,8 +137,9 @@ void ExampleScene::update()
 
 void ExampleScene::draw()
 {
-
-	glClearColor(1, 1, 1, 1);
+	/*glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+	glPointSize(15.f);
+	*/glClearColor(1, 1, 1, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 	SageRenderer::Set_Option_Off(SageRenderer::SAGE_ENABLE_BORDER);
 	SageRenderer::Set_Option_On(SageRenderer::SAGE_ENABLE_CAMERA);
@@ -141,8 +149,8 @@ void ExampleScene::draw()
 	//SageRenderer::Draw_Filled_Instance(instance);
 	SageRenderer::Enable_OnScreenRender();
 	//SageRenderer::Draw_Filled_Instance(instance);
-	
-	//SageRenderer::Render_Text(text);
+	//SageRenderer::Draw_Rect(100,100,100,100, {1,0,0,1});
+	SageRenderer::Render_Text(text);
 
 
 	

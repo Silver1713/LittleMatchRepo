@@ -253,7 +253,7 @@ void SageRenderer::Render_Text(const char* text, float x, float y, float scale, 
 	
 }
 
-//void SageRenderer::Render_Text(TextRenderer::SageText& text)
-//{
-//	SageRendererInternal::Render_Text(text);
-//}
+void SageRenderer::Render_Text(SageText& text)
+{
+	SageRendererInternal::Render_Text(text);
+}

@@ -480,8 +480,8 @@ struct SageRendererInternal
 	static void Clear_Color(ToastBox::Vec4 clr);
 
 	static void Set_Font(TextRenderer::SageFont* active_font);
-	//static void Render_Text(const char* text, float x, float y, float scale, glm::vec4 color);
-	//static void Render_Text(TextRenderer::SageText& text);
+	static void Render_Text(const char* text, float x, float y, float scale, glm::vec4 color);
+	static void Render_Text(SageText& text);
 };
 
 

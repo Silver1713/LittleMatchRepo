@@ -17,7 +17,11 @@ class SageText
 
 	void PopulateData();
 
+	void CreateSSBOResources();
+
 public:
+
+	SageText();
 	struct Character_Data
 	{
 		alignas(16) glm::vec4 offset;
@@ -38,8 +42,11 @@ public:
 	std::vector<Character_Data> characters;
 
 
+
+
 	void Set_Text(const std::string& text);
 	void Set_Font(SageFont* font);
+	SageFont* Get_Font();
 };
 
 #endif // !SAGE_TEXT_HPP
