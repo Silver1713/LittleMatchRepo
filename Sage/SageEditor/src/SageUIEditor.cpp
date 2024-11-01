@@ -32,8 +32,9 @@ namespace SageUIEditor
     void Show_Hierarchy_Window() {
         if (show_hierarchy_window) {
             ImGui::Begin("Hierarchy");
-            SageHierarchy::Hierarchy();
-            ImGui::End();
+            // Call your hierarchy drawing function
+            SageHierarchy::Hierarchy(); // Render the actual hierarchy nodes
+            ImGui::End(); // End the main window
         }
     }
 

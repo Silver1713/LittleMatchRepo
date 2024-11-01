@@ -1,6 +1,6 @@
 #include "SageHierarchy.hpp"
 #include <iostream>
-#include "../../SageEngine/src/GameObjects.cpp"
+#include "GameObjects.hpp"
 
 namespace SageHierarchy
 {
@@ -92,33 +92,54 @@ namespace SageHierarchy
 
     void Hierarchy()
     {
-        //Update_Hierarchy(); need to call this in scene manager change scene
+        // Update hierarchy if needed
+        // Update_Hierarchy(); // Uncomment when changing scenes in SceneManager
 
+        // Button to add a new GameObject
         if (ImGui::Button("Add GameObject"))
         {
             Create_Empty();
         }
 
-        // Check for deletion
+        // Accept drop payload for creating GameObjects from prefabs
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_PREFAB"))
+            {
+                // Retrieve the prefab ID from the payload
+                const char* prefabID = static_cast<const char*>(payload->Data);
+                auto& prefabs = Assets::Prefabs::Get_Prefabs();
+                auto it = prefabs.find(prefabID);
+                if (it != prefabs.end())
+                {
+                    const auto& prefab = it->second;
+                    Create_Prefab(prefab); // Function to instantiate prefab in hierarchy
+                }
+            }
+            ImGui::EndDragDropTarget(); // End the drag-and-drop target
+        }
+
+        // Check if the selected GameObject should be deleted
         if (selected_object && ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Delete)))
         {
             Game_Objects::Delete_Game_Object(selected_object);
+            Update_Hierarchy();
             selected_object = nullptr;
         }
 
-        // Iterate and draw each GameObject node, allowing for reordering via drag-and-drop
+        // Iterate and draw each GameObject node, allowing for reordering
         for (int i = 0; i < game_object_list.size(); ++i)
         {
             GameObject* currentObject = game_object_list[i];
             Draw_Node(currentObject);
 
-            // Begin drag-and-drop reordering
+            // Begin drag-and-drop reordering logic here
             if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
             {
                 float dragY = ImGui::GetMouseDragDelta(0).y;
-                int targetIndex = (dragY < 0.f) ? i - 1 : i + 1; // Set target index based on drag direction
+                int targetIndex = (dragY < 0.f) ? i - 1 : i + 1;
 
-                // Only proceed if within bounds and drag distance exceeds threshold
+                // Ensure the drag is within bounds and exceeds a threshold
                 if (targetIndex >= 0 && targetIndex < game_object_list.size() &&
                     std::abs(dragY) > ImGui::GetTextLineHeightWithSpacing())
                 {
@@ -128,5 +149,4 @@ namespace SageHierarchy
             }
         }
     }
-
 }

@@ -9,6 +9,7 @@
 
 #include <backward.hpp>
 #include "SageUIEditor.hpp"
+#include "SageHierarchy.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -176,6 +177,7 @@ int init()
     io.LogFilename = "../SageEditor/config/custom_layout_log.txt";
     ImGui::LoadIniSettingsFromDisk(io.IniFilename);
 
+    SageHierarchy::Update_Hierarchy();
     return 0;
 }
 
