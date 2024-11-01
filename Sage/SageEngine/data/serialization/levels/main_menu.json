@@ -15,7 +15,6 @@
     ],
 
     "Level_Name": "main_menu",
-    "Num_Prefabs": 5,
     "Prefabs":
     [
       {
@@ -31,7 +30,7 @@
         "Z_Order": 1
       },
       {
-        "Prefab_ID": "GUI_GO_TO_MAIN_MENU_BUTTON",
+        "Prefab_ID": "GUI_RESTART_BUTTON",
         "Identifier": "Main_Menu_Button",
         "Pos": [960,450,0],
         "Scale": [200,75,0],

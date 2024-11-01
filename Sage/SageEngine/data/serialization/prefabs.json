@@ -11,10 +11,10 @@
         "Object_Shape": "If not specified, will do Rect. Otherwise can do Circle",
         "Has_Collider": false,
         "Has_Physics": false,
-        "Physics":      
+        "Physics":
         {
           "Velocity": [0,0,0]
-        },        
+        },
         "Has_Animator": false,
         "Animator":
         {
@@ -29,9 +29,17 @@
           "On_Hover_Enter": "",
           "On_Hover": "",
           "On_Hover_Exit": ""
-        },                 
+        },
+        "Is_Slider": false,
+        "Slider":
+        {
+          "Frame_Prefab_ID": "",
+          "Fill_Prefab_ID": "",
+          "BG_Prefab_ID": "",
+          "Init": "",
+          "Update":""
+        },
         "Has_Children": false,
-        "Num_Children": 0,
         "Children":
         [
           {
@@ -40,11 +48,22 @@
           {
             "Prefab_ID":"second child etc etc..."
           }
+        ],
+        "Has_Behaviour": false,
+        "Behaviour_List" : 
+        [
+          {
+            "CS_Class_Name":"behavaiour 1 etc etc",
+            "CS_Namespace": ""
+          },
+          {
+            "CS_Class_Name":"behavaiour 2 etc etc",
+            "CS_Namespace": ""
+          }
         ]
       }
     ],
 
-    "Num_Prefabs": 13,
     "Prefabs":
     [
       {
@@ -60,7 +79,7 @@
       {
         "ID": "FADE_SCREEN",
         "Transform_Type":"Screen",
-        "Scale": [3840, 2160,0],
+        "Scale": [0, 0,0],
         "RGBA" : [0,0,0,1]
       },
       {
@@ -87,14 +106,14 @@
         "Is_Button": true
       },
       {
-        "ID": "GUI_GO_TO_SPLASH_SCREEN_BUTTON",
+        "ID": "GUI_RESTART_BUTTON",
         "Transform_Type":"Screen",
         "Sprite_Texture_ID": "SQUARE",
         "RGBA" : [0.75,0,0,1],
         "Is_Button": true,
         "Button":
         {
-          "On_Click": "Go_To_Splash_Screen"
+          "On_Click": "Restart_Scene"
         }
       },
       {
@@ -131,6 +150,39 @@
         }
       },
       {
+        "ID": "GUI_SLIDER_BG",
+        "Transform_Type":"Screen",
+        "Sprite_Texture_ID": "BAR_BG",
+        "Scale": [500,50,0]
+      },
+      {
+        "ID": "GUI_SLIDER_FILL",
+        "Transform_Type":"Screen",
+        "Sprite_Texture_ID": "BAR_FILL",
+        "Scale": [500,50,0],
+        "RGBA" : [1,0.6,0,1]
+      },
+      {
+        "ID": "GUI_SLIDER_FRAME",
+        "Transform_Type":"Screen",
+        "Sprite_Texture_ID": "BAR_FRAME",
+        "Scale": [500,50,0]
+      },
+      {
+        "ID": "GUI_SLIDER",
+        "Transform_Type":"Screen",
+        "Scale": [0,0,0],
+        "Is_Slider": true,
+        "Slider":
+        {
+          "Frame_Prefab_ID": "GUI_SLIDER_FRAME",
+          "Fill_Prefab_ID": "GUI_SLIDER_FILL",
+          "BG_Prefab_ID": "GUI_SLIDER_BG",
+          "Init": "Demo_Init",
+          "Update": "Demo_Update"
+        }
+      },
+      {
         "ID": "PLAYER",
         "Sprite_Texture_ID": "SPEARMAN_IDLE_0",
         "Has_Collider": true,
@@ -143,7 +195,14 @@
         "Animator":
         {
           "Animation_Set_ID": "SPEARMAN"
-        }
+        },
+        "Has_Behaviour": false,
+        "Behaviour_List" :
+        [
+          {
+            "CS_Class_Name":"PlayerBehaviour"
+          }
+        ]
       }
     ]
   }

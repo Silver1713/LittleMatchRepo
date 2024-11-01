@@ -4,6 +4,8 @@
 
 namespace Sage_Inspector 
 {
+	inline std::vector<std::string> texture_list;
+
 	void Show_Transform_Component(Transform* _transform_component);
 
 	void Show_UITransform_Component(UITransform* _ui_transform);

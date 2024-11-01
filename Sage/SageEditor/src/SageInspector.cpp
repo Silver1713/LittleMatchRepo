@@ -1,29 +1,12 @@
 #include "SageInspector.hpp"
 
+#include <iostream>
+#include <unordered_set>
+
 #include "SageUIEditor.hpp"
 
 namespace Sage_Inspector
 {
-    
-    std::vector<std::unique_ptr<Component>> Component_List;
-    //typedef enum {
-    //    COMPONENT,
-    //    TRANSFORM,
-    //    UITRANSFORM,
-    //    SPRITE2D,
-    //    IMAGE,
-    //    RENDERER,
-    //    ANIMATOR,
-    //    BOXCOLLIDER2D,
-    //    PHYSICS,
-    //    AUDIO,
-    //    BEHAVIOUR,
-    //    BUTTON,
-    //    NUM_OF_TYPES_OF_COMPONENTS
-    //} ComponentType;
-    // Pseudo test
-    /*std::vector<const char*> componentNames = { "COMPONENT", "TRANSFORM", "UITRANSFORM", "SPRITE2D", "IMAGE", "RENDERER", "ANIMATOR", "BOXCOLLIDER2D"
-    , "PHYSICS", "AUDIO", "BEHAVIOUR", "BUTTON", "NUM_OF_TYPES_OF_COMPONENTS"};*/
 
     void Show_Transform_Component(Transform* _transform_component) {
 		bool changed = false;
@@ -248,8 +231,7 @@ namespace Sage_Inspector
             {
                 // Velocity Row
                 ImGui::TableNextRow();
-                ImGui::TableSetColumnIndex(0);
-                ImGui::Text("Velocity");
+                //ImGui::Text("Velocity");
                 ImGui::TableSetColumnIndex(1);
                 ImGui::Text("X");
                 ImGui::TableSetColumnIndex(2);
@@ -312,6 +294,30 @@ namespace Sage_Inspector
 
     void Show_Image_Component(Image* _image)
     {
+        if (ImGui::CollapsingHeader("Image", ImGuiTreeNodeFlags_DefaultOpen))
+        {
+            ImGui::Text("Image Component");
+            ImGui::Text("Texture ID: %s", _image->Get_Texture_ID().c_str());
+            ImGui::SameLine();
+            if (ImGui::Button("Open"))
+            {
+                ImGui::OpenPopup("Select Texture");
+            }
+
+            if (ImGui::BeginPopup("Select Texture"))
+            {
+                for (const auto& texture_id : texture_list)
+                {
+                    if (ImGui::Selectable(texture_id.c_str()))
+                    {
+                        _image->Set_Texture_ID(texture_id);
+                    }
+                }
+                ImGui::EndPopup();
+            }
+        }
+        
+        
         // Object dropdown box
         ImGui::Text("Object Shape");
         std::vector<std::string> shapes = { "Rect", "Circle" };
@@ -325,11 +331,11 @@ namespace Sage_Inspector
 	        }
         }
         if (ImGui::Combo("##ObjectShape", &current_shape_index, [](void* data, int idx, const char** out_text) {
-            const std::vector<std::string>* shapes = static_cast<const std::vector<std::string>*>(data);
-            *out_text = shapes->at(idx).c_str();
+            const std::vector<std::string>* shapes_vector = static_cast<const std::vector<std::string>*>(data);
+            *out_text = shapes_vector->at(idx).c_str();
             return true;
             }, static_cast<void*>(&shapes), shapes.size())) {
-            _image->Set_Shape(shapes[current_shape_index]);
+            _image->Change_Shape(shapes[current_shape_index]);
         }
         ImGui::Separator();
 
@@ -341,39 +347,68 @@ namespace Sage_Inspector
             _image->Set_Colour({color[0], color[1], color[2], color[3]});
         }
     }
-
-    void Show_Sprite2D_Component(Sprite2D* _sprited2D)
+     
+    void Show_Sprite2D_Component(Sprite2D* _sprite2D)
     {
-        if (ImGui::CollapsingHeader("Sprite2D", ImGuiTreeNodeFlags_DefaultOpen)) {
-            // Object dropdown box
-            ImGui::Text("Object Shape");
-            std::vector<std::string> shapes = { "Rect", "Circle" };
-            static int current_shape_index = 0;
-            for (int i = 0; i < shapes.size(); ++i)
+        if (ImGui::CollapsingHeader("Sprite2D", ImGuiTreeNodeFlags_DefaultOpen))
+        {
+            ImGui::Text("Image Component");
+            ImGui::Text("Texture ID: %s", _sprite2D->Get_Texture_ID().c_str());
+            ImGui::SameLine();
+            if (ImGui::Button("Open"))
             {
-                if (_sprited2D->Get_Shape() == shapes[i])
-                {
-                    current_shape_index = i;
-                    break;
-                }
+                ImGui::OpenPopup("Select Texture");
             }
-            if (ImGui::Combo("##ObjectShape", &current_shape_index, [](void* data, int idx, const char** out_text) {
-                const std::vector<std::string>* shapes = static_cast<const std::vector<std::string>*>(data);
-                *out_text = shapes->at(idx).c_str();
-                return true;
-            }, static_cast<void*>(&shapes), shapes.size())) {
-                _sprited2D->Set_Shape(shapes[current_shape_index]);
-            }
-            ImGui::Separator();
 
-            // Color picker for images
-            ImGui::Text("Color");
-            float color[4] = { _sprited2D->Get_Colour().x, _sprited2D->Get_Colour().y, _sprited2D->Get_Colour().z, _sprited2D->Get_Colour().a };
-            if (ImGui::ColorEdit4("##Color", color))
+            if (ImGui::BeginPopup("Select Texture"))
             {
-                _sprited2D->Set_Colour({ color[0], color[1], color[2], color[3] });
+                for (const auto& texture_id : texture_list)
+                {
+                    if (ImGui::Selectable(texture_id.c_str()))
+                    {
+                        _sprite2D->Set_Texture_ID(texture_id);
+                    }
+                }
+                ImGui::EndPopup();
             }
         }
+        
+
+        /*char texture_id_buffer[128];
+        strncpy(texture_id_buffer, _sprited2D->Get_Texture_ID().c_str(), sizeof(texture_id_buffer));
+        if (ImGui::InputText("##Texture ID", texture_id_buffer, sizeof(texture_id_buffer)))
+        {
+            _sprited2D->Set_Texture_ID(std::string(texture_id_buffer));
+        }*/
+
+    	// Object dropdown box
+    	ImGui::Text("Object Shape");
+    	std::vector<std::string> shapes = { "Rect", "Circle" };
+    	static int current_shape_index = 0;
+    	for (int i = 0; i < shapes.size(); ++i)
+    	{
+    		if (_sprite2D->Get_Shape() == shapes[i])
+    		{
+    			current_shape_index = i;
+    			break;
+    		}
+    	}
+    	if (ImGui::Combo("##ObjectShape", &current_shape_index, [](void* data, int idx, const char** out_text) {
+    		const std::vector<std::string>* shapes_list = static_cast<const std::vector<std::string>*>(data);
+    		*out_text = shapes_list->at(idx).c_str();
+    		return true;
+    	}, static_cast<void*>(&shapes), shapes.size())) {
+    		_sprite2D->Change_Shape(shapes[current_shape_index]);
+    	}
+    	ImGui::Separator();
+
+    	// Color picker for images
+    	ImGui::Text("Color");
+    	float color[4] = { _sprite2D->Get_Colour().x, _sprite2D->Get_Colour().y, _sprite2D->Get_Colour().z, _sprite2D->Get_Colour().a };
+    	if (ImGui::ColorEdit4("##Color", color))
+    	{
+    		_sprite2D->Set_Colour({ color[0], color[1], color[2], color[3] });
+    	}
 		ImGui::Separator();
     }
     //void DrawRendererComponent(Sprite2D* _sprite_2d) {
@@ -390,16 +425,73 @@ namespace Sage_Inspector
     //    }
     //}
 
+    const char* Get_Component_Type_Name(ComponentType _component_type)
+    {
+        switch (_component_type)
+        {
+        case TRANSFORM:
+            return "TRANSFORM";
+            break;
+        case UITRANSFORM:
+            return "UITRANSFORM";
+            break;
+        case SPRITE2D:
+            return "SPRITE2D";
+            break;
+        case IMAGE:
+            return "IMAGE";
+            break;
+        case BOXCOLLIDER2D:
+            return "BOXCOLLIDER2D";
+            break;
+        case RIGIDBODY:
+            return "RIGIDBODY";
+            break;
+        default:
+            return nullptr;
+            break;
+
+        }
+    }
+
+    std::unique_ptr<Component> Create_Component(ComponentType _component_type)
+    {
+        switch (_component_type)
+        {
+        case TRANSFORM:
+            return std::make_unique<Transform>();
+            break;
+        case UITRANSFORM:
+            return std::make_unique<UITransform>();
+            break;
+        case SPRITE2D:
+            return std::make_unique<Sprite2D>();
+            break;
+        case IMAGE:
+            return std::make_unique<Image>();
+            break;
+        case BOXCOLLIDER2D:
+            return std::make_unique<BoxCollider2D>();
+            break;
+        case RIGIDBODY:
+            return std::make_unique<RigidBody>();
+            break;
+        default:
+            //return nullptr;
+            break;
+        }
+    }
     void ShowInspector(GameObject* _game_object) {
         
         //ImGui::Button("Add Component");
-
+        std::unordered_set<ComponentType> existing_components;
         for (auto& component : _game_object->Get_Component_List())
         {
+            existing_components.insert(component->Get_Component_Type());
             switch (component.get()->Get_Component_Type())
             {
-            case COMPONENT:
-                break;
+            //case COMPONENT:
+            //    break;
             case TRANSFORM:
                 Show_Transform_Component(dynamic_cast<Transform*>(component.get()));
                 break;
@@ -412,33 +504,78 @@ namespace Sage_Inspector
             case IMAGE:
                 Show_Image_Component(dynamic_cast<Image*>(component.get()));
                 break;
-            case RENDERER:
-                // Not touch
-                break;
-            case ANIMATOR:
-                // Not touch
-                break;
+            //case RENDERER:
+            //    // Not touch
+            //    break;
+            //case ANIMATOR:
+            //    // Not touch
+            //    break;
             case BOXCOLLIDER2D:
                 Show_Box_Collider2D_Component(dynamic_cast<BoxCollider2D*>(component.get()));
                 break;
             case RIGIDBODY:
                 Show_RigidBody_Component(dynamic_cast<RigidBody*>(component.get()));
                 break;
-            case AUDIO:
-                // Not touch
-                break;
-            case BEHAVIOUR:
-                // Not touch
-                break;
-            case BUTTON:
-                // Not touch
-                break;
-            case NUM_OF_TYPES_OF_COMPONENTS:
-                // Not touch
-                break;
+            //case AUDIO:
+            //    // Not touch
+            //    break;
+            //case BEHAVIOUR:
+            //    // Not touch
+            //    break;
+            //case BUTTON:
+            //    // Not touch
+            //    break;
+            //case NUM_OF_TYPES_OF_COMPONENTS:
+            //    // Not touch
+            //    break;
             default:
                 break;
             }
+
+            //ImGui::SameLine();
+            //if (ImGui::Button(("Remove " + std::string(Get_Component_Type_Name((*component).Get_Component_Type()))).c_str()))
+            //{
+            //    component = existing_components.erase(component);
+            //}
+            //{
+            //    _game_object->Remove_Component(component->Get_Component_Type());
+            //    break;
+            //}
+        }
+        ImGui::Separator();
+        ImGui::Text("Add Missing Components: ");
+        for (size_t i = 0; i < NUM_OF_TYPES_OF_COMPONENTS; ++i)
+        {
+            ComponentType component_type = static_cast<ComponentType>(i);
+            if (existing_components.find(component_type) == existing_components.end())
+            {
+                if (Get_Component_Type_Name(component_type) == nullptr)
+                {
+                    continue;
+                }
+                if (component_type == UITRANSFORM && existing_components.find(TRANSFORM) != existing_components.end())
+                {
+                    continue;
+                }
+                if (component_type == TRANSFORM && existing_components.find(UITRANSFORM) != existing_components.end())
+                {
+                    continue;
+                }
+                if (component_type == IMAGE && existing_components.find(SPRITE2D) != existing_components.end())
+                {
+                    continue;
+                }
+                if (component_type == SPRITE2D && existing_components.find(IMAGE) != existing_components.end())
+                {
+                    continue;
+                }
+                if (ImGui::Button(Get_Component_Type_Name(component_type)))
+                {
+                    _game_object->Add_Component(Create_Component(component_type));
+                }
+            	
+            }
+
         }
     }
 

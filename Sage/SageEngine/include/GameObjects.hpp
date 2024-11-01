@@ -117,7 +117,15 @@ public:
 	  \param _c
 		Component to be added
 	*******************************************************************************/
-	void Add_Component(std::unique_ptr<Component> _c);	
+	void Add_Component(std::unique_ptr<Component> _c);
+
+	/*!*****************************************************************************
+	  \brief
+		Remove component from the gameobject
+	  \param _c
+		Component to be added
+	*******************************************************************************/
+	void Remove_Component(ComponentType _c);
 
 	/*!*****************************************************************************
 	  \brief
@@ -138,6 +146,14 @@ public:
 
 	/*!*****************************************************************************
 	  \brief
+		Check if the game object has a particular component
+	  \return
+		bool true if it has a component otherwise bool false
+	*******************************************************************************/
+	bool Has_Component(const std::shared_ptr<GameObject>& _game_object, ComponentType _component_type) const;
+
+	/*!*****************************************************************************
+	  \brief
 		Sets the parent
 	  \param _new_parent
 		pointer to the new parent gameobject
@@ -151,6 +167,22 @@ public:
 		pointer to the parent gameobject
 	*******************************************************************************/
 	GameObject* Get_Parent();
+
+	/*!*****************************************************************************
+	  \brief
+		Gets the position of the transform of the gameobject
+	  \return
+		Vector 3 to the position of the gameobject
+	*******************************************************************************/
+	ToastBox::Vec3 const Get_Position();
+
+	/*!*****************************************************************************
+	  \brief
+		Sets the position of the transform of the gameobject
+	  \param
+		Vector 3 to the position of the gameobject
+	*******************************************************************************/
+	void Set_Position(ToastBox::Vec3 const& _new_pos);
 
 	/*!*****************************************************************************
 	  \brief
@@ -264,3 +296,24 @@ T* GameObject::Get_Component()
 	}
 	return nullptr;
 }
+
+/*!*****************************************************************************
+  \brief
+	Check if the game object has a particular component
+  \return
+	bool true if it has a component otherwise bool false
+*******************************************************************************/
+//bool GameObject::Has_Component(const std::shared_ptr<GameObject>& _game_object, ComponentType _component_type) const
+//{
+//	for (const auto& component : components)
+//	{
+//		if (component->Get_Component_Type() == _component_type)
+//		{
+//			return true;
+//		}
+//	}
+//	return false;
+//}
+
+
+

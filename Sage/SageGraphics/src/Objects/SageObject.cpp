@@ -69,12 +69,14 @@ void SageObject::Attach_Texture(SageTexture* _texture)
 	material.texture_ref = _texture;
 }
 
-
-
-
-
-
-
+void SageObject::Change_Shape(SageModel* _shape)
+{
+	if (_shape == nullptr)
+	{
+		return;
+	}
+	obj_mesh.model_ref = _shape;
+}
 
 void SageObject::Update()
 {

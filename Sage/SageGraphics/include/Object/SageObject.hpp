@@ -137,6 +137,12 @@ public:
 		Texture to be attached.
 	*******************************************************************************/
 	void Attach_Texture(SageTexture* _texture);
+	/*!*****************************************************************************
+	\brief Change the shape of the object
+	\param _texture
+		shape to be changed to.
+	*******************************************************************************/
+	void Change_Shape(SageModel* _shape);
 	//Camera;
 
 

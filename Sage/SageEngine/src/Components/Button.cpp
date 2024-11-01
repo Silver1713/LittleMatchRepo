@@ -31,7 +31,7 @@ namespace Buttons
 	{
 		{"Default_Button_Update", Default_Button_Update},
 		{"Default_Click", Default_Click},
-		{"Go_To_Splash_Screen", Go_To_Splash_Screen},
+		{"Restart_Scene", Restart_Scene},
 		{"Go_To_Main_Menu", Go_To_Main_Menu},
 		{"Go_To_Level_1", Go_To_Level_1},
 		{"Exit_Game", Exit_Game }
@@ -121,15 +121,15 @@ namespace Buttons
 	  \param _caller
 		the caller
 	*******************************************************************************/
-	void Go_To_Splash_Screen(GameObject* _caller)
+	void Restart_Scene(GameObject* _caller)
 	{
 		Default_Click(_caller);
-		SM::Set_Current_Level("splash_screen");
+		SM::Restart_Scene();
 	}
 	void Go_To_Main_Menu(GameObject* _caller)
 	{
 		Default_Click(_caller);
-		SM::Set_Current_Level("main_menu");
+		SM::Set_Current_Level("main_menu");		
 	}
 	void Go_To_Level_1(GameObject* _caller)
 	{
@@ -139,7 +139,7 @@ namespace Buttons
 	void Exit_Game(GameObject* _caller)
 	{
 		Default_Click(_caller);
-		SM::Exit_Game();
+		//SM::Exit_Game();
 	}
 }
 
@@ -255,6 +255,7 @@ void Button::Init(GameObject* _parent)
 *******************************************************************************/
 void Button::Input()
 {
+	if (!is_enabled) { return; }
 	if (Within_Bounds())
 	{
 		if (!is_hovered)
@@ -270,8 +271,7 @@ void Button::Input()
 		{
 			On_Click();
 		}
-
-		if (SAGEInputHandler::Get_Mouse(SAGE_MOUSE_BUTTON_LEFT))
+		else if (SAGEInputHandler::Get_Mouse(SAGE_MOUSE_BUTTON_LEFT))
 		{
 			On_Click_Hold();
 		}
@@ -295,6 +295,7 @@ void Button::Input()
 *******************************************************************************/
 void Button::Update()
 {
+	if (!is_enabled) { return; }
 	mouse_pos.x = static_cast<float>(SAGEInputHandler::Get_Mouse_X());
 	mouse_pos.y = static_cast<float>(SAGEInputHandler::Get_Mouse_Y());
 }
@@ -350,7 +351,7 @@ void Button::On_Click_Hold()
 	if (on_click_hold)
 	{
 		on_click_hold(Get_Parent());
-	}	
+	}
 }
 
 /*!*****************************************************************************

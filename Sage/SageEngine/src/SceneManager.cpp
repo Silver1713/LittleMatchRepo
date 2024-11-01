@@ -20,6 +20,7 @@
 #include "KeyInputs.h"
 #include "SceneManager.hpp"
 #include "GameObjects.hpp"
+#include "SageAudio.hpp"
 
 #include <iostream>
 
@@ -35,12 +36,14 @@
 namespace SM {	
 	static bool scene_has_loaded{ false };
 	static bool scene_has_initialized{ false };
+	static bool is_restarting{ false };
 
 	static bool scene_faded_in{ false };
 	static bool scene_faded_out{ true };
 
 	static bool game_running{ true };
-	static bool ignore_safety_bools{ false };
+	static bool ignore_input{ false };
+	static bool ignore_remaining_update{ false };
 
 	const float fade_time{ 0.5f };
 
@@ -73,9 +76,47 @@ namespace SM {
 	  \param _is_ignoring
 		Whether the scene manager should accept inputs
 	*******************************************************************************/
-	void Ignore_Safety_Bools(bool _is_ignoring)
+	void Set_Ignore_Input(bool _is_ignoring)
 	{
-		ignore_safety_bools = _is_ignoring;
+		ignore_input = _is_ignoring;
+	}
+
+	/*!*****************************************************************************
+	  \brief
+		Sets whether the scene should ignore inputs
+
+	  \return
+		Whether the scene manager should ignore input
+	*******************************************************************************/
+	bool Is_Ignoring_Input()
+	{
+		return ignore_input;
+	}
+
+
+	/*!*****************************************************************************
+	  \brief
+		This function specifies if the scene should ignore remaining update just in
+		case the gamestate changed in the middle of gameobject update loop
+
+	  \param _is_ignoring
+		Whether the scene manager should accept inputs
+	*******************************************************************************/
+	void Set_Igore_Remaining_Update(bool _is_ignoring)
+	{
+		ignore_remaining_update = _is_ignoring;
+	}
+
+	/*!*****************************************************************************
+	  \brief
+		Sets whether the scene should ignore remaining update
+
+	  \return
+		Whether the scene manager should ignore input
+	*******************************************************************************/
+	bool Is_Ignoring_Remaining_Update()
+	{
+		return ignore_remaining_update;
 	}
 
 	/*!*****************************************************************************
@@ -173,7 +214,7 @@ namespace SM {
 			}
 		}
 		
-		fade_screen = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen",2U);
+		fade_screen = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab("FADE_SCREEN"), "Fade_Screen",0);
 		scene_faded_in = false;
 		SM::fp_load();
 	}
@@ -184,8 +225,8 @@ namespace SM {
 	*******************************************************************************/
 	void Init()
 	{
-		SAGEInputHandler::init();
-		SageSystemManager::Init();
+		//SAGEInputHandler::init();
+		//SageSystemManager::Init();
 		Game_Objects::Init();
 		SM::fp_init();
 	}
@@ -213,6 +254,12 @@ namespace SM {
 		SM::fp_update();
 		Game_Objects::Update();
 
+		if (is_restarting)
+		{
+			is_restarting = false;
+			Go_To_Next_Scene();			
+		}
+
 		if (level_ID != prev_level_ID)
 		{
 			Go_To_Next_Scene();
@@ -236,6 +283,7 @@ namespace SM {
 	*******************************************************************************/
 	void Free()
 	{
+		SageAudio::Stop_All_Audio();
 		SM::fp_free();	
 	}
 
@@ -248,7 +296,7 @@ namespace SM {
 		SM::fp_unload();
 		
 		Game_Objects::Exit();
-		SageSystemManager::Exit();
+		//SageSystemManager::Exit();
 	}
 
 	/*!*****************************************************************************
@@ -336,7 +384,8 @@ namespace SM {
 		SM::Free();
 		SM::Unload();
 		SM::Load();
-		SM::Init();
+		//SM::Init();
+		std::cout << "Moving to next scene: " << level_ID << std::endl;
 	}
 	/*!*****************************************************************************
 	  \brief
@@ -372,17 +421,6 @@ namespace SM {
 			SM::fp_free = Game::Free;
 			SM::fp_unload = Game::Unload;
 		}
-		else if (level_ID == "editor_scene")
-		{
-			SM::fp_load = EditorScene::Load;
-			SM::fp_init = EditorScene::Init;
-			SM::fp_draw = EditorScene::Draw;
-			SM::fp_input = EditorScene::Input;
-			SM::fp_update = EditorScene::Update;
-			SM::fp_draw = EditorScene::Draw;
-			SM::fp_free = EditorScene::Free;
-			SM::fp_unload = EditorScene::Unload;
-		}
 		else
 		{
 			SM::fp_load = Scene::Load;
@@ -404,8 +442,7 @@ namespace SM {
 	*******************************************************************************/
 	void Restart_Scene()
 	{
-		SM::fp_free();
-		scene_has_initialized = false;
+		is_restarting = true;
 	}
 
 	/*!*****************************************************************************

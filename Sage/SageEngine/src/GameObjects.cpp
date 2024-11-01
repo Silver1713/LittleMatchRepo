@@ -14,6 +14,7 @@
 */
 /* End Header **************************************************************************/
 #include "GameObjects.hpp"
+#include "SceneManager.hpp"
 #include "Components/Components.hpp"
 #include "SageObjectManager.hpp"
 
@@ -47,7 +48,7 @@ namespace Game_Objects
 		for (auto& _g : g_game_objects)
 		{
 			if (_g.second)
-			{
+			{				
 				_g.second->Init();
 				BindingSystem::Init_Batch(_g.second.get());
 			}
@@ -59,7 +60,6 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Update()
 	{
-
 		for (auto& _g : g_game_objects)
 		{
 			if (_g.second)
@@ -220,7 +220,7 @@ GameObject::GameObject(){}
 	The prefab to copy from
 
   \param _identifier
-	What this instance should be called
+	What this instance should be called 
 
   \param _z_order
 	The z-order of the object
@@ -253,13 +253,38 @@ GameObject::GameObject(Assets::Prefabs::Prefab const& _p, std::string const& _id
 	{
 		Add_Component(std::make_unique<Button>(_p.on_click,_p.on_click_hold,_p.on_click_release,_p.on_hover_enter,_p.on_hover,_p.on_hover_exit));
 	}
+	if (_p.is_slider)
+	{
+		Add_Component(std::make_unique<Slider>(
+			Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab(_p.slider_children_ID.at("Frame")), _identifier + "_Frame", _z_order),
+			Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab(_p.slider_children_ID.at("Fill")), _identifier + "_Fill", _z_order),
+			Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab(_p.slider_children_ID.at("BG")), _identifier + "_BG", _z_order),
+			_p.slider_init,
+			_p.slider_update));
+	}
+
+	if (_p.has_behaviour)
+	{
+		Add_Component(std::make_unique<Behaviour>());
+		Behaviour* b = Get_Component<Behaviour>();
+		b->Init(this);
+		for (unsigned int i{}; i < _p.num_behaviour; ++i)
+		{
+			b->Add_Instance(_p.cs_class_name[i], _p.cs_namespace[i]);
+		}
+	}
+
 	//Generates children if it has any
 	if (_p.has_children)
 	{
 		for (unsigned int i{}; i < _p.num_children; ++i)
 		{
 			GameObject* p = Game_Objects::Instantiate(Assets::Prefabs::Get_Prefab(_p.children_IDs[i]), _identifier + "_Child_" + std::to_string(i), z_order);
-			this->Add_Child(p);
+			if (p)
+			{
+				p->Set_Position(Get_Position());
+			}
+			Add_Child(p);
 		}
 	}
 
@@ -287,8 +312,6 @@ void GameObject::Init()
 			std::cout << "Behaviour Component Added\n";
 		}
 	}
-
-
 }
 
 /*!*****************************************************************************
@@ -314,7 +337,12 @@ void GameObject::Input()
 *******************************************************************************/
 void GameObject::Update()
 {
-	if (components.empty() || (!is_enabled))
+	if (components.empty())
+	{
+		return;
+	}
+
+	if (!is_enabled)
 	{
 		return;
 	}
@@ -427,6 +455,24 @@ void GameObject::Add_Component(std::unique_ptr<Component> _c)
 
 /*!*****************************************************************************
   \brief
+	Remove component from the gameobject
+  \param _c
+	Component to be added
+*******************************************************************************/
+void GameObject::Remove_Component(ComponentType _c)
+{
+	for (auto it = components.begin(); it != components.end(); ++it)
+	{
+		if ((*it)->Get_Component_Type() == _c)
+		{
+			components.erase(it);
+			break;
+		}
+	}
+}
+
+/*!*****************************************************************************
+  \brief
 	Clears all gameobjects
   \return
 	Returns the vector of components that the gameobject posseses
@@ -456,6 +502,47 @@ void GameObject::Set_Parent(GameObject* const _new_parent)
 GameObject* GameObject::Get_Parent()
 {
 	return parent;
+}
+
+/*!*****************************************************************************
+  \brief
+	Gets the position of the transform of the gameobject
+  \return
+	Vector 3 to the position of the gameobject
+*******************************************************************************/
+ToastBox::Vec3 const GameObject::Get_Position()
+{
+	Transform* t = Get_Component<Transform>();
+	UITransform* ut = Get_Component<UITransform>();
+	if (t)
+	{
+		return t->Get_Position();
+	}
+	else if (ut)
+	{
+		return ut->Get_Position();
+	}
+	return ToastBox::Vec3();
+}
+
+/*!*****************************************************************************
+  \brief
+	Sets the position of the transform of the gameobject
+  \param
+	Vector 3 to the position of the gameobject
+*******************************************************************************/
+void GameObject::Set_Position(ToastBox::Vec3 const& _new_pos)
+{
+	Transform* t = Get_Component<Transform>();
+	UITransform* ut = Get_Component<UITransform>();
+	if (t)
+	{
+		t->Set_Position(_new_pos);
+	}
+	else if (ut)
+	{
+		ut->Set_Position(_new_pos);
+	}
 }
 
 /*!*****************************************************************************

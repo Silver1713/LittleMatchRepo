@@ -24,7 +24,35 @@ namespace SM {
 	  \param _is_ignoring
 		Whether the scene manager should accept inputs
 	*******************************************************************************/
-	void Ignore_Safety_Bools(bool _is_ignoring);
+	void Set_Ignore_Input(bool _is_ignoring);
+
+	/*!*****************************************************************************
+	  \brief
+		Sets whether the scene should ignore inputs
+
+	  \return
+		Whether the scene manager should ignore input
+	*******************************************************************************/
+	bool Is_Ignoring_Input();
+
+	/*!*****************************************************************************
+	  \brief
+		This function specifies if the scene should ignore remaining update just in
+		case the gamestate changed in the middle of gameobject update loop
+
+	  \param _is_ignoring
+		Whether the scene manager should accept inputs
+	*******************************************************************************/
+	void Set_Igore_Remaining_Update(bool _is_ignoring);
+
+	/*!*****************************************************************************
+	  \brief
+		Sets whether the scene should ignore remaining update
+
+	  \return
+		Whether the scene manager should ignore input
+	*******************************************************************************/
+	bool Is_Ignoring_Remaining_Update();
 
 	/*!*****************************************************************************
 	  \brief

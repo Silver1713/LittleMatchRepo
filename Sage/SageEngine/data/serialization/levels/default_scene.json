@@ -14,15 +14,10 @@
       }
     ],
 
-    "Level_Name": "splash_screen",
+    "Level_Name": "default",
     "Prefabs":
     [
-      {
-        "Prefab_ID": "DIGIPEN_SPLASH_SCREEN",
-        "Identifier": "splash_screen",
-        "Scale": [1920,1080,0],
-        "Z_Order": 0
-      }
+      
     ]
   }
   
