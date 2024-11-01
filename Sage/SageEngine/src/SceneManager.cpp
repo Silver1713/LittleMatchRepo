@@ -400,6 +400,11 @@ namespace SM {
 		level_ID = _new_level_ID;
 		prev_level_ID = level_ID;
 		current_level = Assets::Levels::Get_Level(_new_level_ID);
+		/*if (level_ID == "editor_scene")
+		{
+			EditorScene::Load();
+			EditorScene::Init();
+		}*/
 		if (level_ID == "splash_screen")
 		{
 			SM::fp_load = Splash_Screen::Load;

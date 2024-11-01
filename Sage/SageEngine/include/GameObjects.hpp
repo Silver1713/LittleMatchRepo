@@ -285,16 +285,21 @@ namespace Game_Objects
 *******************************************************************************/
 template <typename T, typename>
 T* GameObject::Get_Component()
-{
-	for (auto& _c : components)
+{	
+	if (components.size() != 0)
 	{
-		T* t = dynamic_cast<T*>(_c.get());
-		if (t)
+		for (auto& _c : components)
 		{
-			return t;
+			T* t = dynamic_cast<T*>(_c.get());
+			if (t)
+			{
+				return t;
+			}
 		}
+		
 	}
 	return nullptr;
+	
 }
 
 /*!*****************************************************************************
