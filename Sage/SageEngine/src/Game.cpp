@@ -21,6 +21,7 @@
 #include "KeyInputs.h"
 #include "Game.hpp"
 #include "Components/RigidBody.hpp"
+#include "Components/BoxCollider2D.hpp"
 
 
 #include <iostream>
@@ -291,118 +292,143 @@ namespace Game {
 	  \brief
 		Updates the game scene
 	*******************************************************************************/
-	void Update()
-	{
-		// AABB checks here
-		std::unordered_map<std::string, std::unique_ptr<GameObject>>& objects = Game_Objects::Get_Game_Objects();
+	//void Update()
+	//{
+	//	// AABB checks here
+	//	std::unordered_map<std::string, std::unique_ptr<GameObject>>& objects = Game_Objects::Get_Game_Objects();
 
+	//	std::vector<BoxCollider2D*> colliders{};
+	//	for (auto& obj : objects)
+	//	{
+	//		if (!obj.second)
+	//			continue;
+	//		BoxCollider2D* collider = static_cast<BoxCollider2D*>(obj.second->Get_Component<BoxCollider2D>());
+	//		if (collider)
+	//		{
+	//			collider->Register_Collision_Callback([collider](GameObject* _obj) {
+	//				if (!_obj) {
+	//					return;
+	//				}
+	//				RigidBody* phy = static_cast<RigidBody*>(collider->Get_Parent()->Get_Component<RigidBody>());
+	//				if (phy) {
+	//					phy->Get_Current_Velocity() = { 0,0 };
+	//					//std::cout << _obj->Get_ID() << "collided with " << collider->Get_Parent()->Get_ID() << '\n';
+	//				}
+	//			});
+	//			colliders.push_back(collider);
+	//		}
+	//	}
+
+
+	//	// AABB Here
+	//	for (auto& collider : colliders)
+	//	{
+	//		RigidBody* phys = static_cast<RigidBody*>(collider->Get_Parent()->Get_Component<RigidBody>());
+	//		if (!phys)
+	//			continue;
+	//		for (auto& other : colliders)
+	//		{
+	//			if (collider == other)
+	//			{
+	//				continue;
+	//			}
+	//			float time = 0.f;
+	//			//
+	//				bool collide_cond = collider->Collision_Intersection_Rect_Rect(collider->Get_AABB(), phys->Get_Current_Velocity(), other->Get_AABB(), {}, time);
+	//				if (collide_cond)
+	//				{
+	//					// Retrieve necessary components
+	//					GameObject* parent = collider->Get_Parent();
+	//					Transform* transform = parent->Get_Component<Transform>();
+	//					ToastBox::Vec3 prevPos = transform->Get_Prev_Position();
+
+	//					// Get the current velocity
+	//					ToastBox::Vec2 curr_vel = phys->Get_Current_Velocity();
+	//					ToastBox::Vec3 pos = transform->Get_Position();
+
+	//					ToastBox::Vec3 dir = pos - prevPos; // Direction of movement
+
+	//					// Get reference to the velocity for easier access
+	//					ToastBox::Vec2& vel = phys->Get_Current_Velocity();
+
+
+	//					auto& aabb1 = collider->Get_AABB();
+	//					auto& aabb2 = other->Get_AABB();
+
+	//					float overlapX = std::min(aabb1.max.x, aabb2.max.x) - std::max(aabb1.min.x, aabb2.min.x);
+	//					float overlapY = std::min(aabb1.max.y, aabb2.max.y) - std::max(aabb1.min.y, aabb2.min.y);
+
+	//					bool horizontal = overlapX < overlapY;
+
+	//					if (horizontal) {
+	//						if (dir.x > 0 && !(vel.x < 0))
+	//						{
+	//							
+	//							vel.x = 0;
+
+	//						}
+	//						else if (dir.x < 0 && !(vel.x > 0))
+	//						{
+	//							
+	//							vel.x = 0;
+	//						}
+
+	//						transform->Set_Position({ curr_vel.x * time + prevPos.x,pos.y, pos.z });
+	//					}
+	//					else
+	//					{
+	//						if (dir.y > 0 && !(vel.y < 0))
+	//						{
+	//							
+	//							vel.y = 0;
+	//						}
+	//						else if (dir.y < 0 && !(vel.y > 0))
+	//						{
+	//							
+	//							vel.y = 0;								
+	//						}
+	//						transform->Set_Position({ pos.x, curr_vel.y * time + prevPos.y, pos.z });
+	//					}
+	//				}
+
+	//		}
+	//	}
+	//	//rotates greens
+	//	if (game_objects["Green0"])
+	//	{
+	//		for (unsigned int i{}; i < 3; ++i)
+	//		{
+	//			transform_cache["Green" + std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f,0.0f });
+	//		}
+	//	}
+
+	//	camera.update();
+	//}
+
+
+	void Update() {
+		std::unordered_map<std::string, std::unique_ptr<GameObject>>& objects = Game_Objects::Get_Game_Objects();
 		std::vector<BoxCollider2D*> colliders{};
-		for (auto& obj : objects)
-		{
-			if (!obj.second)
-				continue;
+
+		// Collect colliders
+		for (auto& obj : objects) {
+			if (!obj.second) continue;
 			BoxCollider2D* collider = static_cast<BoxCollider2D*>(obj.second->Get_Component<BoxCollider2D>());
-			if (collider)
-			{
-				collider->Register_Collision_Callback([collider](GameObject* _obj) {
-					if (!_obj) {
-						return;
-					}
-					RigidBody* phy = static_cast<RigidBody*>(collider->Get_Parent()->Get_Component<RigidBody>());
-					if (phy) {
-						phy->Get_Current_Velocity() = { 0,0 };
-						//std::cout << _obj->Get_ID() << "collided with " << collider->Get_Parent()->Get_ID() << '\n';
-					}
-				});
+			if (collider) {
+				collider->Register_Collision_Callback(nullptr);
 				colliders.push_back(collider);
 			}
 		}
 
-
-		// AABB Here
-		for (auto& collider : colliders)
-		{
-			RigidBody* phys = static_cast<RigidBody*>(collider->Get_Parent()->Get_Component<RigidBody>());
-			if (!phys)
-				continue;
-			for (auto& other : colliders)
-			{
-				if (collider == other)
-				{
-					continue;
-				}
-				float time = 0.f;
-				//
-					bool collide_cond = collider->Collision_Intersection_Rect_Rect(collider->Get_AABB(), phys->Get_Current_Velocity(), other->Get_AABB(), {}, time);
-					if (collide_cond)
-					{
-						// Retrieve necessary components
-						GameObject* parent = collider->Get_Parent();
-						Transform* transform = parent->Get_Component<Transform>();
-						ToastBox::Vec3 prevPos = transform->Get_Prev_Position();
-
-						// Get the current velocity
-						ToastBox::Vec2 curr_vel = phys->Get_Current_Velocity();
-						ToastBox::Vec3 pos = transform->Get_Position();
-
-						ToastBox::Vec3 dir = pos - prevPos; // Direction of movement
-
-						// Get reference to the velocity for easier access
-						ToastBox::Vec2& vel = phys->Get_Current_Velocity();
-
-
-						auto& aabb1 = collider->Get_AABB();
-						auto& aabb2 = other->Get_AABB();
-
-						float overlapX = std::min(aabb1.max.x, aabb2.max.x) - std::max(aabb1.min.x, aabb2.min.x);
-						float overlapY = std::min(aabb1.max.y, aabb2.max.y) - std::max(aabb1.min.y, aabb2.min.y);
-
-						bool horizontal = overlapX < overlapY;
-
-						if (horizontal) {
-							if (dir.x > 0 && !(vel.x < 0))
-							{
-								
-								vel.x = 0;
-
-							}
-							else if (dir.x < 0 && !(vel.x > 0))
-							{
-								
-								vel.x = 0;
-							}
-
-							transform->Set_Position({ curr_vel.x * time + prevPos.x,pos.y, pos.z });
-						}
-						else
-						{
-							if (dir.y > 0 && !(vel.y < 0))
-							{
-								
-								vel.y = 0;
-							}
-							else if (dir.y < 0 && !(vel.y > 0))
-							{
-								
-								vel.y = 0;								
-							}
-							transform->Set_Position({ pos.x, curr_vel.y * time + prevPos.y, pos.z });
-						}
-					}
-
-			}
-		}
-		//rotates greens
-		if (game_objects["Green0"])
-		{
-			for (unsigned int i{}; i < 3; ++i)
-			{
-				transform_cache["Green" + std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f,0.0f });
-			}
+		// Let BoxCollider2D handle everything
+		float dt = static_cast<float>(SageHelper::delta_time);
+		for (auto& collider : colliders) {
+			collider->Update(dt);
 		}
 
 		camera.update();
 	}
+
 
 	/*!*****************************************************************************
 	  \brief
