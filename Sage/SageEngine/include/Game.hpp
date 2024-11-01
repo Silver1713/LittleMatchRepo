@@ -13,6 +13,24 @@
 #pragma once
 //Game Scene serving as testbed for level implementation
 namespace Game {
+
+	struct SpawnProperties {
+		std::string prefab_name;
+		std::string object_name;
+		ToastBox::Vec3 position_range_min = { -960.0f, -540.0f, 0.0f };
+		ToastBox::Vec3 position_range_max = { 1920.0f, 1080.0f, 0.0f };
+		ToastBox::Vec3 rotation_range_min = { 0.0f, 0.0f, 0.0f };
+		ToastBox::Vec3 rotation_range_max = { 360.0f, 360.0f, 0.0f };
+		ToastBox::Vec3 scale_range_min = { 1.0f, 1.0f, 0.0f };
+		ToastBox::Vec3 scale_range_max = { 10.0f, 10.0f, 0.0f };
+		bool enable_physics = false;
+		bool enable_collider = true;
+		bool show_collider_debug = false;
+	};
+
+	// Add the function declaration for Spawn_Dynamic_Object
+	GameObject* Spawn_Dynamic_Object(const SpawnProperties& props);
+
 	/*!*****************************************************************************
 	  \brief
 		Loads data the scene may need

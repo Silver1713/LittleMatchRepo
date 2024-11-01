@@ -35,6 +35,7 @@
 
 
 namespace Game {
+
 	//TESTS
 	static ToastBox::Vec3 const min_pos{ -960.0f,-540.0f,0.0f }, max_pos{ 1920.0f,1080.0f,0.0f };
 	static ToastBox::Vec3 const min_rot{ 0.0f,0.0f,0.0f }, max_rot{ 360.0f,360.0f,0.0f };
@@ -53,6 +54,72 @@ namespace Game {
 
 
 	static bool enable_collider_view{ false };
+
+
+	/*!*****************************************************************************
+	  \brief
+		Creates and configures a dynamic game object based on provided properties
+	  \param props
+		Properties defining the object's characteristics and behavior
+	  \return
+		Pointer to the created GameObject, or nullptr if creation fails
+	*******************************************************************************/
+	GameObject* Game::Spawn_Dynamic_Object(const SpawnProperties& props) {
+		// Generate random values within the specified ranges
+		ToastBox::Vec3 pos{
+			static_cast<float>(rand()) / RAND_MAX * (props.position_range_max.x - props.position_range_min.x) + props.position_range_min.x,
+			static_cast<float>(rand()) / RAND_MAX * (props.position_range_max.y - props.position_range_min.y) + props.position_range_min.y,
+			0.0f
+		};
+
+		ToastBox::Vec3 rot{
+			// Random between 0 and 90, but only allow 0 or 90
+			(rand() % 2) * 90.0f,  // Will be either 0 or 90
+			0.0f,  // No Y rotation
+			0.0f   // No Z rotation
+		};
+
+		ToastBox::Vec3 scale{
+			static_cast<float>(rand()) / RAND_MAX * (props.scale_range_max.x - props.scale_range_min.x) + props.scale_range_min.x,
+			static_cast<float>(rand()) / RAND_MAX * (props.scale_range_max.y - props.scale_range_min.y) + props.scale_range_min.y,
+			0.0f
+		};
+
+		// Instantiate the object
+		GameObject* object = Game_Objects::Instantiate(Prefabs::Get_Prefab(props.prefab_name), props.object_name);
+		if (!object) return nullptr;
+
+		// Set transform properties
+		Transform* transform = static_cast<Transform*>(object->Get_Component<Transform>());
+		if (transform) {
+			transform->Set_Position(pos);
+			transform->Set_Rotation(rot);
+			transform->Set_Scale(scale);
+			transform_cache[props.object_name] = transform;
+		}
+
+		// Handle collider
+		if (props.enable_collider) {
+			BoxCollider2D* collider = object->Get_Component<BoxCollider2D>();
+			if (collider) {
+				collider->Set_Debug(props.show_collider_debug);
+				collider_cache[props.object_name] = collider;
+			}
+		}
+
+		// Handle physics
+		if (props.enable_physics) {
+			RigidBody* rigidbody = static_cast<RigidBody*>(object->Get_Component<RigidBody>());
+			if (rigidbody) {
+				rigidbody->Set_Gravity_Flag(false);  // Start with gravity disabled
+				rigidbody->Set_Gravity({ 0.0f, 0.0f });  // Zero gravity vector
+				rigidbody->Set_Mass(1.0f);  // Default mass
+				// The actual velocity will be set after spawn
+			}
+		}
+
+		return object;
+	}
 
 	/*!*****************************************************************************
 	  \brief
@@ -227,6 +294,70 @@ namespace Game {
 		{
 			transform_cache["Player"]->Translate({ -100.0f,0.f,0.f });
 		}
+
+		// Spawn different types of objects with number keys
+		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_1)) {
+			// Spawn small, fast-moving object
+			static int small_counter = 0;
+			SpawnProperties small_props;
+			small_props.prefab_name = "SPAWN";
+			small_props.object_name = "SmallObject_" + std::to_string(small_counter++);
+			small_props.scale_range_min = { 50.0f, 50.0f, 0.0f };
+			small_props.scale_range_max = { 150.0f, 150.0f, 0.0f };
+			small_props.position_range_min = { -200.0f, -200.0f, 0.0f };
+			small_props.position_range_max = { 200.0f, 200.0f, 0.0f };
+			small_props.enable_physics = true;
+			small_props.show_collider_debug = enable_collider_view;
+
+			GameObject* small_obj = Spawn_Dynamic_Object(small_props);
+			if (small_obj) {
+				RigidBody* rb = small_obj->Get_Component<RigidBody>();
+				if (!rb) {  // Only add if it doesn't exist
+					small_obj->Add_Component(std::make_unique<RigidBody>());
+					rb = small_obj->Get_Component<RigidBody>();
+					rb->Init(small_obj);
+				}
+
+				if (rb) {
+					// Set a fixed initial velocity for testing
+					float speed = 100.0f; // Increased speed for more visible movement
+
+					// Choose random direction (right, left, up, down)
+					int direction = rand() % 4;
+					ToastBox::Vec2 newVelocity;
+					switch (direction) {
+					case 0: // Right
+						newVelocity = { speed, 0.0f };
+						break;
+					case 1: // Left
+						newVelocity = { -speed, 0.0f };
+						break;
+					case 2: // Up
+						newVelocity = { 0.0f, speed };
+						break;
+					case 3: // Down
+						newVelocity = { 0.0f, -speed };
+						break;
+					}
+
+					// Set the velocity
+					rb->Set_Current_Velocity(newVelocity);
+
+					// Make sure gravity is disabled
+					rb->Set_Gravity_Flag(false);
+					rb->Set_Gravity({ 0.0f, 0.0f });
+
+					// Set physics properties
+					rb->Set_Mass(0.5f);      // Light mass
+					rb->Set_Restitution(1.0f); // Perfect bounce
+					rb->Set_Friction(0.0f);    // No friction
+
+					// Store in game_objects map for update
+					game_objects[small_props.object_name] = small_obj;
+				}
+			}
+		}
+
 
 		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_3))
 		{
@@ -406,14 +537,91 @@ namespace Game {
 	//}
 
 
+	//void Update() {
+	//	std::unordered_map<std::string, std::unique_ptr<GameObject>>& objects = Game_Objects::Get_Game_Objects();
+	//	std::vector<BoxCollider2D*> colliders{};
+
+	//	// Collect colliders and update rigidbodies
+	//	for (auto& obj : objects) {
+	//		if (!obj.second) continue;
+
+	//		// Update RigidBody if it exists
+	//		RigidBody* rb = obj.second->Get_Component<RigidBody>();
+	//		if (rb) {
+	//			// Add periodic forces for dynamic movement
+	//			if (rand() % 100 < 5) {  // 5% chance each frame
+	//				float force_x = (static_cast<float>(rand()) / RAND_MAX * 200.0f) - 100.0f;
+	//				float force_y = (static_cast<float>(rand()) / RAND_MAX * 200.0f) - 100.0f;
+	//				rb->AddForce({ force_x, force_y }, RigidBody::ForceMode::Force);
+	//			}
+
+	//			rb->Update();  // This will apply the velocity
+	//		}
+
+	//		// Collect colliders
+	//		BoxCollider2D* collider = obj.second->Get_Component<BoxCollider2D>();
+	//		if (collider) {
+	//			collider->Register_Collision_Callback(nullptr);
+	//			colliders.push_back(collider);
+	//		}
+	//	}
+
+	//	// Let BoxCollider2D handle everything
+	//	float dt = static_cast<float>(SageHelper::delta_time);
+	//	for (auto& collider : colliders) {
+	//		collider->Update(dt);
+	//	}
+
+	//	camera.update();
+	//}
+
+
+
 	void Update() {
 		std::unordered_map<std::string, std::unique_ptr<GameObject>>& objects = Game_Objects::Get_Game_Objects();
 		std::vector<BoxCollider2D*> colliders{};
 
-		// Collect colliders
+		// Collect colliders and update rigidbodies
+		float dt = static_cast<float>(SageHelper::delta_time);
 		for (auto& obj : objects) {
 			if (!obj.second) continue;
-			BoxCollider2D* collider = static_cast<BoxCollider2D*>(obj.second->Get_Component<BoxCollider2D>());
+
+			// Update RigidBody if it exists
+			RigidBody* rb = obj.second->Get_Component<RigidBody>();
+			if (rb) {
+				// Get transform for position updates
+				Transform* transform = obj.second->Get_Component<Transform>();
+				if (transform) {
+					// Update position based on velocity
+					ToastBox::Vec2& velocity = rb->Get_Current_Velocity();
+					ToastBox::Vec3 pos = transform->Get_Position();
+					pos.x += velocity.x * dt;
+					pos.y += velocity.y * dt;
+
+					// Optional: Screen wrapping (adjust values based on your screen size)
+					float screenWidth = 1920.0f;
+					float screenHeight = 1080.0f;
+
+					if (pos.x > screenWidth / 2) pos.x = -screenWidth / 2;
+					if (pos.x < -screenWidth / 2) pos.x = screenWidth / 2;
+					if (pos.y > screenHeight / 2) pos.y = -screenHeight / 2;
+					if (pos.y < -screenHeight / 2) pos.y = screenHeight / 2;
+
+					transform->Set_Position(pos);
+				}
+
+				// Optional: Keep your existing random force addition
+				if (rand() % 100 < 5) {  // 5% chance each frame
+					float force_x = (static_cast<float>(rand()) / RAND_MAX * 200.0f) - 100.0f;
+					float force_y = (static_cast<float>(rand()) / RAND_MAX * 200.0f) - 100.0f;
+					rb->AddForce({ force_x, force_y }, RigidBody::ForceMode::Force);
+				}
+
+				//rb->Update();  // Update the rigidbody
+			}
+
+			// Collect colliders
+			BoxCollider2D* collider = obj.second->Get_Component<BoxCollider2D>();
 			if (collider) {
 				collider->Register_Collision_Callback(nullptr);
 				colliders.push_back(collider);
@@ -421,7 +629,6 @@ namespace Game {
 		}
 
 		// Let BoxCollider2D handle everything
-		float dt = static_cast<float>(SageHelper::delta_time);
 		for (auto& collider : colliders) {
 			collider->Update(dt);
 		}

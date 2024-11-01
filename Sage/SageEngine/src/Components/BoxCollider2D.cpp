@@ -572,11 +572,11 @@ void BoxCollider2D::Handle_Collision(GameObject* _other, float _collision_time, 
         // Calculate time segments
         float remaining_time = _delta_time - _collision_time;
 
-        // Move objects to collision point
+        // Move objects to collision point using collision time
         ToastBox::Vec2 pre_collision_vel = physics->Get_Current_Velocity();
         ToastBox::Vec2 other_pre_collision_vel = other_physics->Get_Current_Velocity();
 
-        // Update positions to collision point
+        // Position at collision time - time based
         ToastBox::Vec3 collision_pos = transform->Get_Position();
         collision_pos.x += pre_collision_vel.x * _collision_time;
         collision_pos.y += pre_collision_vel.y * _collision_time;
@@ -596,17 +596,19 @@ void BoxCollider2D::Handle_Collision(GameObject* _other, float _collision_time, 
         if (difference.Magnitude() > 0.0001f) {
             difference.Normalize(collision_normal, difference);
 
-            // Calculate impulse using restitution
+            // Enhanced bounce calculation - similar to dynamic-static
             float restitution = std::min(physics->Get_Restitution(), other_physics->Get_Restitution());
+            restitution = std::max(restitution, 0.3f);  // Ensure minimum bounce like in dynamic-static
+
             float impulse_scalar = -(1.0f + restitution) * relative_velocity.Product_Scalar(collision_normal);
             impulse_scalar /= (1.0f / physics->Get_Mass() + 1.0f / other_physics->Get_Mass());
 
-            // Calculate new velocities
+            // Calculate new velocities with enhanced bounce
             ToastBox::Vec2 impulse = collision_normal * impulse_scalar;
             ToastBox::Vec2 new_velocity = pre_collision_vel + (impulse / physics->Get_Mass());
             ToastBox::Vec2 other_new_velocity = other_pre_collision_vel - (impulse / other_physics->Get_Mass());
 
-            // Handle friction
+            // Handle friction with time-based calculation
             float friction_coeff = std::min(physics->Get_Friction(), other_physics->Get_Friction());
             float normal_velocity_mag = relative_velocity.Product_Scalar(collision_normal);
             ToastBox::Vec2 tangent_velocity = relative_velocity - (collision_normal * normal_velocity_mag);
@@ -615,7 +617,8 @@ void BoxCollider2D::Handle_Collision(GameObject* _other, float _collision_time, 
                 ToastBox::Vec2 friction_direction;
                 tangent_velocity.Normalize(friction_direction, tangent_velocity);
 
-                float friction_impulse_mag = -friction_coeff * impulse_scalar;
+                // Time-based friction like in dynamic-static
+                float friction_impulse_mag = -friction_coeff * impulse_scalar * (_delta_time / SageTimer::delta_time);
                 ToastBox::Vec2 friction_impulse = friction_direction * friction_impulse_mag;
 
                 new_velocity = new_velocity + (friction_impulse / physics->Get_Mass());
@@ -626,17 +629,24 @@ void BoxCollider2D::Handle_Collision(GameObject* _other, float _collision_time, 
             physics->Set_Current_Velocity(new_velocity);
             other_physics->Set_Current_Velocity(other_new_velocity);
 
-            // Move for remaining time
+            // Move for remaining time with new velocities and time-based energy loss
             if (remaining_time > 0.0f) {
-                ToastBox::Vec3 final_pos = transform->Get_Position();
-                final_pos.x += new_velocity.x * remaining_time;
-                final_pos.y += new_velocity.y * remaining_time;
-                transform->Set_Position(final_pos);
+                // Add energy loss over time like in dynamic-static
+                float energy_loss = 1.0f - (0.1f * remaining_time / _delta_time);
+                ToastBox::Vec2 final_velocity = new_velocity * energy_loss;
+                ToastBox::Vec2 other_final_velocity = other_new_velocity * energy_loss;
 
-                ToastBox::Vec3 other_final_pos = other_transform->Get_Position();
-                other_final_pos.x += other_new_velocity.x * remaining_time;
-                other_final_pos.y += other_new_velocity.y * remaining_time;
-                other_transform->Set_Position(other_final_pos);
+                transform->Set_Position({
+                    collision_pos.x + final_velocity.x * remaining_time,
+                    collision_pos.y + final_velocity.y * remaining_time,
+                    collision_pos.z
+                    });
+
+                other_transform->Set_Position({
+                    other_collision_pos.x + other_final_velocity.x * remaining_time,
+                    other_collision_pos.y + other_final_velocity.y * remaining_time,
+                    other_collision_pos.z
+                    });
             }
         }
     }
