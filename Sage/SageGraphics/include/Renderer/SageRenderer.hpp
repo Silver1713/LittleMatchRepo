@@ -23,14 +23,8 @@
 #include "SageViewport.hpp"
 #include "SageInstance.hpp"
 #include "SagePoint.hpp"
-#include "SageText.hpp"
 #include "Vector4.h"
 
-
-namespace TextRenderer
-{
-	class SageFont;
-}
 
 class SageModel; //!< Forward declaration of the SageModel class
 class SageObject; //!< Forward declaration of the SageObject class
@@ -180,8 +174,6 @@ struct SageRenderer
 	static SageCamera* camera; //!< The active camera used for rendering.
 
 	static SageFrameBuffer* framebuffer; //!< The framebuffer used for offscreen rendering.
-
-	static TextRenderer::SageFont* font; //!< The active font used for rendering text.
 
 	/*!*****************************************************************************
 	\brief
@@ -494,13 +486,6 @@ struct SageRenderer
 
 	static void Enable_OffScreenRender();
 	static void Enable_OnScreenRender();
-	
-
-
-	static void Set_Font(TextRenderer::SageFont* font);
-
-	static void Render_Text(const char* text, float x, float y, float scale, ToastBox::Vec4 color);
-	//static void Render_Text(TextRenderer::SageText& text);
 };
 
 

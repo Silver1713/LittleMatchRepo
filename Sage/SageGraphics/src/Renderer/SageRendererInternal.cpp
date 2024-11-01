@@ -20,7 +20,7 @@
 #include "SageTexture.h"
 #include "SagePoint.hpp"
 #include "SageRendererInternal.hpp"
-#include "SageFont.hpp"
+
 #include <iostream>
 #include <ostream>
 
@@ -36,8 +36,6 @@ SageViewport SageRendererInternal::viewport;
 RENDER_CONFIG_INTERNAL SageRendererInternal::default_config{ SageRendererInternal::I_SAGE_ENABLE_TEXTURE | SageRendererInternal::I_SAGE_ENABLE_ALPHA };
 SageCamera* SageRendererInternal::camera;
 SageShader* SageRendererInternal::default_shader;
-
-TextRenderer::SageFont* SageRendererInternal::font{};
 void SageRendererInternal::Draw_Filled(SageObject& object, RENDER_CONFIG_INTERNAL config)
 {
 	SageObject::SageMaterial& mat = object.GetMaterial();
@@ -280,7 +278,6 @@ void SageRendererInternal::Init()
 	{
 		SageShaderManager::Search_And_Create_Shader_Program("BASE_SHADER", "BaseVertexShader", "BaseFragmentShader");
 		SageShaderManager::Search_And_Create_Shader_Program("RECT_INSTANCE_SHADER", "RectVertexShaderInstance", "RectFragmentShaderInstance");
-		SageShaderManager::Search_And_Create_Shader_Program("TEXT_SHADER", "TextVertexShader", "TextFragmentShader");
 
 		default_shader = &SageShaderManager::shaders["BASE_SHADER"];
 
@@ -575,9 +572,15 @@ void SageRendererInternal::Draw_Filled(SageInstance& instances)
 		if (default_config.options & I_SAGE_ENABLE_CAMERA)
 		{
 			data.ndc_xform_mat = view_proj_mat * data.model_matrix;
+			
+
+			
+			
 		}
 		else
 		{
+			
+			
 			data.ndc_xform_mat = view_proj_mat * data.model_matrix;
 			glm::vec4 test = data.ndc_xform_mat * glm::vec4(0, 0, 1, 1);
 
@@ -603,75 +606,5 @@ void SageRendererInternal::Draw_Filled(SageInstance& instances)
 	
 	
 }
-
-
-void SageRendererInternal::Set_Font(TextRenderer::SageFont* active_font)
-{
-	font = active_font;
-}
-
-//void SageRendererInternal::Render_Text(TextRenderer::SageText& text)
-//{
-//	SageViewport* vp = &viewport;
-//	SageShader* shader = &SageShaderManager::shaders["TEXT_SHADER"];
-//	SageModel* model = text.GetFont()->Get_Mesh();
-//	if (!shader) return;
-//
-//
-//	ToastBox::Matrix3x3 view_proj = camera->Get_Projection_View_Matrix();
-//	glm::mat4 view_proj_mat = glm::mat4(1.f);
-//	if (default_config.options & I_SAGE_ENABLE_CAMERA)
-//	{
-//		glm::mat4 view_proj_mat = {
-//		view_proj.data()[0], view_proj.data()[1], view_proj.data()[2],0,
-//		view_proj.data()[3], view_proj.data()[4], view_proj.data()[5],0,
-//		0,0,1,0,
-//		view_proj.data()[6], view_proj.data()[7], 0,1,
-//		};
-//	}
-//	else
-//	{
-//		view_proj_mat[0] = glm::vec4(viewport.get_viewport_xform()[0][0], viewport.get_viewport_xform()[0][1], 0, viewport.get_viewport_xform()[0][2]);
-//		view_proj_mat[1] = glm::vec4(viewport.get_viewport_xform()[1][0], viewport.get_viewport_xform()[1][1], 0, viewport.get_viewport_xform()[1][2]);
-//		view_proj_mat[2] = glm::vec4(0, 0, 1, 0);
-//		view_proj_mat[3] = glm::vec4(viewport.get_viewport_xform()[2][0], viewport.get_viewport_xform()[2][1], 0, 1);
-//
-//	}
-//
-//	glBindVertexArray(model->Get_VAO_Handle());
-//	GLenum err = glGetError();
-//	if (err != GL_NO_ERROR)
-//	{
-//		std::cout << "Error: " << err << std::endl;
-//	}
-//
-//	// Enable Alpha - GL_RED
-//
-//
-//	glEnable(GL_BLEND);
-//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//	text.Bind();
-//	shader->Activate();
-//	glm::mat4  mdl = view_proj_mat * text.transform.model;
-//
-//	auto& chars = text.GetCharacters();
-//
-//	glm::vec4 p = mdl* glm::vec4{ 50,20,0,1 };
-//
-//	glm::vec4  data = mdl * glm::vec4(0, 0, 0, 1);
-//	shader->Set_Uniform("uTransform", view_proj_mat *  text.transform.model);
-//	// Check for errors
-//	shader->Set_Uniform("uTexture", 0);
-//	//Bind texture
-//	glBindTextureUnit(0, text.GetFont()->GetGlyph('K').texture_handle);
-//	glDrawElementsInstanced(GL_TRIANGLES, static_cast<int>(model->Get_Vertex_Indices().size()), GL_UNSIGNED_SHORT, nullptr, text.count());
-//
-//	shader->Deactivate();
-//	glBindVertexArray(0);
-//
-//	text.Unbind();
-//}
-
-
 
 

@@ -50,7 +50,7 @@ struct SageModelManager
 			A reference to SageModel
 	*******************************************************************************/
 	static SageModel& CreatePrimitiveModel(std::string _name, int _shape, int _type);
-	static SageModel& GetModel(std::string _name);
+	
 };
 
 #endif

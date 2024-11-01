@@ -90,20 +90,6 @@ std::string SageShaderManager::Get_Shader_File_Path(std::string const& name)
 }
 
 
-SageShader& SageShaderManager::Get_Shader_Program(std::string name)
-{
-	if (shaders.contains(name))
-	{
-		return shaders[name];
-	}
-	else
-	{
-		std::cerr << "Error: Shader not found." << '\n';
-		throw "Error: Shader not found.";
-	}
-}
-
-
 
 
 
