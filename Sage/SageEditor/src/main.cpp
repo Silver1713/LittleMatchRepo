@@ -20,6 +20,7 @@
 #include "GameObjects.hpp"
 
 #include "KeyInputs.h"
+#include "SageEditor.h"
 #include "SageTimer.hpp"
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -109,8 +110,11 @@ int main(int, char**)
         draw();
         if (SageUIEditor::is_playing && SageUIEditor::play_select)
         {
-            SageEngine::Update();
-            
+            SageEditor::sage_editor_play();
+        }
+        if (SageUIEditor::pause_select)
+        {
+            SageEditor::sage_editor_stop();
         }
 
 		SageEngine::Draw(true);

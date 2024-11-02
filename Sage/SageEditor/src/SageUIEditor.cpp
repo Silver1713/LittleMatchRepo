@@ -346,8 +346,9 @@ namespace SageUIEditor
                 play_select = true;
                 pause_select = false;
                 // NEED FIX
-                is_playing = true;
                 glfwSetTime(0);
+                is_playing = true;
+                
             }
             ImGui::SetCursorPosX(button_x.x/2 - 100.0f);
             if (ImGui::Button("STOP"))
@@ -356,11 +357,6 @@ namespace SageUIEditor
                 //SageTimer::delta_time(0);
                 play_select = false;
                 is_playing = false;
-
-                //SM::Set_Current_Level("level_1");
-                //glfwSetTime(0);
-                //SM::Go_To_Next_Scene();
-                //SageHierarchy::Update_Hierarchy();
 
             }
             // ADD MORE FOR MAIN MENU
