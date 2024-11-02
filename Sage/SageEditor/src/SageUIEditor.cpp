@@ -11,9 +11,11 @@
 #include "GameObjects.hpp"
 #include "SageHierarchy.hpp"
 #include "SageFrameBuffer.hpp"
+#include "SageHelper.hpp"
 #include "SageRenderer.hpp"
 #include "SageInspector.hpp"
 #include "SageProject.hpp"
+#include "SageTimer.hpp"
 #include "SceneManager.hpp"
 
 static bool show_hierarchy_window = true;
@@ -28,6 +30,10 @@ static bool show_assets_window = false;
 namespace SageUIEditor
 {
     ImGuiTextFilter     Filter;
+
+    bool play_select = false;
+    bool pause_select = false;
+    bool is_playing = false;    // State to control engine dt flow
 
     // Bool flags for the toggling of windows
     void Show_Hierarchy_Window() {
@@ -77,7 +83,8 @@ namespace SageUIEditor
         {
             ImGui::Begin("Scene");
             ImGui::Image(SageRenderer::Get_FrameBuffer()->Get_Color_Buffer_Handle(), { 1920,1080 }, { 0,1 }, { 1,0 });
-            
+            ;
+            // TIME IS FLOWING CONSTANTLY IN BACKGROUND
             ImGui::End();
         }
     }
@@ -85,8 +92,9 @@ namespace SageUIEditor
     void Show_Game_Window()
     {
         if (show_game_window)
-        {
+        {   
             ImGui::Begin("Game");
+
             ImGui::Text("This is the Game window.");
             ImGui::End();
         }
@@ -102,9 +110,70 @@ namespace SageUIEditor
         }
     }
 
+    /*void Show_Play_Pause_Bar()
+    //{
+    //    // Create a new toolbar window below the main menu bar
+    //    ImGui::SetNextWindowPos(ImVec2(0, 20), ImGuiCond_Always);
+    //    ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, 50), ImGuiCond_Always);
+
+    //    ImGui::Begin("PlayPauseToolbar");
+
+    //    // Create Play button
+    //    if (ImGui::Button("Play")) {
+    //        play_select = true;
+    //        pause_select = false; // Only one can be selected at a time
+    //    }
+
+    //    ImGui::SameLine();
+
+    //    // Create Pause button
+    //    if (ImGui::Button("Pause")) {
+    //        pause_select = true;
+    //        play_select = false;
+    //    }
+
+    //    ImGui::End();
+    //    //ImGui::BeginChild("PlayPause", ImVec2(ImGui::GetWindowWidth(), 50), false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+    //    //// Create Play button
+    //    //if (ImGui::Selectable("Play", play_select)) {
+    //    //    play_select = true;
+    //    //    pause_select = false; // Only one can be selected at a time
+    //    //}
+
+    //    //ImGui::SameLine();
+
+    //    //// Create Pause button
+    //    //if (ImGui::Selectable("Pause", pause_select)) {
+    //    //    pause_select = true;
+    //    //    play_select = false; // Only one can be selected at a time
+    //    //}
+    //    //ImGui::EndChild();
+    //    //ImGui::BeginChild("PlayPauseBar", ImVec2(window_size.x, 100), true);
+
+    //    //float play_buttonY = 25.0f;
+    //    //float play_buttonX = (window_size.x / 2.0f) - 60.0f;
+
+    //    //ImGui::SetCursorPos(ImVec2(play_buttonX, play_buttonY));
+    //    //if (ImGui::Button("Play"))
+    //    //{
+    //    //    play_select = true;
+    //    //    pause_select = false;
+    //    //}
+
+    //    //ImGui::SetCursorPos(ImVec2(play_buttonX + 100.0f, play_buttonY));
+    //    //if (ImGui::Button("Pause"))
+    //    //{
+    //    //    play_select = false;
+    //    //    pause_select = true;
+    //    //}
+    //    //ImGui::EndChild();
+    //    //ImGui::End();
+    }*/
+
     void RenderGUI()
     {
-        //ImGui::NewFrame();
+        ImGui::NewFrame();
         // DOCKSPACE
 
         // READ THIS !!!
@@ -258,6 +327,7 @@ namespace SageUIEditor
                 }
                 ImGui::EndMenu();
             }
+            
             if (ImGui::BeginMenu("Window"))
             {
                 ImGui::MenuItem("Scene", nullptr, &show_scene_window);
@@ -268,6 +338,30 @@ namespace SageUIEditor
                 ImGui::MenuItem("Project", nullptr, &show_project_window);
 
                 ImGui::EndMenu();
+            }
+            ImVec2 button_x = ImGui::GetWindowSize();
+            ImGui::SetCursorPosX((button_x.x/2) - 150.0f);
+            if (ImGui::Button("PLAY"))
+            {
+                play_select = true;
+                pause_select = false;
+                // NEED FIX
+                is_playing = true;
+                glfwSetTime(0);
+            }
+            ImGui::SetCursorPosX(button_x.x/2 - 100.0f);
+            if (ImGui::Button("STOP"))
+            {
+                pause_select = true;
+                //SageTimer::delta_time(0);
+                play_select = false;
+                is_playing = false;
+
+                //SM::Set_Current_Level("level_1");
+                //glfwSetTime(0);
+                //SM::Go_To_Next_Scene();
+                //SageHierarchy::Update_Hierarchy();
+
             }
             // ADD MORE FOR MAIN MENU
             ImGui::EndMainMenuBar();
