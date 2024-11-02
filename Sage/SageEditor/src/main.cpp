@@ -9,6 +9,7 @@
 
 #include <backward.hpp>
 #include "SageUIEditor.hpp"
+#include "SageHierarchy.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -19,6 +20,8 @@
 #include "GameObjects.hpp"
 
 #include "KeyInputs.h"
+#include "SageEditor.h"
+#include "SageTimer.hpp"
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
@@ -79,6 +82,10 @@ SageWindow* window_self;
 ImVec4 clear_color;
 
 // Main code
+namespace Sage_Editor_Main
+{
+	
+}
 int main(int, char**)
 {
     // Setup Dear ImGui context
@@ -86,11 +93,8 @@ int main(int, char**)
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
-    //io.ConfigViewportsNoAutoMerge = true;
-    //io.ConfigViewportsNoTaskBarIcon = true;
 
 	SageEngine::Init(editor_window_config_path.c_str());
 	init();
@@ -99,10 +103,20 @@ int main(int, char**)
 
     while (!glfwWindowShouldClose(window))
     {
-
+        /// KEEP LOOPING
         update();
-		//SageEngine::Update();
+        
+		
         draw();
+        if (SageUIEditor::is_playing && SageUIEditor::play_select)
+        {
+            SageEditor::sage_editor_play();
+        }
+        if (SageUIEditor::pause_select)
+        {
+            SageEditor::sage_editor_stop();
+        }
+
 		SageEngine::Draw(true);
 
         // Update and Render additional Platform Windows
@@ -135,8 +149,6 @@ int main(int, char**)
 
 int init()
 {
-    //EditorStateManager::Add_Selected_Object(Game_Objects::Get_Game_Object("Player"));
-
     // GL 3.0 + GLSL 130
     const char* glsl_version = "#version 450";
 
@@ -149,7 +161,7 @@ int init()
     glfwSwapInterval(1); // Enable vsync
 
     
-    ImGuiIO& io = ImGui::GetIO(); 
+    ImGuiIO& io = ImGui::GetIO();
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 
@@ -175,6 +187,7 @@ int init()
     io.LogFilename = "../SageEditor/config/custom_layout_log.txt";
     ImGui::LoadIniSettingsFromDisk(io.IniFilename);
 
+    SageHierarchy::Update_Hierarchy();
     return 0;
 }
 
@@ -189,10 +202,6 @@ void update()
     //ImGuiIO& io = ImGui::GetIO();
 
 	SAGEInputHandler::update();
-    
-    
-
-	
 
     if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
     {
@@ -203,7 +212,7 @@ void update()
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+    //ImGui::NewFrame();
 }
 
 void draw()

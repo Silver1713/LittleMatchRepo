@@ -11,10 +11,12 @@
 #include "GameObjects.hpp"
 #include "SageHierarchy.hpp"
 #include "SageFrameBuffer.hpp"
+#include "SageHelper.hpp"
 #include "SageRenderer.hpp"
 #include "SageInspector.hpp"
 #include "SageMonoManager.hpp"
 #include "SageProject.hpp"
+#include "SageTimer.hpp"
 #include "SceneManager.hpp"
 
 static bool show_hierarchy_window = true;
@@ -30,14 +32,19 @@ namespace SageUIEditor
 {
 	ImGuiTextFilter     Filter;
 
-	// Bool flags for the toggling of windows
-	void Show_Hierarchy_Window() {
-		if (show_hierarchy_window) {
-			ImGui::Begin("Hierarchy");
-			SageHierarchy::Hierarchy();
-			ImGui::End();
-		}
-	}
+    bool play_select = false;
+    bool pause_select = false;
+    bool is_playing = false;    // State to control engine dt flow
+
+    // Bool flags for the toggling of windows
+    void Show_Hierarchy_Window() {
+        if (show_hierarchy_window) {
+            ImGui::Begin("Hierarchy");
+            // Call your hierarchy drawing function
+            SageHierarchy::Hierarchy(); // Render the actual hierarchy nodes
+            ImGui::End(); // End the main window
+        }
+    }
 
 	void Show_Console_Window()
 	{
@@ -84,20 +91,20 @@ namespace SageUIEditor
 		}
 	}
 
-	void Show_Inspector_Window()
-	{
-		if (show_inspector_window)
-		{
-			ImGui::Begin("Inspector");
-			if (SageHierarchy::selectedObject != nullptr)
-			{
-				EditorStateManager::Select_Object(SageHierarchy::selectedObject);
-				Sage_Inspector::ShowInspector(SageHierarchy::selectedObject);
-			}
-			ImGui::Text("This is the Inspector window.");
-			ImGui::End();
-		}
-	}
+    void Show_Inspector_Window()
+    {
+        if (show_inspector_window)
+        {
+            ImGui::Begin("Inspector");
+            if (SageHierarchy::selected_object != nullptr)
+            {
+                EditorStateManager::Select_Object(SageHierarchy::selected_object);
+                Sage_Inspector::Show_Inspector(SageHierarchy::selected_object);
+            }
+            ImGui::Text("This is the Inspector window.");
+            ImGui::End();
+        }
+    }
 
 	void Show_Project_Window() {
 		if (show_project_window) {
@@ -106,26 +113,28 @@ namespace SageUIEditor
 		}
 	}
 
-	void Show_Scene_Window()
-	{
-		if (show_scene_window)
-		{
-			ImGui::Begin("Scene");
-			ImGui::Image(SageRenderer::Get_FrameBuffer()->Get_Color_Buffer_Handle(), { 1920,1080 }, { 0,1 }, { 1,0 });
+    void Show_Scene_Window()
+    {
+        if (show_scene_window)
+        {
+            ImGui::Begin("Scene");
+            ImGui::Image(SageRenderer::Get_FrameBuffer()->Get_Color_Buffer_Handle(), { 1920,1080 }, { 0,1 }, { 1,0 });
+            ;
+            // TIME IS FLOWING CONSTANTLY IN BACKGROUND
+            ImGui::End();
+        }
+    }
 
-			ImGui::End();
-		}
-	}
+    void Show_Game_Window()
+    {
+        if (show_game_window)
+        {   
+            ImGui::Begin("Game");
 
-	void Show_Game_Window()
-	{
-		if (show_game_window)
-		{
-			ImGui::Begin("Game");
-			ImGui::Text("This is the Game window.");
-			ImGui::End();
-		}
-	}
+            ImGui::Text("This is the Game window.");
+            ImGui::End();
+        }
+    }
 
 	void Show_Asset_Window()
 	{
@@ -137,206 +146,71 @@ namespace SageUIEditor
 		}
 	}
 
-	//    //Drawing Hierarchy dockspace with parameter of the TreeNode
-	//    //Here you can see 3 examples of what is to be expected from manipulation of Hierarchy dockspace
-	//    void Hierarchy(TreeNode* _root_node)
-	//    {
-	//        static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
-	//
-	//        // - Currently using a table to benefit from RowBg feature
-	//        //Ctrl+F allows user to search GameObject
-	//        ImGui::SetNextItemWidth(-FLT_MIN);
-	//        ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F, ImGuiInputFlags_Tooltip);
-	//        ImGui::PushItemFlag(ImGuiItemFlags_NoNavDefaultFocus, true);
-	//        if (ImGui::Button("Add GameObject")) {
-	//            CreateNewGameObject();
-	//        }
-	//        if (ImGui::InputTextWithHint("##search", "search", Filter.InputBuf, IM_ARRAYSIZE(Filter.InputBuf), ImGuiInputTextFlags_EscapeClearsAll))
-	//            Filter.Build();
-	//        ImGui::PopItemFlag();
-	////#pragma region Visible Selection
-	////        // 'selection_mask' is dumb representation of what may be user-side selection state.
-	////        //  You may retain selection state inside or outside your objects in whatever format you see fit.
-	////        // 'node_clicked' is temporary storage of what node we have clicked to process selection at the end
-	////        /// of the loop. May be a pointer to your own node type, etc.
-	////
-	////        //This example shows the selectable nodes of GameObject but is not reflected onto the Inspector
-	////        static int selection_mask = (1 << 2);
-	////        int node_clicked = -1;
-	////        for (int i = 0; i < 6; i++)
-	////        {
-	////            // Disable the default "open on single-click behavior" + set Selected flag according to our selection.
-	////            // To alter selection we use IsItemClicked() && !IsItemToggledOpen(), so clicking on an arrow doesn't alter selection.
-	////            ImGuiTreeNodeFlags node_flags = base_flags;
-	////            const bool is_selected = (selection_mask & (1 << i)) != 0;
-	////            if (is_selected)
-	////                node_flags |= ImGuiTreeNodeFlags_Selected;
-	////
-	////            // Items 3..5 are Tree Leaves
-	////            // The only reason we use TreeNode at all is to allow selection of the leaf. Otherwise we can
-	////            // use BulletText() or advance the cursor by GetTreeNodeToLabelSpacing() and call Text().
-	////            node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
-	////            ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, "Selectable Leaf %d", i);
-	////            if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-	////                node_clicked = i;
-	////            if (ImGui::BeginDragDropSource())
-	////            {
-	////                ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
-	////                ImGui::Text("This is a drag and drop source");
-	////                ImGui::EndDragDropSource();
-	////            }
-	////        }
-	////        if (node_clicked != -1)
-	////        {
-	////            // Update selection state
-	////            // (process outside of tree loop to avoid visual inconsistencies during the clicking frame)
-	////            if (ImGui::GetIO().KeyCtrl)
-	////                selection_mask ^= (1 << node_clicked);          // CTRL+click to toggle
-	////            else //if (!(selection_mask & (1 << node_clicked))) // Depending on selection behavior you want, may want to preserve selection when clicking on item that is part of the selection
-	////                selection_mask = (1 << node_clicked);           // Click to single-select
-	////        }
-	////#pragma endregion
-	////
-	////#pragma region Inspector Properties
-	////        //This is the main example for changing of properties in Inspector when selecting a GameObject in Hierarchy
-	////        //Currently, it doesn't save the properties as there's no File I/O or Parser for data.
-	////        //Renaming in Inspector is not properly added as it doesn't update onto the Hierarchy
-	////        if (ImGui::BeginTable("##bg", 1, ImGuiTableFlags_RowBg))
-	////        {
-	////            for (TreeNode* node : _root_node->Childs)
-	////                if (Filter.PassFilter(node->Name)) // Filter root node
-	////                    DrawTreeNode(node);
-	////
-	////            // FIXME: there is temporary (usually single-frame) ID Conflict during reordering as a same item may be submitting twice.
-	////            // This code was always slightly faulty but in a way which was not easily noticeable.
-	////            // Until we fix this, enable ImGuiItemFlags_AllowDuplicateId to disable detecting the issue.
-	////            ImGui::PushItemFlag(ImGuiItemFlags_AllowDuplicateId, true);
-	////        }
-	////#pragma endregion
-	////
-	////#pragma region GameObject Reordering
-	////            //This example shows the reordering of GameObjects on the Hierarchy. Simple drag and drop.
-	////            //Hardcoded array of GameObjects
-	////            static const char* item_names[] = { "Empty GameObject 1", "Empty GameObject 2", "Empty GameObject 3" };
-	////            for (int n = 0; n < IM_ARRAYSIZE(item_names); n++)
-	////            {
-	////                const char* item = item_names[n];
-	////                ImGui::Selectable(item);
-	////
-	////                if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
-	////                {
-	////                    int n_next = n + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
-	////                    if (n_next >= 0 && n_next < IM_ARRAYSIZE(item_names))
-	////                    {
-	////                        item_names[n] = item_names[n_next];
-	////                        item_names[n_next] = item;
-	////                        ImGui::ResetMouseDragDelta();
-	////                    }
-	////                }
-	////            }
-	////            ImGui::PopItemFlag();
-	////            ImGui::EndTable();
-	////#pragma endregion
-	//    }
+    /*void Show_Play_Pause_Bar()
+    //{
+    //    // Create a new toolbar window below the main menu bar
+    //    ImGui::SetNextWindowPos(ImVec2(0, 20), ImGuiCond_Always);
+    //    ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x, 50), ImGuiCond_Always);
 
-	////Draws Inspector dockspace
-	//void Inspector()
-	//{
-	//    // Right side: draw properties
-	//    ImGui::BeginGroup();
-	//    if (TreeNode* node = selected_node)
-	//    {
-	//        //This is how renaming works on the Inspector that is supposed to change in the Hierarchy.
-	//        if (ImGui::InputText("###name", node->Name, IM_ARRAYSIZE(node->Name), ImGuiInputTextFlags_EnterReturnsTrue))
-	//        {
-	//            /*RenamingDoc = doc;
-	//            RenamingStarted = true;*/
-	//        }
-	//        ImGui::Separator();
-	//        if (ImGui::BeginTable("##properties", 2, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY))
-	//        {
-	//            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed);
-	//            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch, 2.0f); // Default twice larger
-	//            if (node->HasData)
-	//            {
-	//                // In a typical application, the structure description would be derived from a data-driven system.
-	//                // - We try to mimic this with our ExampleMemberInfo structure and the ExampleTreeNodeMemberInfos[] array.
-	//                // - Limits and some details are hard-coded to simplify the demo.
-	//                for (const ComponentInfo& field_desc : component_infos)
-	//                {
-	//                    ImGui::TableNextRow();
-	//                    ImGui::PushID(field_desc.Name);
-	//                    ImGui::TableNextColumn();
-	//                    ImGui::AlignTextToFramePadding();
-	//                    ImGui::TextUnformatted(field_desc.Name);
-	//                    ImGui::TableNextColumn();
-	//                    void* field_ptr = (void*)(((unsigned char*)node) + field_desc.Offset);
-	//                    switch (field_desc.DataType)
-	//                    {
-	//                    case ImGuiDataType_Bool:
-	//                    {
-	//                        IM_ASSERT(field_desc.DataCount == 1);
-	//                        ImGui::Checkbox("##Editor", (bool*)field_ptr);
-	//                        break;
-	//                    }
-	//                    case ImGuiDataType_S32:
-	//                    {
-	//                        int v_min = INT_MIN, v_max = INT_MAX;
-	//                        ImGui::SetNextItemWidth(-FLT_MIN);
-	//                        ImGui::DragScalarN("##Editor", field_desc.DataType, field_ptr, field_desc.DataCount, 1.0f, &v_min, &v_max);
-	//                        break;
-	//                    }
-	//                    case ImGuiDataType_Float:
-	//                    {
-	//                        float v_min = 0.0f, v_max = 1.0f;
-	//                        ImGui::SetNextItemWidth(-FLT_MIN);
-	//                        ImGui::SliderScalarN("##Editor", field_desc.DataType, field_ptr, field_desc.DataCount, &v_min, &v_max);
-	//                        break;
-	//                    }
-	//                    }
-	//                    ImGui::PopID();
-	//                }
-	//            }
-	//            ImGui::EndTable();
-	//        }
-	//    }
-	//    ImGui::EndGroup();
-	//}
+    //    ImGui::Begin("PlayPauseToolbar");
 
-	void RenderInspectorWindow() {
-		//if (selectedObject) {
-		//    // Display properties like name
-		//    char nameBuffer[128];
-		//    strcpy(nameBuffer, selectedObject->name.c_str());
-		//    if (ImGui::InputText("Name", nameBuffer, sizeof(nameBuffer))) {
-		//        selectedObject->name = nameBuffer;
-		//    }
-		//    // Display components and allow adding new ones
-		//    ImGui::Text("Components:");
-		//    for (auto* component : selectedObject->components) {
-		//        ImGui::Text("Component");
-		//    }
-		//    if (ImGui::Button("Add Component")) {
-		//        ImGui::OpenPopup("AddComponentPopup");
-		//    }
-		//    if (ImGui::BeginPopup("AddComponentPopup")) {
-		//        // Example: list of component types to add
-		//        if (ImGui::MenuItem("Transform")) {
-		//        }
-		//        if (ImGui::MenuItem("Mesh Renderer")) {
-		//        }
-		//        ImGui::EndPopup();
-		//    }
-		//}
-		//else {
-		//    ImGui::Text("Select a GameObject to edit its properties");
-		//}
-	}
+    //    // Create Play button
+    //    if (ImGui::Button("Play")) {
+    //        play_select = true;
+    //        pause_select = false; // Only one can be selected at a time
+    //    }
 
-	void RenderGUI()
-	{
-		//ImGui::NewFrame();
-		// DOCKSPACE
+    //    ImGui::SameLine();
+
+    //    // Create Pause button
+    //    if (ImGui::Button("Pause")) {
+    //        pause_select = true;
+    //        play_select = false;
+    //    }
+
+    //    ImGui::End();
+    //    //ImGui::BeginChild("PlayPause", ImVec2(ImGui::GetWindowWidth(), 50), false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+    //    //// Create Play button
+    //    //if (ImGui::Selectable("Play", play_select)) {
+    //    //    play_select = true;
+    //    //    pause_select = false; // Only one can be selected at a time
+    //    //}
+
+    //    //ImGui::SameLine();
+
+    //    //// Create Pause button
+    //    //if (ImGui::Selectable("Pause", pause_select)) {
+    //    //    pause_select = true;
+    //    //    play_select = false; // Only one can be selected at a time
+    //    //}
+    //    //ImGui::EndChild();
+    //    //ImGui::BeginChild("PlayPauseBar", ImVec2(window_size.x, 100), true);
+
+    //    //float play_buttonY = 25.0f;
+    //    //float play_buttonX = (window_size.x / 2.0f) - 60.0f;
+
+    //    //ImGui::SetCursorPos(ImVec2(play_buttonX, play_buttonY));
+    //    //if (ImGui::Button("Play"))
+    //    //{
+    //    //    play_select = true;
+    //    //    pause_select = false;
+    //    //}
+
+    //    //ImGui::SetCursorPos(ImVec2(play_buttonX + 100.0f, play_buttonY));
+    //    //if (ImGui::Button("Pause"))
+    //    //{
+    //    //    play_select = false;
+    //    //    pause_select = true;
+    //    //}
+    //    //ImGui::EndChild();
+    //    //ImGui::End();
+    }*/
+
+    void RenderGUI()
+    {
+        ImGui::NewFrame();
+        // DOCKSPACE
 
 		// READ THIS !!!
 		// TL;DR; this demo is more complicated than what most users you would normally use.
@@ -390,127 +264,148 @@ namespace SageUIEditor
 		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 
-		// MAIN MENU BAR
-		if (ImGui::BeginMainMenuBar())
-		{
-			if (ImGui::BeginMenu("File"))
-			{
-				if (ImGui::MenuItem("New"))
-				{
-					//std::string editor_startup_scene = "main_menu";
-					SM::Set_Current_Level("level_1");
+        // MAIN MENU BAR
+        if (ImGui::BeginMainMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("New"))
+                {
+                    //std::string editor_startup_scene = "main_menu";
+                    SM::Set_Current_Level("level_1");
+                    
+                    SM::Go_To_Next_Scene();
+                    SageHierarchy::Update_Hierarchy();
+                }
+                if (ImGui::MenuItem("Open", "Ctrl+O"))
+                {
+                    // To open scene
+                }
+                if (ImGui::MenuItem("Save", "Ctrl+S"))
+                {
+                    // To save scene
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Exit"))
+                {
+                    std::exit(0);
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Edit"))
+            {
+                if (ImGui::MenuItem("Undo", "CTRL+Z"))
+                {
+                    // Undo Action
+                }
+                if (ImGui::MenuItem("Redo", "Ctrl+Y"))
+                {
+                    // Redo Action
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Settings"))
+                {
 
-					SM::Go_To_Next_Scene();
-				}
-				if (ImGui::MenuItem("Open", "Ctrl+O"))
-				{
-					// To open scene
-				}
-				if (ImGui::MenuItem("Save", "Ctrl+S"))
-				{
-					// To save scene
-				}
-				ImGui::Separator();
-				if (ImGui::MenuItem("Exit"))
-				{
-					std::exit(0);
-				}
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu("Edit"))
-			{
-				if (ImGui::MenuItem("Undo", "CTRL+Z"))
-				{
-					// Undo Action
-				}
-				if (ImGui::MenuItem("Redo", "Ctrl+Y"))
-				{
-					// Redo Action
-				}
-				ImGui::Separator();
-				if (ImGui::MenuItem("Settings"))
-				{
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Assets"))
+            {
+                if (ImGui::MenuItem("Create"))
+                {
+                    // Create new assets;
+                }
+                if (ImGui::MenuItem("Import New Asset"))
+                {
+                    // Import new assets
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("GameObject"))
+            {
+                if (ImGui::MenuItem("Create Empty"))
+                {
+                    // Create empty game object
+                }
+                if (ImGui::MenuItem("2D Object"))
+                {
+                    // Create 2D objects such as sprite UI elements etc
+                }
+                if (ImGui::MenuItem("Audio"))
+                {
+                    // Create audio sources
+                }
+                if (ImGui::MenuItem("Camera"))
+                {
+                    // Add camera to scene
+                }
+                if (ImGui::MenuItem("Effect"))
+                {
+                    // Add particle systems
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Component"))
+            {
+                if (ImGui::MenuItem("Physics 2D"))
+                {
+                    // rigidbodies 2d
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Audio"))
+                {
+                    // Add audio component to game object?
+                }
+                ImGui::Separator();
+                if (ImGui::MenuItem("Scripts"))
+                {
+                    // Attach scripts that contain custom functionality
+                }
+                ImGui::EndMenu();
+            }
+            
+            if (ImGui::BeginMenu("Window"))
+            {
+                ImGui::MenuItem("Scene", nullptr, &show_scene_window);
+                ImGui::MenuItem("Hierarchy", nullptr, &show_hierarchy_window);
+                ImGui::MenuItem("Inspector", nullptr, &show_inspector_window);
+                ImGui::MenuItem("Game", nullptr, &show_game_window);
+                ImGui::MenuItem("Console", nullptr, &show_console_window);
+                ImGui::MenuItem("Project", nullptr, &show_project_window);
 
-				}
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu("Assets"))
-			{
-				if (ImGui::MenuItem("Create"))
-				{
-					// Create new assets;
-				}
-				if (ImGui::MenuItem("Import New Asset"))
-				{
-					// Import new assets
-				}
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu("GameObject"))
-			{
-				if (ImGui::MenuItem("Create Empty"))
-				{
-					// Create empty game object
-				}
-				if (ImGui::MenuItem("2D Object"))
-				{
-					// Create 2D objects such as sprite UI elements etc
-				}
-				if (ImGui::MenuItem("Audio"))
-				{
-					// Create audio sources
-				}
-				if (ImGui::MenuItem("Camera"))
-				{
-					// Add camera to scene
-				}
-				if (ImGui::MenuItem("Effect"))
-				{
-					// Add particle systems
-				}
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu("Component"))
-			{
-				if (ImGui::MenuItem("Physics 2D"))
-				{
-					// rigidbodies 2d
-				}
-				ImGui::Separator();
-				if (ImGui::MenuItem("Audio"))
-				{
-					// Add audio component to game object?
-				}
-				ImGui::Separator();
-				if (ImGui::MenuItem("Scripts"))
-				{
-					// Attach scripts that contain custom functionality
-				}
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu("Window"))
-			{
-				ImGui::MenuItem("Scene", nullptr, &show_scene_window);
-				ImGui::MenuItem("Hierarchy", nullptr, &show_hierarchy_window);
-				ImGui::MenuItem("Inspector", nullptr, &show_inspector_window);
-				ImGui::MenuItem("Game", nullptr, &show_game_window);
-				ImGui::MenuItem("Console", nullptr, &show_console_window);
-				ImGui::MenuItem("Project", nullptr, &show_project_window);
+                ImGui::EndMenu();
+            }
+            ImVec2 button_x = ImGui::GetWindowSize();
+            ImGui::SetCursorPosX((button_x.x/2) - 150.0f);
+            if (ImGui::Button("PLAY"))
+            {
+                play_select = true;
+                pause_select = false;
+                // NEED FIX
+                glfwSetTime(0);
+                is_playing = true;
+                
+            }
+            ImGui::SetCursorPosX(button_x.x/2 - 100.0f);
+            if (ImGui::Button("STOP"))
+            {
+                pause_select = true;
+                //SageTimer::delta_time(0);
+                play_select = false;
+                is_playing = false;
 
-				ImGui::EndMenu();
-			}
-			// ADD MORE FOR MAIN MENU
-			ImGui::EndMainMenuBar();
-		}
+            }
+            // ADD MORE FOR MAIN MENU
+            ImGui::EndMainMenuBar();
+        }
 
-		Show_Scene_Window();
-		Show_Game_Window();
-		Show_Inspector_Window();
-		SageHierarchy::UpdateGameObjectsFromScene();
-		Show_Hierarchy_Window();
-		Show_Console_Window();
-		Show_Project_Window();
-		Show_Asset_Window();
+        Show_Scene_Window();
+        Show_Game_Window();
+        Show_Inspector_Window();
+        Show_Hierarchy_Window();
+        Show_Console_Window();
+        Show_Project_Window();
+        Show_Asset_Window();
 
 		if (exit_requested)
 		{

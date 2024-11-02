@@ -28,7 +28,6 @@
 #include <backward.hpp>
 #include "SageHelper.hpp"
 #include "SageEngine.hpp"
-
 // Forward declaration
 void init();
 void update();
@@ -79,7 +78,6 @@ int main()
 *******************************************************************************/
 void init()
 {
-
 	SageEngine::Init();
 }
 
@@ -89,7 +87,6 @@ void init()
 *******************************************************************************/
 void update()
 {
-
 	SageEngine::Update();
 }
 

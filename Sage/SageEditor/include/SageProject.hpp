@@ -2,6 +2,7 @@
 #include "imgui.h"
 #include <filesystem>
 #include <iostream>
+#include "AssetLoader.hpp"
 
 namespace Sage_Project
 {

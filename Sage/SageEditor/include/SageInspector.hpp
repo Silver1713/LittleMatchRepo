@@ -18,5 +18,5 @@ namespace Sage_Inspector
 
 	void Show_Sprite2D_Component(Sprite2D* _sprited2D);
 
-	void ShowInspector(GameObject* _game_object);
+	void Show_Inspector(GameObject* _game_object);
 }

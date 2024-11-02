@@ -171,6 +171,7 @@ void SageEngine::Input()
 void SageEngine::Update()
 {
     SageTimer::Update();
+    std::cout << SageTimer::delta_time << std::endl;
     SageHelper::Update();
     accumulator += SageTimer::delta_time;
     if (accumulator >= physics_update_target)
