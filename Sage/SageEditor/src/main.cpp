@@ -107,7 +107,6 @@ int main(int, char**)
         /// KEEP LOOPING
         update();
 		//SageEngine::Update();
-
         draw();
 		SageEngine::Draw(true);
 

@@ -382,8 +382,7 @@ namespace SM {
 		SM::Free();
 		SM::Unload();
 		SM::Load();
-		SM::Init();
-
+		//SM::Init();
 		std::cout << "Moving to next scene: " << level_ID << std::endl;
 	}
 	/*!*****************************************************************************
@@ -424,17 +423,6 @@ namespace SM {
 			SM::fp_draw = Game::Draw;
 			SM::fp_free = Game::Free;
 			SM::fp_unload = Game::Unload;
-		}
-		else if (level_ID == "editor_scene")
-		{
-			SM::fp_load = EditorScene::Load;
-			SM::fp_init = EditorScene::Init;
-			SM::fp_draw = EditorScene::Draw;
-			SM::fp_input = EditorScene::Input;
-			SM::fp_update = EditorScene::Update;
-			SM::fp_draw = EditorScene::Draw;
-			SM::fp_free = EditorScene::Free;
-			SM::fp_unload = EditorScene::Unload;
 		}
 		else
 		{

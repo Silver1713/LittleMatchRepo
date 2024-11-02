@@ -28,8 +28,6 @@
 #include <backward.hpp>
 #include "SageHelper.hpp"
 #include "SageEngine.hpp"
-#include "SageSystemManager.hpp"
-#include "KeyInputs.h"
 // Forward declaration
 void init();
 void update();
@@ -80,8 +78,6 @@ int main()
 *******************************************************************************/
 void init()
 {
-	SAGEInputHandler::init();
-	SageSystemManager::Init();
 	SageEngine::Init();
 }
 

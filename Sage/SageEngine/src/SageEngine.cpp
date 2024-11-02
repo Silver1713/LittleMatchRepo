@@ -17,6 +17,7 @@
 #include "SageMonoManager.hpp"
 #include "SageFrameBuffer.hpp"
 #include "SageEngine.hpp"
+#include <SageSystemManager.hpp>
 
 const GLFWvidmode* mode;
 namespace {
@@ -75,7 +76,8 @@ void SageEngine::Init()
     Assets::Init();
     Prefabs::Init();
     SageAudio::Init();
-
+    SAGEInputHandler::init();
+    SageSystemManager::Init();
     if (1) // to be changed with some sort of flag to detect if running through editor or as built game
     {
         SM::Startup_Scene(editor_startup_scene);
@@ -91,6 +93,8 @@ void SageEngine::Init(const char* editor_config_path)
 {
     SageMonoManager::Initialize();
     SageTimer::Init();
+    SAGEInputHandler::init();
+    SageSystemManager::Init();
 
     SageJSON::SageJSON editor_config;
   
