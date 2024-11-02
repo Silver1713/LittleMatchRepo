@@ -118,7 +118,7 @@ public:
 	  \return
 		A boolean indicating whether debug mode is enabled.
 	*******************************************************************************/
-	bool Get_Debug();
+	bool Get_Debug() const;
 
 	/*!*****************************************************************************
 	  \brief

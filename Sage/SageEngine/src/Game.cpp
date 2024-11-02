@@ -103,6 +103,7 @@ namespace Game {
 			BoxCollider2D* collider = object->Get_Component<BoxCollider2D>();
 			if (collider) {
 				collider->Set_Debug(props.show_collider_debug);
+				collider->Init(object);  // Make sure Init is called
 				collider_cache[props.object_name] = collider;
 			}
 		}
@@ -295,15 +296,27 @@ namespace Game {
 			transform_cache["Player"]->Translate({ -100.0f,0.f,0.f });
 		}
 
-		// Spawn different types of objects with number keys
+		// Spawn dynamic objects 
 		if (SAGEInputHandler::Get_Key_Pressed(SAGE_KEY_1)) {
-			// Spawn small, fast-moving object
 			static int small_counter = 0;
 			SpawnProperties small_props;
 			small_props.prefab_name = "SPAWN";
 			small_props.object_name = "SmallObject_" + std::to_string(small_counter++);
-			small_props.scale_range_min = { 50.0f, 50.0f, 0.0f };
-			small_props.scale_range_max = { 150.0f, 150.0f, 0.0f };
+
+			// Randomly choose between horizontal and vertical orientation
+			bool is_horizontal = (rand() % 2) == 0;
+
+			if (is_horizontal) {
+				// Horizontal object (wider than tall)
+				small_props.scale_range_min = { 150.0f, 50.0f, 0.0f };  // Wider minimum
+				small_props.scale_range_max = { 200.0f, 50.0f, 0.0f };  // Wider maximum
+			}
+			else {
+				// Vertical object (taller than wide)
+				small_props.scale_range_min = { 50.0f, 150.0f, 0.0f };  // Taller minimum
+				small_props.scale_range_max = { 50.0f, 200.0f, 0.0f };  // Taller maximum
+			}
+
 			small_props.position_range_min = { -200.0f, -200.0f, 0.0f };
 			small_props.position_range_max = { 200.0f, 200.0f, 0.0f };
 			small_props.enable_physics = true;
@@ -312,47 +325,33 @@ namespace Game {
 			GameObject* small_obj = Spawn_Dynamic_Object(small_props);
 			if (small_obj) {
 				RigidBody* rb = small_obj->Get_Component<RigidBody>();
-				if (!rb) {  // Only add if it doesn't exist
+				if (!rb) {
 					small_obj->Add_Component(std::make_unique<RigidBody>());
 					rb = small_obj->Get_Component<RigidBody>();
 					rb->Init(small_obj);
 				}
 
 				if (rb) {
-					// Set a fixed initial velocity for testing
-					float speed = 100.0f; // Increased speed for more visible movement
-
-					// Choose random direction (right, left, up, down)
-					int direction = rand() % 4;
+					float speed = 50.0f;
 					ToastBox::Vec2 newVelocity;
-					switch (direction) {
-					case 0: // Right
-						newVelocity = { speed, 0.0f };
-						break;
-					case 1: // Left
-						newVelocity = { -speed, 0.0f };
-						break;
-					case 2: // Up
-						newVelocity = { 0.0f, speed };
-						break;
-					case 3: // Down
-						newVelocity = { 0.0f, -speed };
-						break;
+
+					// Set velocity based on orientation for more interesting movement
+					if (is_horizontal) {
+						// Horizontal objects move vertically
+						newVelocity = { 0.0f, (rand() % 2 == 0) ? speed : -speed };
+					}
+					else {
+						// Vertical objects move horizontally
+						newVelocity = { (rand() % 2 == 0) ? speed : -speed, 0.0f };
 					}
 
-					// Set the velocity
 					rb->Set_Current_Velocity(newVelocity);
-
-					// Make sure gravity is disabled
 					rb->Set_Gravity_Flag(false);
 					rb->Set_Gravity({ 0.0f, 0.0f });
+					rb->Set_Mass(1.0f);
+					rb->Set_Restitution(0.50f);
+					rb->Set_Friction(0.1f);
 
-					// Set physics properties
-					rb->Set_Mass(0.5f);      // Light mass
-					rb->Set_Restitution(1.0f); // Perfect bounce
-					rb->Set_Friction(0.0f);    // No friction
-
-					// Store in game_objects map for update
 					game_objects[small_props.object_name] = small_obj;
 				}
 			}
@@ -576,7 +575,10 @@ namespace Game {
 	//}
 
 
-
+	/*!*****************************************************************************
+		  \brief
+			Updates the game scene
+	*******************************************************************************/
 	void Update() {
 		std::unordered_map<std::string, std::unique_ptr<GameObject>>& objects = Game_Objects::Get_Game_Objects();
 		std::vector<BoxCollider2D*> colliders{};
@@ -599,13 +601,13 @@ namespace Game {
 					pos.y += velocity.y * dt;
 
 					// Optional: Screen wrapping (adjust values based on your screen size)
-					float screenWidth = 1920.0f;
-					float screenHeight = 1080.0f;
+					//float screenWidth = 1920.0f;
+					//float screenHeight = 1080.0f;
 
-					if (pos.x > screenWidth / 2) pos.x = -screenWidth / 2;
-					if (pos.x < -screenWidth / 2) pos.x = screenWidth / 2;
-					if (pos.y > screenHeight / 2) pos.y = -screenHeight / 2;
-					if (pos.y < -screenHeight / 2) pos.y = screenHeight / 2;
+					//if (pos.x > screenWidth / 2) pos.x = -screenWidth / 2;
+					//if (pos.x < -screenWidth / 2) pos.x = screenWidth / 2;
+					//if (pos.y > screenHeight / 2) pos.y = -screenHeight / 2;
+					//if (pos.y < -screenHeight / 2) pos.y = screenHeight / 2;
 
 					transform->Set_Position(pos);
 				}
