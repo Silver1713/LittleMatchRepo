@@ -450,6 +450,7 @@ void SageAssembler::CompileScriptAsync(std::string const& name, std::string cons
 
 
 
+
 	if (syscall_status)
 	{
 		log = "Failed to compile";

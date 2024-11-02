@@ -1,5 +1,1 @@
-{
-  "MODIFY_ME": 9820.0,
-  "MODIFY_ME_NAME": "JOHN DOE",
-  "Data": { "MODIFY_ME": 200.0, "MODIFY_ME_NAME": "This is a name" }
-}
+{ "ID" : "This is a test ID", "Value" : "This is a test value", "Nested" : { "Value" : 10000.000000, "BoolArray" : [ { "Value" : 1 }, { "Value" : 0 }, 100.000000, [ 1.000000, 1.000000, 2.000000, 3.000000 ] ] } }

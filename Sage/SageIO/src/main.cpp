@@ -32,17 +32,18 @@ int main()
 
 
 	
-	std::cout << json["Nested"]["BoolArray"][2].as<JSON::NumberValue>()+2000 << std::endl;
+
+	json["Nested"]["BoolArray"][2] = 100.0;
+
 	JSON::NumberValue number = json["Nested"]["BoolArray"][2].as<JSON::NumberValue>();
+	std::cout << json["Nested"]["BoolArray"][2].as<JSON::NumberValue>() << '\n';
+	std::ofstream json_file(output);
 
+	json_file << json;
 
-
-
-	
-
-
-	
+	json_file.close();
 	json.close();
+	file.close();
 
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 

@@ -1,52 +1,65 @@
-/* Start Header ************************************************************************/
-/*!
-\file		Text.hpp
-\title		Little Match
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
-\par		b.muhammadhafiz@digipen.edu
-\date		27 October 2024
-\brief		Contains the derived class Text that overrides the virtual functions of the
-			base class Component to do Text specific tasks
-
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
-*/
-/* End Header **************************************************************************/
-#pragma once
-#include "Component.hpp"
-
-//Derived component class audio
-class Text : public Component
-{
-	/*!*****************************************************************************
-	  \brief
-		Initializes the component and assigns the parent to the gameobject that
-		created this component. Provides a space if any audio components need to
-		be initialized per gameobject
-
-	  \param _parent
-		the gameobject creating this component
-	*******************************************************************************/
-	void Init(GameObject* _parent) override;
-
-	/*!*****************************************************************************
-	  \brief
-		Updates any audio this component uses
-	*******************************************************************************/
-	void Update() override;
-
-	/*!*****************************************************************************
-	  \brief
-		Provides a space if there is any unloading or freeing may be required
-		per component
-	*******************************************************************************/
-	void Exit() override;
-
-	/*!*****************************************************************************
-	  \brief
-		Gets overriden based on what component this is
-
-	  \return
-		the enum representating what component this is
-	*******************************************************************************/
-	ComponentType Get_Component_Type() override;
-};
+//#ifndef TEXT_HPP
+//#define TEXT_HPP
+//#include "SageFont.hpp"
+//#include "Component.hpp"
+//
+//class Text : public Component // Require a Transform component
+//{
+//	using iterator = std::string::iterator;
+//	using const_iterator = std::string::const_iterator;
+//
+//
+//	size_t id;
+//	
+//	unsigned ssbo_character;
+//	TextRenderer::SageFont* font_model;
+//
+//	std::string text;
+//	int font_size;
+//	unsigned capacity;
+//	unsigned size;
+//
+//	static size_t id_counter;
+//public:
+//	Text();
+//	Text(const char* text, TextRenderer::SageFont* font = nullptr);
+//
+//	operator std::string() const;
+//
+//
+//	iterator begin();
+//	iterator end();
+//
+//	const_iterator begin() const;
+//	const_iterator end() const;
+//
+//	void push_back(const char& c);
+//	void pop_back();
+//
+//	void resize();
+//	void clear();
+//
+//	void unload();
+//
+//	Text& operator=(const std::string& str);
+//
+//	void set_font(TextRenderer::SageFont* font);
+//	void set_text(const char* text);
+//
+//	void allocate_ssbo(); // Allocate a buffer for the text
+//
+//	void realloc_ssbo(size_t size); // Reallocate the buffer for the text
+//
+//
+//	const char * c_str();
+//
+//
+//	iterator front;
+//	iterator back;
+//
+//
+//
+//
+//
+//};
+//#endif

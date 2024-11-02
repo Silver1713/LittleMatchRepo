@@ -460,6 +460,7 @@ namespace SageJSON::AST
 				}
 
 				delete _root;
+				_root = nullptr;
 			}
 		}
 		else if (_root->getType() == Node::AST_Type::ARRAY)
@@ -474,6 +475,7 @@ namespace SageJSON::AST
 					cleanup(i);
 				}
 				delete _root;
+				_root = nullptr;
 			}
 		}
 		else {
@@ -820,9 +822,39 @@ namespace SageJSON
 		if (ast.getRoot())
 		{
 			ast.cleanup(ast.getRoot());
+			ast.setRoot(nullptr);
+
 		}
 	}
 
+	SageJSON& SageJSON::operator=(double const value)
+	{
+		double converted = static_cast<double>(value);
+		try
+		{
+			if (std::holds_alternative<double>(current_node->getKey()))
+			{
+				current_node->getKey() = converted;
+				current_node = nullptr;
+			}
+			else if (std::holds_alternative<std::reference_wrapper<double>>(current_node->getKey()))
+			{
+				std::get<std::reference_wrapper<double>>(current_node->getKey()).get() = converted;
+				current_node = nullptr;
+			}
+			else
+			{
+				throw std::runtime_error("Type mismatch");
+			}
+			return *this;
+		}
+		catch (std::runtime_error& e)
+		{
+			SageJSONCerr << "Warning: " << e.what() << '\n' << " Variable is not converted to primitive data." << std::endl;
+			current_node = nullptr;
+			return *this;
+		}
+	}
 
 	void SageJSON::close()
 	{

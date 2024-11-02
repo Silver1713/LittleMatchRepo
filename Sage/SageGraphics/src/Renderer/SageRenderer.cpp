@@ -16,12 +16,16 @@
 
 #include "SageRendererInternal.hpp"
 #include "SageRenderer.hpp"
+
+#include "SageFontManager.hpp"
 #include "SageFrameBuffer.hpp"
+#include "SageFontManager.hpp"
 class SageCameraInternal2D;
 SageViewport SageRenderer::viewport;
 RENDER_CONFIG SageRenderer::default_config{ SageRenderer::SAGE_ENABLE_TEXTURE | SageRenderer::SAGE_ENABLE_ALPHA};
 SageCamera* SageRenderer::camera;
 SageShader* SageRenderer::default_shader;
+TextRenderer::SageFont* SageRenderer::font{};
 
 SageFrameBuffer* SageRenderer::framebuffer;
 void SageRenderer::Draw_Filled(SageObject& object, RENDER_CONFIG config)
@@ -97,6 +101,7 @@ void SageRenderer::Draw_Filled(SageModel& model, glm::mat3& matrix, RENDER_CONFI
 
 void SageRenderer::Init()
 {
+	//font = TextRenderer::SageFontManager::GetActiveFont();
 	SageRendererInternal::Init();
 	
 }
@@ -236,3 +241,19 @@ void SageRenderer::Enable_OnScreenRender()
 	framebuffer->Unbind();
 }
 
+
+void SageRenderer::Set_Font(TextRenderer::SageFont* ft)
+{
+	font = ft;
+}
+
+
+void SageRenderer::Render_Text(const char* text, float x, float y, float scale, ToastBox::Vec4 color)
+{
+	
+}
+
+void SageRenderer::Render_Text(SageText& text)
+{
+	SageRendererInternal::Render_Text(text);
+}
