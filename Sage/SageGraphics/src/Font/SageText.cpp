@@ -42,7 +42,7 @@ void SageText::PopulateData()
 
 		data.offset = { cursor.x + glyph.bearing.x, cursor.y - glyph.bearing.y, 0.0f, 0.0f };
 		data.uv = { glyph.uv[0], glyph.uv[1], glyph.uv[2], glyph.uv[3] };
-
+		data.scale = { glyph.size.x, glyph.size.y };
 		cursor.x += glyph.advance;
 		characters.push_back(data);
 	}

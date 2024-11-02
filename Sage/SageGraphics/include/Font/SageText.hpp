@@ -26,6 +26,7 @@ public:
 	{
 		alignas(16) glm::vec4 offset;
 		alignas(16) glm::vec4 uv;
+		alignas(8) glm::vec2 scale;
 	};
 
 

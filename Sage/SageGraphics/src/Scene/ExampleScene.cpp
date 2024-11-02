@@ -47,7 +47,7 @@ void ExampleScene::init()
 
 	text =  SageFontManager::Create_Text("Score: 000000");
 	text.transform.position = { 0.f,0.f,0.f };
-	text.transform.scale = { 50.f,50.f,0.f };
+	text.transform.scale = { 25.f,25.f,0.f };
 
 	text.transform.Calculate_Model_Matrix();
 	
@@ -120,7 +120,7 @@ void ExampleScene::init()
 	GLenum err = glGetError();
 
 
-	text.Set_Text("This is a test wording.");
+	text.Set_Text("ABCabcGHIJK ghijkYy");
 
 }
 

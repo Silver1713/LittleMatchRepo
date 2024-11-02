@@ -11,17 +11,23 @@ void SageFont::Load_Glyph_And_Create_Atlas()
 {
 	Set_Text_Size(128);
 
-	CreateGLResource(128, 10);
+	CreateGLResource(128, 50);
 
 	glm::vec2 offset{};
 	int rowHeight = 0;
-	int padding = 10;
+	int padding = 50;
+
+	int baseline = 0;
+	int boundsX = 0, boundsY = 0;
+	Calculate_Bounds_Hack(boundsX, boundsY, baseline);
+
+
 
 
 	for (int i = 0; i < 128; i++)
 	{
 		char c = static_cast<char>(i);
-		Add_Load_Glyph(c, offset, rowHeight, padding);
+		Add_Load_Glyph(c, offset, rowHeight, padding, baseline);
 	}
 
 	is_loaded = true;
@@ -83,8 +89,24 @@ void SageFont::Calculate_Dimensions(int font_size, int padding, int number_of_ch
 	atlas_height = power_of_2;
 }
 
+void SageFont::Calculate_Bounds_Hack(int& boundsX, int& boundsY, int& baseline)
+{
+	FT_Error err = FT_Load_Char(ft_face, 'H', FT_LOAD_RENDER);
+	if (err)
+	{
+		std::cout << "Error: Failed to load glyph for baseline hack" << std::endl;
+		return;
+	}
 
-void SageFont::Add_Load_Glyph(char glyph_char, glm::vec2& offset, int& rowHeight, int padding)
+	FT_GlyphSlot& ft_glyph = ft_face->glyph;
+
+	baseline = ft_glyph->bitmap_top;
+	
+
+}
+
+
+void SageFont::Add_Load_Glyph(char glyph_char, glm::vec2& offset, int& rowHeight, int padding, int baseline)
 {
 	// Load the glyph
 	FT_Error load_err = FT_Load_Char(ft_face, glyph_char, FT_LOAD_RENDER);
@@ -97,6 +119,11 @@ void SageFont::Add_Load_Glyph(char glyph_char, glm::vec2& offset, int& rowHeight
 	FT_Bitmap& bmp = ft_glyph->bitmap;
 	std::cout << "Character: " << glyph_char << " ";
 	std::cout << "Bitmap Width: " << bmp.width << ", Height: " << bmp.rows << std::endl;
+
+	int yOffset = 0;
+	if (ft_glyph->bitmap_top < baseline) {
+		yOffset = baseline - ft_glyph->bitmap_top;
+	}
 	if (offset.x + bmp.width + padding > atlas_width)
 	{
 		offset.x = 0;
@@ -111,7 +138,7 @@ void SageFont::Add_Load_Glyph(char glyph_char, glm::vec2& offset, int& rowHeight
 	{
 		std::fill_n(data, bmp.width * bmp.rows, 255);
 	}
-	glTextureSubImage2D(font_texture_atlas_id, 0, offset.x, offset.y,
+	glTextureSubImage2D(font_texture_atlas_id, 0, offset.x, offset.y + yOffset,
 		bmp.width, bmp.rows, GL_RED, 
 		GL_UNSIGNED_BYTE, data);
 
@@ -124,8 +151,8 @@ void SageFont::Add_Load_Glyph(char glyph_char, glm::vec2& offset, int& rowHeight
 	err = glGetError();
 	SageGlyph glyph{};
 
-	glyph.uv = { offset.x / atlas_width, offset.y / atlas_height,
-	(offset.x + bmp.width) / atlas_width, (offset.y + bmp.rows) / atlas_height };
+	glyph.uv = { offset.x / atlas_width, (offset.y + yOffset) / atlas_height,
+	(offset.x + bmp.width) / atlas_width, (offset.y + yOffset + bmp.rows) / atlas_height };
 	glyph.character = glyph_char;
 	//glyph.ft_glyph = &ft_glyph;
 	glyph.size = { bmp.width, bmp.rows };
@@ -140,9 +167,6 @@ void SageFont::Add_Load_Glyph(char glyph_char, glm::vec2& offset, int& rowHeight
 	{
 		rowHeight = bmp.rows;
 	}
-
-
-
 
 }
 

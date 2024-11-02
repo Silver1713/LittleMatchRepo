@@ -23,11 +23,12 @@ public class GamePlayBehaviour : SageBehaviour
         if (Input.GetKey(Input.KeyCode.D))
         {
             SageDebug.Print("D is pressed");
+
         }
-        
+
 
         //SageDebug.Print("[" + position.x + "," + position.y + "]");
-        
+
 
 
     }

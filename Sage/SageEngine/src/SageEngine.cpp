@@ -209,4 +209,11 @@ void SageEngine::Exit()
     SM::Unload();
     SageHelper::Exit();
     SageAudio::Exit();
+
+
+    SageMonoManager::STDOUTCS& j = SageMonoManager::output_stream;
+	for (auto& i : j.Get())
+	{
+		std::cout<< '\"' << i.first << '\"' << " occurs for " << i.second << " times." << '\n';
+	}
 }

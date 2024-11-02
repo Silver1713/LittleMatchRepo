@@ -3,7 +3,7 @@
 #include <iostream>
 #include <filesystem>
 #include <mono/metadata/debug-helpers.h>
-
+#include <mono/utils/mono-logger.h>
 #include "SageScriptLoader.hpp"
 #include "SageScriptCompiler.hpp"
 
@@ -16,6 +16,75 @@ std::unordered_map<std::string, MonoDomain*> SageMonoManager::domains{};
 std::unordered_map<std::string, MonoAssembly*> SageMonoManager::assemblies{};
 std::unordered_map<std::string, MonoImage*> SageMonoManager::images{};
 std::unordered_map<std::string, SageMonoManager::MonoKlassInfo> SageMonoManager::klassList{};
+SageMonoManager::STDOUTCS SageMonoManager::output_stream{};
+SageMonoManager::STDERRCS SageMonoManager::error_stream{};
+
+
+void SageMonoManager::STDOUTCS::Add(const char* message)
+{
+	if (stdout_stream.empty())
+	{
+		stdout_stream.push_back(std::make_pair(message, 1));
+		latest = message;
+
+		return;
+	}
+	if (message == latest)
+	{
+		stdout_stream.back().second += 1;
+	}
+	else
+	{
+		stdout_stream.push_back(std::make_pair(message, 1));
+		latest = message;
+	}
+	
+
+}
+
+void SageMonoManager::STDOUTCS::Clear()
+{
+	stdout_stream.clear();
+	latest.clear();
+
+}
+
+std::vector<std::pair<std::string, size_t>> SageMonoManager::STDOUTCS::Get()
+{
+	std::vector<std::pair<std::string, size_t>> out;
+	out.reserve(stdout_stream.size());
+	for (const auto& [key, value] : stdout_stream)
+	{
+		out.push_back(std::make_pair(key, value));
+	}
+	return out;
+
+}
+
+
+void SageMonoManager::STDERRCS::Add(const char* message)
+{
+	latest = message;
+	stdout_stream[message] += 1;
+}
+
+void SageMonoManager::STDERRCS::Clear()
+{
+	stdout_stream.clear();
+	latest.clear();
+}
+
+
+std::vector<std::pair<std::string, size_t>> SageMonoManager::STDERRCS::Get()
+{
+	std::vector<std::pair<std::string, size_t>> out;
+	out.reserve(stdout_stream.size());
+	for (const auto& [key, value] : stdout_stream)
+	{
+		out.push_back(std::make_pair(key, value));
+	}
+	return out;
+}
 
 
 SageMonoManager::MonoKlassInfo::MonoKlassInfo()
@@ -47,15 +116,21 @@ SageMonoManager::MonoKlassInfo::~MonoKlassInfo()
 
 void SageMonoManager::Initialize()
 {
-	compiler = std::make_unique<SageAssembler>();
-	loader = std::make_unique<SageLoader>();
 
 	// Initialize Mono Environment
+	mono_trace_set_print_handler(handle_print);
+	mono_trace_set_printerr_handler(handle_print);
+	mono_trace_set_log_handler(handle_log, nullptr);
+	compiler = std::make_unique<SageAssembler>();
+	loader = std::make_unique<SageLoader>();
 	loader->Init("../MONO/lib", "../MONO/etc");
 	compiler->Init("..\\MONO\\bin\\", "..\\BehaviourScripts\\programs");
 	compiler->Set_Command("csc"); // use roslyn compiler.
 	compiler->Set_Compile_Flags("/target:library -langversion:8.0");
 
+
+	
+		
 	// Compile ALL C# Scripts
 	Compile_Scripts("../BehaviourScripts/scripts", "../BehaviourScripts/programs/");
 
@@ -63,6 +138,10 @@ void SageMonoManager::Initialize()
 	Load_Assembly("SageLibrary", "../BehaviourScripts/programs/SageLibrary.dll");
 	Load_Image("SageLibraryImage", "SageLibrary");
 	Default_Domain = loader->Get_RT_Domain();
+
+	// Register Log Handler
+	
+	//mono_trace_set_printerr_handler(handle_print);
 }
 
 void SageMonoManager::Shutdown()
@@ -345,3 +424,24 @@ SageMonoManager::MonoKlassInfo* SageMonoManager::Get_Klass_Info(MonoClass* klass
 		return Get_Klass_Info(klass_name.c_str(), klass_namespace.c_str());
 	}
 }
+
+
+void SageMonoManager::handle_print(const char* message, mono_bool is_stdout)
+{
+	std::cout << "Message: " << message << std::endl;
+	
+	if (is_stdout)
+	{
+		output_stream.Add(message);
+	}
+	else
+	{
+		error_stream.Add(message);
+	}
+}
+
+void SageMonoManager::handle_log(const char* log_domain, const char* log_level, const char* message, mono_bool fatal, void* user_data)
+{
+	std::cout << log_domain << '\n';
+}
+

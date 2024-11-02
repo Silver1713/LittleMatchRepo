@@ -9,6 +9,7 @@
 #include "Components/Behaviour.h"
 #include "internal/GLFWHandler.h"
 #include "Bindings/Bindings.hpp"
+#include "Bindings/DebugBinding.hpp"
 
 std::vector<BindingSystem::MonoRepresentation> BindingSystem::mono_entities{};
  std::unordered_map<MonoObject*, unsigned> BindingSystem::cs_to_cpp_mapping{};
@@ -94,6 +95,7 @@ BindingSystem::MonoRepresentation* BindingSystem::Get_Mono_Represation_From_Enti
 void BindingSystem::Init()
 {
 	//Bind all Static Methods
+	DebugBinding::Bind();
 	Bind_Input_System();
 	Bind_Rendering_System();
 

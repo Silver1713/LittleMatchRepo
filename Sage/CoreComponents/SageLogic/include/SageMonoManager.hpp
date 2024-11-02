@@ -57,7 +57,39 @@ struct SageMonoManager
 	static std::unordered_map<std::string, MonoImage*> images;
 	static std::unordered_map<std::string, MonoKlassInfo> klassList;
 
-	// Class Information
+	// Streams
+
+	struct STDOUTCS
+	{
+		size_t latest_index;
+		std::string latest;
+		std::vector<std::pair<std::string, size_t>> stdout_stream;
+
+
+		void Add(const char* message);
+
+		std::vector<std::pair<std::string, size_t>> Get();
+		void Clear();
+
+	};
+
+
+	struct STDERRCS
+	{
+		std::string latest;
+		std::map<std::string, size_t> stdout_stream;
+
+
+		void Add(const char* message);
+		void Clear();
+		std::vector<std::pair<std::string, size_t>> Get();
+	};
+
+
+	static STDOUTCS output_stream;
+	static STDERRCS error_stream;
+
+
 	
 
 
@@ -103,7 +135,11 @@ struct SageMonoManager
 	static MonoObject* Box_Value(MonoDomain* domain, MonoClass* klass, T* value);
 	template <typename T>
 	static T* Unbox_Value(MonoObject* obj);
-	
+
+
+	//Logging
+	static void handle_print(const char* message, mono_bool is_stdout);
+	static void handle_log(const char* log_domain, const char* log_level, const char* message, mono_bool fatal, void* user_data);
 
 
 };

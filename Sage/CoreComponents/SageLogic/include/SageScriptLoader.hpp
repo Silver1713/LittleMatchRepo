@@ -21,6 +21,7 @@ struct SageLoader
 
 	
 	void Run_Main(MonoAssembly* assembly , const char* assembly_name);
+
 	
 
 	MonoDomain* Get_RT_Domain();

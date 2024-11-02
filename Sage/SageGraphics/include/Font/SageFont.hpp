@@ -48,6 +48,8 @@ public:
 	~SageFont();
 	void Load_Font(const char* path);
 
+
+
 	void Load_Glyph_And_Create_Atlas();
 
 	SageGlyph& Get_Glyph(char c);
@@ -55,7 +57,9 @@ public:
 
 	void Set_Text_Size(unsigned int size);
 
-	void Add_Load_Glyph(char glyph_char, glm::vec2& offset, int& rowHeight, int padding);
+	void Calculate_Bounds_Hack(int& boundsX, int& boundsY, int& baseline );
+
+	void Add_Load_Glyph(char glyph_char, glm::vec2& offset, int& rowHeight, int padding, int baseline=0);
 
 	SageModel* Get_Mesh();
 
