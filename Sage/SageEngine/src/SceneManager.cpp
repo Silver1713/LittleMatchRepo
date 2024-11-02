@@ -225,8 +225,8 @@ namespace SM {
 	*******************************************************************************/
 	void Init()
 	{
-		SAGEInputHandler::init();
-		SageSystemManager::Init();
+		//SAGEInputHandler::init();
+		//SageSystemManager::Init();
 		Game_Objects::Init();
 		SM::fp_init();
 	}
@@ -237,8 +237,6 @@ namespace SM {
 	*******************************************************************************/
 	void Input()
 	{
-		
-		
 		SM::fp_input();
 	}
 
@@ -296,7 +294,7 @@ namespace SM {
 		SM::fp_unload();
 		
 		Game_Objects::Exit();
-		SageSystemManager::Exit();
+		//SageSystemManager::Exit();
 	}
 
 	/*!*****************************************************************************

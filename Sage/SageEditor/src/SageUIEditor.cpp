@@ -104,7 +104,7 @@ namespace SageUIEditor
 
     void RenderGUI()
     {
-        ImGui::NewFrame();
+        //ImGui::NewFrame();
         // DOCKSPACE
 
         // READ THIS !!!
