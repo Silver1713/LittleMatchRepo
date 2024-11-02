@@ -299,7 +299,7 @@ namespace SageUIEditor
 
     void RenderGUI()
     {
-        ImGui::NewFrame();
+        //ImGui::NewFrame();
         // DOCKSPACE
 
         // READ THIS !!!
@@ -362,7 +362,8 @@ namespace SageUIEditor
                 if (ImGui::MenuItem("New"))
                 {
                     //std::string editor_startup_scene = "main_menu";
-                    SM::Set_Current_Level("default");
+                    SM::Set_Current_Level("level_1");
+                    
                     SM::Go_To_Next_Scene();
                     
                     
