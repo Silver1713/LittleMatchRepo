@@ -7,6 +7,7 @@ namespace SageHierarchy
     // Definition of the list of GameObjects.
     std::vector<GameObject*> game_object_list;
     extern GameObject* selected_object = nullptr;
+	bool scene_change = true;
 
     void Update_Hierarchy()
     {

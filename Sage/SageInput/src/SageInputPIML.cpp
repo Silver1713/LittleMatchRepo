@@ -115,3 +115,8 @@ double SageInputPIML::Get_Mouse_Y()
 	return GLFWInputHandler::g_mouse_pos_y;
 }
 
+void SageInputPIML::Get_Mouse_Pos(double& _x, double& _y)
+{
+	GLFWInputHandler::Get_Mouse_Pos(_x, _y);
+}
+

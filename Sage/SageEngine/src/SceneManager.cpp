@@ -527,5 +527,14 @@ namespace SM {
 	{
 		return &game_running;
 	}
+	/*!*****************************************************************************
+	  \brief
+		Gets the game running flag
+	*******************************************************************************/
+	bool Get_Is_Restarting()
+	{
+		return is_restarting;
+	}
+
 }
 #pragma endregion

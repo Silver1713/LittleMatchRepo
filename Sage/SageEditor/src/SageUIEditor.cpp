@@ -1,3 +1,15 @@
+/* Start Header ************************************************************************/
+/*!
+\file		SageUIEditor.cpp
+\title		Memory's Flame
+\author		Neo Hui Zong, neo.h, 2301325 (100%)
+\par		neo.h@digipen.edu
+\date		17 October 2024
+\brief		This file contain the definition for the Sage UI Editor. These includes
+			all the relevant windows and buttons of the editor.
+*/
+/* End Header **************************************************************************/
+
 #include "SageUIEditor.hpp"
 #include "../../SageEngine/include/Game.hpp"
 #include <windows.h>
@@ -18,6 +30,7 @@
 #include "SageTimer.hpp"
 #include "SceneManager.hpp"
 
+// Bool variable to show the different windows
 static bool show_hierarchy_window = true;
 static bool show_console_window = true;
 static bool show_inspector_window = true;
@@ -35,7 +48,7 @@ namespace SageUIEditor
     bool pause_select = false;
     bool is_playing = false;    // State to control engine dt flow
 
-    // Bool flags for the toggling of windows
+    
     void Show_Hierarchy_Window() {
         if (show_hierarchy_window) {
             ImGui::Begin("Hierarchy");
@@ -343,18 +356,33 @@ namespace SageUIEditor
             ImGui::SetCursorPosX((button_x.x/2) - 150.0f);
             if (ImGui::Button("PLAY"))
             {
+                glfwSetTime(0);
+                SM::Set_Current_Level("level_1");
+                SM::Go_To_Next_Scene();
+
+                SageHierarchy::Update_Hierarchy();
+                SageHierarchy::selected_object = nullptr;
                 play_select = true;
                 pause_select = false;
+                
                 // NEED FIX
-                glfwSetTime(0);
+                
                 is_playing = true;
                 
             }
             ImGui::SetCursorPosX(button_x.x/2 - 100.0f);
             if (ImGui::Button("STOP"))
             {
-                pause_select = true;
+                
                 //SageTimer::delta_time(0);
+                
+                
+                SM::Set_Current_Level("level_1");
+                SM::Go_To_Next_Scene();
+
+                SageHierarchy::Update_Hierarchy();
+                SageHierarchy::selected_object = nullptr;
+                pause_select = true;
                 play_select = false;
                 is_playing = false;
 

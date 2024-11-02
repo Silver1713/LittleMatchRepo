@@ -155,6 +155,5 @@ double SAGEInputHandler::Get_Mouse_Y()
 *******************************************************************************/
 void SAGEInputHandler::Get_Mouse_Position(double& _x, double& _y)
 {
-	_x = SageInputPIML::Get_Mouse_X();
-	_y = SageInputPIML::Get_Mouse_Y();
+	SageInputPIML::Get_Mouse_Pos(_x, _y);
 }
