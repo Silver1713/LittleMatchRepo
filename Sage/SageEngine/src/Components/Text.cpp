@@ -1,55 +1,108 @@
-/* Start Header ************************************************************************/
-/*!
-\file		Text.cpp
-\title		Little Match
-\author		Muhammad Hafiz Bin Onn, b.muhammadhafiz, 2301265 (100%)
-\par		b.muhammadhafiz@digipen.edu
-\date		27 October 2024
-\brief		Contains the derived class Text that overrides the virtual functions of the
-			base class Component to do Text specific tasks
-
-			All content © 2024 DigiPen Institute of Technology Singapore. All rights reserved.
-*/
-/* End Header **************************************************************************/
-#include "Components/Text.hpp"
-
-/*!*****************************************************************************
-  \brief
-	Initializes the component and assigns the parent to the gameobject that
-	created this component. Provides a space if any text components need to
-	be initialized per gameobject
-
-  \param _parent
-	the gameobject creating this component
-*******************************************************************************/
-void Text::Init(GameObject* _parent)
-{
-	Component::Init(_parent);
-}
-
-/*!*****************************************************************************
-  \brief
-	Updates any text this component uses
-*******************************************************************************/
-void Text::Update()
-{
-	if (!is_enabled) { return; }
-}
-/*!*****************************************************************************
-  \brief
-	Provides a space if there is any unloading or freeing may be required
-	per component
-*******************************************************************************/
-void Text::Exit()
-{
-
-}
-
-/*!*****************************************************************************
-  \brief
-	Gets overriden based on what component this is
-
-  \return
-	the enum representating what component this is
-*******************************************************************************/
-ComponentType Text::Get_Component_Type() { return TEXT; }
+//#include "Components/Text.hpp"
+//#include <functional>
+//
+//#include "SageSystemManager.hpp"
+//#include "Systems/SageGraphicsSystem.hpp"
+//
+//size_t Text::id_counter = 0;
+//Text::Text()
+//{
+//	id = std::hash<size_t>{}(text.size() + id_counter++);
+//	allocate_ssbo();
+//	// Generate a unique id for the text
+//
+//}
+//
+//Text::iterator Text::begin()
+//{
+//	return front;
+//}
+//
+//Text::iterator Text::end()
+//{
+//	return front + size;
+//}
+//
+//Text::const_iterator Text::begin() const
+//{
+//	return front;
+//}
+//
+//Text::const_iterator Text::end() const
+//{
+//	return (front+ size);
+//}
+//
+//void Text::push_back(const char& c)
+//{
+//	text.push_back(c);
+//	size++;
+//	
+//	if (size >= capacity)
+//	{
+//		realloc_ssbo(static_cast<size_t>(size * 2));
+//		capacity *= 2;
+//	}
+//}
+//
+//void Text::allocate_ssbo()
+//{
+//	size = 0;
+//	capacity = 60;
+//
+//	SageGraphicsSystem* graphics_system = SageSystemManager::Get_System<SageGraphicsSystem>();
+//	graphics_system->Allocate_SSBO(id, capacity, ssbo_character);
+//
+//	
+//
+//}
+//
+//Text& Text::operator=(const std::string& str)
+//{
+//	SageGraphicsSystem* graphics_system = SageSystemManager::Get_System<SageGraphicsSystem>();
+//	std::string str_cpy{ str };
+//	
+//	if (str.size() > capacity)
+//	{
+//		realloc_ssbo(static_cast<size_t>(capacity * 2));
+//		capacity *= 2;
+//
+//		
+//
+//
+//	}
+//
+//	return *this;
+//}
+//
+//void Text::set_font(TextRenderer::SageFont* font)
+//{
+//	font_model = font;
+//}
+//
+//void Text::set_text(const char* text)
+//{
+//	SageGraphicsSystem* graphics_system = SageSystemManager::Get_System<SageGraphicsSystem>();
+//	this->text = text;
+//	if (this->text.size() > capacity)
+//	{
+//		realloc_ssbo(capacity* 2);
+//		capacity *= 2;
+//		
+//	}
+//	graphics_system->SSBO_SubData(id, 0, this->text.size(), this->text.data());
+//}
+//
+//
+//void Text::realloc_ssbo(size_t size)
+//{
+//	SageGraphicsSystem* graphics_system = SageSystemManager::Get_System<SageGraphicsSystem>();
+//	graphics_system->Reallocate_SSBO(id, size);
+//}
+//
+//void Text::unload()
+//{
+//	SageGraphicsSystem* graphics_system = SageSystemManager::Get_System<SageGraphicsSystem>();
+//	graphics_system->SSBO_Delete(ssbo_character);
+//	ssbo_character = 0;
+//}

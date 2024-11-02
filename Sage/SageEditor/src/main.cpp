@@ -9,6 +9,7 @@
 
 #include <backward.hpp>
 #include "SageUIEditor.hpp"
+#include "SageHierarchy.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -139,8 +140,6 @@ int main(int, char**)
 
 int init()
 {
-    //EditorStateManager::Add_Selected_Object(Game_Objects::Get_Game_Object("Player"));
-
     // GL 3.0 + GLSL 130
     const char* glsl_version = "#version 450";
 
@@ -153,7 +152,7 @@ int init()
     glfwSwapInterval(1); // Enable vsync
 
     
-    ImGuiIO& io = ImGui::GetIO(); 
+    ImGuiIO& io = ImGui::GetIO();
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 
@@ -179,6 +178,7 @@ int init()
     io.LogFilename = "../SageEditor/config/custom_layout_log.txt";
     ImGui::LoadIniSettingsFromDisk(io.IniFilename);
 
+    SageHierarchy::Update_Hierarchy();
     return 0;
 }
 

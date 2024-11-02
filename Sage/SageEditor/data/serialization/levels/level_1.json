@@ -79,7 +79,7 @@
         "Prefab_ID": "GUI_TEST_TEXTURE",
         "Identifier": "GUI_Top",
         "Pos": [100,100,0],
-        "Scale": [90,58,0],
+        "Scale": [90,58,0], 
         "RGBA" : [1,0,0,1],
         "Z_Order": 1
       }
