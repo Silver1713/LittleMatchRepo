@@ -95,4 +95,13 @@ public:
 		Return a double
 	*******************************************************************************/
 	static double Get_Mouse_Y();
+
+	/*!*****************************************************************************
+	\brief
+		Function to get the mouse position
+
+	\return
+		Return a double
+	*******************************************************************************/
+	static void Get_Mouse_Pos(double& _x, double& _y);
 };

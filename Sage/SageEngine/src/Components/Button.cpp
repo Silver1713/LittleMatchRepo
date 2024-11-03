@@ -212,8 +212,10 @@ void Button::Init(GameObject* _parent)
 	sprite = static_cast<Sprite2D*>(parent->Get_Component<Sprite2D>());
 	image = static_cast<Image*>(parent->Get_Component<Image>());	
 
-	mouse_pos.x = static_cast<float>(SAGEInputHandler::Get_Mouse_X());
-	mouse_pos.y = static_cast<float>(SAGEInputHandler::Get_Mouse_Y());
+	double x, y;
+	SAGEInputHandler::Get_Mouse_Position(x, y);
+	mouse_pos.x = static_cast<float>(x);
+	mouse_pos.y = static_cast<float>(y);
 	
 	ToastBox::Vec3 pos;
 	ToastBox::Vec3 scale;
@@ -296,8 +298,13 @@ void Button::Input()
 void Button::Update()
 {
 	if (!is_enabled) { return; }
-	mouse_pos.x = static_cast<float>(SAGEInputHandler::Get_Mouse_X());
-	mouse_pos.y = static_cast<float>(SAGEInputHandler::Get_Mouse_Y());
+	double x, y;
+	SAGEInputHandler::Get_Mouse_Position(x, y);
+	mouse_pos.x = static_cast<float>(x);
+	mouse_pos.y = static_cast<float>(y);
+
+	std::cout << x << std::endl;
+	std::cout << y << std::endl;
 }
 
 /*!*****************************************************************************

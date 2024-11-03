@@ -10,7 +10,8 @@ namespace SageHierarchy
     // List of all top-level GameObjects (no single root).
     //extern std::vector<GameObject*> gameObjects;
     extern GameObject* selected_object; // Pointer to the selected object.
-
+    extern bool scene_change;
+    
     void Update_Hierarchy();
     void Create_Empty();
     void Create_Prefab(const Assets::Prefabs::Prefab& _prefab);

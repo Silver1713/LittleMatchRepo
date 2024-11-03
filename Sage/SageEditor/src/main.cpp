@@ -43,6 +43,7 @@ extern "C"
 #include "SageEngine.hpp"
 #include "SageHelper.hpp"
 #include "SageWindow.hpp"
+#include "SceneManager.hpp"
 constexpr double physics_update_target = 0.02;
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
@@ -80,6 +81,7 @@ void exit();
 GLFWwindow* window;
 SageWindow* window_self;
 ImVec4 clear_color;
+
 
 // Main code
 namespace Sage_Editor_Main
@@ -193,6 +195,15 @@ int init()
 
 void update()
 {
+    if (SageHierarchy::scene_change)
+    {
+	    if (!SM::Get_Is_Restarting())
+	    {
+            SageHierarchy::selected_object = nullptr;
+	    }
+    }
+    SageHierarchy::Update_Hierarchy();
+    
     // Poll and handle events (inputs, window resize, etc.)
         // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
         // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.

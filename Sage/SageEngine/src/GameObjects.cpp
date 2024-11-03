@@ -238,6 +238,7 @@ namespace Game_Objects
 	void Clear_Game_Objects()
 	{
 		SageObjectManager::Destroy_All_Objects();
+		std::cout << "Deleted objects" << std::endl;
 		g_game_objects.clear();
 		world_space_game_objects.clear();
 		screen_space_game_objects.clear();
@@ -366,6 +367,7 @@ void GameObject::Input()
 	for (const auto& _c : components)
 	{
 		_c->Input();
+		
 	}
 }
 
