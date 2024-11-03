@@ -126,12 +126,6 @@ void SageEngine::Init(const char* editor_config_path)
 
     }
 
-
-
-
-
-
-
     std::string window_title = editor_config["Window"]["Title"].as<SageJSON::SageJSON::StringValue>();
     std::string editor_startup_scene = editor_config["Other_Configurations"]["Editor_Startup_Scene"].as<SageJSON::SageJSON::StringValue>();
     std::string game_startup_scene = editor_config["Other_Configurations"]["Game_Startup_Scene"].as<SageJSON::SageJSON::StringValue>();
@@ -158,7 +152,6 @@ void SageEngine::Init(const char* editor_config_path)
     if (1) // to be changed with some sort of flag to detect if running through editor or as built game
     {
         SM::Startup_Scene(editor_startup_scene);
-        
     }
 }
 

@@ -242,6 +242,8 @@ namespace Game_Objects
 		g_game_objects.clear();
 		world_space_game_objects.clear();
 		screen_space_game_objects.clear();
+
+		SageSystemManager::Get_System<SageScriptSystem>()->Exit();
 	}
 }
 
@@ -527,7 +529,7 @@ void GameObject::Remove_Component(ComponentType _c)
 
 /*!*****************************************************************************
   \brief
-	Clears all gameobjects
+	Get the component list of game object
   \return
 	Returns the vector of components that the gameobject posseses
 *******************************************************************************/

@@ -1,11 +1,13 @@
-// Dear ImGui: standalone example application for GLFW + OpenGL 3, using programmable pipeline
-// (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
-
-// Learn about Dear ImGui:
-// - FAQ                  https://dearimgui.com/faq
-// - Getting Started      https://dearimgui.com/getting-started
-// - Documentation        https://dearimgui.com/docs (same as your local docs/ folder).
-// - Introduction, links and more at the top of imgui.cpp
+/* Start Header ************************************************************************/
+/*!
+\file		main.cpp
+\title		Memory's Flame
+\author		Neo Hui Zong, neo.h, 2301325 (100%)
+\par		neo.h@digipen.edu
+\date		20 October 2024
+\brief		This is the main entry point of the editor.
+*/
+/* End Header **************************************************************************/
 
 #include <backward.hpp>
 #include "SageUIEditor.hpp"
@@ -59,8 +61,6 @@ constexpr double physics_update_target = 0.02;
 #endif
 const std::string editor_window_config_path = "../SageEditor/data/configuration/project_config.json";
 
-
-
 namespace
 {
     static double accumulator = 0;
@@ -83,11 +83,16 @@ SageWindow* window_self;
 ImVec4 clear_color;
 
 
-// Main code
-namespace Sage_Editor_Main
-{
-	
-}
+//// Main code
+//namespace Sage_Editor_Main
+//{
+//	
+//}
+
+/*!*****************************************************************************
+  \brief
+    Entry point for the editor
+*******************************************************************************/
 int main(int, char**)
 {
     // Setup Dear ImGui context
@@ -149,6 +154,10 @@ int main(int, char**)
     return 0;
 }
 
+/*!*****************************************************************************
+  \brief
+    Initialize the editor
+*******************************************************************************/
 int init()
 {
     // GL 3.0 + GLSL 130
@@ -193,11 +202,15 @@ int init()
     return 0;
 }
 
+/*!*****************************************************************************
+  \brief
+    Update the editor
+*******************************************************************************/
 void update()
 {
     if (SageHierarchy::scene_change)
     {
-	    if (!SM::Get_Is_Restarting())
+	    if (SM::Get_Is_Restarting())
 	    {
             SageHierarchy::selected_object = nullptr;
 	    }
@@ -226,6 +239,10 @@ void update()
     //ImGui::NewFrame();
 }
 
+/*!*****************************************************************************
+  \brief
+    Draw the editor
+*******************************************************************************/
 void draw()
 {
     //[HALIS] [HUI ZONG]
@@ -241,6 +258,10 @@ void draw()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+/*!*****************************************************************************
+  \brief
+    Exit the editor
+*******************************************************************************/
 void exit()
 {
     //SageEditor::CleanUpScene();

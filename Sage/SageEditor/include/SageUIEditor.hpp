@@ -80,7 +80,11 @@ namespace SageUIEditor
 
     void Show_Asset_Window();
 
-    void Show_Play_Pause_Bar();
+    //void Show_Play_Pause_Bar();
+    /*!*****************************************************************************
+    \brief Show the engine editor UI
 
+    This function shows the engine with its' relevant UI using IMGUI
+    *******************************************************************************/
     void RenderGUI();
 }

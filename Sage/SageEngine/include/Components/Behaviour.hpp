@@ -23,7 +23,7 @@ public:
 
 	MonoObject* Add_Instance(std::string _klass_name, std::string _namespace);
 	void Remove_Instance(std::string _klass_name);
-
+	void Remove_All_Instance();
 
 };
 #endif // !BEHAVIOUR_COMPONENT_HPP

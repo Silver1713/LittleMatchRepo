@@ -70,7 +70,9 @@ void SageScriptSystem::Update_Entity(GameObject* _entity)
 void SageScriptSystem::Exit()
 {
 	loader = nullptr;
-
+	mapped_instances.clear();
+	scriptable_entities.clear();
+	methods.clear();
 }
 
 SageScriptSystem::~SageScriptSystem()
