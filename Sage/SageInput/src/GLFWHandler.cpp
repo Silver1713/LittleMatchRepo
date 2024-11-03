@@ -303,6 +303,14 @@ void GLFWInputHandler::Set_Bindings()
 
 }
 
+void GLFWInputHandler::Set_Mouse_Offset(double offsetX, double offsetY)
+{
+	g_mouse_offset_x = offsetX;
+	g_mouse_offset_y = offsetY;
+
+}
+
+
 
 
 

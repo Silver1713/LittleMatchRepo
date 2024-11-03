@@ -25,6 +25,9 @@ public:
 	static double g_mouse_pos_x;
 	static double g_mouse_pos_y;
 
+	static double g_mouse_offset_x;
+	static double g_mouse_offset_y;
+
 	static std::unordered_map<int, std::byte> key_map;
 
 	/*!*****************************************************************************
@@ -126,4 +129,8 @@ public:
 	static void Set_Bindings();
 
 	static void Get_Mouse_Pos(double& _xpos, double& _ypos);
+
+
+	static void Set_Mouse_Offset(double offsetX, double offsetY);
+
 };
