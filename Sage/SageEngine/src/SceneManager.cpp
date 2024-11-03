@@ -382,7 +382,7 @@ namespace SM {
 		SM::Free();
 		SM::Unload();
 		SM::Load();
-		//SM::Init();
+		SM::Init();
 		std::cout << "Moving to next scene: " << level_ID << std::endl;
 	}
 	/*!*****************************************************************************

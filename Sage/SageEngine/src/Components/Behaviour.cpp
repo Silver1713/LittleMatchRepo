@@ -27,7 +27,7 @@ void Behaviour::Draw()
 
 void Behaviour::Exit()
 {
-	
+	Remove_All_Instance();
 }
 
 
@@ -91,8 +91,12 @@ MonoObject* Behaviour::Add_Instance(std::string _klass_name, std::string _namesp
 
 void Behaviour::Remove_Instance(std::string _klass_name)
 {
-		
 	return;
+}
+
+void Behaviour::Remove_All_Instance()
+{
+	mono_instances.clear();
 }
 
 

@@ -397,7 +397,7 @@ namespace SageUIEditor
         Show_Hierarchy_Window();
         Show_Console_Window();
         Show_Project_Window();
-        Show_Asset_Window();
+        //Show_Asset_Window();
 
         if (exit_requested)
         {

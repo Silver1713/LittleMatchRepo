@@ -16,6 +16,7 @@ std::vector<BindingSystem::MonoRepresentation> BindingSystem::mono_entities{};
 
 void BindingSystem::Map_Script_Instance_GameObject(MonoObject* _instance, GameObject* _entity)
 {
+	std::cout << "MAPPING GAME OBJECTS" << std::endl;
 	std::vector<MonoRepresentation>::iterator const& it = std::find_if(mono_entities.begin(), mono_entities.end(), [&_entity](MonoRepresentation& obj)
 	{
 		return _entity == obj.cpp_entity;
@@ -100,7 +101,7 @@ void BindingSystem::Init()
 	GameObjectBinding::Bind();
 	TransformBinding::Bind();
 	RigidBodyBinding::Bind();
-
+	std::cout << "Init success" << std::endl;
 
 	
 
