@@ -16,14 +16,13 @@
 #include <unordered_map>
 #include "SageBindings.hpp"
 
-// Mono headers
-#include <mono/jit/jit.h>
-#include <mono/metadata/assembly.h>
-#include <mono/metadata/debug-helpers.h>
+
 
 std::unordered_map<int, std::byte> GLFWInputHandler::key_map{};
 double GLFWInputHandler::g_mouse_pos_x = 0;
 double GLFWInputHandler::g_mouse_pos_y = 0;
+double GLFWInputHandler::g_mouse_offset_x = 0;
+double GLFWInputHandler::g_mouse_offset_y = 0;
 // Base Layer of glfw handler
 static GLFWInputHandler* instance = nullptr;
 
@@ -290,8 +289,8 @@ void GLFWInputHandler::Mouse_Pos_Cb(GLFWwindow* _window, double _xpos, double _y
 void GLFWInputHandler::Get_Mouse_Pos(double& _xmouse, double& _ymouse)
 {
 	glfwGetCursorPos(glfwGetCurrentContext(), &g_mouse_pos_x, &g_mouse_pos_y);
-	_xmouse = g_mouse_pos_x;
-	_ymouse = g_mouse_pos_y;
+	_xmouse = g_mouse_pos_x - g_mouse_offset_x;
+	_ymouse = g_mouse_pos_y - g_mouse_offset_y;
 }
 
 
