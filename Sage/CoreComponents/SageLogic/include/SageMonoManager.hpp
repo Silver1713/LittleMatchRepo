@@ -11,20 +11,34 @@
 #include "SageScriptLoader.hpp"
 struct SageLoader;
 class SageAssembler;
+
+/*!*****************************************************************************
+	\brief
+		A class the encapsulates the Mono runtime and provides a set of
+		tools to interact with it
+*******************************************************************************/
 struct SageMonoManager
 {
+	/*!*****************************************************************************
+	\brief
+		Encapsulate a Mono Class information
+	*******************************************************************************/
 	struct MonoKlassInfo
 	{
 		// Internals
-		MonoClass* klass;
-		MonoImage* image;
-		MonoAssembly* assembly;
+		MonoClass* klass; //!< The Mono Class
+		MonoImage* image; //!< The Image
+		MonoAssembly* assembly; //!< The Assembly
 
-		const char* Klass_Namespace{}; // Namespace
-		const char* Klass_Name{}; // Class Name
-		char * Klass_Full_Name{}; // Full Name
-		const char* Klass_OfA_Name{}; // The Name of the Base Class, if any
+		const char* Klass_Namespace{}; //!< Namespace
+		const char* Klass_Name{}; //!< Class Name
+		char* Klass_Full_Name{}; //!< Full Name
+		const char* Klass_OfA_Name{}; //!< The Name of the Base Class, if any
 
+		/*!*****************************************************************************
+		\brief
+			Default Constructor for the MonoKlassInfo
+		*******************************************************************************/
 		MonoKlassInfo();
 
 		MonoKlassInfo(const MonoKlassInfo& other) = delete;
@@ -39,11 +53,14 @@ struct SageMonoManager
 		~MonoKlassInfo();
 	};
 
-
+	/*!*****************************************************************************
+	\brief
+		Encapsulate a Mono Instance
+	*******************************************************************************/
 	struct KlassInstance
 	{
-		MonoKlassInfo* Of_A; // The Class Information
-		MonoObject* Instance; // The Instance
+		MonoKlassInfo* Of_A; //!< The Base Class
+		MonoObject* Instance; //!< The Instance
 
 	};
 	// Tools
@@ -90,7 +107,7 @@ struct SageMonoManager
 	static STDERRCS error_stream;
 
 
-	
+
 
 
 	// Lifecycle
@@ -114,12 +131,12 @@ struct SageMonoManager
 
 	// --- Reflection ---
 
-	static MonoClass* Load_Klass_In_Image(MonoImage* Image, const char* _klass_name, const char* _klass_namespace=nullptr);
-	static MonoObject* Create_Instance(MonoClass* _klass, bool do_not_instantiate=false);
+	static MonoClass* Load_Klass_In_Image(MonoImage* Image, const char* _klass_name, const char* _klass_namespace = nullptr);
+	static MonoObject* Create_Instance(MonoClass* _klass, bool do_not_instantiate = false);
 
 	//------Retrieval-----
 
-	static MonoKlassInfo* Get_Klass_Info(const char* _klass_name, const char* _namespace=nullptr);
+	static MonoKlassInfo* Get_Klass_Info(const char* _klass_name, const char* _namespace = nullptr);
 	static MonoKlassInfo* Get_Klass_Info(MonoClass* klass);
 
 	//---Compilation of Scripts
