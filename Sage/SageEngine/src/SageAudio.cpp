@@ -15,6 +15,8 @@
 #include <backward.hpp>
 #include <cassert>
 
+#include "SageProfiler.hpp"
+
 namespace SageAudio
 {
 	FMOD_RESULT result;
@@ -291,8 +293,10 @@ namespace SageAudio
 	*******************************************************************************/
 	void Update()
 	{
+		Profiler::SageProfiler::Mark("Audio System");
 		result = p_system->update();
 		FMOD_ErrorCheck(result);
+		
 	}
 
 	/*!*****************************************************************************

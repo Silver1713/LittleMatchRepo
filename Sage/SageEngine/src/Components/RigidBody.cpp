@@ -25,19 +25,19 @@ RigidBody::RigidBody(ToastBox::Vec2 _velocity) : velocity{ _velocity } {}
 void RigidBody::Init(GameObject* _parent)
 {
 	Component::Init(_parent);
-	transform = static_cast<Transform*>(Get_Parent()->Get_Component<Transform>());
-	//curr_velocity = velocity * (float)SageTimer::delta_time;
+	//transform = static_cast<Transform*>(Get_Parent()->Get_Component<Transform>());
+	////curr_velocity = velocity * (float)SageTimer::delta_time;
 }
 
 void RigidBody::Update()
 {	
-	if (!is_enabled) { return; }
+	/*if (!is_enabled) { return; }
 	float dt = (float)SageTimer::delta_time;
 	if (enable_gravity)
 	{
 		ApplyGravity(dt);
 	}
-	transform->Translate({ curr_velocity.x * dt,curr_velocity.y * dt,0.f });
+	transform->Translate({ curr_velocity.x * dt,curr_velocity.y * dt,0.f });*/
 }
 
 void RigidBody::Exit() {}
@@ -73,7 +73,7 @@ void RigidBody::ApplyGravity(float _delta_time)
 
 void RigidBody::UpdateVelocity(float _delta_time) 
 {
-	std::cout << "HI";
+	
 
 	(void)_delta_time;
 }

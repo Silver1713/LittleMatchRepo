@@ -19,8 +19,9 @@
 /* End Header **************************************************************************/
 
 #pragma once
-
+#include <GL/glew.h>
 #include "Main.h"
+
 #include "SageShader.hpp"
 #include "SageRenderer.hpp"
 

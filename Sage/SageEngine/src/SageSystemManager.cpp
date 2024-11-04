@@ -1,13 +1,16 @@
 #include "SageSystemManager.hpp"
 
 #include "BindingSystem.hpp"
+#include "Systems/SagePhysicsSystem.hpp"
 #include "Systems/SageScripting.hpp"
 
 std::map<std::string, System*> SageSystemManager::systems{};
 void SageSystemManager::Init()
 {
 	// Add Common Components
+	Add_System(new SagePhysicsSystem());
 	Add_System(new SageScriptSystem());
+
 	BindingSystem::Init();
 }
 

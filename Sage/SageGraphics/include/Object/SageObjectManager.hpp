@@ -14,7 +14,7 @@
 /* End Header **************************************************************************/
 #ifndef SAGE_OBJECT_MANAGER_HPP
 #define SAGE_OBJECT_MANAGER_HPP
-
+#include <map>
 #include "SageLine.hpp"
 #include "SageObject.hpp"
 

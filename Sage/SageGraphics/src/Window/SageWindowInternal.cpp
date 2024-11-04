@@ -203,7 +203,7 @@ void SageWindowInternal::Set_Fb_Callback()
 		SageWindowInternal* internal_win = static_cast<SageWindowInternal*>(glfwGetWindowUserPointer(win));
 		internal_win->height = h;
 		internal_win->width = w;
-		std::cout << "Width: " << w << " Height: " << h << '\n';
+		//std::cout << "Width: " << w << " Height: " << h << '\n';
 		
 	});
 }

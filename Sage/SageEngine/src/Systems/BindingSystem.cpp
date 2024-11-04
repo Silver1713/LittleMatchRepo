@@ -113,6 +113,7 @@ void BindingSystem::Exit()
 {
 	cs_to_cpp_mapping.clear();
 	cpp_to_cs_mapping.clear();
+	mono_entities.clear();
 
 
 }

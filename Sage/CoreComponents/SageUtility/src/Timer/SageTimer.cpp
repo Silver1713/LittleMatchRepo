@@ -14,11 +14,15 @@
 
 std::chrono::time_point<std::chrono::high_resolution_clock> SageTimer::start_time{};
 std::chrono::time_point<std::chrono::high_resolution_clock> SageTimer::prev_time{};
+bool SageTimer::initialized = false;
 double SageTimer::delta_time{};
+
+double SageTimer::maxRefresh_Rate = 1.0 / 60.f;
 void SageTimer::Init()
 {
 	start_time = std::chrono::steady_clock::now();
 	prev_time = std::chrono::steady_clock::now();
+	initialized = true;
 
 }
 
@@ -49,6 +53,11 @@ void SageTimer::Update()
 	delta_time = std::chrono::duration<double, std::milli>(current_time - prev_time).count();
 
 	delta_time /= 1000.0;
+
+	if (delta_time > maxRefresh_Rate)
+	{
+		delta_time = maxRefresh_Rate;	
+	}
 
 	prev_time = current_time;
 }

@@ -6,6 +6,7 @@
 #include "SageMonoManager.hpp"
 #include "SageScriptLoader.hpp"
 #include "GameObjects.hpp"
+#include "SageProfiler.hpp"
 #include "Components/Behaviour.h"
 
 System::SystemType SageScriptSystem::GetInstance()
@@ -37,6 +38,7 @@ void SageScriptSystem::Init()
 
 void SageScriptSystem::Update()
 {
+	
 	for (auto& entity : scriptable_entities)
 	{
 		Behaviour* scriptableComponent = entity.second;
@@ -53,6 +55,7 @@ void SageScriptSystem::Update()
 
 void SageScriptSystem::Update_Entity(GameObject* _entity)
 {
+	Profiler::SageProfiler::Mark("Scripting Engine (Logic System)");
 	Behaviour* behaviour = _entity->Get_Component<Behaviour>();
 	if (!behaviour)
 	{
@@ -176,6 +179,21 @@ void SageScriptSystem::Map_Script_Instance_GameObject(MonoObject* _instance, Gam
 	mapped_instances[_instance] = _entity;
 }
 
+void SageScriptSystem::Init_Entity(GameObject* _entity)
+{
+	Behaviour* behaviour = _entity->Get_Component<Behaviour>();
+	if (!behaviour)
+	{
+		return;
+	}
+
+	auto& instances = behaviour->Get_Script_Instances();
+
+	for (auto& instance : instances)
+	{
+		Init_CSBehaviour_Instance(instance.second.instance);
+	}
+}
 
 void SageScriptSystem::Init_CSBehaviour_Instance(MonoObject* _instance)
 {

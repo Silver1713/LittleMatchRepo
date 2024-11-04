@@ -16,6 +16,8 @@
 #ifndef SAGE_MODEL_MANAGER_HPP
 #define SAGE_MODEL_MANAGER_HPP
 
+#include <map>
+
 #include "SageModel.hpp"
 #include "SageRenderer.hpp"
 

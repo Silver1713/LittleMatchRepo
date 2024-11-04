@@ -26,6 +26,7 @@
 #include <memory>
 
 #include "SageCamera.hpp"
+#include "SageTimer.hpp"
 #include "SageViewport.hpp"
 namespace Splash_Screen {
 	static float time_elapsed{};
@@ -76,7 +77,7 @@ namespace Splash_Screen {
 	*******************************************************************************/
 	void Update()
 	{
-		time_elapsed += (float)SageHelper::delta_time;
+		time_elapsed += (float)SageTimer::delta_time;
 
 		static bool is_triggered{ false };
 

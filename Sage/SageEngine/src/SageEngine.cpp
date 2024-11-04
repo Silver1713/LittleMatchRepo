@@ -19,6 +19,8 @@
 #include "SageEngine.hpp"
 #include <SageSystemManager.hpp>
 
+#include "SageProfiler.hpp"
+
 const GLFWvidmode* mode;
 namespace {
     SageFrameBuffer frame_buffer;
@@ -93,6 +95,8 @@ void SageEngine::Init(const char* editor_config_path)
 {
     SageMonoManager::Initialize();
     SageTimer::Init();
+    Profiler::SageProfiler::Begin();
+
     SAGEInputHandler::init();
     SageSystemManager::Init();
 
@@ -164,7 +168,6 @@ void SageEngine::Input()
 void SageEngine::Update()
 {
     SageTimer::Update();
-    std::cout << SageTimer::delta_time << std::endl;
     SageHelper::Update();
     accumulator += SageTimer::delta_time;
     if (accumulator >= physics_update_target)
@@ -191,6 +194,9 @@ void SageEngine::Draw(bool inEditor)
     SageRenderer::Clear_Color({1, 1, 1, 1});
     SM::Draw();
     SageRenderer::Enable_OnScreenRender();
+    Profiler::SageProfiler::End();
+    
+
 }
 
 
@@ -210,4 +216,6 @@ void SageEngine::Exit()
 	{
 		std::cout<< '\"' << i.first << '\"' << " occurs for " << i.second << " times." << '\n';
 	}
+	Profiler::SageProfiler::Print_Profile_Info();
+    Profiler::SageProfiler::Reset();
 }

@@ -22,7 +22,8 @@ here.
 *******************************************************************************/
 struct SageTimer
 {
-	
+	static bool initialized;
+	static double maxRefresh_Rate;
 	static std::chrono::time_point<std::chrono::steady_clock> start_time; //!< start time of the engine
 	static std::chrono::time_point<std::chrono::steady_clock> prev_time; //!< previous time of the engine
 

@@ -428,7 +428,6 @@ SageMonoManager::MonoKlassInfo* SageMonoManager::Get_Klass_Info(MonoClass* klass
 
 void SageMonoManager::handle_print(const char* message, mono_bool is_stdout)
 {
-	std::cout << "Message: " << message << std::endl;
 	
 	if (is_stdout)
 	{

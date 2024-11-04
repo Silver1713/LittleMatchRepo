@@ -145,7 +145,7 @@ void GLFWInputHandler::Key_Cb(GLFWwindow* _window, int _keycode, int _scancode, 
 		/*if (key_map[_keycode] == std::byte{ 1 })
 			key_map[_keycode] = std::byte{ 2 };
 		else key_map[_keycode] = std::byte{ 1 };*/
-		std::cout << "Key is Pressed\n";
+		//std::cout << "Key is Pressed\n";
 
 #if _DEBUG
 		std::cout << "Key is Pressed\n";
@@ -283,7 +283,7 @@ void GLFWInputHandler::Mouse_Pos_Cb(GLFWwindow* _window, double _xpos, double _y
 	g_mouse_pos_x = _xpos;
 	g_mouse_pos_y = _ypos;
 	(_window);
-	std::cout << "Mouse X: " << g_mouse_pos_x << " Mouse Y: " << g_mouse_pos_y << std::endl;
+
 }
 
 void GLFWInputHandler::Get_Mouse_Pos(double& _xmouse, double& _ymouse)

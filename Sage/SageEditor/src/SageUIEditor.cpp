@@ -27,12 +27,14 @@
 #include "SageRenderer.hpp"
 #include "SageInspector.hpp"
 #include "SageMonoManager.hpp"
+#include "SageProfiler.hpp"
 #include "SageProject.hpp"
 #include "SageTimer.hpp"
 #include "SceneManager.hpp"
 
 // Bool variable to show the different windows
 static bool show_hierarchy_window = true;
+static bool show_profiler_window = true;
 static bool show_console_window = true;
 static bool show_inspector_window = true;
 static bool show_project_window = true;
@@ -73,13 +75,13 @@ namespace SageUIEditor
 				ImGui::SameLine();
 				ImGui::EndMenuBar();
 			}
-#pragma region REMOVE ME LATER
+#if 0
 			static int c{ 10 };
 			if (c > 0)
 				output_stream.Add("Step into the light where all the stars are bright~"); // Testing remove later
 		output_stream.Add("I thought that I'd been hurt before.\n But no one's ever left me quite this sore;\n Your words cut deeper than a knife.\n Now I need someone to breathe me back to life.~");
 			c--;
-#pragma endregion
+#endif
 			auto output = output_stream.Get();
 			if (output.empty()) {
 				// Change text color to red
@@ -103,6 +105,42 @@ namespace SageUIEditor
 			ImGui::End();
 		}
 	}
+
+    void Show_Profiler_Window()
+    {
+        if (show_profiler_window)
+        {
+            static std::string text = "No profile";
+			static float timer = 0.0f;
+            ImGui::Begin("Profiler", nullptr, ImGuiWindowFlags_MenuBar);
+			if (ImGui::BeginMenuBar())
+			{
+				if (ImGui::Button("Update"))
+				{
+					// Clear the profiler
+                    Profiler::SageProfiler::Clear_All();
+                    timer = 0;
+				}
+				ImGui::SameLine();
+				ImGui::EndMenuBar();
+			}
+			//Update every 10 seconds
+			
+			timer += SageTimer::delta_time;
+           
+			if (timer >= 1.f )
+			{
+				Profiler::SageProfiler::End();
+                text = Profiler::SageProfiler::Get_Current_Profile();
+                
+				timer = 0;
+			}
+            ImGui::Text(text.c_str());
+            
+
+            ImGui::End();
+        }
+    }
 
     void Show_Inspector_Window()
     {
@@ -384,13 +422,29 @@ namespace SageUIEditor
                 ImGui::MenuItem("Inspector", nullptr, &show_inspector_window);
                 ImGui::MenuItem("Game", nullptr, &show_game_window);
                 ImGui::MenuItem("Console", nullptr, &show_console_window);
+                ImGui::MenuItem("Profiler", nullptr, &show_profiler_window);
                 ImGui::MenuItem("Project", nullptr, &show_project_window);
 
                 ImGui::EndMenu();
             }
             ImVec2 button_x = ImGui::GetWindowSize();
             ImGui::SetCursorPosX((button_x.x/2) - 150.0f);
-            if (ImGui::Button("PLAY"))
+            static bool color_pushed{ false };
+			// Set color of button
+			if (is_playing)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+                // Disable hover
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+				color_pushed = true;
+
+			}
+			else
+			{
+				color_pushed = false;
+			}
+            if (ImGui::Button("PLAY") && !is_playing)
             {
                 glfwSetTime(0);
                 SM::Set_Current_Level("level_1");
@@ -404,10 +458,30 @@ namespace SageUIEditor
                 // NEED FIX
                 
                 is_playing = true;
-                
+
+            }
+            if (color_pushed) {
+                ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();
             }
             ImGui::SetCursorPosX(button_x.x/2 - 100.0f);
-            if (ImGui::Button("STOP"))
+
+			if (!is_playing)
+			{
+                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+                // Disable hover
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+                ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+                color_pushed = true;
+		
+			}
+			else
+			{
+				color_pushed = false;
+			}
+
+            if (ImGui::Button("STOP") && is_playing)
             {
                 
                 //SageTimer::delta_time(0);
@@ -423,6 +497,13 @@ namespace SageUIEditor
                 is_playing = false;
 
             }
+			if (color_pushed)
+			{
+                ImGui::PopStyleColor();
+                ImGui::PopStyleColor();
+                ImGui::PopStyleColor();
+			}
+				
             // ADD MORE FOR MAIN MENU
             ImGui::EndMainMenuBar();
         }
@@ -431,7 +512,9 @@ namespace SageUIEditor
         Show_Game_Window();
         Show_Inspector_Window();
         Show_Hierarchy_Window();
+		Show_Profiler_Window();
         Show_Console_Window();
+
         Show_Project_Window();
         //Show_Asset_Window();
 

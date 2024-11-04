@@ -11,7 +11,10 @@
 #include "SageObject.hpp"
 #include "SageShaderManager.hpp"
 //#include "SageCameraInternal.hpp"
+#include "SageMain.hpp"
+
 #include "SageCamera.hpp"
+#include "SageHelper.hpp"
 
 SageModel model;
 SageViewport vp;

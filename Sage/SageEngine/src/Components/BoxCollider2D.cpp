@@ -30,6 +30,8 @@
 
 #include <iostream>
 
+#include "SageProfiler.hpp"
+
 // Initialization and Cleanup Functions
 
 /*!*****************************************************************************
@@ -62,6 +64,7 @@ void BoxCollider2D::Init(GameObject* _parent)
 *******************************************************************************/
 void BoxCollider2D::Update(float _delta_time)
 {
+    
     if (!is_enabled) { return; }
     Transform* transform = static_cast<Transform*>(Get_Parent()->Get_Component<Transform>());
     if (!transform) return;
@@ -78,6 +81,7 @@ void BoxCollider2D::Update(float _delta_time)
 *******************************************************************************/
 void BoxCollider2D::Update()
 {
+    Profiler::SageProfiler::Mark("Collision System");
     Transform_AABB();
 
 	aabb.Calculate_Model_Matrix(Get_Parent());

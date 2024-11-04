@@ -22,6 +22,8 @@
 
 #include <iostream>
 
+#include "SageTimer.hpp"
+
 namespace Sliders
 {
 	std::unordered_map<std::string, void(*)(GameObject*)> slider_functions =
@@ -71,7 +73,7 @@ namespace Sliders
 			{
 				direction = 1.f;
 			}
-			s->Add_Value(static_cast<float>(SageHelper::delta_time) * direction);
+			s->Add_Value(static_cast<float>(SageTimer::delta_time) * direction);
 		}
 	}
 }

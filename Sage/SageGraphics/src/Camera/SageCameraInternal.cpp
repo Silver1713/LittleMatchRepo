@@ -21,6 +21,7 @@
 
 
 #include "SageHelper.hpp"
+#include "SageTimer.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
 
@@ -82,8 +83,8 @@ void SageCameraInternal2D::Calculate_Camera_Matrix()
 
 void SageCameraInternal2D::Move_Camera(glm::vec2 _move_vector, float speed)
 {
-	position += _move_vector * (speed * static_cast<float>(SageHelper::delta_time));
-	std::cout << "camera: "  << position.x << " " << position.y << std::endl;
+	position += _move_vector * (speed * static_cast<float>(SageTimer::delta_time));
+
 }
 
 void SageCameraInternal2D::Set_Position(glm::vec2 _position)

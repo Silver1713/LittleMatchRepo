@@ -24,8 +24,11 @@
 #include <iostream>
 
 #include "BindingSystem.hpp"
+//#include "SageProfiler.hpp"
+#include "SageProfiler.hpp"
 #include "SageSystemManager.hpp"
 #include "Components/RigidBody.hpp"
+#include "Systems/SagePhysicsSystem.hpp"
 #include "Systems/SageScripting.hpp"
 
 namespace Game_Objects
@@ -37,20 +40,26 @@ namespace Game_Objects
 	static std::vector<std::unique_ptr<GameObject>*> world_space_game_objects;
 
 	static SageScriptSystem* script_system{ nullptr };
-
+	static SagePhysicsSystem* physics_system{ nullptr };
 	/*!*****************************************************************************
 	  \brief
 		Initializes all components of all gameobjects
 	*******************************************************************************/
 	void Init()
 	{
+
 		script_system = SageSystemManager::Get_System<SageScriptSystem>();
+		physics_system = SageSystemManager::Get_System<SagePhysicsSystem>();
 		for (auto& _g : g_game_objects)
 		{
 			if (_g.second)
-			{				
+			{
 				_g.second->Init();
 				BindingSystem::Init_Batch(_g.second.get());
+
+				// Physics
+				physics_system->Init_Entity(_g.second.get());
+				
 			}
 		}
 	}
@@ -60,14 +69,28 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Update()
 	{
+		
 		for (auto& _g : g_game_objects)
 		{
 			if (_g.second)
 			{
 				_g.second->Input();
 				_g.second->Update();
+
+				// Physics
+				
+				physics_system->Update_Entity(_g.second.get());
+
 			}
 		}
+
+		Profiler::SageProfiler::Stop_Marker("Physics Engine");
+		Profiler::SageProfiler::Stop_Marker("Collision System");
+		Profiler::SageProfiler::Stop_Marker("Scripting Engine (Logic System)");
+		Profiler::SageProfiler::Stop_Marker("Sprite2D - Rendering System (Update)");
+		Profiler::SageProfiler::Stop_Marker("Audio System");
+		Profiler::SageProfiler::Stop_Marker("Transform System");
+		
 	}
 
 	/*!*****************************************************************************
@@ -76,7 +99,6 @@ namespace Game_Objects
 	*******************************************************************************/
 	void Draw()
 	{
-		//std::cout << "Drawing\n";
 		SageRenderer::Clear_Color({ 1,1,1,1 });
 
 		for (unsigned int current_z{}; current_z <= max_z_orders; ++current_z)
@@ -101,6 +123,7 @@ namespace Game_Objects
 			}
 		}
 
+		Profiler::SageProfiler::Stop_Marker("Sprite2D - Rendering System (Draw)");
 	}
 
 	/*!*****************************************************************************
@@ -117,6 +140,8 @@ namespace Game_Objects
 			}
 		}
 		Clear_Game_Objects();
+
+		
 	}
 
 	/*!*****************************************************************************

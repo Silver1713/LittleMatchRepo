@@ -13,6 +13,7 @@
 #include "SageShaderManager.hpp"
 
 #include "backward.hpp"
+#include "SageHelper.hpp"
 
 //
 
@@ -130,7 +131,6 @@ void ExampleScene::update()
 	instance.Update();
 	text.transform.Calculate_Model_Matrix();
 
-	GLenum g = glGetError();
 
 
 }
@@ -159,7 +159,7 @@ void ExampleScene::draw()
 	
 
 	
-	std::cout << SageHelper::FPS << std::endl;
+	//std::cout << SageHelper::FPS << std::endl;
 
 	
 }

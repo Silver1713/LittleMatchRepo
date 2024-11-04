@@ -24,6 +24,7 @@
 
 #include <iostream>
 
+#include "BindingSystem.hpp"
 #include "EditorScene.hpp"
 #include "SplashScreen.hpp"
 #include "Scene.hpp"
@@ -31,6 +32,7 @@
 
 #include "SageMain.hpp"
 #include "SageSystemManager.hpp"
+#include "SageTimer.hpp"
 
 #pragma region Public Functions
 namespace SM {	
@@ -294,6 +296,7 @@ namespace SM {
 		SM::fp_unload();
 		
 		Game_Objects::Exit();
+		BindingSystem::Exit();
 		//SageSystemManager::Exit();
 	}
 
@@ -462,7 +465,7 @@ namespace SM {
 			return;
 		}
 		
-		float dt = (float)SageHelper::delta_time;
+		float dt = (float)SageTimer::delta_time;
 
 		if (alpha > 0.0f)
 		{
@@ -493,7 +496,7 @@ namespace SM {
 			return;
 		}
 
-		float dt = (float)SageHelper::delta_time;
+		float dt = (float)SageTimer::delta_time;
 
 		if (alpha < 1.0f)
 		{

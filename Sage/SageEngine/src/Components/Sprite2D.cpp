@@ -19,6 +19,7 @@
 #include <iostream>
 
 #include "SageModelManager.hpp"
+#include "SageProfiler.hpp"
 
 /*!*****************************************************************************
   \brief
@@ -98,6 +99,8 @@ void Sprite2D::Init(GameObject* _parent)
 *******************************************************************************/
 void Sprite2D::Update()
 {
+	Profiler::SageProfiler::Mark("Sprite2D - Rendering System (Update)");
+	
 	//updates the sageobject with the current transforms of the Transform component
 	obj->transform.position.x = transform->Get_Position().x;
 	obj->transform.position.y = transform->Get_Position().y;
@@ -115,7 +118,8 @@ void Sprite2D::Update()
 *******************************************************************************/
 void Sprite2D::Draw()
 {
-	//if sageobject exists, draw it 
+	Profiler::SageProfiler::Mark("Sprite2D - Rendering System (Draw)");
+	
 	if (obj)
 	{
 		SageRenderer::Draw_Filled(*obj, {

@@ -30,6 +30,7 @@
 #include <cstdlib> // for srand()
 #include <memory>	
 
+#include "SageTimer.hpp"
 #include "Components/Behaviour.h"
 
 
@@ -143,19 +144,19 @@ namespace Game {
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_Q))
 		{
-			transform_cache["Player"]->Rotate({ (float)SageHelper::delta_time * 10.0f,0.0f,0.f });
+			transform_cache["Player"]->Rotate({ (float)SageTimer::delta_time * 10.0f,0.0f,0.f });
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_E))
 		{
-			transform_cache["Player"]->Rotate({ (float)SageHelper::delta_time * (-10.0f),0.0f,0.f });
+			transform_cache["Player"]->Rotate({ (float)SageTimer::delta_time * (-10.0f),0.0f,0.f });
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_Z))
 		{
-			transform_cache["Player"]->Scale({ (float)SageHelper::delta_time * 100.0f,(float)SageHelper::delta_time * 100.0f,0.f });
+			transform_cache["Player"]->Scale({ (float)SageTimer::delta_time * 100.0f,(float)SageTimer::delta_time * 100.0f,0.f });
 		}
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_X))
 		{
-			transform_cache["Player"]->Scale({ (float)SageHelper::delta_time * (-100.0f),(float)SageHelper::delta_time * (-100.0f),0.f });
+			transform_cache["Player"]->Scale({ (float)SageTimer::delta_time * (-100.0f),(float)SageTimer::delta_time * (-100.0f),0.f });
 		}
 
 		if (SAGEInputHandler::Get_Key(SAGE_KEY_I))
@@ -311,7 +312,7 @@ namespace Game {
 					RigidBody* phy = static_cast<RigidBody*>(collider->Get_Parent()->Get_Component<RigidBody>());
 					if (phy) {
 						phy->Get_Current_Velocity() = { 0,0 };
-						//std::cout << _obj->Get_ID() << "collided with " << collider->Get_Parent()->Get_ID() << '\n';
+						
 					}
 				});
 				colliders.push_back(collider);
@@ -347,7 +348,7 @@ namespace Game {
 
 						ToastBox::Vec3 dir = pos - prevPos; // Direction of movement
 
-						// Get reference to the velocity for easier access
+					
 						ToastBox::Vec2& vel = phys->Get_Current_Velocity();
 
 
@@ -397,7 +398,7 @@ namespace Game {
 		{
 			for (unsigned int i{}; i < 3; ++i)
 			{
-				transform_cache["Green" + std::to_string(i)]->Rotate({ (float)SageHelper::delta_time * 5.0f,0.f,0.0f });
+				transform_cache["Green" + std::to_string(i)]->Rotate({ (float)SageTimer::delta_time * 5.0f,0.f,0.0f });
 			}
 		}
 

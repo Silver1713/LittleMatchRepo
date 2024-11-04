@@ -303,8 +303,7 @@ void Button::Update()
 	mouse_pos.x = static_cast<float>(x);
 	mouse_pos.y = static_cast<float>(y);
 
-	std::cout << x << std::endl;
-	std::cout << y << std::endl;
+	
 }
 
 /*!*****************************************************************************

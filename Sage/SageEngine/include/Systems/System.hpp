@@ -14,6 +14,7 @@ public:
 	enum class SystemType
 	{
 		GRAPHICS,
+		PHYSICS,
 		INPUT,
 		SCRIPTING,
 		NETWORK,
@@ -22,6 +23,7 @@ public:
 	};
 
 	virtual void Init() = 0;
+	virtual void Init_Entity(GameObject* _entity) = 0;
 	virtual void Update() = 0;
 
 	virtual void Update_Entity(GameObject* _entity) = 0;
