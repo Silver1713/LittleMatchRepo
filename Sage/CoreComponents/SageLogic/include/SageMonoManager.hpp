@@ -40,16 +40,58 @@ struct SageMonoManager
 			Default Constructor for the MonoKlassInfo
 		*******************************************************************************/
 		MonoKlassInfo();
-
+		/*!*****************************************************************************
+		\brief
+			Deleted Copy Constructor. This is to prevent copying of the MonoKlassInfo
+		\param other
+			The other MonoKlassInfo to copy from
+		*******************************************************************************/
 		MonoKlassInfo(const MonoKlassInfo& other) = delete;
+		/*!*****************************************************************************
+		\brief
+			Deleted Copy Assignment Operator. This is to prevent copying of the
+			MonoKlassInfo
+		\param other
+			The other MonoKlassInfo to copy from
+		\return
+			The MonoKlassInfo
+		*******************************************************************************/
 		MonoKlassInfo& operator=(const MonoKlassInfo& other) = delete;
 
+		/*!*****************************************************************************
+		\brief
+			Move Constructor for the MonoKlassInfo
 
-		MonoKlassInfo(MonoKlassInfo&& other);
-		MonoKlassInfo& operator=(MonoKlassInfo&& other);
+			This will transfer the ownership of the MonoKlassInfo from the other
+			MonoKlassInfo to this MonoKlassInfo. Transfering the pointers and
+			other resources.
+		\param other
+			The other MonoKlassInfo to move from
+		*******************************************************************************/
+		MonoKlassInfo(MonoKlassInfo&& other) noexcept;
+		/*!*****************************************************************************
+		\brief
+			Move Assignment Operator for the MonoKlassInfo
+
+			This will transfer the ownership of the MonoKlassInfo from the other
+			MonoKlassInfo to this MonoKlassInfo. Transfering the pointers and
+			other resources.
+		\param other
+			The other MonoKlassInfo to move from
+		\return
+			The MonoKlassInfo
+		*******************************************************************************/
+		MonoKlassInfo& operator=(MonoKlassInfo&& other) noexcept;
 
 
+		/*!*****************************************************************************
+		\brief
+			Destructor for the MonoKlassInfo
 
+			This will release the resources held by the MonoKlassInfo releasing any
+			allocated memory back to the free store.
+		
+		*******************************************************************************/
 		~MonoKlassInfo();
 	};
 
@@ -64,47 +106,118 @@ struct SageMonoManager
 
 	};
 	// Tools
-	static std::unique_ptr< SageLoader> loader;
-	static std::unique_ptr<SageAssembler> compiler;
+	static std::unique_ptr< SageLoader> loader; //!< The Loader
+	static std::unique_ptr<SageAssembler> compiler; //!< The Compiler
 
+	
+	static MonoDomain* Default_Domain; //!< The Default Domain
+	static std::unordered_map<std::string, MonoDomain*> domains; //!< The Domains
+	static std::unordered_map<std::string, MonoAssembly*> assemblies; //!< The Assemblies
+	static std::unordered_map<std::string, MonoImage*> images; //!< The Images
+	static std::unordered_map<std::string, MonoKlassInfo> klassList; //!< The Klass List
 
-	static MonoDomain* Default_Domain;
-	static std::unordered_map<std::string, MonoDomain*> domains;
-	static std::unordered_map<std::string, MonoAssembly*> assemblies;
-	static std::unordered_map<std::string, MonoImage*> images;
-	static std::unordered_map<std::string, MonoKlassInfo> klassList;
+	
+	/*!*****************************************************************************
+		\brief
+			A structure to encapsulate the logic system's output stream
 
-	// Streams
+			This structure serves as the middleman between the logic system and the
+			Mono runtime. It is used to capture the output of the logic system's scripts
+			and provide it to the logic system. This structure will only capture the
+			output through the use of internal functions. This allow logging to be
+			perform in C++ side.
 
+	*******************************************************************************/
 	struct STDOUTCS
 	{
-		size_t latest_index;
-		std::string latest;
-		std::vector<std::pair<std::string, size_t>> stdout_stream;
+		size_t latest_index; //!< The Latest Index
+		std::string latest; //!< The Latest Message
+		std::vector<std::pair<std::string, size_t>> stdout_stream; //!< The Stream
 
+		/*!*****************************************************************************
+		\brief
+			Add a message to the output stream.
 
-		void Add(const char* message);
+			This function will add a message to the output stream. if the message is
+			the same as the last message, it will increment the count of the last message
+			instead of adding a new message which increase efficiency.
 
+		\param message
+			The message to add to the output stream
+		*******************************************************************************/
+		void Add(const char* message); 
+
+		/*!*****************************************************************************
+		\brief
+			Get the output stream
+
+			This function will return the output stream. This will return a vector of
+			pairs of strings and size_t. The string is the message and the size_t is the
+			count of the message.
+		\return
+			Vector of pairs of strings and size_t
+		*******************************************************************************/
 		std::vector<std::pair<std::string, size_t>> Get();
+		/*!*****************************************************************************
+		\brief
+			Clear the output stream
+
+			This function will clear messages logged from the C# output stream, clearing
+			the messages from the output stream from the C# side.
+		*******************************************************************************/
 		void Clear();
-
 	};
+	/*!*****************************************************************************
+		\brief
+			A structure to encapsulate the logic system's error stream
 
-
+			This structure serves as the middleman between the logic system and the
+			Mono runtime. It is used to capture the error output of the logic system's
+			scripts and provide it to the logic system. This structure will only capture
+			the output through the use of internal functions. This allow logging to be
+			perform in C++ side.
+	/********************************************************************************/
 	struct STDERRCS
 	{
-		std::string latest;
-		std::map<std::string, size_t> stdout_stream;
+		std::string latest; //!< The Latest Message
+		std::map<std::string, size_t> stdout_stream; //!< The Stream
 
+		/*!*****************************************************************************
+		\brief
+			Add a message to the error stream.
 
+			This function will add a message to the error stream. if the message is
+			the same as the last message, it will increment the count of the last message
+			instead of adding a new message which increase efficiency.
+
+		\param message
+			The message to add to the error stream
+		*******************************************************************************/
 		void Add(const char* message);
+		/*!*****************************************************************************
+		\brief
+			Clear the error stream
+
+			This function will clear messages logged from the C# error stream, clearing
+			the messages from the error stream from the C# side.
+		*******************************************************************************/
 		void Clear();
+		/*!*****************************************************************************
+		\brief
+			Get the error stream
+
+			This function will return the error stream. This will return a vector of
+			pairs of strings and size_t. The string is the message and the size_t is the
+			count of the message.
+		\return
+			Vector of pairs of strings and size_t
+		*******************************************************************************/
 		std::vector<std::pair<std::string, size_t>> Get();
 	};
 
 
-	static STDOUTCS output_stream;
-	static STDERRCS error_stream;
+	static STDOUTCS output_stream; //!< The Output Stream
+	static STDERRCS error_stream; //!< The Error Stream
 
 
 

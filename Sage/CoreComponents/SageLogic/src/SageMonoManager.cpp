@@ -329,7 +329,7 @@ SageMonoManager::MonoKlassInfo* SageMonoManager::Get_Klass_Info(const char* _kla
 }
 
 
-SageMonoManager::MonoKlassInfo::MonoKlassInfo(MonoKlassInfo&& other)
+SageMonoManager::MonoKlassInfo::MonoKlassInfo(MonoKlassInfo&& other) noexcept
 {
 	klass = other.klass;
 	image = other.image;
@@ -348,7 +348,7 @@ SageMonoManager::MonoKlassInfo::MonoKlassInfo(MonoKlassInfo&& other)
 	other.Klass_OfA_Name = nullptr;
 }
 
-SageMonoManager::MonoKlassInfo& SageMonoManager::MonoKlassInfo::operator=(MonoKlassInfo&& other)
+SageMonoManager::MonoKlassInfo& SageMonoManager::MonoKlassInfo::operator=(MonoKlassInfo&& other) noexcept
 {
 	if (this == &other)
 	{
